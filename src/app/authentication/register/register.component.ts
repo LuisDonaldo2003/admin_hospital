@@ -30,13 +30,13 @@ export class RegisterComponent {
 
   constructor(private router:Router,private auth: AuthService) { }
 
-  
+
   submit() {
     if (this.form.value.password != this.form.value.confirmPassword) {
       this.isValidConfirmPassword = true;
     } else {
       this.isValidConfirmPassword = false;
-      this.auth.login();
+      this.auth.login(this.form.value.email || '', this.form.value.password || ''); // Asegúrate de que `email` y `password` estén definidos en el componente.
     }
   }
   passwordFunc(){

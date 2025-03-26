@@ -23,11 +23,11 @@
                     ><img src="assets/img/login-logo.png" alt=""
                   /></a>
                 </div>
-                <h2>Login</h2>
+                <h2>Iniciar Sesión</h2>
                 <!-- Form -->
                 <form [formGroup]="form" (ngSubmit)="loginFormSubmit()">
                   <div class="form-group">
-                    <label for="Email">Email <span class="login-danger">*</span></label>
+                    <label for="Email">Correo electrónico <span class="login-danger">*</span></label>
                     <input
                       class="form-control"
                       formControlName="email"
@@ -43,17 +43,17 @@
                       <div
                       *ngIf="f['email'].errors && f['email'].errors['required']"
                       >
-                        Email is required.
+                        Ingrese el correo electrónico asociado a su cuenta.
                       </div>
                       <div
                         *ngIf="f['email'].errors && f['email'].errors['email']"
                       >
-                        Please, enter valid email address.
+                        Correo no válido
                       </div>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="Password">Password <span class="login-danger">*</span></label>
+                    <label for="Password">Contraseña <span class="login-danger">*</span></label>
                     <input
                       class="form-control pass-input"
                       [type]="passwordClass ? 'text' : 'password'"
@@ -73,14 +73,14 @@
                           f['password'].errors['required']
                         "
                       >
-                        Password is required.
+                        La contraseña es requerida
                       </div>
                     </div>
                     <span (click)="togglePassword()" (keyup.enter)="togglePassword()"  [ngClass] = "passwordClass ? 'feather icon-eye' : 'feather icon-eye-off'"
                       class="profile-views toggle-password"  tabindex="0"
                     ></span>
                   </div>
-                  <div class="forgotpass">
+                  <!-- <div class="forgotpass">
                     <div class="remember-me">
                       <label
                         class="custom_check mr-2 mb-0 d-inline-flex remember-me"
@@ -91,7 +91,13 @@
                       </label>
                     </div>
                     <a [routerLink]="routes.forgotPassword">Forgot Password?</a>
-                  </div>
+                  </div> -->
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="ERROR">
+                      <strong>Error!</strong> El usuario y contraseña son incorrectos.
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true"> </span>
+                      </button>
+                </div>
                   <div class="form-group login-btn">
                     <button
                       [disabled]="form.invalid"
@@ -104,15 +110,14 @@
                 </form>
                 <!-- /Form -->
 
-                <div class="next-sign">
+                <!-- <div class="next-sign">
                   <p class="account-subtitle">
                     Need an account?
                     <a [routerLink]="routes.register">Sign Up</a>
                   </p>
 
-                  <!-- Social Login -->
                   <div class="social-login">
-                    <a href="javascript:;" 
+                    <a href="javascript:;"
                       ><img src="assets/img/icons/login-icon-01.svg" alt=""
                     /></a>
                     <a href="javascript:;"
@@ -122,8 +127,8 @@
                       ><img src="assets/img/icons/login-icon-03.svg" alt=""
                     /></a>
                   </div>
-                  <!-- /Social Login -->
-                </div>
+                </div> -->
+
               </div>
             </div>
           </div>
