@@ -68,7 +68,7 @@ export class EditRoleUserComponent {
     }
     let data = {
       name: this.name,
-      permisions:this.permissions,
+      permissions:this.permissions,
     };
     this.valid_form_success = false;
     this.text_validation = null;

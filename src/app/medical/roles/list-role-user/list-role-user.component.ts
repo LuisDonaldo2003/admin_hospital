@@ -48,16 +48,16 @@ export class ListRoleUserComponent {
     this.rolesList = [];
     this.serialNumberArray = [];
 
-    this.RoleService.listRoles().subscribe((resp:any) => {
+    this.RoleService.listRoles().subscribe((resp: any) => {
+        console.log(resp);
 
-      console.log(resp);
-
-      this.totalData = resp.roles.length;
-      this.role_generals = resp.roles;
-      this.getTableDataGeneral();
-    })
-
-
+        this.totalData = resp.roles.length;
+        this.role_generals = resp.roles.map((role: any) => ({
+            ...role,
+            permissions: role.permission_pluck || [] // Asegurar que los permisos estén correctamente asignados
+        }));
+        this.getTableDataGeneral();
+    });
   }
 
   getTableDataGeneral() {
