@@ -1,27 +1,30 @@
-import { Component } from '@angular/core';
-import { SideBarService } from '../shared/side-bar/side-bar.service';
-import { Route, Router } from '@angular/router';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Route, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { DataService } from '../shared/data/data.service';
-import { MenuItem, SideBarData } from '../shared/models/models';
+import { SideBarData, MenuItem } from '../shared/models/models';
+import { SideBarService } from '../shared/side-bar/side-bar.service';
+import { SharedModule } from '../shared/shared.module'; // Importar SharedModule
 
 @Component({
   selector: 'app-medical',
-  imports: [],
   templateUrl: './medical.component.html',
-  styleUrl: './medical.component.scss'
+  styleUrls: ['./medical.component.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA], // Permitir componentes personalizados
+  imports: [CommonModule, RouterModule, SharedModule], // Usar SharedModule
 })
 export class MedicalComponent {
   public miniSidebar = 'false';
   public expandMenu = 'false';
   public mobileSidebar = 'false';
-  public sideBarActivePath = false;
-  public headerActivePath = false;
+  public sideBarActivePath = true;
+  public headerActivePath = true;
   base = '';
   page = '';
   currentUrl = '';
 
-  constructor(private sideBar: SideBarService,public router: Router,private data: DataService,) 
-  {
+  constructor(private sideBar: SideBarService, public router: Router, private data: DataService) {
     this.sideBar.toggleSideBar.subscribe((res: string) => {
       if (res == 'true') {
         this.miniSidebar = 'true';
@@ -60,22 +63,22 @@ export class MedicalComponent {
         });
       }
     });
-    this.router.config.forEach((route: Route) => {
-      this.getRoutes(route);
-    });
+    this.getRoutes(this.router.config);
   }
+
   public toggleMobileSideBar(): void {
     this.sideBar.switchMobileSideBarPosition();
   }
-  private getRoutes(route: Route): void {
-    if (
-      route.path?.split('/')[2] === 'confirm-mail'
-    ) {
-      this.sideBarActivePath = false;
-      this.headerActivePath = false;
-    } else {
-      this.sideBarActivePath = true;
-      this.headerActivePath = true;
-    }
+
+  private getRoutes(routes: Route[]): void {
+    routes.forEach((route) => {
+      if (route.path && route.path.includes('confirm-mail')) {
+        this.sideBarActivePath = false;
+        this.headerActivePath = false;
+      } else {
+        this.sideBarActivePath = true;
+        this.headerActivePath = true;
+      }
+    });
   }
 }

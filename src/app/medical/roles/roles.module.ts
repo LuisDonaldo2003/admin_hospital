@@ -12,18 +12,19 @@ import { RouterModule } from '@angular/router';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+  ],
   imports: [
     CommonModule,
     RolesRoutingModule,
-    RolesComponent,
-    AddRoleUserComponent,
-    EditRoleUserComponent,
-    ListRoleUserComponent,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule
-  ]
+    RouterModule,
+    RolesComponent, // Importar como standalone
+    AddRoleUserComponent, // Importar como standalone
+    EditRoleUserComponent, // Importar como standalone
+    ListRoleUserComponent, // Importar como standalone
+  ],
 })
 export class RolesModule { }

@@ -7,7 +7,7 @@ interface MainMenu {
 
 interface MenuItem {
   menuValue: string;
-  showSubRoute: boolean;  
+  showSubRoute: boolean;
 }
 @Injectable({
   providedIn: 'root',
@@ -24,7 +24,7 @@ export class SideBarService {
   public expandSideBar: BehaviorSubject<string> = new BehaviorSubject<string>("false");
 
   constructor(private data: DataService) {
-   
+
   }
 
   public switchSideMenuPosition(): void {

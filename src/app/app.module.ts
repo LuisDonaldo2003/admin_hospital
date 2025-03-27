@@ -6,16 +6,24 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 
+// import { HeaderComponent } from './common-component/header/header.component';
+// import { SidebarComponent } from './common-component/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    // HeaderComponent,
+    // SidebarComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule
+  ],
+  exports: [
+    // HeaderComponent,
+    // SidebarComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { RolesComponent } from './roles.component';
 import { AddRoleUserComponent } from './add-role-user/add-role-user.component';
 import { ListRoleUserComponent } from './list-role-user/list-role-user.component';
-import { EditRoleUserComponent } from './edit-role-user/edit-role-user.component';
+import { EditRoleUserComponent } from './edit-role-user/edit-role-user.component'; // IMPORTA EL COMPONENTE
 
 const routes: Routes = [
   {
@@ -25,6 +25,7 @@ const routes: Routes = [
     ]
   }
 ];
+
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
