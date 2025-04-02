@@ -1,12 +1,17 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SpecialitieService } from '../service/specialitie.service';
 
 @Component({
   selector: 'app-add-specialitie',
-  imports: [FormsModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
   templateUrl: './add-specialitie.component.html',
-  styleUrl: './add-specialitie.component.scss'
+  styleUrls: ['./add-specialitie.component.scss']
 })
 export class AddSpecialitieComponent {
 
