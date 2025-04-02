@@ -132,10 +132,10 @@ export class routes {
     return this.baseUrl + '/dashboard/patient-dashboard';
   }
   public static get addDepartment(): string {
-    return this.baseUrl + '/departments/add-department';
+    return this.baseUrl + '/specialities/register';
   }
   public static get departmentList(): string {
-    return this.baseUrl + '/departments/department-list';
+    return this.baseUrl + '/specialities/list';
   }
   public static get editDepartment(): string {
     return this.baseUrl + '/departments/edit-department';
