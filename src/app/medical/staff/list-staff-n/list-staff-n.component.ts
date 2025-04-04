@@ -38,6 +38,17 @@ export class ListStaffNComponent {
 
   public role_generals:any = [];
   public staff_selected:any;
+
+  public curp: string = '';
+  public ine: string = '';
+  public rfc: string = '';
+  public attendance_number: string = '';
+  public professional_license: string = '';
+  public funcion_real: string = '';
+  public specialitie: string = '';
+  public profile: string = '';
+  public contract_type: string = '';
+
   constructor(
     public staffService: StaffService,
   ){
@@ -54,8 +65,9 @@ export class ListStaffNComponent {
 
       console.log(resp);
 
-      this.totalData = resp.users.data.length;
-      this.role_generals = resp.users.data;
+      this.totalData = resp.users.length;
+      this.role_generals = resp.users;
+
       this.getTableDataGeneral();
     })
 

@@ -40,10 +40,22 @@ export class AddStaffNComponent {
     public password_confirmation:string = '';
     public birth_date:string = '';
     public gender:number = 1;
-    public education:string = '';
-    public designation:string = '';
-    public address:string = '';
-
+    public curp: string = '';
+    public ine: string = '';
+    public rfc: string = '';
+    public attendance_number: string = '';
+    public professional_license: string = '';
+    public funcion_real: string = '';
+    
+    
+    public specialitie_id: string = '';
+    public profile_id: string = '';
+    public contract_type_id: string = '';
+    
+    public specialities: any = [];
+    public profiles: any = [];
+    public contract_types: any = [];
+    
     public roles:any = [];
 
     public FILE_AVATAR :any;
@@ -56,13 +68,15 @@ export class AddStaffNComponent {
     ){
     }
 
-    ngOnInit(): void{
-      this.staffservice.listConfig().subscribe((resp:any) =>{
-        console.log(resp);
+    ngOnInit(): void {
+      this.staffservice.listConfig().subscribe((resp: any) => {
         this.roles = resp.roles;
-      })
-
+        this.specialities = resp.specialities ?? [];
+        this.profiles = resp.profiles ?? [];
+        this.contract_types = resp.contract_types ?? [];
+      });
     }
+    
 
 
     save() {
@@ -89,11 +103,18 @@ export class AddStaffNComponent {
       fromData.append('birth_date', formattedBirthDate); // Se envía en formato correcto
       fromData.append('password', this.password);
       fromData.append('gender', this.gender + "");
-      fromData.append('education', this.education);
-      fromData.append('designation', this.designation);
-      fromData.append('address', this.address);
       fromData.append('imagen', this.FILE_AVATAR);
       fromData.append('role_id', this.selectedValue);
+      fromData.append('curp', this.curp);
+      fromData.append('ine', this.ine);
+      fromData.append('rfc', this.rfc);
+      fromData.append('attendance_number', this.attendance_number);
+      fromData.append('professional_license', this.professional_license);
+      fromData.append('funcion_real', this.funcion_real);
+      fromData.append('specialitie_id', this.specialitie_id);
+      fromData.append('profile_id', this.profile_id);
+      fromData.append('contract_type_id', this.contract_type_id);
+
 
       this.staffservice.registerUser(fromData).subscribe((resp: any) => {
         console.log(resp);
@@ -109,9 +130,6 @@ export class AddStaffNComponent {
           this.email = '';
           this.password = '';
           this.gender = 1;
-          this.education = '';
-          this.designation = '';
-          this.address = '';
           this.FILE_AVATAR = null;
           this.IMAGE_PREVIZUALIZA = null;
         }

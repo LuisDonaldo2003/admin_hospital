@@ -44,57 +44,67 @@
 
             <!-- Tabla -->
             <div class="table-responsive">
-              <table matSort (matSortChange)="sortData($event)" class="table table-hover table-bordered align-middle">
-                <thead class="table-light">
+              <table matSort (matSortChange)="sortData($event)" class="table table-sm table-bordered align-middle text-nowrap">
+                <thead class="table-light text-center">
                   <tr>
-                    <th mat-sort-header="name">Nombre completo</th>
-                    <th mat-sort-header="email">Correo</th>
-                    <th mat-sort-header="mobile">Teléfono</th>
-                    <th mat-sort-header="birth_date">Nacimiento</th>
-                    <th mat-sort-header="role">Rol</th>
-                    <th mat-sort-header="created_at">Registrado</th>
+                    <th>Nombre completo</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Nacimiento</th>
+                    <th>CURP</th>
+                    <th>INE</th>
+                    <th>RFC</th>
+                    <th>N° Asistencia</th>
+                    <th>Cédula</th>
+                    <th>Función Real</th>
+                    <th>Especialidad</th>
+                    <th>Perfil</th>
+                    <th>Tipo de Contrato</th>
+                    <th>Rol</th>
+                    <th>Registrado</th>
                     <th class="text-end">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of usersList">
-                    <td>{{ data.name + ' ' + (data.surname || '') }}</td>
-                    <td>{{ data.email }}</td>
+                    <td class="text-break">{{ data.name }} {{ data.surname || '' }}</td>
+                    <td class="text-break">{{ data.email }}</td>
                     <td>{{ data.mobile }}</td>
                     <td>{{ data.birth_date }}</td>
+                    <td>{{ data.curp }}</td>
+                    <td>{{ data.ine }}</td>
+                    <td>{{ data.rfc }}</td>
+                    <td>{{ data.attendance_number }}</td>
+                    <td>{{ data.professional_license }}</td>
+                    <td>{{ data.funcion_real  || '-' }}</td>
+                    <td>{{ data.speciality  }}</td>
+                    <td>{{ data.profile_relation  }}</td>
+                    <td>{{ data.contract_type }}</td>
                     <td>{{ data.role?.name }}</td>
                     <td>{{ data.created_at }}</td>
                     <td class="text-end">
                       <div class="dropdown" *ngIf="data.id != 1">
-                        <a class="text-muted" href="javascript:void(0);" data-bs-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></a>
+                        <a class="text-muted" href="javascript:void(0);" data-bs-toggle="dropdown">
+                          <i class="fa fa-ellipsis-v"></i>
+                        </a>
                         <div class="dropdown-menu dropdown-menu-end">
-                          <a class="dropdown-item" [routerLink]="['/staffs/list-staff/edit-staff/', data.id]"><i class="fa-solid fa-pen-to-square me-2"></i> Edit</a>
-                          <a class="dropdown-item text-danger" href="javascript:void(0);" (click)="selectUser(data)" data-bs-toggle="modal" [attr.data-bs-target]="'#delete_staff-'+data.id"><i class="fa fa-trash-alt me-2"></i> Delete</a>
+                          <a class="dropdown-item" [routerLink]="['/staffs/list-staff/edit-staff/', data.id]">
+                            <i class="fa-solid fa-pen-to-square me-2"></i> Editar
+                          </a>
+                          <a class="dropdown-item text-danger" href="javascript:void(0);"
+                             (click)="selectUser(data)"
+                             data-bs-toggle="modal"
+                             [attr.data-bs-target]="'#delete_staff-'+data.id">
+                            <i class="fa fa-trash-alt me-2"></i> Eliminar
+                          </a>
                         </div>
                       </div>
                     </td>
                   </tr>
-
-                  <!-- Modal -->
-                  <ng-container *ngFor="let data of usersList">
-                    <div [attr.id]="'delete_staff-'+data.id" class="modal fade" tabindex="-1" role="dialog">
-                      <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                          <div class="modal-body text-center">
-                            <img src="assets/img/sent.png" alt="" width="50" height="46">
-                            <h5 class="mt-3" *ngIf="staff_selected">¿Eliminar a <strong>{{ staff_selected.email }}</strong>?</h5>
-                            <div class="mt-4 d-flex justify-content-center gap-3">
-                              <button class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                              <button class="btn btn-danger" (click)="deleteUser()">Eliminar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </ng-container>
                 </tbody>
               </table>
             </div>
+            
 
             <!-- Paginación -->
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">

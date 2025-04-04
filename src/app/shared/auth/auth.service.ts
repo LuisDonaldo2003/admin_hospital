@@ -68,4 +68,4 @@ export class AuthService {
       window.location.reload(); // 🔴 FORZAR RECARGA TOTAL DE LA APP
     });
   }
-}
+} 
