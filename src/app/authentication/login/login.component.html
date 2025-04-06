@@ -2,15 +2,15 @@
 <div class="main-wrapper login-body">
   <div class="container-fluid px-0">
     <div class="row">
-      <!-- Login logo -->
+
+      <!-- Login logo / Imagen del hospital -->
       <div class="col-lg-6 login-wrap">
         <div class="login-sec">
           <div class="log-img">
-            <img class="img-fluid" src="assets/img/login-02.png" alt="Logo" />
+            <img class="img-fluid" src="assets/img/login-02.png" alt="Imagen del hospital IMSS" />
           </div>
         </div>
       </div>
-      <!-- /Login logo -->
 
       <!-- Login Content -->
       <div class="col-lg-6 login-wrap-bg">
@@ -18,116 +18,89 @@
           <div class="loginbox">
             <div class="login-right">
               <div class="login-right-wrap">
-                <div class="account-logo">
-                  <a [routerLink]="routes.adminDashboard"
-                    ><img src="assets/img/login-logo.png" alt=""
-                  /></a>
+
+                <!-- Logo y título -->
+                <div class="account-logo text-center">
+                  <a [routerLink]="routes.adminDashboard">
+                    <img src="assets/img/login-logo.png" alt="Logo SISMEG" />
+                  </a>
                 </div>
-                <h2>Iniciar Sesión</h2>
-                <!-- Form -->
+                <h2 class="text-center">Iniciar Sesión</h2>
+
+                <!-- Formulario -->
                 <form [formGroup]="form" (ngSubmit)="loginFormSubmit()">
+
+                  <!-- Correo -->
                   <div class="form-group">
-                    <label for="Email">Correo electrónico <span class="login-danger">*</span></label>
+                    <label for="email">Correo electrónico <span class="login-danger">*</span></label>
                     <input
-                      class="form-control"
+                      aria-label="Correo electrónico"
+                      id="email"
+                      type="email"
+                      class="form-control transition-all"
                       formControlName="email"
-                      type="text"
-                      [ngClass]="{
-                        'is-invalid': f['email'].touched && f['email'].invalid
-                      }"
+                      [ngClass]="{ 'is-invalid': f['email'].touched && f['email'].invalid }"
                     />
-                    <div
-                    *ngIf="f['email'].touched && f['email'].invalid"
-                    class="invalid-feedback"
-                    >
-                      <div
-                      *ngIf="f['email'].errors && f['email'].errors['required']"
-                      >
+                    <div *ngIf="f['email'].touched && f['email'].invalid" class="invalid-feedback">
+                      <div *ngIf="f['email'].errors?.['required']">
                         Ingrese el correo electrónico asociado a su cuenta.
                       </div>
-                      <div
-                        *ngIf="f['email'].errors && f['email'].errors['email']"
-                      >
-                        Correo no válido
+                      <div *ngIf="f['email'].errors?.['email']">
+                        Correo no válido.
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <label for="Password">Contraseña <span class="login-danger">*</span></label>
+
+                  <!-- Contraseña -->
+                  <div class="form-group position-relative">
+                    <label for="password">Contraseña <span class="login-danger">*</span></label>
                     <input
-                      class="form-control pass-input"
+                      aria-label="Contraseña"
+                      id="password"
                       [type]="passwordClass ? 'text' : 'password'"
+                      class="form-control pass-input transition-all"
                       formControlName="password"
-                      [ngClass]="{
-                        'is-invalid':
-                          f['password'].touched && f['password'].invalid
-                      }"
+                      [ngClass]="{ 'is-invalid': f['password'].touched && f['password'].invalid }"
                     />
-                    <div
-                      *ngIf="f['password'].touched && f['password'].invalid"
-                      class="invalid-feedback"
-                    >
-                      <div
-                        *ngIf="
-                          f['password'].errors &&
-                          f['password'].errors['required']
-                        "
-                      >
-                        La contraseña es requerida
+                    <div *ngIf="f['password'].touched && f['password'].invalid" class="invalid-feedback">
+                      <div *ngIf="f['password'].errors?.['required']">
+                        La contraseña es requerida.
                       </div>
                     </div>
-                    <span (click)="togglePassword()" (keyup.enter)="togglePassword()"  [ngClass] = "passwordClass ? 'feather icon-eye' : 'feather icon-eye-off'"
-                      class="profile-views toggle-password"  tabindex="0"
+
+                    <!-- Ícono de mostrar/ocultar contraseña -->
+                    <span
+                      tabindex="0"
+                      role="button"
+                      aria-label="Mostrar/Ocultar contraseña"
+                      class="profile-views toggle-password"
+                      [ngClass]="passwordClass ? 'feather icon-eye' : 'feather icon-eye-off'"
+                      (click)="togglePassword()"
+                      (keydown.enter)="togglePassword()"
                     ></span>
                   </div>
-                  <!-- <div class="forgotpass">
-                    <div class="remember-me">
-                      <label
-                        class="custom_check mr-2 mb-0 d-inline-flex remember-me"
-                      >
-                        Remember me
-                        <input type="checkbox" name="radio" />
-                        <span class="checkmark"></span>
-                      </label>
-                    </div>
-                    <a [routerLink]="routes.forgotPassword">Forgot Password?</a>
-                  </div> -->
-                  <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="ERROR">
-                      <strong>Error!</strong> El usuario y contraseña son incorrectos.
-                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true"> </span>
-                      </button>
-                </div>
+
+                  <!-- Alerta de error -->
+                  <div *ngIf="ERROR" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error:</strong> Usuario o contraseña incorrectos. Verifique sus datos o contacte al administrador.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar">
+                      <span aria-hidden="true"></span>
+                    </button>
+                  </div>
+
+                  <!-- Botón de Login -->
                   <div class="form-group login-btn">
                     <button
-                      [disabled]="form.invalid"
                       class="btn btn-primary btn-block"
                       type="submit"
+                      [disabled]="form.invalid || loading"
                     >
-                      Login
+                      <span *ngIf="!loading">Login</span>
+                      <span *ngIf="loading"><i class="fa fa-spinner fa-spin me-2"></i> Cargando...</span>
                     </button>
                   </div>
                 </form>
-                <!-- /Form -->
-
-                <!-- <div class="next-sign">
-                  <p class="account-subtitle">
-                    Need an account?
-                    <a [routerLink]="routes.register">Sign Up</a>
-                  </p>
-
-                  <div class="social-login">
-                    <a href="javascript:;"
-                      ><img src="assets/img/icons/login-icon-01.svg" alt=""
-                    /></a>
-                    <a href="javascript:;"
-                      ><img src="assets/img/icons/login-icon-02.svg" alt=""
-                    /></a>
-                    <a href="javascript:;"
-                      ><img src="assets/img/icons/login-icon-03.svg" alt=""
-                    /></a>
-                  </div>
-                </div> -->
+                <!-- /Formulario -->
 
               </div>
             </div>
@@ -135,6 +108,7 @@
         </div>
       </div>
       <!-- /Login Content -->
+
     </div>
   </div>
 </div>

@@ -5,56 +5,65 @@ import { AuthService } from 'src/app/shared/auth/auth.service';
 import { routes } from 'src/app/shared/routes/routes';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    standalone: false
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+  standalone: false
 })
 export class LoginComponent implements OnInit {
   public routes = routes;
   public passwordClass = false;
   public ERROR = false;
+  public loading = false;
+
   form = new FormGroup({
-    email: new FormControl('', [
-      Validators.required,
-      Validators.email,
-    ]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
   });
+
+  constructor(
+    public auth: AuthService,
+    public router: Router
+  ) {}
+
+  ngOnInit(): void {
+    // Si deseas limpiar sesiones anteriores
+    // localStorage.removeItem('authenticated');
+  }
 
   get f() {
     return this.form.controls;
   }
 
-  constructor(public auth: AuthService,public router: Router) {}
-  ngOnInit(): void {
-    // if (localStorage.getItem('authenticated')) {
-    //   localStorage.removeItem('authenticated');
-    // }
-  }
+  loginFormSubmit(): void {
+    if (this.form.invalid) return;
 
-  loginFormSubmit() {
-    if (this.form.valid) {
-      this.ERROR = false;
-      this.auth.login(this.form.value.email ? this.form.value.email : '' ,this.form.value.password ? this.form.value.password: '')
-      .subscribe((resp:any) => {
-        console.log(resp);
-        if(resp){
-          // EL LOGIN ES EXITOSO
-          setTimeout(() => {
-            this.router.navigate([routes.adminDashboard]);
-          }, 50);
-        }else{
-          // EL LOGIN NO ES EXITOSO
+    this.ERROR = false;
+    this.loading = true;
+
+    const { email, password } = this.form.value;
+
+    this.auth.login(email || '', password || '').subscribe({
+      next: (resp: any) => {
+        this.loading = false;
+
+        if (resp) {
+          // ✅ Login exitoso
+          this.router.navigate([this.routes.adminDashboard]);
+        } else {
+          // ❌ Credenciales incorrectas
           this.ERROR = true;
         }
-      },error => {
-        console.log(error);
-      })
-      ;
-    }
+      },
+      error: (err) => {
+        console.error('Error de login:', err);
+        this.loading = false;
+        this.ERROR = true;
+      }
+    });
   }
-  togglePassword() {
+
+  togglePassword(): void {
     this.passwordClass = !this.passwordClass;
   }
 }
