@@ -1,24 +1,24 @@
-import { Component } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { SpecialitieService } from '../service/specialitie.service';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
+import { DepartamentMService } from '../service/departament-m.service';
 
 @Component({
-  selector: 'app-list-specialitie',
-  standalone: true,
+  selector: 'app-list-departament-m',
   imports: [
     CommonModule,
-    FormsModule,           
-    MatTableModule,   
+    FormsModule,
+    MatTableModule,
     RouterModule
   ],
-  templateUrl: './list-specialitie.component.html',
-  styleUrl: './list-specialitie.component.scss'
+  templateUrl: './list-departament-m.component.html',
+  styleUrl: './list-departament-m.component.scss'
 })
-export class ListSpecialitieComponent {
-  public specialitiesList:any = [];
+export class ListDepartamentMComponent {
+
+  public departamentsList: any = [];
   dataSource!: MatTableDataSource<any>;
 
   public showFilter = false;
@@ -26,8 +26,8 @@ export class ListSpecialitieComponent {
   public lastIndex = 0;
   public pageSize = 20;
   public totalData = 0;
-  public skip = 0;//MIN
-  public limit: number = this.pageSize;//MAX
+  public skip = 0; // MIN
+  public limit: number = this.pageSize; // MAX
   public pageIndex = 0;
   public serialNumberArray: Array<number> = [];
   public currentPage = 1;
@@ -35,59 +35,55 @@ export class ListSpecialitieComponent {
   public pageSelection: Array<any> = [];
   public totalPages = 0;
 
-  public specialitie_generals:any = [];
-  public specialitie_selected:any;
-  constructor(
-    public specialitiesService: SpecialitieService,
-  ){
+  public departament_generals: any = [];
+  public departament_selected: any;
 
-  }
+  constructor(
+    public departamentsService: DepartamentMService,
+  ) {}
+
   ngOnInit() {
     this.getTableData();
   }
+
   private getTableData(): void {
-    this.specialitiesList = [];
+    this.departamentsList = [];
     this.serialNumberArray = [];
 
-    this.specialitiesService.listSpecialities().subscribe((resp:any) => {
-
+    this.departamentsService.listDepartaments().subscribe((resp: any) => {
       console.log(resp);
 
-      this.totalData = resp.specialities.length;
-      this.specialitie_generals = resp.specialities;
+      this.totalData = resp.departaments.length;
+      this.departament_generals = resp.departaments;
       this.getTableDataGeneral();
     })
-
-
   }
 
   getTableDataGeneral() {
-    this.specialitiesList = [];
+    this.departamentsList = [];
     this.serialNumberArray = [];
 
-    this.specialitie_generals.map((res: any, index: number) => {
+    this.departament_generals.map((res: any, index: number) => {
       const serialNumber = index + 1;
       if (index >= this.skip && serialNumber <= this.limit) {
-        
-        this.specialitiesList.push(res);
+        this.departamentsList.push(res);
         this.serialNumberArray.push(serialNumber);
       }
     });
-    this.dataSource = new MatTableDataSource<any>(this.specialitiesList);
+    this.dataSource = new MatTableDataSource<any>(this.departamentsList);
     this.calculateTotalPages(this.totalData, this.pageSize);
   }
 
-  selectSpecialitie(rol:any){
-    this.specialitie_selected = rol;
+  selectDepartament(rol: any) {
+    this.departament_selected = rol;
   }
 
-  deleteSpecialitie(){
-
-    this.specialitiesService.deleteSpecialities(this.specialitie_selected.id).subscribe((resp:any) => {
+  deleteDepartament() {
+    this.departamentsService.deleteDepartament(this.departament_selected.id).subscribe((resp: any) => {
       console.log(resp);
-      let INDEX = this.specialitiesList.findIndex((item:any) => item.id == this.specialitie_selected.id);
-      if(INDEX != -1){
-        this.specialitiesList.splice(INDEX,1);
+      let INDEX = this.departamentsList.findIndex((item: any) => item.id == this.departament_selected.id);
+      if (INDEX != -1) {
+        this.departamentsList.splice(INDEX, 1);
 
         $('#delete_patient').hide();
         $("#delete_patient").removeClass("show");
@@ -95,26 +91,24 @@ export class ListSpecialitieComponent {
         $("body").removeClass();
         $("body").removeAttr("style");
 
-        this.specialitie_selected = null;
+        this.departament_selected = null;
       }
     })
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   public searchData(value: any): void {
     this.dataSource.filter = value.trim().toLowerCase();
-    this.specialitiesList = this.dataSource.filteredData;
+    this.departamentsList = this.dataSource.filteredData;
   }
 
   public sortData(sort: any) {
-    const data = this.specialitiesList.slice();
+    const data = this.departamentsList.slice();
 
     if (!sort.active || sort.direction === '') {
-      this.specialitiesList = data;
+      this.departamentsList = data;
     } else {
-      this.specialitiesList = data.sort((a:any, b:any) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.departamentsList = data.sort((a: any, b: any) => {
         const aValue = (a as any)[sort.active];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const bValue = (b as any)[sort.active];
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
@@ -164,16 +158,11 @@ export class ListSpecialitieComponent {
     if (this.totalPages % 1 != 0) {
       this.totalPages = Math.trunc(this.totalPages + 1);
     }
-    /* eslint no-var: off */
     for (var i = 1; i <= this.totalPages; i++) {
       const limit = pageSize * i;
       const skip = limit - pageSize;
       this.pageNumberArray.push(i);
       this.pageSelection.push({ skip: skip, limit: limit });
-      // 1
-      // 0 - 10
-      // 2
-      // 10 - 20
     }
   }
 }

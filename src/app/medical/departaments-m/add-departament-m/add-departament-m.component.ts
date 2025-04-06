@@ -1,32 +1,30 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SpecialitieService } from '../service/specialitie.service';
+import { DepartamentMService } from '../service/departament-m.service';
 
 @Component({
-  selector: 'app-add-specialitie',
+  selector: 'app-add-departament-m',
   standalone: true,
   imports: [
     CommonModule,
     FormsModule
   ],
-  templateUrl: './add-specialitie.component.html',
-  styleUrls: ['./add-specialitie.component.scss']
+  templateUrl: './add-departament-m.component.html',
+  styleUrl: './add-departament-m.component.scss'
 })
-export class AddSpecialitieComponent {
+export class AddDepartamentMComponent {
 
   name:string = '';
   valid_form: boolean = false;
   valid_form_success: boolean = false;
   text_validation:any = null;
   constructor(
-    public specialitieService: SpecialitieService,
+    public departamentService: DepartamentMService,
   ) {
-    
-  }
-  ngOnInit(): void {
 
   }
+  ngOnInit(): void {}
 
   save(){
     this.valid_form = false;
@@ -39,7 +37,7 @@ export class AddSpecialitieComponent {
     };
     this.valid_form_success = false;
     this.text_validation = null;
-    this.specialitieService.storeSpecialities(data).subscribe((resp:any) => {
+    this.departamentService.storeDepartament(data).subscribe((resp:any) => {
       console.log(resp);
       if(resp.message == 403){
         this.text_validation = resp.message_text;
@@ -47,9 +45,6 @@ export class AddSpecialitieComponent {
         this.name = '';
         this.valid_form_success = true;
       }
-
     })
   }
-
 }
-

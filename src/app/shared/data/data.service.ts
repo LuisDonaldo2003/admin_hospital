@@ -312,38 +312,38 @@ export class DataService {
           ],
         },
         {
-          menuValue: 'Departments',
+          menuValue: 'Departaments',
           hasSubRoute: true,
           showSubRoute: false,
-          base: 'specialtys',
+          base: 'departaments-m',
           img: 'assets/img/icons/menu-icon-06.svg',
           subMenus: [
             {
               menuValue: 'Departament List',
               route: routes.departmentList,
               base: routes.departmentList,
-              permision: 'list_specialty',
+              permision: 'list_departament',
               show_nav: true,
             },
             {
               menuValue: 'Add Departament',
               route: routes.addDepartment,
               base: routes.addDepartment,
-              permision: 'register_specialty',
+              permision: 'add_departament',
               show_nav: true,
             },
             {
               menuValue: 'Edit Departament',
               route: '',
               base: '',
-              permision: 'edit_specialty',
+              permision: 'edit_departament',
               show_nav: false,
             },
             {
               menuValue: 'Delete Departament',
               route: '',
               base: '',
-              permision: 'delete_specialty',
+              permision: 'delete_departament',
               show_nav: false,
             },
           ],
@@ -557,7 +557,7 @@ export class DataService {
     },
   ];
   // public sideBarList = [
-    
+
   // ];
 
   public carousel1 = [

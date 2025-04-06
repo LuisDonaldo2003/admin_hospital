@@ -1,46 +1,44 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { SpecialitieService } from '../service/specialitie.service';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { DepartamentMService } from '../service/departament-m.service';
 
 @Component({
-  selector: 'app-edit-specialitie',
+  selector: 'app-edit-departament-m',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,           
-    MatTableModule,   
+    FormsModule,
+    MatTableModule,
     RouterModule
-  ],  templateUrl: './edit-specialitie.component.html',
-  styleUrl: './edit-specialitie.component.scss'
+  ],
+  templateUrl: './edit-departament-m.component.html',
+  styleUrl: './edit-departament-m.component.scss'
 })
-export class EditSpecialitieComponent {
-
-  
+export class EditDepartamentMComponent {
   name:string = '';
   state:number = 1;
   valid_form: boolean = false;
   valid_form_success: boolean = false;
   text_validation:any = null;
 
-  specialitie_id:any;
+  departament_id:any;
   constructor(
-    public specialitieService: SpecialitieService,
+    public departamentService: DepartamentMService,
     public activedRoute: ActivatedRoute,
-  ) {
-    
-  }
+  ) {}
+
   ngOnInit(): void {
     this.activedRoute.params.subscribe((resp:any) => {
-      this.specialitie_id = resp.id;
+      this.departament_id = resp.id;
     })
-    this.showSpecialitie();
+    this.showDepartament();
   }
 
-  showSpecialitie(){
-    this.specialitieService.showSpecialities(this.specialitie_id).subscribe((resp:any) => {
+  showDepartament(){
+    this.departamentService.showDepartament(this.departament_id).subscribe((resp:any) => {
       console.log(resp);
       this.name = resp.name;
       this.state = resp.state;
@@ -55,11 +53,11 @@ export class EditSpecialitieComponent {
     }
     let data = {
       name: this.name,
-      state:this.state,
+      state: this.state,
     };
     this.valid_form_success = false;
     this.text_validation = null;
-    this.specialitieService.editSpecialities(data,this.specialitie_id).subscribe((resp:any) => {
+    this.departamentService.editDepartament(data, this.departament_id).subscribe((resp:any) => {
       console.log(resp);
       if(resp.message == 403){
         this.text_validation = resp.message_text;
