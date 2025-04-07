@@ -46,16 +46,16 @@ export class AddStaffNComponent {
     public attendance_number: string = '';
     public professional_license: string = '';
     public funcion_real: string = '';
-    
-    
-    public specialitie_id: string = '';
+
+
+    public departament_id: string = '';
     public profile_id: string = '';
     public contract_type_id: string = '';
-    
-    public specialities: any = [];
+
+    public departaments: any = [];
     public profiles: any = [];
     public contract_types: any = [];
-    
+
     public roles:any = [];
 
     public FILE_AVATAR :any;
@@ -71,12 +71,12 @@ export class AddStaffNComponent {
     ngOnInit(): void {
       this.staffservice.listConfig().subscribe((resp: any) => {
         this.roles = resp.roles;
-        this.specialities = resp.specialities ?? [];
+        this.departaments  = resp.departaments  ?? [];
         this.profiles = resp.profiles ?? [];
         this.contract_types = resp.contract_types ?? [];
       });
     }
-    
+
 
 
     save() {
@@ -111,7 +111,7 @@ export class AddStaffNComponent {
       fromData.append('attendance_number', this.attendance_number);
       fromData.append('professional_license', this.professional_license);
       fromData.append('funcion_real', this.funcion_real);
-      fromData.append('specialitie_id', this.specialitie_id);
+      fromData.append('departament_id', this.departament_id);
       fromData.append('profile_id', this.profile_id);
       fromData.append('contract_type_id', this.contract_type_id);
 

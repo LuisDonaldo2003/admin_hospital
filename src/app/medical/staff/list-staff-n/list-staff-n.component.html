@@ -76,9 +76,9 @@
                     <td>{{ data.rfc }}</td>
                     <td>{{ data.attendance_number }}</td>
                     <td>{{ data.professional_license }}</td>
-                    <td>{{ data.funcion_real  || '-' }}</td>
-                    <td>{{ data.speciality  }}</td>
-                    <td>{{ data.profile_relation  }}</td>
+                    <td>{{ data.funcion_real || '-' }}</td>
+                    <td>{{ data.departament || '-' }}</td>
+                    <td>{{ data.profile_relation }}</td>
                     <td>{{ data.contract_type }}</td>
                     <td>{{ data.role?.name }}</td>
                     <td>{{ data.created_at }}</td>
@@ -91,10 +91,11 @@
                           <a class="dropdown-item" [routerLink]="['/staffs/list-staff/edit-staff/', data.id]">
                             <i class="fa-solid fa-pen-to-square me-2"></i> Editar
                           </a>
-                          <a class="dropdown-item text-danger" href="javascript:void(0);"
+                          <a class="dropdown-item text-danger"
+                             href="javascript:void(0);"
                              (click)="selectUser(data)"
                              data-bs-toggle="modal"
-                             [attr.data-bs-target]="'#delete_staff-'+data.id">
+                             data-bs-target="#deleteModal">
                             <i class="fa fa-trash-alt me-2"></i> Eliminar
                           </a>
                         </div>
@@ -104,7 +105,6 @@
                 </tbody>
               </table>
             </div>
-            
 
             <!-- Paginación -->
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
@@ -116,13 +116,11 @@
                   <li class="page-item" [class.disabled]="currentPage === 1">
                     <a class="page-link" href="javascript:void(0);" (click)="getMoreData('previous')">Anterior</a>
                   </li>
-
                   <ng-container *ngFor="let item of pageNumberArray; let i = index">
                     <li class="page-item" [class.active]="item === currentPage">
                       <a class="page-link" href="javascript:void(0);" (click)="moveToPage(item)">{{ item }}</a>
                     </li>
                   </ng-container>
-
                   <li class="page-item" [class.disabled]="currentPage === pageNumberArray[pageNumberArray.length - 1]">
                     <a class="page-link" href="javascript:void(0);" (click)="getMoreData('next')">Siguiente</a>
                   </li>
@@ -132,6 +130,25 @@
 
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal genérico de eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar a <strong>{{ staff_selected?.name }} {{ staff_selected?.surname }}</strong>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="deleteUser()" data-bs-dismiss="modal">Eliminar</button>
       </div>
     </div>
   </div>
