@@ -131,6 +131,12 @@ export class routes {
   public static get patientDashboard(): string {
     return this.baseUrl + '/dashboard/patient-dashboard';
   }
+  public static get addContract(): string {
+    return this.baseUrl + '/contract-types/add_contract';
+  }
+  public static get contractList(): string {
+    return this.baseUrl + '/contract-types/list_contract';
+  }
   public static get addDepartment(): string {
     return this.baseUrl + '/departaments-m/add-departament';
   }

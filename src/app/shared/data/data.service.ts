@@ -312,6 +312,43 @@ export class DataService {
           ],
         },
         {
+          menuValue: 'Contract',
+          hasSubRoute: true,
+          showSubRoute: false,
+          base: 'contract-types',
+          img: 'assets/img/icons/menu-icon-06.svg',
+          subMenus: [
+            {
+              menuValue: 'Contract List',
+              route: routes.contractList,
+              base: routes.contractList,
+              permision: 'list_contract',
+              show_nav: true,
+            },
+            {
+              menuValue: 'Add Contract',
+              route: routes.addContract,
+              base: routes.addContract,
+              permision: 'add_contract',
+              show_nav: true,
+            },
+            {
+              menuValue: 'Edit Contract',
+              route: '',
+              base: '',
+              permision: 'edit_contract',
+              show_nav: false,
+            },
+            {
+              menuValue: 'Delete Contract',
+              route: '',
+              base: '',
+              permision: 'delete_contract',
+              show_nav: false,
+            },
+          ],
+        },
+        {
           menuValue: 'Departaments',
           hasSubRoute: true,
           showSubRoute: false,
