@@ -29,6 +29,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./contract-types/contract-types.module').then((m) => m.ContractTypesModule),
       },
+      {
+        path: 'profile-m',
+        loadChildren: () =>
+          import('./profile-m/profile-m.module').then((m) => m.ProfileMModule),
+      },
     ]
   }
 ];

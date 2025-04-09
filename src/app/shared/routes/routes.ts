@@ -131,18 +131,7 @@ export class routes {
   public static get patientDashboard(): string {
     return this.baseUrl + '/dashboard/patient-dashboard';
   }
-  public static get addContract(): string {
-    return this.baseUrl + '/contract-types/add_contract';
-  }
-  public static get contractList(): string {
-    return this.baseUrl + '/contract-types/list_contract';
-  }
-  public static get addDepartment(): string {
-    return this.baseUrl + '/departaments-m/add-departament';
-  }
-  public static get departmentList(): string {
-    return this.baseUrl + '/departaments-m/list-departament';
-  }
+  
   public static get editDepartment(): string {
     return this.baseUrl + '/department/edit';
   }
@@ -323,9 +312,7 @@ export class routes {
   public static get addLeave(): string {
     return this.baseUrl + '/staff/add-leave';
   }
-  public static get addStaff(): string {
-    return this.baseUrl + '/staffs/add-staff';
-  }
+  
   public static get editLeave(): string {
     return this.baseUrl + '/staff/edit-leave';
   }
@@ -341,9 +328,7 @@ export class routes {
   public static get staffLeave(): string {
     return this.baseUrl + '/staff/staff-leave';
   }
-  public static get staffList(): string {
-    return this.baseUrl + '/staffs/list-staff';
-  }
+  
   public static get staffProfile(): string {
     return this.baseUrl + '/staff/staff-profile';
   }
@@ -362,10 +347,49 @@ export class routes {
   public static get error500(): string {
     return this.baseUrl + '/error/error500';
   }
+
+
+
+  //Medical
+
+  //Role
   public static get registerRole(): string {
     return this.baseUrl + '/roles/register';
   }
   public static get listadoRole(): string {
     return this.baseUrl + '/roles/list';
   }
+
+  //User
+  public static get staffList(): string {
+    return this.baseUrl + '/staffs/list-staff';
+  }
+  public static get addStaff(): string {
+    return this.baseUrl + '/staffs/add-staff';
+  }
+
+  //Contract
+  public static get addContract(): string {
+    return this.baseUrl + '/contract-types/add_contract';
+  }
+  public static get contractList(): string {
+    return this.baseUrl + '/contract-types/list_contract';
+  }
+
+  //Profile
+  public static get addProfile(): string {
+    return this.baseUrl + '/profile-m/add_profile-m';
+  }
+  public static get profileList(): string {
+    return this.baseUrl + '/profile-m/list_profile-m';
+  }
+
+  //Department
+public static get addDepartment(): string {
+    return this.baseUrl + '/departaments-m/add-departament';
+  }
+  public static get departmentList(): string {
+    return this.baseUrl + '/departaments-m/list-departament';
+  }
+
 }

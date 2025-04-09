@@ -349,6 +349,43 @@ export class DataService {
           ],
         },
         {
+          menuValue: 'Profile',
+          hasSubRoute: true,
+          showSubRoute: false,
+          base: 'profile-m',
+          img: 'assets/img/icons/menu-icon-06.svg',
+          subMenus: [
+            {
+              menuValue: 'Profile List',
+              route: routes.profileList,
+              base: routes.profileList,
+              permision: 'list_profile-m',
+              show_nav: true,
+            },
+            {
+              menuValue: 'Add Profile',
+              route: routes.addProfile,
+              base: routes.addProfile,
+              permision: 'add_profile-m',
+              show_nav: true,
+            },
+            {
+              menuValue: 'Edit Profile',
+              route: '',
+              base: '',
+              permision: 'edit_profile-m',
+              show_nav: false,
+            },
+            {
+              menuValue: 'Delete Profile',
+              route: '',
+              base: '',
+              permision: 'delete_profile-m',
+              show_nav: false,
+            },
+          ],
+        },
+        {
           menuValue: 'Departaments',
           hasSubRoute: true,
           showSubRoute: false,
