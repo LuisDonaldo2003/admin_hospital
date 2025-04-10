@@ -47,7 +47,6 @@ export class AddStaffNComponent {
     public professional_license: string = '';
     public funcion_real: string = '';
 
-
     public departament_id: string = '';
     public profile_id: string = '';
     public contract_type_id: string = '';
@@ -59,14 +58,12 @@ export class AddStaffNComponent {
     public roles:any = [];
 
     public FILE_AVATAR :any;
-    public IMAGE_PREVIZUALIZA:any = 'assets/img/user-06.jpg';
+    public IMAGEN_PREVIZUALIZA:any = 'assets/img/user-06.jpg'; // nombre corregido
 
     public text_success:string = '';
     public text_validation:string = '';
-    constructor(
-      public staffservice: StaffService,
-    ){
-    }
+
+    constructor(public staffservice: StaffService) {}
 
     ngOnInit(): void {
       this.staffservice.listConfig().subscribe((resp: any) => {
@@ -77,30 +74,26 @@ export class AddStaffNComponent {
       });
     }
 
-
-
     save() {
-
-      this.text_validation =   '';
-      if(!this.name || !this.email || !this.surname || !this.FILE_AVATAR || !this.password){
-        this.text_validation = 'Los siguientes campos son obligatorios (name,surname,email,avatar)';
+      this.text_validation = '';
+      if (!this.name || !this.email || !this.surname || !this.FILE_AVATAR || !this.password) {
+        this.text_validation = 'Los siguientes campos son obligatorios (name, surname, email, avatar)';
         return;
       }
 
-      if(this.password != this.password_confirmation){
+      if (this.password !== this.password_confirmation) {
         this.text_validation = 'Las contraseñas no coinciden';
         return;
       }
-      console.log(this.selectedValue);
 
-      let formattedBirthDate = new Date(this.birth_date).toISOString().split('T')[0]; // Convierte a 'YYYY-MM-DD'
+      let formattedBirthDate = new Date(this.birth_date).toISOString().split('T')[0];
 
       let fromData = new FormData();
       fromData.append('name', this.name);
       fromData.append('surname', this.surname);
       fromData.append('mobile', this.mobile);
       fromData.append('email', this.email);
-      fromData.append('birth_date', formattedBirthDate); // Se envía en formato correcto
+      fromData.append('birth_date', formattedBirthDate);
       fromData.append('password', this.password);
       fromData.append('gender', this.gender + "");
       fromData.append('imagen', this.FILE_AVATAR);
@@ -115,38 +108,41 @@ export class AddStaffNComponent {
       fromData.append('profile_id', this.profile_id);
       fromData.append('contract_type_id', this.contract_type_id);
 
-
       this.staffservice.registerUser(fromData).subscribe((resp: any) => {
         console.log(resp);
-        if(resp.message == 403){
+        if (resp.message === 403) {
           this.text_validation = resp.message_text;
-        }else{
+        } else {
           this.text_success = 'Usuario registrado correctamente';
 
+          // Limpiar campos
           this.birth_date = '';
           this.name = '';
           this.surname = '';
           this.mobile = '';
           this.email = '';
           this.password = '';
+          this.password_confirmation = '';
           this.gender = 1;
           this.FILE_AVATAR = null;
-          this.IMAGE_PREVIZUALIZA = null;
+          this.IMAGEN_PREVIZUALIZA = 'assets/img/user-06.jpg'; // usar imagen por defecto
         }
       });
     }
 
     loadFile($event: any) {
-      if($event.target.files[0].type.indexOf('image') < 0){
-        // alert('Please select image file only');
+      if ($event.target.files[0].type.indexOf('image') < 0) {
         this.text_validation = 'Solamente pueden ser archivos de tipo imagen';
         return;
-        }
-
-        this.text_validation ='';
-        this.FILE_AVATAR = $event.target.files[0];
-        let reader = new FileReader();
-        reader.readAsDataURL(this.FILE_AVATAR);
-        reader.onloadend = () => this.IMAGE_PREVIZUALIZA = reader.result;
       }
+
+      this.text_validation = '';
+      this.FILE_AVATAR = $event.target.files[0];
+      let reader = new FileReader();
+      reader.readAsDataURL(this.FILE_AVATAR);
+      reader.onloadend = () => {
+        this.IMAGEN_PREVIZUALIZA = reader.result;
+        console.log("Vista previa cargada:", this.IMAGEN_PREVIZUALIZA);
+      };
+    }
 }

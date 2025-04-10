@@ -66,8 +66,10 @@ export class ListStaffNComponent {
       console.log(resp);
 
       this.totalData = resp.users.length;
-      this.role_generals = resp.users;
-
+      this.role_generals = resp.users.sort((a: any, b: any) =>
+        a.name.localeCompare(b.name)
+      );
+      
       this.getTableDataGeneral();
     })
 

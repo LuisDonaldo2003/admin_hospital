@@ -130,10 +130,11 @@
                 <div class="col-md-6">
                   <label class="form-label">Avatar *</label>
                   <input type="file" class="form-control" accept="image/*" (change)="loadFile($event)" />
-                  <div class="mt-3" *ngIf="FILE_AVATAR">
-                    <img [src]="IMAGE_PREVIZUALIZA" class="img-thumbnail" width="200" alt="Preview" />
+                  <div class="mt-3" *ngIf="IMAGEN_PREVIZUALIZA">
+                    <img [src]="IMAGEN_PREVIZUALIZA" class="img-thumbnail" width="200" alt="Preview" />
                   </div>
                 </div>
+                
 
                 <!-- Mensajes -->
                 <div class="col-12" *ngIf="text_success || text_validation">

@@ -54,8 +54,10 @@ export class ListContractComponent {
       console.log(resp);
 
       this.totalData = resp.contracts.length;
-      this.contract_generals = resp.contracts;
-      this.getTableDataGeneral();
+      this.contract_generals = resp.contracts.sort((a: any, b: any) =>
+        a.name.localeCompare(b.name)
+      );
+            this.getTableDataGeneral();
     })
   }
 

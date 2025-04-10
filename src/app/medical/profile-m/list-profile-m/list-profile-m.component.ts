@@ -54,7 +54,9 @@ export class ListProfileMComponent {
       console.log(resp);
 
       this.totalData = resp.profile.length;
-      this.profile_generals = resp.profile;
+      this.profile_generals = resp.profile.sort((a: any, b: any) =>
+        a.name.localeCompare(b.name)
+      );
       this.getTableDataGeneral();
     })
   }

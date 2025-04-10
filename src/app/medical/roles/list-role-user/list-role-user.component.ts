@@ -51,12 +51,15 @@ export class ListRoleUserComponent {
     this.RoleService.listRoles().subscribe((resp: any) => {
         console.log(resp);
 
-        this.totalData = resp.roles.length;
-        this.role_generals = resp.roles.map((role: any) => ({
-            ...role,
-            permissions: role.permission_pluck || [] // Asegurar que los permisos estén correctamente asignados
-        }));
-        this.getTableDataGeneral();
+      this.totalData = resp.roles.length;
+      this.role_generals = resp.roles
+        .map((role: any) => ({
+          ...role,
+          permissions: role.permission_pluck || []
+        }))
+        .sort((a: any, b: any) => a.name.localeCompare(b.name));
+
+      this.getTableDataGeneral();
     });
   }
 

@@ -54,7 +54,9 @@ export class ListDepartamentMComponent {
       console.log(resp);
 
       this.totalData = resp.departaments.length;
-      this.departament_generals = resp.departaments;
+      this.departament_generals = resp.departaments.sort((a: any, b: any) =>
+        a.name.localeCompare(b.name)
+      );
       this.getTableDataGeneral();
     })
   }
