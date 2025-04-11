@@ -1,46 +1,22 @@
 // Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
 @use "@angular/material" as mat;
-// Plus imports for other components in your app.
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat.elevation-classes();
 @include mat.app-background();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
 $preclinic-angular-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
-$preclinic-angular-accent: mat.m2-define-palette(
-  mat.$m2-pink-palette,
-  A200,
-  A100,
-  A400
-);
-
-// The warn palette is optional (defaults to red).
+$preclinic-angular-accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
 $preclinic-angular-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$preclinic-angular-theme: mat.m2-define-light-theme(
-  (
-    color: (
-      primary: $preclinic-angular-primary,
-      accent: $preclinic-angular-accent,
-      warn: $preclinic-angular-warn,
-    ),
-  )
-);
+$preclinic-angular-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $preclinic-angular-primary,
+    accent: $preclinic-angular-accent,
+    warn: $preclinic-angular-warn,
+  ),
+));
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
 @include mat.all-component-themes($preclinic-angular-theme);
-
-/* You can add global styles to this file, and also import other style files */
 
 @import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lightgallery.css");
 @import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-zoom.css");
@@ -52,7 +28,8 @@ $preclinic-angular-theme: mat.m2-define-light-theme(
   .fc .fc-button .fc-icon {
     color: #797979;
   }
-  .fc-header-toolbar.fc-toolbar .fc-button,.fc-header-toolbar.fc-toolbar .fc-button:active {
+  .fc-header-toolbar.fc-toolbar .fc-button,
+  .fc-header-toolbar.fc-toolbar .fc-button:active {
     background-color: #f1f1f1;
     border: 0 none;
     color: #797979;
@@ -61,42 +38,34 @@ $preclinic-angular-theme: mat.m2-define-light-theme(
   .fc-header-toolbar.fc-toolbar .fc-button.fc-button-active {
     background-color: #00d3c7;
     color: #fff;
-    text-shadow: none;
   }
-  .fc-header-toolbar.fc-toolbar .fc-button:not(:disabled).fc-button-active:focus,.fc-header-toolbar.fc-toolbar .fc-button:not(:disabled):active:focus,
-  .fc-header-toolbar.fc-toolbar .fc-button:focus
-  {
+  .fc-header-toolbar.fc-toolbar .fc-button:focus {
     box-shadow: 0 0 0;
   }
   .fc-button-group.fc .fc-button-primary:not(:disabled).fc-button-active {
     background-color: #00d3c7;
     border-color: #00d3c7;
     color: #fff;
-    text-transform: capitalize;
   }
   .fc .fc-button-primary:disabled {
     background-color: #00d3c7;
     border-color: #00d3c7;
     color: #fff;
-    text-transform: capitalize;
   }
   .fc .fc-button-primary:hover {
     background: #f3f3f3;
     border-color: #f3f3f3;
     color: #797979;
-    text-transform: capitalize;
   }
   .fc .fc-button-primary:disabled:hover {
     background: #00d3c7;
     border-color: #00d3c7;
     color: #fff;
-    text-transform: capitalize;
   }
   .fc-button {
     background: #f1f1f1;
     border: none;
     color: $color_55;
-    text-transform: capitalize;
     box-shadow: none;
     border-radius: 3px !important;
     margin: 0 3px !important;
@@ -107,12 +76,13 @@ $preclinic-angular-theme: mat.m2-define-light-theme(
     font-size: 14px;
   }
   .fc .fc-toolbar {
-    align-items: center;
-    flex-wrap: wrap;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
 }
-}
+
 .table_header {
   display: flex;
   justify-content: space-between;
@@ -125,31 +95,29 @@ $preclinic-angular-theme: mat.m2-define-light-theme(
       justify-content: space-between;
       margin-left: -24px;
     }
-
     select {
       width: auto;
-      display: inline-block;
       margin: 0px 3px;
     }
   }
 }
+
 .table_footer {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
   .pagination_section {
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
   }
 }
+
 .mat-mdc-option:hover:not(.mdc-list-item--disabled),
 .mat-mdc-option:focus:not(.mdc-list-item--disabled),
 .mat-mdc-option.mat-mdc-option-active,
-.mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple):not(
-    .mdc-list-item--disabled
-  ) {
+.mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple):not(.mdc-list-item--disabled) {
   background-color: $background-color_11 !important;
 }
 .mat-mdc-option-active .mdc-list-item__primary-text,
@@ -162,6 +130,7 @@ $preclinic-angular-theme: mat.m2-define-light-theme(
 .cdk-overlay-container {
   z-index: 10000000;
 }
+
 .mat-datepicker-toggle {
   pointer-events: auto;
   position: absolute;
@@ -187,12 +156,14 @@ $preclinic-angular-theme: mat.m2-define-light-theme(
 .mat-datepicker-content {
   font-size: 13px;
 }
+
 .feather.icon-settings,
 .feather.icon-list,
 .feather.icon-grid,
 .feather-circle {
   font-size: 18px;
 }
+
 .NgxEditor {
   box-shadow: none;
   padding: 10px 15px;
@@ -202,6 +173,7 @@ $preclinic-angular-theme: mat.m2-define-light-theme(
   border-radius: 10px !important;
   height: 250px;
 }
+
 .mini-sidebar {
   .sidebar-menu ul ul {
     display: none;
@@ -212,18 +184,318 @@ $preclinic-angular-theme: mat.m2-define-light-theme(
     }
   }
 }
+
 ngx-material-timepicker-content {
   margin-top: 70px;
 }
 .slick-slider {
   text-align: center;
 }
+
 @media only screen and (max-width: 768px) {
-	.table_footer {
+  .table_footer {
     flex-wrap: wrap;
     justify-content: center;
   }
-	}
-  .mat-pseudo-checkbox{
-    display: none;
-  }
+}
+
+.mat-pseudo-checkbox {
+  display: none;
+}
+
+// ====================
+//  MODO OSCURO FINAL
+// ====================
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+body.dark-mode .sidebar {
+  background-color: #1f1f1f !important;
+}
+
+body.dark-mode .sidebar .nav-link,
+body.dark-mode .sidebar a {
+  color: #f0f0f0 !important;
+}
+
+body.dark-mode .sidebar i,
+body.dark-mode .sidebar .fa,
+body.dark-mode .sidebar .feather {
+  color: #f0f0f0 !important;
+}
+
+body.dark-mode .sidebar img,
+body.dark-mode .sidebar-menu img {
+  filter: brightness(0) invert(1) !important;
+}
+
+body.dark-mode .sidebar .menu-title span {
+  color: #ccc !important;
+}
+
+body.dark-mode .top-nav,
+body.dark-mode .navbar,
+body.dark-mode .header,
+body.dark-mode .page-header {
+  background-color: #1c1c1c !important;
+  color: #f0f0f0 !important;
+  border-bottom: 1px solid #333;
+}
+
+body.dark-mode .top-nav .dropdown-menu {
+  background-color: #2c2c2c !important;
+  color: #ffffff;
+}
+
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea,
+body.dark-mode .form-control {
+  background-color: #2b2b2b !important;
+  color: #ffffff !important;
+  border-color: #444 !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: #bbbbbb !important;
+}
+
+body.dark-mode .btn,
+body.dark-mode .dropdown-toggle {
+  background-color: #303030;
+  color: #ffffff;
+  border-color: #444;
+}
+
+body.dark-mode .btn:hover {
+  background-color: #444;
+}
+
+body.dark-mode .card {
+  background-color: #1e1e1e !important;
+  border: 1px solid #333 !important;
+  color: #f0f0f0 !important;
+}
+
+body.dark-mode .card h4,
+body.dark-mode .card span,
+body.dark-mode .card p {
+  color: #f0f0f0 !important;
+}
+
+body.dark-mode label {
+  color: #ccc !important;
+}
+
+body.dark-mode svg {
+  fill: #f0f0f0 !important;
+  stroke: #f0f0f0 !important;
+}
+
+body.dark-mode .card {
+  background-color: #1e1e1e !important;
+  border: 1px solid #333;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}
+
+body.dark-mode .card-header {
+  border-bottom: 1px solid #333;
+  background-color: #1b1b1b;
+  color: #f0f0f0;
+}
+
+body.dark-mode .card-title {
+  color: #f0f0f0;
+}
+
+body.dark-mode .form-group p,
+body.dark-mode .form-group label {
+  color: #cccccc !important;
+}
+
+body.dark-mode .status-toggle span {
+  font-weight: 500;
+}
+
+body.dark-mode .status-toggle span.me-2,
+body.dark-mode .status-toggle span.ms-2 {
+  color: #999;
+  transition: color 0.3s ease;
+}
+
+body.dark-mode .status-toggle input:checked + label + span.ms-2 {
+  color: #00d3c7; // ON verde
+}
+
+body.dark-mode .status-toggle input:not(:checked) ~ span.me-2 {
+  color: #d9534f; // OFF rojo
+}
+body.dark-mode .breadcrumb {
+  background-color: transparent !important;
+}
+
+body.dark-mode .breadcrumb-item,
+body.dark-mode .breadcrumb-item a,
+body.dark-mode .breadcrumb-item.active {
+  color: #ffffff !important;
+}
+
+body.dark-mode .breadcrumb-item i {
+  color: #bbbbbb !important;
+}
+body.dark-mode .status-toggle p {
+  color: #ffffff !important;
+  font-weight: 500;
+}
+
+/* HEADER ESTILOS PARA MODO OSCURO */
+body.dark-mode .header {
+  background-color: #1e1e1e !important;
+  border-bottom: 1px solid #333;
+  color: #fff;
+}
+
+body.dark-mode .header a,
+body.dark-mode .header .nav-link,
+body.dark-mode .header .user-names h5,
+body.dark-mode .header .user-names span {
+  color: #fff !important;
+}
+
+body.dark-mode .header .user-names h5 {
+  font-weight: 600;
+}
+
+body.dark-mode .header .logo span {
+  color: #fff;
+}
+
+body.dark-mode .top-nav-search input.form-control {
+  background-color: #2b2b2b;
+  border-color: #444;
+  color: #fff;
+}
+
+body.dark-mode .top-nav-search input::placeholder {
+  color: #bbb;
+}
+
+body.dark-mode .top-nav-search .btn img,
+body.dark-mode .header img {
+  filter: brightness(1.2);
+}
+
+body.dark-mode .dropdown-menu {
+  background-color: #2c2c2c;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+body.dark-mode .dropdown-item {
+  color: #fff !important;
+}
+
+body.dark-mode .dropdown-item:hover {
+  background-color: #3c3c3c;
+}
+
+/* USER DROPDOWN DARK MODE  */
+body.dark-mode .dropdown-menu {
+  background-color: #222 !important;
+  border: 1px solid #444;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+}
+
+body.dark-mode .dropdown-menu .dropdown-item {
+  color: #f0f0f0 !important;
+  padding: 10px 15px;
+  transition: background-color 0.3s ease;
+}
+
+body.dark-mode .dropdown-menu .dropdown-item:hover {
+  background-color: #333 !important;
+  color: #00d3c7 !important;
+}
+
+/* Extra: mejorar el avatar o imagen del usuario */
+body.dark-mode .user-profile-list .user-img img {
+  border-radius: 50%;
+  border: 2px solid #00d3c7;
+  box-shadow: 0 0 4px rgba(0, 211, 199, 0.5);
+}
+
+/* Mejorar estructura del nombre de usuario */
+body.dark-mode .user-names h5,
+body.dark-mode .user-names span {
+  color: #fff !important;
+}
+/* Elimina el efecto blanco opaco que aparece al pasar el cursor */
+body.dark-mode .user-profile-list .nav-link:hover,
+body.dark-mode .user-profile-list .dropdown-toggle:hover,
+body.dark-mode .user-profile-list .nav-link:focus {
+  background-color: #2a2a2a !important;
+  border-radius: 10px;
+  color: #fff !important;
+}
+
+/* Evita que el texto se opaque */
+body.dark-mode .user-profile-list .user-names h5,
+body.dark-mode .user-profile-list .user-names span {
+  color: #ffffff !important;
+}
+
+
+/*  LIMPIEZA DE BORDES HEADER/SIDEBAR  */
+body.dark-mode .header,
+body.dark-mode .sidebar {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+body.dark-mode .header {
+  border-right: none !important;
+}
+
+body.dark-mode .sidebar {
+  border-right: none !important;
+  border-top: none !important;
+}
+
+body.dark-mode .main-wrapper {
+  background-color: #121212 !important;
+}
+
+
+/*  Eliminar borde inferior de page-header en modo oscuro */
+body.dark-mode .page-header,
+body.dark-mode .page-header .row,
+body.dark-mode .page-header .col-sm-12,
+body.dark-mode .breadcrumb {
+  border: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background-color: transparent !important;
+}
+
+/* Pseudo-elementos posibles responsables de líneas */
+body.dark-mode .page-header::before,
+body.dark-mode .page-header::after,
+body.dark-mode .breadcrumb::before,
+body.dark-mode .breadcrumb::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* GLOBAL: Redondear imagen del usuario (avatar) en todos los modos */
+.user-profile-list .user-img img {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}

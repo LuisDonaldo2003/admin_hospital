@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { routes } from '../routes/routes';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { apiResultFormat } from '../models/models';
 
@@ -9,8 +9,37 @@ import { apiResultFormat } from '../models/models';
   providedIn: 'root',
 })
 export class DataService {
-  constructor(private http: HttpClient) {}
 
+  //Modo Oscuro
+  private darkModeSubject = new BehaviorSubject<boolean>(this.getInitialDarkMode());
+  public darkMode$ = this.darkModeSubject.asObservable();
+
+  constructor(private http: HttpClient) {
+    // Aplicar el modo oscuro al cargar
+    if (this.darkModeSubject.value) {
+      document.body.classList.add('dark-mode');
+    }
+  }
+
+  toggleDarkMode(): void {
+    const current = this.darkModeSubject.value;
+    const newValue = !current;
+    this.darkModeSubject.next(newValue);
+    localStorage.setItem('dark-mode', newValue ? 'true' : 'false');
+
+    if (newValue) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }
+
+  private getInitialDarkMode(): boolean {
+    return localStorage.getItem('dark-mode') === 'true';
+  }
+
+
+  //FIN Modo Oscuro
   public getDoctorsList(): Observable<apiResultFormat> {
     return this.http.get<apiResultFormat>('assets/json/doctors-list.json').pipe(
       map((res: apiResultFormat) => {
@@ -590,40 +619,6 @@ export class DataService {
           faIcon: true,
           base: 'calendar',
           permision: 'calendar',
-          show_nav: true,
-          subMenus: [],
-        },
-        {
-          menuValue: 'Reports',
-          hasSubRoute: true,
-          showSubRoute: false,
-          base: 'reports',
-          img: 'assets/img/icons/menu-icon-02.svg',
-          subMenus: [
-            {
-              menuValue: 'Expense Report',
-              route: routes.expenseReports,
-              base: routes.expenseReports,
-              permision: 'expense_report',
-              show_nav: true,
-            },
-            {
-              menuValue: 'Invoice Report',
-              route: routes.invoiceReports,
-              base: routes.invoiceReports,
-              permision: 'invoice_report',
-              show_nav: true,
-            },
-          ],
-        },
-        {
-          menuValue: 'Settings',
-          route: routes.settings,
-          hasSubRoute: false,
-          showSubRoute: false,
-          img: 'assets/img/icons/menu-icon-16.svg',
-          base: 'settings',
-          permision: 'settings',
           show_nav: true,
           subMenus: [],
         },

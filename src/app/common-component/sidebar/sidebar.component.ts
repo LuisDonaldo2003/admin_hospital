@@ -23,6 +23,7 @@ export class SidebarComponent implements OnDestroy {
   public routes = routes;
   public sidebarData: Array<SideBarData> = [];
   public user: any;
+  public isDarkMode: boolean = false;
 
   private userSubscription: Subscription;
 
@@ -35,6 +36,10 @@ export class SidebarComponent implements OnDestroy {
     this.userSubscription = this.authService.user$.subscribe(user => {
       this.user = user;
       this.loadSidebar();
+    });
+
+    this.data.darkMode$.subscribe((darkMode) => {
+      this.isDarkMode = darkMode;
     });
 
     router.events.subscribe((event: object) => {
@@ -110,6 +115,10 @@ export class SidebarComponent implements OnDestroy {
     } else {
       this.sideBar.expandSideBar.next("false");
     }
+  }
+
+  public toggleTheme(): void {
+    this.data.toggleDarkMode();
   }
 
   ngOnDestroy(): void {
