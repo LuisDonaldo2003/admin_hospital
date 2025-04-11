@@ -1,64 +1,98 @@
 <div class="page-wrapper">
-  <!-- Page Content -->
-  <div class="content container-fluid">
-
+    <!-- Page Content -->
+    <div class="content container-fluid">
+  
       <!-- Page Header -->
       <div class="page-header">
-          <div class="row">
-              <div class="col-sm-12">
-                  <ul class="breadcrumb">
-                      <li class="breadcrumb-item"><a [routerLink]="routes.adminDashboard">Dashboard </a></li>
-                      <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                      <li class="breadcrumb-item active">Settings</li>
-                  </ul>
-              </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a [routerLink]="routes.adminDashboard">Dashboard</a>
+              </li>
+              <li class="breadcrumb-item">
+                <i class="feather icon-chevron-right"></i>
+              </li>
+              <li class="breadcrumb-item active">Settings</li>
+            </ul>
           </div>
+        </div>
       </div>
       <!-- /Page Header -->
-
+  
       <div class="settings-menu-links">
-          <ul class="nav nav-tabs menu-tabs">
-              <li class="nav-item active">
-                  <a class="nav-link" [routerLink]="routes.settings">General Settings</a>
-              </li>
-          </ul>
+        <ul class="nav nav-tabs menu-tabs">
+          <li class="nav-item active">
+            <a class="nav-link" [routerLink]="routes.settings">General Settings</a>
+          </li>
+        </ul>
       </div>
-
+  
       <div class="row">
-          <div class="col-md-6">
-              <div class="card">
-                  <div class="card-header">
-                      <h5 class="card-title">Website Basic Details</h5>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Website Basic Details</h5>
+            </div>
+            <div class="card-body pt-0">
+              <form>
+                <div class="settings-form">
+  
+                  <!-- 🔄 Modo oscuro -->
+                  <div class="form-group">
+                    <div class="status-toggle d-flex justify-content-between align-items-center">
+                      <p class="mb-0">Modo Oscuro</p>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="me-2" style="font-size: 0.9rem;">OFF</span>
+                        <input
+                          type="checkbox"
+                          id="toggle-dark"
+                          class="check"
+                          [checked]="isDarkMode"
+                          (change)="toggleTheme()" />
+                        <label for="toggle-dark" class="checktoggle">switch</label>
+                        <span class="ms-2" style="font-size: 0.9rem;">ON</span>
+                      </div>
+                    </div>
                   </div>
-                  <div class="card-body pt-0">
-                      <form>
-                          <div class="settings-form">
-
-
-                              <!-- 🔄 Modo oscuro con switch y etiquetas -->
-                              <div class="form-group">
-                                <div class="status-toggle d-flex justify-content-between align-items-center">
-                                  <p class="mb-0">Modo Oscuro</p>
-                                  <div class="d-flex align-items-center gap-2">
-                                    <span class="me-2" style="font-size: 0.9rem;">OFF</span>
-                                    <input type="checkbox" id="toggle-dark" class="check" [checked]="isDarkMode" (change)="toggleTheme()" />
-                                    <label for="toggle-dark" class="checktoggle">switch</label>
-                                    <span class="ms-2" style="font-size: 0.9rem;">ON</span>
-                                  </div>
-                                </div>
-                              </div>
-
-
-                          </div>
-                      </form>
-                  </div>
-              </div>
+  
+                  <!-- 🎨 Color de contorno en modo oscuro -->
+                    <div class="form-group mt-4">
+                        <label for="borderColor" class="form-label fw-semibold">Color del contorno (modo oscuro)</label>
+                        
+                        <div class="d-flex align-items-center gap-3 flex-wrap mt-2">
+                        
+                        <!-- Selector visual -->
+                        <input
+                            type="color"
+                            id="borderColor"
+                            [(ngModel)]="borderColor"
+                            name="borderColor"
+                            class="form-control form-control-color p-0"
+                            style="width: 50px; height: 50px; border-radius: 10px;"
+                        />
+                    
+                        <!-- Preview del color aplicado -->
+                        <div class="border-preview" [ngStyle]="{ 'background-color': borderColor }"></div>
+                    
+                        <!-- Botón para aplicar -->
+                        <button type="button" class="btn btn-sm btn-outline-light" (click)="updateBorderColor()">
+                            Aplicar color
+                        </button>
+                        </div>
+                    </div>
+                    
+  
+                </div>
+              </form>
+            </div>
           </div>
-
-          <!-- Address Details -->
-          <div class="col-md-6">
-              <!-- ... sin cambios ... -->
-          </div>
+        </div>
+  
+        <div class="col-md-6">
+          <!-- Puedes añadir más configuraciones aquí -->
+        </div>
       </div>
+    </div>
   </div>
-</div>
+  

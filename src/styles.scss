@@ -491,11 +491,42 @@ body.dark-mode .breadcrumb::after {
   content: none !important;
   display: none !important;
 }
+body.dark-mode .user-profile-list .avatar-img {
+  filter: none !important;
+}
 
-/* GLOBAL: Redondear imagen del usuario (avatar) en todos los modos */
-.user-profile-list .user-img img {
+
+body.dark-mode .logo-img,
+body.dark-mode .avatar-img {
+  border: 2px solid red;
+  border-radius: 50%; // Esto ayuda si las imágenes deben ser redondas (como el avatar o el logo)
+}
+
+.logo-wrapper {
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+/* Solo aplicar borde rojo en modo oscuro */
+body.dark-mode .logo-wrapper {
+  border: 2px solid red;
+  border-radius: 50%;
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;    // 🔥 rellena el círculo sin deformar
+  border-radius: 50%;
+}
+
+body.dark-mode .logo-wrapper,
+body.dark-mode .avatar-img {
+  border: 2px solid var(--user-border-color, red);
 }

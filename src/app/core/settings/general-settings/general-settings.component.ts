@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { DataService } from 'src/app/shared/data/data.service'; // 💡 Asegúrate de importar
-
+import { DataService } from 'src/app/shared/data/data.service';
 import { routes } from 'src/app/shared/routes/routes';
 
 interface data {
@@ -20,15 +19,24 @@ export class GeneralSettingsComponent {
   public selectedValue!: string;
 
   public isDarkMode = false;
+  public borderColor: string = '#ff0000'; // Color inicial del borde
 
   constructor(private dataService: DataService) {
     this.dataService.darkMode$.subscribe(mode => {
       this.isDarkMode = mode;
+      this.updateBorderColor(); // Aplica color cada vez que cambia el modo
     });
   }
 
   toggleTheme(): void {
     this.dataService.toggleDarkMode();
+    this.updateBorderColor(); // Vuelve a aplicar el color
+  }
+
+  updateBorderColor(): void {
+    if (this.isDarkMode) {
+      document.body.style.setProperty('--user-border-color', this.borderColor);
+    }
   }
 
   deleteIconFunc1() {

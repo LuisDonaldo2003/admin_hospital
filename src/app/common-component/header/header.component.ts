@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ProfileService } from 'src/app/core/profile/service/profile.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 import { routes } from 'src/app/shared/routes/routes';
 import { SideBarService } from 'src/app/shared/side-bar/side-bar.service';
@@ -16,8 +17,11 @@ export class HeaderComponent {
   public miniSidebar  = false;
   public addClass = false;
   public user:any;
+  public profileData: any = {};
+  public roles: string[] = [];
 
-  constructor(public router: Router,private sideBar: SideBarService,public auth: AuthService) {
+
+  constructor(public router: Router,private sideBar: SideBarService,public auth: AuthService,public profileService: ProfileService) {
     this.sideBar.toggleSideBar.subscribe((res: string) => {
       if (res == 'true') {
         this.miniSidebar = true;
@@ -28,6 +32,25 @@ export class HeaderComponent {
     let USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER : '');
     console.log(this.user);
+  }
+
+  ngOnInit() {
+    this.getProfileData();
+  }
+
+  private getProfileData(): void {
+    this.profileService.getProfile().subscribe((resp: any) => {
+      this.profileData = resp.data;
+      this.roles = resp.roles;
+    });
+  }
+
+  getRole(){
+    let RoleName = "";
+    this.user.roles.forEach((rol:any) => {
+      RoleName = rol;
+    });
+    return RoleName;
   }
 
   openBoxFunc() {
