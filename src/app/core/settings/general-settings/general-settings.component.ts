@@ -19,24 +19,31 @@ export class GeneralSettingsComponent {
   public selectedValue!: string;
 
   public isDarkMode = false;
-  public borderColor: string = '#ff0000'; // Color inicial del borde
+  public borderColor: string = '#ff0000'; // Color inicial
 
   constructor(private dataService: DataService) {
+    const savedColor = localStorage.getItem('borderColor');
+    if (savedColor) {
+      this.borderColor = savedColor;
+      this.updateBorderColor();
+    }
+
     this.dataService.darkMode$.subscribe(mode => {
       this.isDarkMode = mode;
-      this.updateBorderColor(); // Aplica color cada vez que cambia el modo
+      this.updateBorderColor();
     });
   }
 
   toggleTheme(): void {
     this.dataService.toggleDarkMode();
-    this.updateBorderColor(); // Vuelve a aplicar el color
+    localStorage.setItem('darkMode', String(this.isDarkMode)); // ✅ Guarda el valor
+    this.updateBorderColor();
   }
 
+
   updateBorderColor(): void {
-    if (this.isDarkMode) {
-      document.body.style.setProperty('--user-border-color', this.borderColor);
-    }
+    document.documentElement.style.setProperty('--user-border-color', this.borderColor);
+    localStorage.setItem('borderColor', this.borderColor);
   }
 
   deleteIconFunc1() {
