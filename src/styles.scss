@@ -473,3 +473,29 @@ body.dark-mode .header img {
   filter: none !important;
 }
 
+/*Banderas*/
+.checktoggle {
+  background-color: #4c5dd3;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-block;
+  height: 24px;
+  position: relative;
+  width: 48px;
+}
+
+.checktoggle::before {
+  content: '';
+  background-color: #fff;
+  border-radius: 50%;
+  height: 18px;
+  left: 3px;
+  position: absolute;
+  top: 3px;
+  transition: all 0.3s;
+  width: 18px;
+}
+
+input.check:checked + .checktoggle::before {
+  transform: translateX(24px);
+}

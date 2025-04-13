@@ -1,0 +1,19 @@
+{
+  "GENERAL_SETTINGS": "Configuración General",
+  "SETTINGS": "Configuración",
+  "DARK_MODE": "Modo Oscuro",
+  "ACTIVATE_DARK_MODE": "Activar Modo Oscuro",
+  "OFF": "APAGADO",
+  "ON": "ENCENDIDO",
+  "OUTLINE_COLOR": "Color del Contorno (Foto de Perfil)",
+  "OUTLINE_COLOR_NOTE": "Este color se usará para el contorno de la foto de perfil.",
+  "SELECT_COLOR": "Selecciona un color",
+  "APPLY_COLOR": "Aplicar Color",
+  "SELECT_LANGUAGE": "Seleccionar Idioma",
+  "DASHBOARD": "Tablero",
+  "PROFILE": "Perfil",
+  "USERS": "Usuarios",
+  "ROLES": "Roles",
+  "CONTRACT": "Contrato",
+  "DEPARTMENTS": "Departamentos"
+}

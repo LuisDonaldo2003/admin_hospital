@@ -16,6 +16,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { HeaderComponent } from '../common-component/header/header.component';
 import { SidebarComponent } from '../common-component/sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { RouterModule } from '@angular/router';
     NgxMaterialTimepickerModule,
     HeaderComponent,
     SidebarComponent,
+    TranslateModule
   ],
   providers: [
     DataService,

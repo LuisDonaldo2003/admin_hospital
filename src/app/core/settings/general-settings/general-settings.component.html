@@ -8,12 +8,12 @@
         <div class="col-sm-12">
           <ul class="breadcrumb">
             <li class="breadcrumb-item">
-              <a [routerLink]="routes.adminDashboard">Dashboard</a>
+              <a [routerLink]="routes.adminDashboard">{{ 'DASHBOARD' | translate }}</a>
             </li>
             <li class="breadcrumb-item">
               <i class="feather icon-chevron-right"></i>
             </li>
-            <li class="breadcrumb-item active">Settings</li>
+            <li class="breadcrumb-item active">{{ 'SETTINGS' | translate }}</li>
           </ul>
         </div>
       </div>
@@ -23,7 +23,7 @@
     <div class="settings-menu-links">
       <ul class="nav nav-tabs menu-tabs">
         <li class="nav-item active">
-          <a class="nav-link" [routerLink]="routes.settings">General Settings</a>
+          <a class="nav-link" [routerLink]="routes.settings">{{ 'GENERAL_SETTINGS' | translate }}</a>
         </li>
       </ul>
     </div>
@@ -31,47 +31,85 @@
     <div class="row">
       <div class="col-md-6">
 
-       <!-- 🌓 Modo Oscuro -->
+      <!-- 🌐 Idioma -->
       <div class="card mb-4">
         <div class="card-header">
-          <h5 class="card-title">Dark Mode</h5>
+          <h5 class="card-title">{{ 'SELECT_LANGUAGE' | translate }}</h5>
         </div>
         <div class="card-body pt-0">
-          <form>
-            <div class="form-group mt-3"> <!-- ← Agregamos mt-3 aquí -->
-              <div class="status-toggle d-flex justify-content-between align-items-center">
-                <p class="mb-0">Activate Dark Mode</p>
-                <div class="d-flex align-items-center gap-2">
-                  <span class="me-2" style="font-size: 0.9rem;">OFF</span>
-                  <input
-                    type="checkbox"
-                    id="toggle-dark"
-                    class="check"
-                    [checked]="isDarkMode"
-                    (change)="toggleTheme()" />
-                  <label for="toggle-dark" class="checktoggle">switch</label>
-                  <span class="ms-2" style="font-size: 0.9rem;">ON</span>
-                </div>
+          <div class="form-group mt-3">
+            <div class="status-toggle d-flex justify-content-between align-items-center">
+              <p class="mb-0">{{ selectedLang === 'es' ? 'Español' : 'English' }}</p>
+              <div class="d-flex align-items-center gap-2">
+                <img
+                  src="assets/flags/us.png"
+                  width="24"
+                  height="16"
+                  alt="English"
+                  title="English" />
+
+                <input
+                  type="checkbox"
+                  id="toggle-lang"
+                  class="check"
+                  [checked]="selectedLang === 'es'"
+                  (change)="toggleLanguage()" />
+                <label for="toggle-lang" class="checktoggle">switch</label>
+
+                <img
+                  src="assets/flags/mx.png"
+                  width="24"
+                  height="16"
+                  alt="Español"
+                  title="Español" />
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </div>
 
 
-        <!-- 🎨 Card: Outline Color -->
+
+
+        <!-- 🌓 Dark Mode -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="card-title">{{ 'DARK_MODE' | translate }}</h5>
+          </div>
+          <div class="card-body pt-0">
+            <form>
+              <div class="form-group mt-3">
+                <div class="status-toggle d-flex justify-content-between align-items-center">
+                  <p class="mb-0">{{ 'ACTIVATE_DARK_MODE' | translate }}</p>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="me-2" style="font-size: 0.9rem;">{{ 'OFF' | translate }}</span>
+                    <input
+                      type="checkbox"
+                      id="toggle-dark"
+                      class="check"
+                      [checked]="isDarkMode"
+                      (change)="toggleTheme()" />
+                    <label for="toggle-dark" class="checktoggle">switch</label>
+                    <span class="ms-2" style="font-size: 0.9rem;">{{ 'ON' | translate }}</span>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 🎨 Outline Color -->
         <div class="card">
           <div class="card-header">
-            <h5 class="card-title mb-1">Outline Color</h5>
-            <p class="text-muted mb-0" style="font-size: 0.9rem;">For profile picture border</p>
+            <h5 class="card-title mb-1">{{ 'OUTLINE_COLOR' | translate }}</h5>
+            <p class="text-muted mb-0" style="font-size: 0.9rem;">{{ 'OUTLINE_COLOR_NOTE' | translate }}</p>
           </div>
           <div class="card-body">
             <form>
               <div class="form-group">
-                <label for="borderColor" class="form-label fw-semibold mb-2">Select a color</label>
+                <label for="borderColor" class="form-label fw-semibold mb-2">{{ 'SELECT_COLOR' | translate }}</label>
                 <div class="d-flex align-items-center gap-3 mt-1">
 
-                  <!-- 🎨 Input color con sombra y borde -->
                   <input
                     type="color"
                     id="borderColor"
@@ -80,13 +118,12 @@
                     class="form-control form-control-color"
                     style="width: 60px; height: 60px; border-radius: 12px; border: none; box-shadow: 0 0 6px rgba(0,0,0,0.2);" />
 
-                  <!-- 🟢 Botón estilizado -->
                   <button
                     type="button"
                     class="btn btn-outline-light px-4"
                     (click)="updateBorderColor()"
                     style="border-radius: 8px;">
-                    Apply Color
+                    {{ 'APPLY_COLOR' | translate }}
                   </button>
 
                 </div>
@@ -94,7 +131,6 @@
             </form>
           </div>
         </div>
-
 
       </div>
 

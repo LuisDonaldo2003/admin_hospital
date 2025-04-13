@@ -1,0 +1,19 @@
+{
+  "GENERAL_SETTINGS": "General Settings",
+  "SETTINGS": "Settings",
+  "DARK_MODE": "Dark Mode",
+  "ACTIVATE_DARK_MODE": "Activate Dark Mode",
+  "OFF": "OFF",
+  "ON": "ON",
+  "OUTLINE_COLOR": "Outline Color (Profile Picture)",
+  "OUTLINE_COLOR_NOTE": "This color will be used for the outline of the profile picture.",
+  "SELECT_COLOR": "Select a color",
+  "APPLY_COLOR": "Apply Color",
+  "SELECT_LANGUAGE": "Select Language",
+  "DASHBOARD": "Dashboard",
+  "PROFILE": "Profile",
+  "USERS": "Users",
+  "ROLES": "Roles",
+  "CONTRACT": "Contract",
+  "DEPARTMENTS": "Departments"
+}
