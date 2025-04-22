@@ -1,0 +1,82 @@
+body {
+  background-color: #f1f3f4;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Contenedor general */
+.form-wrapper {
+  max-width: 900px;
+  margin: 60px auto 40px auto;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Título */
+.form-wrapper h2 {
+  font-weight: 500;
+  text-align: center;
+  color: #202124;
+  margin-bottom: 30px;
+}
+
+/* Espaciado entre inputs */
+.form-wrapper .form-group {
+  margin-bottom: 24px;
+}
+
+/* Inputs */
+.form-control {
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 16px;
+}
+
+/* Labels */
+label.form-label {
+  font-weight: 500;
+  color: #3c4043;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Botón guardar */
+.form-wrapper .btn-primary {
+  background-color: #1a73e8;
+  border: none;
+  font-weight: 500;
+  padding: 10px 30px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.form-wrapper .btn-primary:hover {
+  background-color: #185abc;
+}
+
+/* Datepicker (alineación perfecta del ícono) */
+.datepicker-wrapper {
+  position: relative;
+
+  input.form-control {
+    padding-right: 42px; // espacio para el icono
+  }
+
+  .mat-datepicker-toggle {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    button.mat-icon-button {
+      background: transparent !important;
+      box-shadow: none !important;
+      height: auto;
+      width: auto;
+    }
+  }
+}

@@ -34,19 +34,31 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    let URL = URL_SERVICIOS + "/auth/login";
-    return this.http.post(URL, { email: email, password: password }).pipe(
+    const URL = URL_SERVICIOS + "/auth/login";
+    return this.http.post(URL, { email, password }).pipe(
       map((auth: any) => {
-        console.log(auth);
-        const result = this.savelocalStorage(auth);
-        return result;
+        // Si el backend responde correctamente con un token
+        if (auth && auth.access_token) {
+          this.savelocalStorage(auth);
+          return { success: true };
+        }
+        return { success: false };
       }),
       catchError((error: any) => {
-        console.error(error);
-        return of(undefined);
+        console.error('Login error:', error);
+
+        // Si es un usuario no verificado (403)
+        if (error.status === 403 && error.error?.unverified) {
+          localStorage.setItem('pending_email', email); // Guardamos para verificar luego
+          this.router.navigate(['/verify-code']);
+          return of({ success: false, unverified: true });
+        }
+
+        return of({ success: false });
       })
     );
   }
+
 
   savelocalStorage(auth: any) {
     if (auth && auth.access_token) {
@@ -68,4 +80,4 @@ export class AuthService {
       window.location.reload(); // 🔴 FORZAR RECARGA TOTAL DE LA APP
     });
   }
-} 
+}

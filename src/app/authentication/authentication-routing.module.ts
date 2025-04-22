@@ -41,6 +41,11 @@ const routes: Routes = [
           (m) => m.LockScreenModule
         ),
     },
+    {
+      path: 'verify-code',
+      loadComponent: () =>
+        import('./verify-code/verify-code.component').then(m => m.VerifyCodeComponent),
+    },
   ],
 },
 ];

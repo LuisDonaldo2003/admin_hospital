@@ -1,0 +1,34 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="text-center mb-4">Verificar cuenta</h2>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label>Correo electrónico</label>
+          <input formControlName="email" class="form-control" type="email" readonly />
+        </div>
+
+        <div class="mb-3">
+          <label>Código de verificación</label>
+          <input formControlName="code" class="form-control" maxlength="8" placeholder="Ej. ABC1234Z" />
+          <div *ngIf="submitted && f['code'].invalid" class="text-danger small mt-1">
+            Código requerido (mínimo 6 caracteres).
+          </div>
+        </div>
+
+        <div *ngIf="errorMsg" class="alert alert-danger mt-2">
+          {{ errorMsg }}
+        </div>
+
+        <div *ngIf="successMsg" class="alert alert-success mt-2">
+          {{ successMsg }}
+        </div>
+
+        <button [disabled]="form.invalid || loading" type="submit" class="btn btn-primary w-100 mt-3">
+          {{ loading ? 'Verificando...' : 'Verificar' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

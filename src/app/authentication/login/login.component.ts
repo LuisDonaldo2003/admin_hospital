@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   public passwordClass = false;
   public ERROR = false;
   public loading = false;
+  public unverifiedMsg = ''; // 🆕 Mensaje para cuentas no verificadas
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -39,6 +40,7 @@ export class LoginComponent implements OnInit {
     if (this.form.invalid) return;
 
     this.ERROR = false;
+    this.unverifiedMsg = ''; // limpiar msg anterior
     this.loading = true;
 
     const { email, password } = this.form.value;
@@ -47,11 +49,15 @@ export class LoginComponent implements OnInit {
       next: (resp: any) => {
         this.loading = false;
 
-        if (resp) {
+        if (resp?.success) {
           // ✅ Login exitoso
           this.router.navigate([this.routes.adminDashboard]);
+        } else if (resp?.unverified) {
+          // 🚨 Usuario no verificado
+          this.unverifiedMsg = 'Tu cuenta no está verificada. Te hemos enviado un nuevo código.';
+          this.router.navigate(['/verify-code']);
         } else {
-          // ❌ Credenciales incorrectas
+          // ❌ Credenciales incorrectas u otro error
           this.ERROR = true;
         }
       },

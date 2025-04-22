@@ -88,6 +88,15 @@
                     </button>
                   </div>
 
+                  <!-- Alerta de cuenta no verificada -->
+                  <div *ngIf="unverifiedMsg" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Atención:</strong> {{ unverifiedMsg }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar">
+                      <span aria-hidden="true"></span>
+                    </button>
+                  </div>
+
+
                   <!-- Botón de Login -->
                   <div class="form-group login-btn">
                     <button
