@@ -25,7 +25,7 @@ export class AuthService {
       let USER = localStorage.getItem('user');
       this.user = JSON.parse(USER ? USER : '');
       this.token = localStorage.getItem("token");
-      this.userSubject.next(this.user); // Notificar cambios
+      this.userSubject.next(this.user);
     } else {
       this.user = null;
       this.token = null;
@@ -37,7 +37,6 @@ export class AuthService {
     const URL = URL_SERVICIOS + "/auth/login";
     return this.http.post(URL, { email, password }).pipe(
       map((auth: any) => {
-        // Si el backend responde correctamente con un token
         if (auth && auth.access_token) {
           this.savelocalStorage(auth);
           return { success: true };
@@ -46,26 +45,22 @@ export class AuthService {
       }),
       catchError((error: any) => {
         console.error('Login error:', error);
-
-        // Si es un usuario no verificado (403)
         if (error.status === 403 && error.error?.unverified) {
-          localStorage.setItem('pending_email', email); // Guardamos para verificar luego
+          localStorage.setItem('pending_email', email);
           this.router.navigate(['/verify-code']);
           return of({ success: false, unverified: true });
         }
-
         return of({ success: false });
       })
     );
   }
-
 
   savelocalStorage(auth: any) {
     if (auth && auth.access_token) {
       localStorage.setItem("token", auth.access_token);
       localStorage.setItem("user", JSON.stringify(auth.user));
       localStorage.setItem('authenticated', 'true');
-      this.userSubject.next(auth.user); // Notificar cambios
+      this.userSubject.next(auth.user);
       return true;
     }
     return false;
@@ -75,9 +70,9 @@ export class AuthService {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem('authenticated');
-    this.userSubject.next(null); // Notificar que el usuario se ha eliminado
+    this.userSubject.next(null);
     this.router.navigate([routes.login]).then(() => {
-      window.location.reload(); // 🔴 FORZAR RECARGA TOTAL DE LA APP
+      window.location.reload();
     });
   }
 }

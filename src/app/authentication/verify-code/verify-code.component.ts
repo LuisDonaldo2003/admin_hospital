@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { URL_SERVICIOS } from 'src/app/config/config';
 import { CommonModule } from '@angular/common';
+import { AuthService } from 'src/app/shared/auth/auth.service';
 
 @Component({
   selector: 'app-verify-code',
@@ -22,7 +23,8 @@ export class VerifyCodeComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -47,12 +49,16 @@ export class VerifyCodeComponent implements OnInit {
 
     this.http.post<any>(`${URL_SERVICIOS}/verify-code`, this.form.value).subscribe({
       next: (res) => {
+        if (res.access_token) {
+          this.authService.savelocalStorage(res);
+        }
+
         this.successMsg = res.message || 'Verificación exitosa.';
         localStorage.removeItem('pending_email');
 
         setTimeout(() => {
           this.router.navigate(['/dashboard']);
-        }, 1500);
+        }, 1000);
       },
       error: (err) => {
         this.loading = false;
