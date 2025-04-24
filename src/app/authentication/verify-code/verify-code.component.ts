@@ -19,6 +19,12 @@ export class VerifyCodeComponent implements OnInit {
   loading = false;
   successMsg = '';
   errorMsg = '';
+  resendSuccessMsg = '';
+
+  countdown: number = 300;
+  timerDisplay: string = '';
+  timerExpired: boolean = false;
+  interval: any;
 
   constructor(
     private fb: FormBuilder,
@@ -32,6 +38,43 @@ export class VerifyCodeComponent implements OnInit {
       email: [localStorage.getItem('pending_email') || '', [Validators.required, Validators.email]],
       code: ['', [Validators.required, Validators.minLength(6)]]
     });
+    this.startCountdown();
+  }
+
+  startCountdown() {
+    this.updateTimerDisplay();
+    this.interval = setInterval(() => {
+      if (this.countdown > 0) {
+        this.countdown--;
+        this.updateTimerDisplay();
+      } else {
+        this.timerExpired = true;
+        clearInterval(this.interval);
+      }
+    }, 1000);
+  }
+
+  resendCode() {
+    const email = this.form.get('email')?.value;
+    if (!email) return;
+
+    this.http.post<any>(`${URL_SERVICIOS}/resend-code`, { email }).subscribe({
+      next: (res) => {
+        this.resendSuccessMsg = res.message || 'Código reenviado.';
+        this.countdown = 300;
+        this.timerExpired = false;
+        this.startCountdown(); // Reinicia el temporizador
+      },
+      error: (err) => {
+        this.errorMsg = err?.error?.message || 'No se pudo reenviar el código.';
+      }
+    });
+  }
+
+  updateTimerDisplay() {
+    const minutes = Math.floor(this.countdown / 60);
+    const seconds = this.countdown % 60;
+    this.timerDisplay = `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
 
   get f() {
@@ -43,7 +86,7 @@ export class VerifyCodeComponent implements OnInit {
     this.errorMsg = '';
     this.successMsg = '';
 
-    if (this.form.invalid) return;
+    if (this.form.invalid || this.timerExpired) return;
 
     this.loading = true;
 
