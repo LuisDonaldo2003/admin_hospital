@@ -7,7 +7,6 @@ import { VerifyCodeComponent } from './verify-code.component';
 
 @NgModule({
   declarations: [
-    VerifyCodeComponent
   ],
   imports: [
     CommonModule,
