@@ -15,30 +15,32 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ForgotPasswordComponent {
   public routes = routes;
+  loading = false;
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
   });
 
-  constructor(private fb: FormBuilder, private router: Router,private http: HttpClient) {}
+  constructor(private fb:
+     FormBuilder, private router: Router,private http: HttpClient) {}
 
   onSubmit() {
     if (this.form.valid) {
       const email = this.form.value.email;
+      this.loading = true; // <- inicia el loader
   
       this.http.post(`${URL_SERVICIOS}/forgot-password/send-code`, { email }).subscribe({
-        next: (res: any) => {
-          console.log(res.message);
+        next: () => {
+          this.loading = false;
           this.router.navigate(['forgot-password/verify-reset-code'], {
             queryParams: { email }
           });
         },
-        error: (err: any) => {
+        error: (err) => {
           console.error('Error al enviar el código:', err);
-          // Puedes mostrar un mensaje con error.error.message si quieres
+          this.loading = false; // <- detiene el loader incluso si falla
         }
       });
-  
     } else {
       this.form.markAllAsTouched();
     }

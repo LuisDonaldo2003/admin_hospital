@@ -45,7 +45,8 @@
   
         <div class="d-flex justify-content-center">
           <button [disabled]="loading || timerExpired" class="btn btn-primary verify-btn mt-3">
-            Verificar
+            <span *ngIf="!loading">Verificar</span>
+            <span *ngIf="loading"><i class="fa fa-spinner fa-spin me-2"></i> Verificando...</span>
           </button>
         </div>
       </form>
