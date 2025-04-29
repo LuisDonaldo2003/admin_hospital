@@ -1,0 +1,54 @@
+<div class="background">
+    <div class="card-container">
+      <div class="text-center">
+        <div class="logo-wrapper mb-3">
+          <img src="assets/img/logo-hospital.png" alt="Logo" class="logo-img" />
+        </div>
+  
+        <h2 class="title">Verifica tu cuenta</h2>
+        <p class="subtitle">
+          Te enviamos un código a <b>{{ form.get('email')?.value }}</b>
+        </p>
+      </div>
+  
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="code-inputs mb-3">
+          <input *ngFor="let ctrl of codeControls; let i = index"
+            type="text"
+            maxlength="1"
+            class="code-box"
+            [formControl]="ctrl"
+            (input)="autoFocusNext($event, i)"
+            (keydown.backspace)="autoFocusPrev($event, i)"
+            (paste)="handlePaste($event)"
+          />
+        </div>
+        
+  
+        <div *ngIf="!timerExpired" class="text-center small text-muted mb-2">
+          El código expira en <b>{{ timerDisplay }}</b>
+        </div>
+  
+        <div *ngIf="timerExpired" class="alert alert-warning p-2 small text-center">
+          El código ha expirado. <br>
+          <button type="button" class="btn btn-sm btn-outline-secondary mt-2" (click)="resendCode()">Reenviar código</button>
+        </div>
+  
+        <div *ngIf="errorMsg" class="alert alert-danger text-center mt-2">
+          {{ errorMsg }}
+        </div>
+  
+        <div *ngIf="successMsg" class="alert alert-success text-center mt-2">
+          {{ successMsg }}
+        </div>
+        
+  
+        <div class="d-flex justify-content-center">
+          <button [disabled]="loading || timerExpired" class="btn btn-primary verify-btn mt-3">
+            Verificar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
