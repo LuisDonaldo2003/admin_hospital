@@ -1,12 +1,12 @@
 <div class="page-wrapper">
-  <div class="content">
+  <div class="content list-staff">
 
     <!-- Encabezado -->
     <div class="page-header mb-4">
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item"><a href="#">Users</a></li>
+            <li class="breadcrumb-item">Users ></li>
             <li class="breadcrumb-item active">Users List</li>
           </ol>
         </div>
@@ -16,74 +16,44 @@
     <!-- Contenido -->
     <div class="row">
       <div class="col-sm-12">
-        <div class="card shadow-sm border-0">
+        <div class="card card-list shadow border-0">
           <div class="card-body">
 
             <!-- Header de tabla -->
-            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-              <h4 class="mb-0">Users List</h4>
-              <div class="d-flex align-items-center gap-2">
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search..." [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
-                  <span class="input-group-text bg-white">
-                    <img src="assets/img/icons/search-normal.svg" alt="">
+            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 header-bar">
+              <h4 class="mb-0 fw-semibold">Lista de Usuarios</h4>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="input-group search-input">
+                  <input type="text" class="form-control" placeholder="Buscar..." [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
+                  <span class="input-group-text">
+                    <i class="fa fa-search"></i>
                   </span>
                 </div>
-                <a routerLink="/staffs/add-staff" class="btn btn-primary"><img src="assets/img/icons/plus.svg" alt=""></a>
-                <button (click)="PageSize()" class="btn btn-outline-secondary"><img src="assets/img/icons/re-fresh.svg" alt=""></button>
-              </div>
-            </div>
-
-            <!-- Exportación -->
-            <div class="text-end mb-2">
-              <div class="btn-group" role="group">
-                <button class="btn btn-light"><img src="assets/img/icons/pdf-icon-01.svg" alt=""></button>
-                <button class="btn btn-light"><img src="assets/img/icons/pdf-icon-02.svg" alt=""></button>
-                <button class="btn btn-light"><img src="assets/img/icons/pdf-icon-03.svg" alt=""></button>
-                <button class="btn btn-light"><img src="assets/img/icons/pdf-icon-04.svg" alt=""></button>
+                <a routerLink="/staffs/add-staff" class="btn btn-primary d-flex align-items-center gap-1">
+                  <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">Nuevo</span>
+                </a>
+                <button (click)="PageSize()" class="btn btn-outline-secondary">
+                  <i class="fa fa-refresh"></i>
+                </button>
               </div>
             </div>
 
             <!-- Tabla -->
             <div class="table-responsive">
-              <table matSort (matSortChange)="sortData($event)" class="table table-hover table-bordered align-middle text-nowrap">
+              <table matSort (matSortChange)="sortData($event)" class="table table-striped table-hover align-middle text-nowrap">
                 <thead class="table-light text-center">
                   <tr>
                     <th>Nombre completo</th>
                     <th>Correo</th>
-                    <th>Teléfono</th>
-                    <th>Nacimiento</th>
-                    <th>CURP</th>
-                    <th>INE</th>
-                    <th>RFC</th>
-                    <th>N° Checador</th>
-                    <th>Cédula</th>
-                    <th>Función Real</th>
-                    <th>Departamento</th>
-                    <th>Perfil</th>
-                    <th>Tipo de Contrato</th>
                     <th>Rol</th>
-                    <th>Registrado</th>
                     <th class="text-end">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of usersList">
-                    <td class="text-break">{{ data.name }} {{ data.surname || '' }}</td>
-                    <td class="text-break">{{ data.email }}</td>
-                    <td>{{ data.mobile }}</td>
-                    <td>{{ data.birth_date }}</td>
-                    <td>{{ data.curp }}</td>
-                    <td>{{ data.ine }}</td>
-                    <td>{{ data.rfc }}</td>
-                    <td>{{ data.attendance_number }}</td>
-                    <td>{{ data.professional_license }}</td>
-                    <td>{{ data.funcion_real || '-' }}</td>
-                    <td>{{ data.departament || '-' }}</td>
-                    <td>{{ data.profile_relation }}</td>
-                    <td>{{ data.contract_type }}</td>
+                    <td>{{ data.name }} {{ data.surname || '' }}</td>
+                    <td>{{ data.email }}</td>
                     <td>{{ data.role?.name }}</td>
-                    <td>{{ data.created_at }}</td>
                     <td class="text-end">
                       <div class="dropdown" *ngIf="data.id != 1">
                         <a class="text-muted" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -91,14 +61,14 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
                           <a class="dropdown-item" [routerLink]="['/staffs/list-staff/edit-staff/', data.id]">
-                            <i class="fa-solid fa-pen-to-square me-2"></i> Editar
+                            <i class="fa fa-pen me-2"></i> Editar
                           </a>
                           <a class="dropdown-item text-danger"
                              href="javascript:void(0);"
                              (click)="selectUser(data)"
                              data-bs-toggle="modal"
                              data-bs-target="#deleteModal">
-                            <i class="fa fa-trash-alt me-2"></i> Eliminar
+                            <i class="fa fa-trash me-2"></i> Eliminar
                           </a>
                         </div>
                       </div>
@@ -110,7 +80,7 @@
 
             <!-- Paginación -->
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-              <div class="text-muted">
+              <div class="pagination-info small">
                 Mostrando {{ serialNumberArray[0] }} a {{ serialNumberArray[serialNumberArray.length - 1] }} de {{ totalData }} registros
               </div>
               <nav>
@@ -134,7 +104,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -142,7 +111,7 @@
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-body text-center">
+      <div class="modal-body text-center p-4">
         <img src="assets/img/sent.png" alt="" width="50" height="46" />
         <h5 class="mt-3" *ngIf="staff_selected">
           ¿Estás seguro de eliminar a <strong>{{ staff_selected.name }} {{ staff_selected.surname }}</strong>?

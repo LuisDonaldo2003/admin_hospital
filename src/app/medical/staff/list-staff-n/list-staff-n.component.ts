@@ -12,23 +12,20 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     FormsModule,
     RouterModule,
-    MatTableModule, // agrega lo que uses aquí
+    MatTableModule
   ],
   templateUrl: './list-staff-n.component.html',
   styleUrl: './list-staff-n.component.scss'
 })
 export class ListStaffNComponent {
-
-  public usersList:any = [];
+  public usersList: any = [];
   dataSource!: MatTableDataSource<any>;
 
-  public showFilter = false;
   public searchDataValue = '';
-  public lastIndex = 0;
   public pageSize = 10;
   public totalData = 0;
-  public skip = 0;//MIN
-  public limit: number = this.pageSize;//MAX
+  public skip = 0;
+  public limit: number = this.pageSize;
   public pageIndex = 0;
   public serialNumberArray: Array<number> = [];
   public currentPage = 1;
@@ -36,44 +33,26 @@ export class ListStaffNComponent {
   public pageSelection: Array<any> = [];
   public totalPages = 0;
 
-  public role_generals:any = [];
-  public staff_selected:any;
+  public role_generals: any = [];
+  public staff_selected: any;
 
-  public curp: string = '';
-  public ine: string = '';
-  public rfc: string = '';
-  public attendance_number: string = '';
-  public professional_license: string = '';
-  public funcion_real: string = '';
-  public specialitie: string = '';
-  public profile: string = '';
-  public contract_type: string = '';
+  constructor(public staffService: StaffService) {}
 
-  constructor(
-    public staffService: StaffService,
-  ){
-
-  }
   ngOnInit() {
     this.getTableData();
   }
+
   private getTableData(): void {
     this.usersList = [];
     this.serialNumberArray = [];
 
-    this.staffService.listUsers().subscribe((resp:any) => {
-
-      console.log(resp);
-
+    this.staffService.listUsers().subscribe((resp: any) => {
       this.totalData = resp.users.length;
       this.role_generals = resp.users.sort((a: any, b: any) =>
         a.name.localeCompare(b.name)
       );
-      
       this.getTableDataGeneral();
-    })
-
-
+    });
   }
 
   getTableDataGeneral() {
@@ -83,84 +62,64 @@ export class ListStaffNComponent {
     this.role_generals.map((res: any, index: number) => {
       const serialNumber = index + 1;
       if (index >= this.skip && serialNumber <= this.limit) {
-
         this.usersList.push(res);
         this.serialNumberArray.push(serialNumber);
       }
     });
+
     this.dataSource = new MatTableDataSource<any>(this.usersList);
     this.calculateTotalPages(this.totalData, this.pageSize);
   }
 
-  selectUser(rol:any){
-    this.staff_selected = rol;
+  selectUser(user: any) {
+    this.staff_selected = user;
   }
 
-  deleteUser(){
-
-    this.staffService.deleteUser(this.staff_selected.id).subscribe((resp:any) => {
-      console.log(resp);
-      let INDEX = this.usersList.findIndex((item:any) => item.id == this.staff_selected.id);
-      if(INDEX != -1){
-        this.usersList.splice(INDEX,1);
-
-        $('#delete_patient').hide();
-        $("#delete_patient").removeClass("show");
-        $(".modal-backdrop").remove();
-        $("body").removeClass();
-        $("body").removeAttr("style");
-
+  deleteUser() {
+    this.staffService.deleteUser(this.staff_selected.id).subscribe(() => {
+      const index = this.usersList.findIndex((item: any) => item.id === this.staff_selected.id);
+      if (index !== -1) {
+        this.usersList.splice(index, 1);
         this.staff_selected = null;
       }
-    })
+    });
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public searchData(value: any): void {
+
+  public searchData(value: string): void {
     this.dataSource.filter = value.trim().toLowerCase();
     this.usersList = this.dataSource.filteredData;
   }
 
-  public sortData(sort: any) {
+  public sortData(sort: any): void {
     const data = this.usersList.slice();
-
     if (!sort.active || sort.direction === '') {
       this.usersList = data;
     } else {
-      this.usersList = data.sort((a:any, b:any) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const aValue = (a as any)[sort.active];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const bValue = (b as any)[sort.active];
+      this.usersList = data.sort((a: any, b: any) => {
+        const aValue = a[sort.active];
+        const bValue = b[sort.active];
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
     }
   }
 
   public getMoreData(event: string): void {
-    if (event == 'next') {
+    if (event === 'next') {
       this.currentPage++;
-      this.pageIndex = this.currentPage - 1;
-      this.limit += this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.getTableDataGeneral();
-    } else if (event == 'previous') {
+    } else if (event === 'previous') {
       this.currentPage--;
-      this.pageIndex = this.currentPage - 1;
-      this.limit -= this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.getTableDataGeneral();
     }
+    this.pageIndex = this.currentPage - 1;
+    this.skip = this.pageIndex * this.pageSize;
+    this.limit = this.skip + this.pageSize;
+    this.getTableDataGeneral();
   }
 
   public moveToPage(pageNumber: number): void {
     this.currentPage = pageNumber;
+    this.pageIndex = pageNumber - 1;
     this.skip = this.pageSelection[pageNumber - 1].skip;
     this.limit = this.pageSelection[pageNumber - 1].limit;
-    if (pageNumber > this.currentPage) {
-      this.pageIndex = pageNumber - 1;
-    } else if (pageNumber < this.currentPage) {
-      this.pageIndex = pageNumber + 1;
-    }
     this.getTableDataGeneral();
   }
 
@@ -175,21 +134,12 @@ export class ListStaffNComponent {
 
   private calculateTotalPages(totalData: number, pageSize: number): void {
     this.pageNumberArray = [];
-    this.totalPages = totalData / pageSize;
-    if (this.totalPages % 1 != 0) {
-      this.totalPages = Math.trunc(this.totalPages + 1);
-    }
-    /* eslint no-var: off */
-    for (var i = 1; i <= this.totalPages; i++) {
+    this.totalPages = Math.ceil(totalData / pageSize);
+    for (let i = 1; i <= this.totalPages; i++) {
       const limit = pageSize * i;
       const skip = limit - pageSize;
       this.pageNumberArray.push(i);
       this.pageSelection.push({ skip: skip, limit: limit });
-      // 1
-      // 0 - 10
-      // 2
-      // 10 - 20
     }
   }
-
 }
