@@ -150,8 +150,13 @@ export class VerifyCodeComponent implements OnInit {
         localStorage.removeItem('pending_email');
 
         setTimeout(() => {
-          this.router.navigate(['/dashboard']);
+          if (!res.is_profile_complete) {
+            this.router.navigate(['/complete-profile']);
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
         }, 1000);
+              
       },
       error: (err) => {
         this.loading = false;

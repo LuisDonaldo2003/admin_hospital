@@ -62,6 +62,13 @@ const routes: Routes = [
         loadComponent: () =>
           import('./forgot-password/reset-password/reset-password.component').then(m => m.ResetPasswordComponent),
       },
+      {
+        path: 'complete-profile',
+        loadComponent: () =>
+          import('./complete-profile/complete-profile.component')
+            .then(m => m.CompleteProfileComponent)
+      }
+      
       
     ],
   },
