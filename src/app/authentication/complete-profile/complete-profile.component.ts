@@ -62,7 +62,7 @@ export class CompleteProfileComponent {
       this.contract_types = res.contract_types;
     });
   }
-  
+
 
   loadFile(event: any) {
     const file = event.target.files[0];
@@ -75,6 +75,15 @@ export class CompleteProfileComponent {
   }
 
   save() {
+    this.text_validation = '';
+    this.text_success = '';
+
+    // Validación manual
+    if (!this.mobile || !this.birth_date || !this.gender || !this.attendance_number || !this.avatarFile) {
+      this.text_validation = 'Todos los campos obligatorios deben completarse.';
+      return;
+    }
+
     const formData = new FormData();
     formData.append('mobile', this.mobile);
     formData.append('curp', this.curp);
