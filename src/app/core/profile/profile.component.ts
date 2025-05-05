@@ -12,19 +12,22 @@ import { RouterModule } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
   public profileData: any;
-  public roles: string[] = []; 
+  public roles: string[] = [];
   public routes = routes;
 
   constructor(public profileService: ProfileService) {}
 
   ngOnInit() {
     this.getProfileData();
+    console.log('Perfil completo:', this.profileData);
   }
 
   private getProfileData(): void {
     this.profileService.getProfile().subscribe((resp: any) => {
+      console.log('Respuesta del perfil:', resp); // 👈 agrega esta línea
       this.profileData = resp.data;
-      this.roles = resp.roles; // Asignar roles
+      this.roles = resp.roles;
     });
   }
+
 }

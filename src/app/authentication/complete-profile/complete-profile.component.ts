@@ -104,7 +104,7 @@ export class CompleteProfileComponent {
     this.http.post(`${URL_SERVICIOS}/complete-profile`, formData).subscribe({
       next: () => {
         this.text_success = 'Perfil completado correctamente';
-        setTimeout(() => this.router.navigate(['/dashboard']), 1000);
+        setTimeout(() => this.router.navigate(['/profile']), 1000);
       },
       error: err => {
         this.text_validation = err?.error?.message || 'Error al guardar';
