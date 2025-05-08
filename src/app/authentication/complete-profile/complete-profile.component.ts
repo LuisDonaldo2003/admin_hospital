@@ -2,23 +2,22 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // ✅ NECESARIO para ngModel
+import { FormsModule } from '@angular/forms';
 import { URL_SERVICIOS } from 'src/app/config/config';
 
 @Component({
   selector: 'app-complete-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule], // ✅ Aquí se declara FormsModule
+  imports: [CommonModule, FormsModule],
   templateUrl: './complete-profile.component.html',
   styleUrls: ['./complete-profile.component.scss']
 })
 export class CompleteProfileComponent {
-  // Datos del usuario ya verificado
   name = '';
   surname = '';
   email = '';
 
-  // Datos a completar
+  // Datos del formulario
   mobile = '';
   curp = '';
   ine = '';
@@ -31,14 +30,13 @@ export class CompleteProfileComponent {
   departament_id = '';
   profile_id = '';
   contract_type_id = '';
-  selectedValue = '';
   IMAGEN_PREVIZUALIZA: any = null;
   avatarFile: File | null = null;
 
   // Catálogos
   departaments: any[] = [];
   profiles: any[] = [];
-  contract_types: any[] = [];
+  contractTypes: any[] = [];
 
   // Mensajes
   text_success = '';
@@ -48,7 +46,6 @@ export class CompleteProfileComponent {
 
   ngOnInit() {
     this.getCatalogs();
-
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.name = user.name || '';
     this.surname = user.surname || '';
@@ -56,13 +53,18 @@ export class CompleteProfileComponent {
   }
 
   getCatalogs() {
-    this.http.get<any>(`${URL_SERVICIOS}/staffs/config`).subscribe(res => {
-      this.departaments = res.departaments;
-      this.profiles = res.profiles;
-      this.contract_types = res.contract_types;
+    this.http.get<any>(`${URL_SERVICIOS}/staffs/config`).subscribe({
+      next: res => {
+        this.departaments = res.departaments;
+        this.profiles = res.profiles;
+        this.contractTypes = res.contractTypes; // 👈 corregido
+      },
+      error: err => {
+        console.error('Error al cargar catálogos:', err);
+        this.text_validation = 'Error al cargar catálogos.';
+      }
     });
   }
-
 
   loadFile(event: any) {
     const file = event.target.files[0];
@@ -78,8 +80,7 @@ export class CompleteProfileComponent {
     this.text_validation = '';
     this.text_success = '';
 
-    // Validación manual
-    if (!this.mobile || !this.birth_date || !this.gender || !this.attendance_number || !this.avatarFile) {
+    if (!this.mobile || !this.birth_date || !this.gender || !this.contract_type_id || !this.attendance_number || !this.avatarFile) {
       this.text_validation = 'Todos los campos obligatorios deben completarse.';
       return;
     }
@@ -107,6 +108,7 @@ export class CompleteProfileComponent {
         setTimeout(() => this.router.navigate(['/profile']), 1000);
       },
       error: err => {
+        console.error('Error al guardar:', err);
         this.text_validation = err?.error?.message || 'Error al guardar';
       }
     });
