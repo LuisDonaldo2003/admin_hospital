@@ -341,6 +341,43 @@ export class DataService {
           ],
         },
         {
+          menuValue: 'Pacientes',
+          hasSubRoute: true,
+          showSubRoute: false,
+          base: 'archives',
+          img: 'assets/img/icons/menu-icon-06.svg',
+          subMenus: [
+            {
+              menuValue: 'Lista de Pacientes',
+              route: routes.archiveList,
+              base: routes.archiveList,
+              permision: 'list_archive',
+              show_nav: true,
+            },
+            {
+              menuValue: 'Agregar  Pacientes',
+              route: routes.addArchive,
+              base: routes.addArchive,
+              permision: 'add_archive',
+              show_nav: true,
+            },
+            {
+              menuValue: 'Editar Pacientes',
+              route: '',
+              base: '',
+              permision: 'edit_archive',
+              show_nav: false,
+            },
+            {
+              menuValue: 'Eliminar Pacientes',
+              route: '',
+              base: '',
+              permision: 'delete_archive',
+              show_nav: false,
+            },
+          ],
+        },
+        {
           menuValue: 'Contract',
           hasSubRoute: true,
           showSubRoute: false,

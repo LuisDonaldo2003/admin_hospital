@@ -34,6 +34,12 @@ const routes: Routes = [
         loadChildren: () =>
           import('./profile-m/profile-m.module').then((m) => m.ProfileMModule),
       },
+      {
+        path: 'archives',
+        loadChildren: () => 
+          import('./archive/archive.module').then(m => m.ArchiveModule)
+      },
+
     ]
   }
 ];

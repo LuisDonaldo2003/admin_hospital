@@ -384,12 +384,20 @@ export class routes {
     return this.baseUrl + '/profile-m/list_profile-m';
   }
 
-  //Department
-public static get addDepartment(): string {
-    return this.baseUrl + '/departaments-m/add-departament';
-  }
-  public static get departmentList(): string {
-    return this.baseUrl + '/departaments-m/list-departament';
-  }
+    //Department
+  public static get addDepartment(): string {
+      return this.baseUrl + '/departaments-m/add-departament';
+    }
+    public static get departmentList(): string {
+      return this.baseUrl + '/departaments-m/list-departament';
+    }
+
+        //Archive
+    public static get addArchive(): string {
+      return this.baseUrl + '/archives/add_archive';
+    }
+    public static get archiveList(): string {
+      return this.baseUrl + '/archives/list_archive';
+    }
 
 }
