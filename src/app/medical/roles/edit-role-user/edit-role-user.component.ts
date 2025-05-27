@@ -4,11 +4,13 @@ import { RolesService } from '../service/roles.service';
 import { DataService } from 'src/app/shared/data/data.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-edit-role-user',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule,CommonModule,TranslateModule],
   templateUrl: './edit-role-user.component.html',
   styleUrl: './edit-role-user.component.scss'
 })
@@ -20,14 +22,21 @@ export class EditRoleUserComponent {
   valid_form: boolean = false;
   valid_form_success: boolean = false;
   text_validation:any = null;
+  
+  public selectedLang: string;
+
 
   role_id:any;
   constructor(
     public DataService: DataService ,
     public RoleService: RolesService,
     public activedRoute: ActivatedRoute,
-  ) {
+    private translate: TranslateService
 
+  ) {
+    // Establece el idioma inicial
+    this.selectedLang = localStorage.getItem('language') || 'en';
+    this.translate.use(this.selectedLang);
   }
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -37,6 +46,12 @@ export class EditRoleUserComponent {
       this.role_id = resp.id;
     })
     this.showRole();
+  }
+
+  toggleLanguage(): void {
+    this.selectedLang = this.selectedLang === 'es' ? 'en' : 'es';
+    this.translate.use(this.selectedLang);
+    localStorage.setItem('language', this.selectedLang);
   }
 
   showRole() {

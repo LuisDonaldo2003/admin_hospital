@@ -7,10 +7,10 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb bg-light p-2 rounded">
               <li class="breadcrumb-item">
-                <a href="#">Roles y Permisos</a>
+                <a href="#">{{ 'ROLES2' | translate }} > </a>
               </li>
               <li class="breadcrumb-item active" aria-current="page">
-                Lista de Roles
+                {{ 'ROLE_LIST' | translate }}
               </li>
             </ol>
           </nav>
@@ -26,18 +26,18 @@
             <!-- Table Header -->
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
               <div>
-                <h3 class="mb-0">Listado de Roles</h3>
+                <h3 class="mb-0">{{ 'ROLE_LISTING' | translate }}</h3>
               </div>
               <div class="d-flex flex-wrap gap-2">
                 <div class="input-group">
-                  <input class="form-control" placeholder="Buscar rol" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
-                  <button class="btn btn-outline-secondary" type="button">Buscar</button>
+                  <input class="form-control" placeholder="Search role" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
+                  <button class="btn btn-outline-secondary" type="button">{{ 'SEARCH' | translate }}</button>
                 </div>
                 <a routerLink="/roles/register" class="btn btn-success">
-                  + Nuevo
+                  {{ 'NEW' | translate }}
                 </a>
                 <button (click)="PageSize()" class="btn btn-outline-primary">
-                  Refrescar
+                  {{ 'REFRESH' | translate }}
                 </button>
               </div>
             </div>
@@ -47,34 +47,34 @@
               <table matSort (matSortChange)="sortData($event)" class="table table-hover align-middle">
                 <thead class="table-light">
                   <tr>
-                    <th mat-sort-header="name">Nombre</th>
-                    <th mat-sort-header="permisos">Permisos</th>
-                    <th mat-sort-header="created_at">Fecha de registro</th>
-                    <th class="text-end">Acciones</th>
+                    <th mat-sort-header="name">{{ 'NAME' | translate }}</th>
+                    <th mat-sort-header="permisos">{{ 'PERMISSIONS' | translate }}</th>
+                    <th mat-sort-header="created_at">{{ 'REGISTER' | translate }}</th>
+                    <th class="text-end">{{ 'ACTIONS' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of rolesList">
                     <td>{{ data.name }}</td>
                     <td>
-                      {{ data.permission_pluck.length > 0 ? data.permission_pluck.join(', ') : 'TODOS LOS PERMISOS' }}
+                      {{ data.permission_pluck.length > 0 ? data.permission_pluck.join(', ') : 'ALL PERMISSIONS' }}
                     </td>
                     <td>{{ data.created_at }}</td>
                     <td class="text-end" *ngIf="data.id !== 1">
                       <div class="dropdown">
                         <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                          Opciones
+                          {{ 'OPTIONS' | translate }}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                           <li>
                             <a class="dropdown-item" [routerLink]="[ '/roles/list/edit/', data.id ]">
-                              Editar
+                              {{ 'EDIT' | translate }}
                             </a>
                           </li>
                           <li>
                             <a class="dropdown-item text-danger" href="javascript:void(0);" (click)="selectRole(data)" data-bs-toggle="modal"
                               [attr.data-bs-target]="'#delete_role-'+data.id">
-                              Eliminar
+                              {{ 'DELETE' | translate }}
                             </a>
                           </li>
                         </ul>
@@ -84,37 +84,37 @@
                 </tbody>
               </table>
 
-              <!-- Modal de Confirmación -->
+              <!-- Confirmation Modal -->
               <ng-container *ngFor="let data of rolesList">
                 <div [attr.id]="'delete_role-'+data.id" class="modal fade" tabindex="-1" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title">Confirmar eliminación</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <h5 class="modal-title">{{ 'DELETE_CONFIRMATION' | translate }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body text-center">
-                        <img src="assets/img/sent.png" alt="Alerta" width="50" height="46" class="mb-3">
-                        <p>¿Estás seguro de eliminar el rol <strong>{{ data.name }}</strong>?</p>
+                        <img src="assets/img/sent.png" alt="Alert" width="50" height="46" class="mb-3">
+                        <p>{{ 'DELETE_CONFIRMATION2' | translate }}<strong>{{ data.name }}</strong>?</p>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-danger" (click)="deleteRol()">Eliminar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+                        <button type="button" class="btn btn-danger" (click)="deleteRol()">{{ 'DELETE' | translate }}</button>
                       </div>
                     </div>
                   </div>
                 </div>
               </ng-container>
 
-              <!-- Footer de la tabla -->
+              <!-- Table Footer -->
               <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
                 <div>
-                  Mostrando {{ serialNumberArray[0] }} a {{ serialNumberArray[serialNumberArray.length - 1] }} de {{ totalData }} registros
+                  {{ 'SHOWING' | translate }} {{ serialNumberArray[0] }} {{ 'TO' | translate }} {{ serialNumberArray[serialNumberArray.length - 1] }} {{ 'TO' | translate }} {{ totalData }} {{ 'RECORDS' | translate }}
                 </div>
                 <nav>
                   <ul class="pagination mb-0">
                     <li class="page-item" [class.disabled]="currentPage === 1">
-                      <a class="page-link" (click)="getMoreData('previous')">Anterior</a>
+                      <a class="page-link" (click)="getMoreData('previous')">{{ 'PREVIOUS' | translate }}</a>
                     </li>
                     <ng-container *ngFor="let item of pageNumberArray">
                       <li class="page-item" [class.active]="item === currentPage">
@@ -122,7 +122,7 @@
                       </li>
                     </ng-container>
                     <li class="page-item" [class.disabled]="currentPage === pageNumberArray[pageNumberArray.length - 1]">
-                      <a class="page-link" (click)="getMoreData('next')">Siguiente</a>
+                      <a class="page-link" (click)="getMoreData('next')">{{ 'NEXT' | translate }}</a>
                     </li>
                   </ul>
                 </nav>

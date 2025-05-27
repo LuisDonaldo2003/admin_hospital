@@ -36,8 +36,46 @@
   "CONTRACT_TYPE": "Contract Type",
 
   "_comentario3": "Header",
-  "LOGOUT": "Logout"
+  "LOGOUT": "Logout",
 
+  "_comentario4": "Roles",
 
+  "ROLES2": "Roles and Permissions",
+  "ROLE_LIST": "Roles List",
+  "ROLE_LISTING": "Roles Listing",
+  "NEW": "+ New",
+  "SEARCH": "Search",
+  "REFRESH": "Refresh",
+  "NAME":"Name",
+  "PERMISSIONS": "Permissions",
+  "REGISTER": "Registration",
+  "ACTIONS": "Actions",
+  "OPTIONS" : "Options",
+  "EDIT": "Edit",
+  "DELETE":"Delete",
+  "DELETE_CONFIRMATION": "Confirm Deletion",
+  "DELETE_CONFIRMATION2": "Are you sure you want to delete the role: ",
+  "CANCEL": "Cancel",
+  "SHOWING": "Showing",
+  "TO": "to",
+  "RECORDS": "Records",
+  "PREVIOUS": "Previous",
+  "NEXT": "Next",
+
+  "_comentario5": "Edit-Roles",
+  "EDIT_ROLE": "Edit Role",
+  "EDITION": "Edition",
+  "ALERT1": "It is necessary to fill in a name and select a permit.",
+  "GREAT":"Right",
+  "GOD_ROLE":"The role was edited correctly.",
+  "ATTENTION": "Attention",
+  "ASIGNATION":"Assignment of Permits",
+  "SECCION": "Section",
+
+  "_comentario6": "Add-Roles",
+  "REGISTER_ROLE": "Register Role",
+  "CREATE_ROLE": "Create Role",
+  "SAVE": "Save",
+  "GREAT_ROLE": "The role was created correctly."
 
 }

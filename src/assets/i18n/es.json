@@ -36,8 +36,45 @@
   "CONTRACT_TYPE": "Tipo de Contrato",
 
   "_comentario3": "Header",
-  "LOGOUT": "Salir"
+  "LOGOUT": "Salir",
 
+  "_comentario4": "Roles",
+  "ROLES2": "Roles y Permisos",
+  "ROLE_LIST": "Lista de Roles",
+  "ROLE_LISTING": "Lista de Roles",
+  "NEW": "+ Nuevo",
+  "SEARCH": "Buscar",
+  "REFRESH": "Actualizar",
+  "NAME":"Nombre",
+  "PERMISSIONS": "Permisos",
+  "REGISTER": "Registro",
+  "ACTIONS": "Acciones",
+  "OPTIONS" : "Opciones",
+  "EDIT":"Editar",
+  "DELETE":"Eliminar",
+  "DELETE_CONFIRMATION": "Confirmar Eliminación",
+  "DELETE_CONFIRMATION2": "¿Estás seguro de elimar el rol: ",
+  "CANCEL": "Cancelar",
+  "SHOWING": "Mostrando",
+  "TO": "de",
+  "RECORDS": "Archivos",
+  "PREVIOUS": "Previo",
+  "NEXT": "Siguiente",
 
+  "_comentario5": "Edit-Roles",
+  "EDIT_ROLE": "Editar Rol",
+  "EDITION": "Edición",
+  "ALERT1": "Es necesario llenar un nombre y seleccionar un permiso.",
+  "GREAT":"Bien",
+  "GOD_ROLE":"El rol se editó correctamente.",
+  "ATTENTION": "Atención",
+  "ASIGNATION":"Asignación de Permisos",
+  "SECCION": "Sección",
+
+  "_comentario6": "Add-Roles",
+  "REGISTER_ROLE": "Registrar Rol",
+  "CREATE_ROLE": "Crear Rol",
+  "SAVE":"Guardar",
+  "GREAT_ROLE": "El rol se creó correctamente."
 
 }

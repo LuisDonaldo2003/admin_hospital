@@ -5,17 +5,17 @@ import { RolesService } from '../service/roles.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-list-role-user',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
   templateUrl: './list-role-user.component.html',
   styleUrls: ['./list-role-user.component.scss']
 })
 export class ListRoleUserComponent {
-
-  public rolesList:any = [];
+  public rolesList: any = [];
   dataSource!: MatTableDataSource<any>;
 
   public showFilter = false;
@@ -23,8 +23,8 @@ export class ListRoleUserComponent {
   public lastIndex = 0;
   public pageSize = 10;
   public totalData = 0;
-  public skip = 0;//MIN
-  public limit: number = this.pageSize;//MAX
+  public skip = 0;
+  public limit: number = this.pageSize;
   public pageIndex = 0;
   public serialNumberArray: Array<number> = [];
   public currentPage = 1;
@@ -32,24 +32,36 @@ export class ListRoleUserComponent {
   public pageSelection: Array<any> = [];
   public totalPages = 0;
 
-  public role_generals:any = [];
-  public role_selected:any;
+  public role_generals: any = [];
+  public role_selected: any;
 
+  public selectedLang: string;
 
   constructor(
     public RoleService: RolesService,
-  ){
-
+    private translate: TranslateService
+  ) {
+    // Establece el idioma inicial
+    this.selectedLang = localStorage.getItem('language') || 'en';
+    this.translate.use(this.selectedLang);
   }
+
   ngOnInit() {
     this.getTableData();
   }
+
+  toggleLanguage(): void {
+    this.selectedLang = this.selectedLang === 'es' ? 'en' : 'es';
+    this.translate.use(this.selectedLang);
+    localStorage.setItem('language', this.selectedLang);
+  }
+
   private getTableData(): void {
     this.rolesList = [];
     this.serialNumberArray = [];
 
     this.RoleService.listRoles().subscribe((resp: any) => {
-        console.log(resp);
+      console.log(resp);
 
       this.totalData = resp.roles.length;
       this.role_generals = resp.roles
@@ -70,7 +82,6 @@ export class ListRoleUserComponent {
     this.role_generals.map((res: any, index: number) => {
       const serialNumber = index + 1;
       if (index >= this.skip && serialNumber <= this.limit) {
-
         this.rolesList.push(res);
         this.serialNumberArray.push(serialNumber);
       }
@@ -79,17 +90,16 @@ export class ListRoleUserComponent {
     this.calculateTotalPages(this.totalData, this.pageSize);
   }
 
-  selectRole(rol:any){
+  selectRole(rol: any) {
     this.role_selected = rol;
   }
 
-  deleteRol(){
-
-    this.RoleService.deleteRoles(this.role_selected.id).subscribe((resp:any) => {
+  deleteRol() {
+    this.RoleService.deleteRoles(this.role_selected.id).subscribe((resp: any) => {
       console.log(resp);
-      let INDEX = this.rolesList.findIndex((item:any) => item.id == this.role_selected.id);
-      if(INDEX != -1){
-        this.rolesList.splice(INDEX,1);
+      let INDEX = this.rolesList.findIndex((item: any) => item.id == this.role_selected.id);
+      if (INDEX != -1) {
+        this.rolesList.splice(INDEX, 1);
 
         $('#delete_patient').hide();
         $("#delete_patient").removeClass("show");
@@ -99,9 +109,9 @@ export class ListRoleUserComponent {
 
         this.role_selected = null;
       }
-    })
+    });
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   public searchData(value: any): void {
     this.dataSource.filter = value.trim().toLowerCase();
     this.rolesList = this.dataSource.filteredData;
@@ -113,10 +123,8 @@ export class ListRoleUserComponent {
     if (!sort.active || sort.direction === '') {
       this.rolesList = data;
     } else {
-      this.rolesList = data.sort((a:any, b:any) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.rolesList = data.sort((a: any, b: any) => {
         const aValue = (a as any)[sort.active];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const bValue = (b as any)[sort.active];
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
@@ -166,16 +174,11 @@ export class ListRoleUserComponent {
     if (this.totalPages % 1 != 0) {
       this.totalPages = Math.trunc(this.totalPages + 1);
     }
-    /* eslint no-var: off */
     for (var i = 1; i <= this.totalPages; i++) {
       const limit = pageSize * i;
       const skip = limit - pageSize;
       this.pageNumberArray.push(i);
       this.pageSelection.push({ skip: skip, limit: limit });
-      // 1
-      // 0 - 10
-      // 2
-      // 10 - 20
     }
   }
 }
