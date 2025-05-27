@@ -53,12 +53,13 @@ export class ListProfileMComponent {
     this.profileService.listProfile().subscribe((resp: any) => {
       console.log(resp);
 
-      this.totalData = resp.profile.length;
-      this.profile_generals = resp.profile.sort((a: any, b: any) =>
+      this.totalData = resp.profiles.length;
+      this.profile_generals = resp.profiles.sort((a: any, b: any) =>
         a.name.localeCompare(b.name)
       );
       this.getTableDataGeneral();
-    })
+    });
+
   }
 
   getTableDataGeneral() {

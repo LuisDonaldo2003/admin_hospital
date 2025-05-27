@@ -38,9 +38,9 @@
 
         </a>
         <div class="dropdown-menu">
-          <a class="dropdown-item" [routerLink]="routes.profile">My Profile</a>
-          <a class="dropdown-item" [routerLink]="routes.editProfile">Edit Profile</a>
-          <a class="dropdown-item" href="#" (click)="logout()">Logout</a>
+          <a class="dropdown-item" [routerLink]="routes.profile">{{ 'PROFILES' | translate }}</a>
+          <a class="dropdown-item" [routerLink]="routes.editProfile">{{ 'EDIT_PROFILE' | translate }}</a>
+          <a class="dropdown-item" href="#" (click)="logout()">{{ 'LOGOUT' | translate }}</a>
         </div>
       </li>
   

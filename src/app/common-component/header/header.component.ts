@@ -4,34 +4,42 @@ import { ProfileService } from 'src/app/core/profile/service/profile.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 import { routes } from 'src/app/shared/routes/routes';
 import { SideBarService } from 'src/app/shared/side-bar/side-bar.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss'],
-    standalone: false
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
+  standalone: false
 })
 export class HeaderComponent {
   public routes = routes;
   public openBox = false;
-  public miniSidebar  = false;
+  public miniSidebar = false;
   public addClass = false;
-  public user:any;
+  public user: any;
   public profileData: any = {};
   public roles: string[] = [];
+  public selectedLang: string;
 
-
-  constructor(public router: Router,private sideBar: SideBarService,public auth: AuthService,public profileService: ProfileService) {
+  constructor(
+    public router: Router,
+    private sideBar: SideBarService,
+    public auth: AuthService,
+    public profileService: ProfileService,
+    private translate: TranslateService
+  ) {
     this.sideBar.toggleSideBar.subscribe((res: string) => {
-      if (res == 'true') {
-        this.miniSidebar = true;
-      } else {
-        this.miniSidebar = false;
-      }
+      this.miniSidebar = res === 'true';
     });
-    let USER = localStorage.getItem("user");
+
+    const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER : '');
     console.log(this.user);
+
+    // Inicializar idioma
+    this.selectedLang = localStorage.getItem('language') || 'en';
+    this.translate.use(this.selectedLang);
   }
 
   ngOnInit() {
@@ -45,47 +53,51 @@ export class HeaderComponent {
     });
   }
 
-  getRole(){
-    let RoleName = "";
-    this.user.roles.forEach((rol:any) => {
-      RoleName = rol;
+  getRole(): string {
+    let roleName = "";
+    this.user.roles.forEach((rol: any) => {
+      roleName = rol;
     });
-    return RoleName;
+    return roleName;
+  }
+
+  toggleLanguage(): void {
+    this.selectedLang = this.selectedLang === 'es' ? 'en' : 'es';
+    this.translate.use(this.selectedLang);
+    localStorage.setItem('language', this.selectedLang);
   }
 
   openBoxFunc() {
     this.openBox = !this.openBox;
-    /* eslint no-var: off */
-    var mainWrapper = document.getElementsByClassName('main-wrapper')[0];
+    const mainWrapper = document.getElementsByClassName('main-wrapper')[0];
     if (this.openBox) {
       mainWrapper.classList.add('open-msg-box');
     } else {
       mainWrapper.classList.remove('open-msg-box');
     }
   }
-  logout(){
+
+  logout() {
     this.auth.logout();
   }
+
   public toggleSideBar(): void {
     this.sideBar.switchSideMenuPosition();
   }
+
   public toggleMobileSideBar(): void {
     this.sideBar.switchMobileSideBarPosition();
+    this.addClass = !this.addClass;
 
-      this.addClass = !this.addClass;
-      /* eslint no-var: off */
-      var root = document.getElementsByTagName( 'html' )[0];
-      /* eslint no-var: off */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      var sidebar:any = document.getElementById('sidebar')
+    const root = document.getElementsByTagName('html')[0];
+    const sidebar: any = document.getElementById('sidebar');
 
-      if (this.addClass) {
-        root.classList.add('menu-opened');
-        sidebar.classList.add('opened');
-      }
-      else {
-        root.classList.remove('menu-opened');
-        sidebar.classList.remove('opened');
-      }
+    if (this.addClass) {
+      root.classList.add('menu-opened');
+      sidebar.classList.add('opened');
+    } else {
+      root.classList.remove('menu-opened');
+      sidebar.classList.remove('opened');
     }
   }
+}

@@ -52,7 +52,8 @@ import { TranslateModule } from '@ngx-translate/core';
     FormsModule,
     ReactiveFormsModule,
     NgxMaterialTimepickerModule,
-    RouterModule
+    RouterModule,
+    TranslateModule
   ],
   exports: [
     CommonModule,

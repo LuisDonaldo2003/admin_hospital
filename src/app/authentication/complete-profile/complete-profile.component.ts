@@ -94,7 +94,7 @@ export class CompleteProfileComponent {
     formData.append('professional_license', this.professional_license);
     formData.append('funcion_real', this.funcion_real);
     formData.append('birth_date', this.birth_date);
-    formData.append('gender', this.gender);
+    formData.append('gender_id', this.gender);
     formData.append('departament_id', this.departament_id);
     formData.append('profile_id', this.profile_id);
     formData.append('contract_type_id', this.contract_type_id);

@@ -1,4 +1,5 @@
 {
+    "_comentario": "General Settings",
   "GENERAL_SETTINGS": "Configuración General",
   "SETTINGS": "Configuración",
   "DARK_MODE": "Modo Oscuro",
@@ -15,5 +16,28 @@
   "USERS": "Usuarios",
   "ROLES": "Roles",
   "CONTRACT": "Contrato",
-  "DEPARTMENTS": "Departamentos"
+  "DEPARTMENTS": "Departamentos",
+
+  "_comentario2": "Perfil",
+  "PROFILES": "Mi Perfil",
+  "EDIT_PROFILE": "Editar Perfil",
+  "BASIC_DATES": "Datos Básicos",
+  "EMAIL": "Correo Electrónico",
+  "GENDER": "Género",
+  "ID_USER": "ID de Usuario",
+  "INFRORMATION_PROFESSIONAL": "Información Profesional",
+  "ASSISTANCE": "Número de Asistencia",
+  "PHONE": "Teléfono",
+  "BIRTHDAY": "Cumpleaños",
+  "PROFESSIONAL_LICENSE": "Cédula Profesional",
+  "FUNCTION_REAL": "Función Real",
+  "DEPARTAMENT": "Departamento",
+  "RELATION_PROFILE": "Perfil Relacional",
+  "CONTRACT_TYPE": "Tipo de Contrato",
+
+  "_comentario3": "Header",
+  "LOGOUT": "Salir"
+
+
+
 }
