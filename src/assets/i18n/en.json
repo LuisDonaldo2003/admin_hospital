@@ -82,7 +82,25 @@
   "USER_LIST": "User List",
   "LISTA_USUARIOS": "User List",
   "COMPLETE_NAME": "Complete Name",
-  "ROLE": "Rol"
+  "ROLE": "Rol",
+
+  "_comentario8": "ADD-USER",
+  "ADD_STAFF": "Add User",
+  "USER_REGISTRATION": "User Registration",
+  "FIRST_NAME": "First Name",
+  "SURNAME": "Surname",
+  "ROLE_SELECT": "Role",
+  "PASSWORD": "Password",
+  "CONFIRM_PASSWORD": "Confirm Password",
+  "SELECT_ROLE_PLACEHOLDER": "Select a role",
+  "WARNING": "Warning",
+  "SUCCESS": "Success",
+
+  "_comentario9": "EDIT-USER",
+  "EDIT_USER": "Edit User",
+  "USER_ID": "User:",
+  "SELECT_ROLE": "Select Role"
+
 
 
 }

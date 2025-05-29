@@ -1,10 +1,11 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router'; // ✅ IMPORTA ROUTER
+import { Router } from '@angular/router';
 import { StaffService } from '../service/staff.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-staff-n',
@@ -14,7 +15,8 @@ import { MatOptionModule } from '@angular/material/core';
     CommonModule,
     FormsModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    TranslateModule
   ],
   templateUrl: './add-staff-n.component.html',
   styleUrls: ['./add-staff-n.component.scss']
@@ -36,7 +38,8 @@ export class AddStaffNComponent {
 
   constructor(
     public staffservice: StaffService,
-    private router: Router // ✅ INYECTA ROUTER
+    private router: Router,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -56,22 +59,27 @@ export class AddStaffNComponent {
 
     const missingFields: string[] = [];
 
-    if (!this.name.trim()) missingFields.push('Nombre');
-    if (!this.surname.trim()) missingFields.push('Apellido');
-    if (!this.email.trim()) missingFields.push('Correo electrónico');
-    if (!this.password.trim()) missingFields.push('Contraseña');
-    if (!this.password_confirmation.trim()) missingFields.push('Confirmar contraseña');
-    if (!this.selectedValue) missingFields.push('Rol');
+    if (!this.name.trim()) missingFields.push(this.translate.instant('NAME'));
+    if (!this.surname.trim()) missingFields.push(this.translate.instant('SURNAME'));
+    if (!this.email.trim()) missingFields.push(this.translate.instant('EMAIL'));
+    if (!this.password.trim()) missingFields.push(this.translate.instant('PASSWORD'));
+    if (!this.password_confirmation.trim()) missingFields.push(this.translate.instant('CONFIRM_PASSWORD'));
+    if (!this.selectedValue) missingFields.push(this.translate.instant('ROLE'));
 
     if (missingFields.length > 0) {
       const plural = missingFields.length > 1;
       const campos = missingFields.join(', ');
-      this.text_validation = `Falta${plural ? 'n' : ''} completar los siguiente${plural ? 's' : ''} campo${plural ? 's' : ''}: ${campos}.`;
+      const mensaje = this.translate.instant('FIELDS_MISSING', {
+        plural: plural ? 'n' : '',
+        sPlural: plural ? 's' : '',
+        campos
+      });
+      this.text_validation = mensaje;
       return;
     }
 
     if (this.password !== this.password_confirmation) {
-      this.text_validation = 'Las contraseñas no coinciden.';
+      this.text_validation = this.translate.instant('PASSWORD_MISMATCH');
       return;
     }
 
@@ -87,9 +95,8 @@ export class AddStaffNComponent {
       if (resp.message === 403) {
         this.text_validation = resp.message_text;
       } else {
-        this.text_success = 'Usuario registrado correctamente';
+        this.text_success = this.translate.instant('USER_REGISTERED_SUCCESS');
 
-        // ✅ Redirige a list-staff luego de 1 segundo
         setTimeout(() => {
           this.router.navigate(['/staffs/list-staff']);
         }, 1000);

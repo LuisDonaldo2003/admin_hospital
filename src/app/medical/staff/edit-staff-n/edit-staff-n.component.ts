@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { StaffService } from '../service/staff.service';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-edit-staff-n',
@@ -12,7 +13,8 @@ import { MatSelectModule } from '@angular/material/select';
     CommonModule,
     FormsModule,
     RouterModule,
-    MatSelectModule
+    MatSelectModule,
+    TranslateModule
   ],
   templateUrl: './edit-staff-n.component.html',
   styleUrl: './edit-staff-n.component.scss'
@@ -34,7 +36,8 @@ export class EditStaffNComponent {
 
   constructor(
     public staffService: StaffService,
-    public activedRoute: ActivatedRoute
+    public activedRoute: ActivatedRoute,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -60,8 +63,21 @@ export class EditStaffNComponent {
     this.text_validation = '';
     this.text_success = '';
 
-    if (!this.name.trim() || !this.surname.trim() || !this.email.trim() || !this.selectedValue) {
-      this.text_validation = 'Todos los campos obligatorios deben completarse.';
+    const missingFields: string[] = [];
+
+    if (!this.name.trim()) missingFields.push(this.translate.instant('NAME'));
+    if (!this.surname.trim()) missingFields.push(this.translate.instant('SURNAME'));
+    if (!this.email.trim()) missingFields.push(this.translate.instant('EMAIL'));
+    if (!this.selectedValue) missingFields.push(this.translate.instant('ROLE'));
+
+    if (missingFields.length > 0) {
+      const plural = missingFields.length > 1;
+      const campos = missingFields.join(', ');
+      this.text_validation = this.translate.instant('FIELDS_MISSING', {
+        plural: plural ? 'n' : '',
+        sPlural: plural ? 's' : '',
+        campos
+      });
       return;
     }
 
@@ -75,7 +91,7 @@ export class EditStaffNComponent {
       if (resp.message === 403) {
         this.text_validation = resp.message_text;
       } else {
-        this.text_success = 'El usuario ha sido actualizado correctamente';
+        this.text_success = this.translate.instant('USER_UPDATED_SUCCESS');
       }
     });
   }
