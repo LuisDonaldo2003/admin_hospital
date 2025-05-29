@@ -4,6 +4,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-list-staff-n',
@@ -12,7 +13,8 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     FormsModule,
     RouterModule,
-    MatTableModule
+    MatTableModule,
+    TranslateModule
   ],
   templateUrl: './list-staff-n.component.html',
   styleUrl: './list-staff-n.component.scss'
@@ -36,10 +38,24 @@ export class ListStaffNComponent {
   public role_generals: any = [];
   public staff_selected: any;
 
-  constructor(public staffService: StaffService) {}
+  public selectedLang: string;
+
+  constructor(
+    public staffService: StaffService,
+    private translate: TranslateService
+  ) {
+    this.selectedLang = localStorage.getItem('language') || 'en';
+    this.translate.use(this.selectedLang);
+  }
 
   ngOnInit() {
     this.getTableData();
+  }
+
+  toggleLanguage(): void {
+    this.selectedLang = this.selectedLang === 'es' ? 'en' : 'es';
+    this.translate.use(this.selectedLang);
+    localStorage.setItem('language', this.selectedLang);
   }
 
   private getTableData(): void {

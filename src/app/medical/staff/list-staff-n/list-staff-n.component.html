@@ -6,8 +6,8 @@
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item">Users ></li>
-            <li class="breadcrumb-item active">Users List</li>
+            <li class="breadcrumb-item">{{ 'USERS' | translate }} ></li>
+            <li class="breadcrumb-item active">{{ 'USER_LIST' | translate }}</li>
           </ol>
         </div>
       </div>
@@ -21,7 +21,7 @@
 
             <!-- Header de tabla -->
             <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 header-bar">
-              <h4 class="mb-0 fw-semibold">Lista de Usuarios</h4>
+              <h4 class="mb-0 fw-semibold">{{ 'LISTA_USUARIOS' | translate }}</h4>
               <div class="d-flex align-items-center gap-2 flex-wrap">
                 <div class="input-group search-input">
                   <input type="text" class="form-control" placeholder="Buscar..." [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
@@ -30,7 +30,7 @@
                   </span>
                 </div>
                 <a routerLink="/staffs/add-staff" class="btn btn-primary d-flex align-items-center gap-1">
-                  <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">Nuevo</span>
+                  <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'NEW' | translate }}</span>
                 </a>
                 <button (click)="PageSize()" class="btn btn-outline-secondary">
                   <i class="fa fa-refresh"></i>
@@ -43,10 +43,10 @@
               <table matSort (matSortChange)="sortData($event)" class="table table-striped table-hover align-middle text-nowrap">
                 <thead class="table-light text-center">
                   <tr>
-                    <th>Nombre completo</th>
-                    <th>Correo</th>
-                    <th>Rol</th>
-                    <th class="text-end">Acciones</th>
+                    <th>{{ 'COMPLETE_NAME' | translate }}</th>
+                    <th>{{ 'EMAIL' | translate }}</th>
+                    <th>{{ 'ROLE' | translate }}</th>
+                    <th class="text-end">{{ 'ACTIONS' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -61,14 +61,14 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
                           <a class="dropdown-item" [routerLink]="['/staffs/list-staff/edit-staff/', data.id]">
-                            <i class="fa fa-pen me-2"></i> Editar
+                            <i class="fa fa-pen me-2"></i> {{ 'EDIT' | translate }}
                           </a>
                           <a class="dropdown-item text-danger"
                              href="javascript:void(0);"
                              (click)="selectUser(data)"
                              data-bs-toggle="modal"
                              data-bs-target="#deleteModal">
-                            <i class="fa fa-trash me-2"></i> Eliminar
+                            <i class="fa fa-trash me-2"></i> {{ 'DELETE' | translate }}
                           </a>
                         </div>
                       </div>
@@ -81,12 +81,12 @@
             <!-- Paginación -->
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
               <div class="pagination-info small">
-                Mostrando {{ serialNumberArray[0] }} a {{ serialNumberArray[serialNumberArray.length - 1] }} de {{ totalData }} registros
+                {{ 'SHOWING' | translate }} {{ serialNumberArray[0] }}  {{ 'TO' | translate }} {{ totalData }} {{ 'RECORDS' | translate }}
               </div>
               <nav>
                 <ul class="pagination mb-0">
                   <li class="page-item" [class.disabled]="currentPage === 1">
-                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('previous')">Anterior</a>
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('previous')">{{ 'PREVIOUS' | translate }}</a>
                   </li>
                   <ng-container *ngFor="let item of pageNumberArray">
                     <li class="page-item" [class.active]="item === currentPage">
@@ -94,7 +94,7 @@
                     </li>
                   </ng-container>
                   <li class="page-item" [class.disabled]="currentPage === pageNumberArray[pageNumberArray.length - 1]">
-                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('next')">Siguiente</a>
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('next')">{{ 'NEXT' | translate }}</a>
                   </li>
                 </ul>
               </nav>

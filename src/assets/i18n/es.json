@@ -42,7 +42,7 @@
   "ROLES2": "Roles y Permisos",
   "ROLE_LIST": "Lista de Roles",
   "ROLE_LISTING": "Lista de Roles",
-  "NEW": "+ Nuevo",
+  "NEW": "Nuevo",
   "SEARCH": "Buscar",
   "REFRESH": "Actualizar",
   "NAME":"Nombre",
@@ -56,7 +56,7 @@
   "DELETE_CONFIRMATION2": "¿Estás seguro de elimar el rol: ",
   "CANCEL": "Cancelar",
   "SHOWING": "Mostrando",
-  "TO": "de",
+  "TO": "página con",
   "RECORDS": "Archivos",
   "PREVIOUS": "Previo",
   "NEXT": "Siguiente",
@@ -75,6 +75,13 @@
   "REGISTER_ROLE": "Registrar Rol",
   "CREATE_ROLE": "Crear Rol",
   "SAVE":"Guardar",
-  "GREAT_ROLE": "El rol se creó correctamente."
+  "GREAT_ROLE": "El rol se creó correctamente.",
+
+  "_comentario7": "Users",
+  "USER_LIST": "User List",
+  "LISTA_USUARIOS": "Lista de Usuarios",
+  "COMPLETE_NAME": "Nombre Completo",
+  "ROLE": "Rol"
+
 
 }

@@ -43,7 +43,7 @@
   "ROLES2": "Roles and Permissions",
   "ROLE_LIST": "Roles List",
   "ROLE_LISTING": "Roles Listing",
-  "NEW": "+ New",
+  "NEW": "New",
   "SEARCH": "Search",
   "REFRESH": "Refresh",
   "NAME":"Name",
@@ -57,7 +57,7 @@
   "DELETE_CONFIRMATION2": "Are you sure you want to delete the role: ",
   "CANCEL": "Cancel",
   "SHOWING": "Showing",
-  "TO": "to",
+  "TO": "page with",
   "RECORDS": "Records",
   "PREVIOUS": "Previous",
   "NEXT": "Next",
@@ -76,6 +76,13 @@
   "REGISTER_ROLE": "Register Role",
   "CREATE_ROLE": "Create Role",
   "SAVE": "Save",
-  "GREAT_ROLE": "The role was created correctly."
+  "GREAT_ROLE": "The role was created correctly.",
+
+  "_comentario7": "Users",
+  "USER_LIST": "User List",
+  "LISTA_USUARIOS": "User List",
+  "COMPLETE_NAME": "Complete Name",
+  "ROLE": "Rol"
+
 
 }
