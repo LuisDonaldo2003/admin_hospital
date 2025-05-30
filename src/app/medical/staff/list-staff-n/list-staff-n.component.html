@@ -29,7 +29,7 @@
                     <i class="fa fa-search"></i>
                   </span>
                 </div>
-                <a routerLink="/staffs/add-staff" class="btn btn-primary d-flex align-items-center gap-1">
+                <a routerLink="/staffs/add-staff" class="btn btn-options d-flex align-items-center gap-1">
                   <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'NEW' | translate }}</span>
                 </a>
                 <button (click)="PageSize()" class="btn btn-outline-secondary">
@@ -46,7 +46,7 @@
                     <th>{{ 'COMPLETE_NAME' | translate }}</th>
                     <th>{{ 'EMAIL' | translate }}</th>
                     <th>{{ 'ROLE' | translate }}</th>
-                    <th class="text-end">{{ 'ACTIONS' | translate }}</th>
+                    <th class="text-center">{{ 'ACTIONS' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -54,24 +54,26 @@
                     <td>{{ data.name }} {{ data.surname || '' }}</td>
                     <td>{{ data.email }}</td>
                     <td>{{ data.role?.name }}</td>
-                    <td class="text-end">
-                      <div class="dropdown" *ngIf="data.id != 1">
-                        <a class="text-muted" href="javascript:void(0);" data-bs-toggle="dropdown">
-                          <i class="fa fa-ellipsis-v"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                          <a class="dropdown-item" [routerLink]="['/staffs/list-staff/edit-staff/', data.id]">
-                            <i class="fa fa-pen me-2"></i> {{ 'EDIT' | translate }}
-                          </a>
-                          <a class="dropdown-item text-danger"
-                             href="javascript:void(0);"
-                             (click)="selectUser(data)"
-                             data-bs-toggle="modal"
-                             data-bs-target="#deleteModal">
-                            <i class="fa fa-trash me-2"></i> {{ 'DELETE' | translate }}
-                          </a>
+                    <td class="text-center">
+                      <ng-container *ngIf="data.id !== 1">
+                        <div class="dropdown d-flex justify-content-center align-items-center">
+                          <button class="btn btn-options dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-cogs me-1"></i> {{ 'OPTIONS' | translate }}
+                          </button>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" [routerLink]="['/staffs/list-staff/edit-staff/', data.id]">
+                              <i class="fa fa-pen me-2"></i> {{ 'EDIT' | translate }}
+                            </a>
+                            <a class="dropdown-item text-danger"
+                               href="javascript:void(0);"
+                               (click)="selectUser(data)"
+                               data-bs-toggle="modal"
+                               data-bs-target="#deleteModal">
+                              <i class="fa fa-trash me-2"></i> {{ 'DELETE' | translate }}
+                            </a>
+                          </div>
                         </div>
-                      </div>
+                      </ng-container>
                     </td>
                   </tr>
                 </tbody>
@@ -114,11 +116,11 @@
       <div class="modal-body text-center p-4">
         <img src="assets/img/sent.png" alt="" width="50" height="46" />
         <h5 class="mt-3" *ngIf="staff_selected">
-          ¿Estás seguro de eliminar a <strong>{{ staff_selected.name }} {{ staff_selected.surname }}</strong>?
+          {{ 'DELETE_CONFIRMATION2' | translate }} <strong>{{ staff_selected.name }} {{ staff_selected.surname }}</strong>?
         </h5>
         <div class="mt-4 d-flex justify-content-center gap-3">
-          <button class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-          <button class="btn btn-danger" (click)="deleteUser()" data-bs-dismiss="modal">Eliminar</button>
+          <button class="btn btn-light" data-bs-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+          <button class="btn btn-danger" (click)="deleteUser()" data-bs-dismiss="modal">{{ 'DELETE' | translate }}</button>
         </div>
       </div>
     </div>

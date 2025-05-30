@@ -98,6 +98,49 @@
   "_comentario9": "EDIT-USER",
   "EDIT_USER": "Editar Usuario",
   "USER_ID": "Usuario:",
-  "SELECT_ROLE": "Seleccionar Rol"
+  "SELECT_ROLE": "Seleccionar Rol",
 
+  "_comentario10": "Sidebar",
+ 
+  "MAIN": "Main",
+  "SIDEBAR_DASHBOARD": "Tablero",
+  "SIDEBAR_MAIN": "Principal",
+  "SIDEBAR_ADMIN":"Tablero de Administrador",
+  "SIDEBAR_DOCTOR": "Tablero de Doctor",
+  "SIDEBAR_PATIENT": "Tablero de Paciente",
+  "SIDEBAR_ROL":"Rol",
+  "SIDEBAR_ROLE":"Registrar Rol",
+  "SIDEBAR_ROLE2": "Lista de Roles",
+  "SIDEBAR_ROLE3": "Editar Rol",
+  "SIDEBAR_ROLE4": "Eliminar Rol",
+
+  "SIDEBAR_USER":"Usuarios",
+  "SIDEBAR_USER_LIST":"Lista de Usuarios",
+  "SIDEBAR_USER_ADD": "Agregar Usuario",
+  "SIDEBAR_USER_EDIT": "Editar Usuario",
+  "SIDEBAR_USER_DELETE": "Eliminar Usuario",
+
+  "SIDEBAR_PATIENT2":"Pacientes",
+  "SIDEBAR_PATIENT_LIST": "Lista de Pacientes",
+  "SIDEBAR_PATIENT_ADD": "Agregar Paciente",
+  "SIDEBAR_PATIENT_EDIT": "Editar Paciente",
+  "SIDEBAR_PATIENT_DELETE": "Eliminar Paciente",
+
+  "SIDEBAR_CONTRACT": "Contratos",
+  "SIDEBAR_CONTRACT_LIST":"Lista de Contratos",
+  "SIDEBAR_CONTRACT_ADD": "Agregar Contrato",
+  "SIDEBAR_CONTRACT_EDIT":"Editar Contrato",
+  "SIDEBAR_CONTRACT_DELETE": "Eliminar Contrato",
+
+  "SIDEBAR_PROFILE":"Perfiles",
+  "SIDEBAR_PROFILE_LIST":"Lista de Perfiles",
+  "SIDEBAR_PROFILE_ADD": "Agregar Perfiles",
+  "SIDEBAR_PROFILE_EDIT": "Editar Perfiles",
+  "SIDEBAR_PROFILE_DELETE": "Eliminar Perfiles",
+
+  "SIDEBAR_DEPARTAMENT": "Departamentos",
+  "SIDEBAR_DEPARTAMENT_LIST": "Lista de Departamentos",
+  "SIDEBAR_DEPARTAMENT_ADD":"Agregar Departamento",
+  "SIDEBAR_DEPARTAMENT_EDIT":"Editar Departamento",
+  "SIDEBAR_DEPARTAMENT_DELETE":"Eliminar Departamento"
 }

@@ -99,8 +99,48 @@
   "_comentario9": "EDIT-USER",
   "EDIT_USER": "Edit User",
   "USER_ID": "User:",
-  "SELECT_ROLE": "Select Role"
+  "SELECT_ROLE": "Select Role",
 
 
+  "_comentario10": "Sidebar",
+  "SIDEBAR_MAIN": "Main",
+  "SIDEBAR_DASHBOARD": "Dashboard",
+  "SIDEBAR_ADMIN":"Administrator Dashboard",
+  "SIDEBAR_DOCTOR": "Doctor Dashboard",
+  "SIDEBAR_PATIENT": "Patient Dashboard",
+  "SIDEBAR_ROL":"Role",
+  "SIDEBAR_ROLE":"Register Role",
+  "SIDEBAR_ROLE2": "Roles List",
+  "SIDEBAR_ROLE3": "Edit Role",
+  "SIDEBAR_ROLE4": "Delete Role",
 
+  "SIDEBAR_USER":"Users",
+  "SIDEBAR_USER_LIST":"User List",
+  "SIDEBAR_USER_ADD": "Add User",
+  "SIDEBAR_USER_EDIT": "Edit User",
+  "SIDEBAR_USER_DELETE": "Delete User",
+
+  "SIDEBAR_PATIENT2":"Patients",
+  "SIDEBAR_PATIENT_LIST": "Patients List",
+  "SIDEBAR_PATIENT_ADD": "Add Patient",
+  "SIDEBAR_PATIENT_EDIT": "Edit Patient",
+  "SIDEBAR_PATIENT_DELETE": "Delete Patient",
+
+  "SIDEBAR_CONTRACT": "Contracts",
+  "SIDEBAR_CONTRACT_LIST":"Contracts List",
+  "SIDEBAR_CONTRACT_ADD": "Add Contract",
+  "SIDEBAR_CONTRACT_EDIT":"Edit Contract",
+  "SIDEBAR_CONTRACT_DELETE": "Delete Contract",
+
+  "SIDEBAR_PROFILE":"Profiles",
+  "SIDEBAR_PROFILE_LIST":"Profiles List",
+  "SIDEBAR_PROFILE_ADD": "Add Profile",
+  "SIDEBAR_PROFILE_EDIT": "Edit Profile",
+  "SIDEBAR_PROFILE_DELETE": "Delete Profile",
+
+  "SIDEBAR_DEPARTAMENT": "Departaments",
+  "SIDEBAR_DEPARTAMENT_LIST": "Departament List",
+  "SIDEBAR_DEPARTAMENT_ADD":"Add Departament",
+  "SIDEBAR_DEPARTAMENT_EDIT":"Edit Departament",
+  "SIDEBAR_DEPARTAMENT_DELETE":"Delete Departament"
 }

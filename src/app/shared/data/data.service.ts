@@ -3,7 +3,7 @@ import { routes } from '../routes/routes';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { apiResultFormat } from '../models/models';
-
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,10 @@ export class DataService {
   private darkModeSubject = new BehaviorSubject<boolean>(this.getInitialDarkMode());
   public darkMode$ = this.darkModeSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private translate: TranslateService
+) {
     // Aplicar el modo oscuro al cargar
     if (this.darkModeSubject.value) {
       document.body.classList.add('dark-mode');
@@ -47,6 +50,12 @@ export class DataService {
       })
     );
   }
+
+  public showTranslatedMessage(): void {
+  const message = this.translate.instant('USER_REGISTRATION');
+  alert(message); // mostrará "User Registration" o "Registro de Usuario"
+}
+
   public getPatientsList(): Observable<apiResultFormat> {
     return this.http.get<apiResultFormat>('assets/json/doctors-list.json').pipe(
       map((res: apiResultFormat) => {
@@ -224,12 +233,12 @@ export class DataService {
   }
   public sideBar = [
     {
-      tittle: 'Main',
+      tittle: 'SIDEBAR_MAIN',
       showAsTab: false,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Dashboard',
+          menuValue: 'SIDEBAR_DASHBOARD',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'dashboard',
@@ -237,21 +246,21 @@ export class DataService {
           img: 'assets/img/icons/menu-icon-01.svg',
           subMenus: [
             {
-              menuValue: 'Admin Dashboard',
+              menuValue: 'SIDEBAR_ADMIN',
               route: routes.adminDashboard,
               base: routes.adminDashboard,
               permision: '',
               show_nav: true,
             },
             {
-              menuValue: 'Doctor Dashboard',
+              menuValue: 'SIDEBAR_DOCTOR',
               route: routes.doctorDashboard,
               base: routes.doctorDashboard,
               permision: '',
               show_nav: true,
             },
             {
-              menuValue: 'Patient Dashboard',
+              menuValue: 'SIDEBAR_PATIENT',
               route: routes.patientDashboard,
               base: routes.patientDashboard,
               permision: '',
@@ -260,7 +269,7 @@ export class DataService {
           ],
         },
         {
-          menuValue: 'Roles',
+          menuValue: 'SIDEBAR_ROL',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'gallery',
@@ -269,28 +278,28 @@ export class DataService {
           faIcon: true,
           subMenus: [
             {
-              menuValue: 'Register Rol',
+              menuValue: 'SIDEBAR_ROLE',
               route: routes.registerRole,
               base: routes.registerRole,
               permision: 'register_rol',
               show_nav: true,
             },
             {
-              menuValue: 'Role List',
+              menuValue: 'SIDEBAR_ROLE2',
               route: routes.listadoRole,
               base: routes.listadoRole,
               permision: 'list_rol',
               show_nav: true,
             },
             {
-              menuValue: 'Edit Rol',
+              menuValue: 'SIDEBAR_ROLE3',
               route: '',
               base: '',
               permision: 'edit_rol',
               show_nav: false,
             },
             {
-              menuValue: 'Delete Rol',
+              menuValue: 'SIDEBAR_ROLE4',
               route: '',
               base: '',
               permision: 'delete_rol',
@@ -299,35 +308,35 @@ export class DataService {
           ],
         },
         {
-          menuValue: 'Users',
+          menuValue: 'SIDEBAR_USER',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'staffs',
           img: 'assets/img/icons/menu-icon-08.svg',
           subMenus: [
             {
-              menuValue: 'Users List',
+              menuValue: 'SIDEBAR_USER_LIST',
               route: routes.staffList,
               base: routes.staffList,
               permision: 'list_staff',
               show_nav: true,
             },
             {
-              menuValue: 'Add Users',
+              menuValue: 'SIDEBAR_USER_ADD',
               route: routes.addStaff,
               base: routes.addStaff,
               permision: 'register_staff',
               show_nav: true,
             },
             {
-              menuValue: 'Edit Users',
+              menuValue: 'SIDEBAR_USER_EDIT',
               route: '',
               base: '',
               permision: 'edit_staff',
               show_nav: false,
             },
             {
-              menuValue: 'Delete Users',
+              menuValue: 'SIDEBAR_USER_DELETE',
               route: '',
               base: '',
               permision: 'delete_staff',
@@ -341,35 +350,35 @@ export class DataService {
           ],
         },
         {
-          menuValue: 'Pacientes',
+          menuValue: 'SIDEBAR_PATIENT2',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'archives',
           img: 'assets/img/icons/menu-icon-06.svg',
           subMenus: [
             {
-              menuValue: 'Lista de Pacientes',
+              menuValue: 'SIDEBAR_PATIENT_LIST',
               route: routes.archiveList,
               base: routes.archiveList,
               permision: 'list_archive',
               show_nav: true,
             },
             {
-              menuValue: 'Agregar  Pacientes',
+              menuValue: 'SIDEBAR_PATIENT_ADD',
               route: routes.addArchive,
               base: routes.addArchive,
               permision: 'add_archive',
               show_nav: true,
             },
             {
-              menuValue: 'Editar Pacientes',
+              menuValue: 'SIDEBAR_PATIENT_EDIT',
               route: '',
               base: '',
               permision: 'edit_archive',
               show_nav: false,
             },
             {
-              menuValue: 'Eliminar Pacientes',
+              menuValue: 'SIDEBAR_PATIENT_DELETE',
               route: '',
               base: '',
               permision: 'delete_archive',
@@ -378,35 +387,35 @@ export class DataService {
           ],
         },
         {
-          menuValue: 'Contract',
+          menuValue: 'SIDEBAR_CONTRACT',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'contract-types',
           img: 'assets/img/icons/menu-icon-06.svg',
           subMenus: [
             {
-              menuValue: 'Contract List',
+              menuValue: 'SIDEBAR_CONTRACT_LIST',
               route: routes.contractList,
               base: routes.contractList,
               permision: 'list_contract',
               show_nav: true,
             },
             {
-              menuValue: 'Add Contract',
+              menuValue: 'SIDEBAR_CONTRACT_ADD',
               route: routes.addContract,
               base: routes.addContract,
               permision: 'add_contract',
               show_nav: true,
             },
             {
-              menuValue: 'Edit Contract',
+              menuValue: 'SIDEBAR_CONTRACT_EDIT',
               route: '',
               base: '',
               permision: 'edit_contract',
               show_nav: false,
             },
             {
-              menuValue: 'Delete Contract',
+              menuValue: 'SIDEBAR_CONTRACT_DELETE',
               route: '',
               base: '',
               permision: 'delete_contract',
@@ -415,35 +424,35 @@ export class DataService {
           ],
         },
         {
-          menuValue: 'Profile',
+          menuValue: 'SIDEBAR_PROFILE',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'profile-m',
           img: 'assets/img/icons/menu-icon-06.svg',
           subMenus: [
             {
-              menuValue: 'Profile List',
+              menuValue: 'SIDEBAR_PROFILE_LIST',
               route: routes.profileList,
               base: routes.profileList,
               permision: 'list_profile-m',
               show_nav: true,
             },
             {
-              menuValue: 'Add Profile',
+              menuValue: 'SIDEBAR_PROFILE_ADD',
               route: routes.addProfile,
               base: routes.addProfile,
               permision: 'add_profile-m',
               show_nav: true,
             },
             {
-              menuValue: 'Edit Profile',
+              menuValue: 'SIDEBAR_PROFILE_EDIT',
               route: '',
               base: '',
               permision: 'edit_profile-m',
               show_nav: false,
             },
             {
-              menuValue: 'Delete Profile',
+              menuValue: 'SIDEBAR_PROFILE_DELETE',
               route: '',
               base: '',
               permision: 'delete_profile-m',
@@ -452,35 +461,35 @@ export class DataService {
           ],
         },
         {
-          menuValue: 'Departaments',
+          menuValue: 'SIDEBAR_DEPARTAMENT',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'departaments-m',
           img: 'assets/img/icons/menu-icon-06.svg',
           subMenus: [
             {
-              menuValue: 'Departament List',
+              menuValue: 'SIDEBAR_DEPARTAMENT_LIST',
               route: routes.departmentList,
               base: routes.departmentList,
               permision: 'list_departament',
               show_nav: true,
             },
             {
-              menuValue: 'Add Departament',
+              menuValue: 'SIDEBAR_DEPARTAMENT_ADD',
               route: routes.addDepartment,
               base: routes.addDepartment,
               permision: 'add_departament',
               show_nav: true,
             },
             {
-              menuValue: 'Edit Departament',
+              menuValue: 'SIDEBAR_DEPARTAMENT_EDIT',
               route: '',
               base: '',
               permision: 'edit_departament',
               show_nav: false,
             },
             {
-              menuValue: 'Delete Departament',
+              menuValue: 'SIDEBAR_DEPARTAMENT_DELETE',
               route: '',
               base: '',
               permision: 'delete_departament',

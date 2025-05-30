@@ -19,7 +19,7 @@
 
   // 📊 Estilos para la tabla con bordes redondeados
   table {
-    border-collapse: separate; // Permite aplicar border-radius
+    border-collapse: separate;
     border-spacing: 0;
     width: 100%;
     background-color: #ffffff !important;
@@ -29,7 +29,8 @@
     th, td {
       border: 1px solid #ddd;
       padding: 0.75rem;
-      text-align: left;
+      text-align: center;
+      vertical-align: middle;
     }
 
     thead th {
@@ -37,7 +38,6 @@
       color: #000000 !important;
     }
 
-    // 🔄 Bordes redondeados visibles
     thead th:first-child {
       border-top-left-radius: 12px;
     }
@@ -53,10 +53,39 @@
     tbody tr:last-child td:last-child {
       border-bottom-right-radius: 12px;
     }
+
+    td:nth-child(2), th:nth-child(2) {
+      max-width: 300px;
+      white-space: normal;
+      word-break: break-word;
+    }
+  }
+
+  // ✅ Botón "Options" y "New" profesional
+  .btn-options {
+    background-color: #3b82f6;
+    border: none;
+    padding: 6px 14px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+
+    i {
+      margin-right: 6px;
+    }
+
+    &:hover {
+      background-color: #2563eb;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
   }
 }
 
-// 🌚 MODO OSCURO - estilos del card y tabla
+// 🌚 MODO OSCURO
 ::ng-deep body.dark-mode .card.card-list {
   background-color: #f5f0f0 !important;
   border-color: #ff4f4f !important;
@@ -78,13 +107,14 @@
     th, td {
       border: 1px solid #bbb;
       color: #000000 !important;
+      text-align: center;
+      vertical-align: middle;
     }
 
     thead th {
       background-color: #eaeaea;
     }
 
-    // Borde redondeado también en modo oscuro
     thead th:first-child {
       border-top-left-radius: 12px;
     }
@@ -100,10 +130,37 @@
     tbody tr:last-child td:last-child {
       border-bottom-right-radius: 12px;
     }
+
+    td:nth-child(2), th:nth-child(2) {
+      max-width: 300px;
+      white-space: normal;
+      word-break: break-word;
+    }
+  }
+
+  .btn-options {
+    background-color: #3b82f6;
+    border: none;
+    padding: 6px 14px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+
+    i {
+      margin-right: 6px;
+    }
+
+    &:hover {
+      background-color: #2563eb;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
   }
 }
 
-// 🌚 Botón primario azul en modo oscuro
 ::ng-deep body.dark-mode .btn-primary {
   background-color: #3b82f6 !important;
   border-color: #3b82f6 !important;
