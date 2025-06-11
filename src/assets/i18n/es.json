@@ -142,5 +142,32 @@
   "SIDEBAR_DEPARTAMENT_LIST": "Lista de Departamentos",
   "SIDEBAR_DEPARTAMENT_ADD":"Agregar Departamento",
   "SIDEBAR_DEPARTAMENT_EDIT":"Editar Departamento",
-  "SIDEBAR_DEPARTAMENT_DELETE":"Eliminar Departamento"
+  "SIDEBAR_DEPARTAMENT_DELETE":"Eliminar Departamento",
+  
+    "PATIENT": "Paciente",
+  "PATIENT_LIST": "Lista de Pacientes",
+  "SEARCH_RECORD": "Buscar por número de expediente",
+  "SEARCH_NAME": "Buscar por nombre",
+  "ALL_GENDERS": "Todos los géneros",
+  "ALL_STATES": "Todos los estados",
+  "ALL_MUNICIPALITIES": "Todos los municipios",
+  "ALL_LOCATIONS": "Todas las localidades",
+  "GLOBAL_TOTAL": "Total global:",
+  "FILTERED_MATCHES": "Coincidencias filtradas:",
+  "NUMBER": "Número",
+  "FULL_NAME": "Nombre Completo",
+  "AGE": "Edad",
+  "ADDRESS": "Dirección",
+  "LOCATION": "Localidad",
+  "MUNICIPALITY": "Municipio",
+  "STATE": "Estado",
+  "ADMISSION": "Ingreso",
+  "NOT_DEFINED": "No definido",
+  "NO_ADDRESS": "Sin dirección",
+  "NO_LOCATION": "Sin localidad",
+  "NO_MUNICIPALITY": "Sin municipio",
+  "NO_STATE": "Sin estado",
+  "NO_DATE": "Sin fecha",
+  "DELETE_CONFIRMATION3": "¿Estás seguro de eliminar el expediente"
+
 }

@@ -1,6 +1,168 @@
-.text-truncate {
-  max-width: 200px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.card.card-list {
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 4px solid #000000 !important;
+  background-color: #F8F8FF !important;
+  color: #000000 !important;
+  position: relative;
+  z-index: 1;
+
+  .card-body {
+    border-radius: 12px;
+    background-color: transparent !important;
+    color: #000000 !important;
+
+    h4, p, span, small, th, td, .pagination-info {
+      color: #000000 !important;
+    }
+  }
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    background-color: #ffffff !important;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.75rem;
+      text-align: center;
+      vertical-align: middle;
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: unset !important;
+    }
+
+    thead th {
+      background-color: #f8f9fa;
+      color: #000000 !important;
+    }
+
+    thead th:first-child { border-top-left-radius: 12px; }
+    thead th:last-child { border-top-right-radius: 12px; }
+    tbody tr:last-child td:first-child { border-bottom-left-radius: 12px; }
+    tbody tr:last-child td:last-child { border-bottom-right-radius: 12px; }
+  }
+
+  .btn-options {
+    background-color: #3b82f6;
+    border: none;
+    padding: 6px 14px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+
+    i {
+      margin-right: 6px;
+    }
+
+    &:hover {
+      background-color: #2563eb;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+  }
+}
+
+// 🌞 MODO CLARO para inputs/selects
+::ng-deep .custom-input,
+::ng-deep .custom-select {
+  background-color: #F8F8FF !important;
+  border: 2px solid #000000 !important;
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  color: #000000 !important;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    outline: none;
+  }
+
+  &::placeholder {
+    color: #555 !important;
+  }
+}
+
+::ng-deep .custom-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg fill='black' viewBox='0 0 16 16' height='16' width='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  padding-right: 2rem;
+}
+
+// 🌚 MODO OSCURO
+::ng-deep body.dark-mode {
+  .card.card-list {
+    background-color: #f5f0f0 !important;
+    border-color: #ff4f4f !important;
+  }
+
+  .card.card-list .card-body,
+  .card.card-list th,
+  .card.card-list td {
+    color: #000000 !important;
+  }
+
+  .card.card-list table {
+    background-color: #ffffff !important;
+    border: 1px solid #aaa;
+    border-radius: 12px;
+
+    th, td {
+      border: 1px solid #bbb;
+      color: #000000 !important;
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: unset !important;
+    }
+
+    thead th {
+      background-color: #eaeaea;
+    }
+  }
+
+  .btn-options {
+    background-color: #3b82f6;
+    &:hover {
+      background-color: #2563eb;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+  }
+
+  .custom-input,
+  .custom-select {
+    background-color: #2a2a2a !important;
+    color: #f0f0f0 !important;
+    border: 2px solid #ff4f4f !important;
+
+    &:focus {
+      border-color: #3b82f6 !important;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+    }
+
+    &::placeholder {
+      color: #ccc !important;
+    }
+  }
+
+  .custom-select {
+    background-image: url("data:image/svg+xml,%3Csvg fill='white' viewBox='0 0 16 16' height='16' width='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  }
+}
+
+// Scroll horizontal nativo (sin botones flotantes)
+.table-responsive {
+  overflow-x: auto;
+  scroll-behavior: smooth;
 }

@@ -1,108 +1,108 @@
 <div class="page-wrapper">
   <div class="content list-staff">
+    <!-- Encabezado -->
     <div class="page-header mb-4">
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item">Archive ></li>
-            <li class="breadcrumb-item active">Archive List</li>
+            <li class="breadcrumb-item">{{ 'PATIENT' | translate }} ></li>
+            <li class="breadcrumb-item active">{{ 'PATIENT_LIST' | translate }}</li>
           </ol>
         </div>
       </div>
     </div>
 
-    <!-- FILTROS -->
+    <!-- Filtros -->
     <div class="row mb-3 gy-2">
       <div class="col-md-3">
-        <input type="text" class="form-control" placeholder="Buscar por expediente" [(ngModel)]="archiveNumberSearch">
+        <input type="text" class="form-control custom-input" [placeholder]="'SEARCH_RECORD' | translate" [(ngModel)]="archiveNumberSearch">
       </div>
       <div class="col-md-3">
-        <input type="text" class="form-control" placeholder="Buscar por nombre" [(ngModel)]="nameSearch">
+        <input type="text" class="form-control custom-input" [placeholder]="'SEARCH_NAME' | translate" [(ngModel)]="nameSearch">
       </div>
-      <div class="col-md-2">
-        <select class="form-select" [(ngModel)]="selectedGender">
-          <option value="">Todos los géneros</option>
+      <div class="col-md-3">
+        <select class="form-select custom-select" [(ngModel)]="selectedGender">
+          <option value="">{{ 'ALL_GENDERS' | translate }}</option>
           <option *ngFor="let g of genders" [value]="g.id">{{ g.name }}</option>
         </select>
       </div>
-      <div class="col-md-2">
-        <select class="form-select" [(ngModel)]="selectedState" (change)="onStateChange()">
-          <option value="">Todos los estados</option>
+      <div class="col-md-3">
+        <select class="form-select custom-select" [(ngModel)]="selectedState" (change)="onStateChange()">
+          <option value="">{{ 'ALL_STATES' | translate }}</option>
           <option *ngFor="let s of states" [value]="s?.id">{{ s?.name }}</option>
         </select>
       </div>
-      <div class="col-md-2">
-        <select class="form-select" [(ngModel)]="selectedMunicipality" (change)="onMunicipalityChange()">
-          <option value="">Todos los municipios</option>
+      <div class="col-md-3">
+        <select class="form-select custom-select" [(ngModel)]="selectedMunicipality" (change)="onMunicipalityChange()">
+          <option value="">{{ 'ALL_MUNICIPALITIES' | translate }}</option>
           <option *ngFor="let m of municipalities" [value]="m?.id">{{ m?.name }}</option>
         </select>
       </div>
       <div class="col-md-3">
-        <select class="form-select" [(ngModel)]="selectedLocation">
-          <option value="">Todas las localidades</option>
+        <select class="form-select custom-select" [(ngModel)]="selectedLocation">
+          <option value="">{{ 'ALL_LOCATIONS' | translate }}</option>
           <option *ngFor="let l of locations" [value]="l?.id">{{ l?.name }}</option>
         </select>
       </div>
     </div>
 
-    <!-- TABLA -->
+    <!-- Tabla sin botones de scroll -->
     <div class="row">
       <div class="col-sm-12">
         <div class="card card-list shadow border-0">
           <div class="card-body">
-
-            <!-- Totales -->
             <div class="d-flex justify-content-between align-items-center mb-3">
               <p class="fw-semibold text-dark mb-0">
-                Total global: <span class="text-primary">{{ totalRecords }}</span>
+                {{ 'GLOBAL_TOTAL' | translate }} <span class="text-primary">{{ totalRecords }}</span>
               </p>
               <p class="fw-semibold text-dark mb-0">
-                Coincidencias filtradas: <span class="text-success">{{ filteredArchives().length }}</span>
+                {{ 'FILTERED_MATCHES' | translate }} <span class="text-success">{{ filteredArchives().length }}</span>
               </p>
             </div>
 
+            <!-- Scroll horizontal nativo -->
             <div class="table-responsive">
               <table class="table table-striped table-hover text-center align-middle">
                 <thead class="table-light">
                   <tr>
-                    <th style="width: 80px;">Número</th>
-                    <th style="min-width: 200px;">Nombre completo</th>
-                    <th style="width: 60px;">Edad</th>
-                    <th style="width: 100px;">Sexo</th>
-                    <th style="min-width: 180px;">Domicilio</th>
-                    <th style="min-width: 150px;">Localidad</th>
-                    <th style="min-width: 150px;">Municipio</th>
-                    <th style="min-width: 150px;">Estado</th>
-                    <th style="width: 120px;">Ingreso</th>
-                    <th class="text-end" style="width: 90px;">Acciones</th>
+                    <th>{{ 'NUMBER' | translate }}</th>
+                    <th>{{ 'FULL_NAME' | translate }}</th>
+                    <th>{{ 'AGE' | translate }}</th>
+                    <th>{{ 'GENDER' | translate }}</th>
+                    <th>{{ 'ADDRESS' | translate }}</th>
+                    <th>{{ 'LOCATION' | translate }}</th>
+                    <th>{{ 'MUNICIPALITY' | translate }}</th>
+                    <th>{{ 'STATE' | translate }}</th>
+                    <th>{{ 'ADMISSION' | translate }}</th>
+                    <th class="text-end">{{ 'ACTIONS' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let a of filteredArchives()">
                     <td>{{ a.archive_number }}</td>
-                    <td class="text-truncate">{{ a.name }} {{ a.last_name_father }} {{ a.last_name_mother }}</td>
+                    <td>{{ a.name }} {{ a.last_name_father }} {{ a.last_name_mother }}</td>
                     <td>{{ a.age }}</td>
-                    <td>{{ a.gender?.name || 'No definido' }}</td>
-                    <td class="text-truncate">{{ a.address || 'Sin dirección' }}</td>
-                    <td>{{ a.location?.name || 'Sin localidad' }}</td>
-                    <td>{{ a.location?.municipality?.name || 'Sin municipio' }}</td>
-                    <td>{{ a.location?.municipality?.state?.name || 'Sin estado' }}</td>
-                    <td>{{ a.admission_date || 'Sin fecha' }}</td>
+                    <td>{{ a.gender?.name || ('NOT_DEFINED' | translate) }}</td>
+                    <td>{{ a.address || ('NO_ADDRESS' | translate) }}</td>
+                    <td>{{ a.location?.name || ('NO_LOCATION' | translate) }}</td>
+                    <td>{{ a.location?.municipality?.name || ('NO_MUNICIPALITY' | translate) }}</td>
+                    <td>{{ a.location?.municipality?.state?.name || ('NO_STATE' | translate) }}</td>
+                    <td>{{ a.admission_date || ('NO_DATE' | translate) }}</td>
                     <td class="text-end">
-                      <div class="dropdown">
-                        <a class="text-muted" href="javascript:void(0);" data-bs-toggle="dropdown">
-                          <i class="fa fa-ellipsis-v"></i>
-                        </a>
+                      <div class="dropdown d-flex justify-content-end align-items-center">
+                        <button class="btn btn-options dropdown-toggle" data-bs-toggle="dropdown">
+                          <i class="fa fa-cogs me-1"></i> {{ 'OPTIONS' | translate }}
+                        </button>
                         <div class="dropdown-menu dropdown-menu-end">
                           <a class="dropdown-item" [routerLink]="['/archives/list-archive/edit-archive/', a.archive_number]">
-                            <i class="fa fa-pen me-2"></i> Editar
+                            <i class="fa fa-pen me-2"></i> {{ 'EDIT' | translate }}
                           </a>
                           <a class="dropdown-item text-danger"
                              href="javascript:void(0);"
                              (click)="selectArchive(a)"
                              data-bs-toggle="modal"
                              data-bs-target="#deleteModal">
-                            <i class="fa fa-trash me-2"></i> Eliminar
+                            <i class="fa fa-trash me-2"></i> {{ 'DELETE' | translate }}
                           </a>
                         </div>
                       </div>
@@ -119,18 +119,18 @@
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- Modal de Eliminación -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body text-center p-4">
         <img src="assets/img/sent.png" alt="" width="50" height="46" />
         <h5 class="mt-3" *ngIf="archive_selected">
-          ¿Estás seguro de eliminar el expediente <strong>#{{ archive_selected.archive_number }}</strong>?
+          {{ 'DELETE_CONFIRMATION3' | translate }} <strong>#{{ archive_selected.archive_number }}</strong>?
         </h5>
         <div class="mt-4 d-flex justify-content-center gap-3">
-          <button class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-          <button class="btn btn-danger" (click)="deleteArchive()" data-bs-dismiss="modal">Eliminar</button>
+          <button class="btn btn-light" data-bs-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+          <button class="btn btn-danger" (click)="deleteArchive()" data-bs-dismiss="modal">{{ 'DELETE' | translate }}</button>
         </div>
       </div>
     </div>

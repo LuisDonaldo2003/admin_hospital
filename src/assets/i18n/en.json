@@ -142,5 +142,32 @@
   "SIDEBAR_DEPARTAMENT_LIST": "Departament List",
   "SIDEBAR_DEPARTAMENT_ADD":"Add Departament",
   "SIDEBAR_DEPARTAMENT_EDIT":"Edit Departament",
-  "SIDEBAR_DEPARTAMENT_DELETE":"Delete Departament"
+  "SIDEBAR_DEPARTAMENT_DELETE":"Delete Departament",
+
+  "PATIENT": "Patient",
+  "PATIENT_LIST": "Patient List",
+  "SEARCH_RECORD": "Search by record number",
+  "SEARCH_NAME": "Search by name",
+  "ALL_GENDERS": "All genders",
+  "ALL_STATES": "All states",
+  "ALL_MUNICIPALITIES": "All municipalities",
+  "ALL_LOCATIONS": "All locations",
+  "GLOBAL_TOTAL": "Global total:",
+  "FILTERED_MATCHES": "Filtered matches:",
+  "NUMBER": "Number",
+  "FULL_NAME": "Full Name",
+  "AGE": "Age",
+  "ADDRESS": "Address",
+  "LOCATION": "Location",
+  "MUNICIPALITY": "Municipality",
+  "STATE": "State",
+  "ADMISSION": "Admission",
+  "NOT_DEFINED": "Not defined",
+  "NO_ADDRESS": "No address",
+  "NO_LOCATION": "No location",
+  "NO_MUNICIPALITY": "No municipality",
+  "NO_STATE": "No state",
+  "NO_DATE": "No date",
+  "DELETE_CONFIRMATION3": "Are you sure you want to delete the record"
+
 }

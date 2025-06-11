@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ArchiveService } from '../service/archive.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-list-archive',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
   templateUrl: './list-archive.component.html',
   styleUrls: ['./list-archive.component.scss']
 })
@@ -30,10 +31,27 @@ export class ListArchiveComponent implements OnInit {
 
   public totalRecords = 0;
 
-  constructor(private archiveService: ArchiveService) {}
+  public selectedLang: string;
+
+  @ViewChild('scrollableTable') scrollableTable!: ElementRef;
+
+  constructor(
+    private archiveService: ArchiveService,
+    private translate: TranslateService
+  ) {
+    // Configurar idioma inicial
+    this.selectedLang = localStorage.getItem('language') || 'en';
+    this.translate.use(this.selectedLang);
+  }
 
   ngOnInit(): void {
     this.loadArchives();
+  }
+
+  toggleLanguage(): void {
+    this.selectedLang = this.selectedLang === 'es' ? 'en' : 'es';
+    this.translate.use(this.selectedLang);
+    localStorage.setItem('language', this.selectedLang);
   }
 
   loadArchives(): void {
@@ -41,7 +59,6 @@ export class ListArchiveComponent implements OnInit {
       next: (res: any) => {
         this.archives = Array.isArray(res.data) ? res.data : [];
         this.totalRecords = res.total || 0;
-
 
         this.states = [...new Map(
           this.archives
@@ -100,5 +117,11 @@ export class ListArchiveComponent implements OnInit {
       this.totalRecords = this.archives.length;
       this.archive_selected = null;
     });
+  }
+
+  scrollTable(direction: 'left' | 'right'): void {
+    const el = this.scrollableTable.nativeElement;
+    const scrollAmount = 200;
+    el.scrollLeft += direction === 'left' ? -scrollAmount : scrollAmount;
   }
 }
