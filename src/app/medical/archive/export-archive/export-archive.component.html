@@ -1,1 +1,126 @@
-<p>export-archive works!</p>
+<!-- export-archive.component.html -->
+<div class="page-wrapper">
+  <div class="content export-archive">
+
+    <!-- Encabezado -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <h3 class="fw-bold">{{ 'EXPORT_ARCHIVES_TITLE' | translate }}</h3>
+          <p class="text-muted">{{ 'EXPORT_ARCHIVES_SUBTITLE' | translate }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Respaldos disponibles
+    <div class="card mt- mb-4 border-colored">
+      <div class="card-header bg-primary text-white d-flex align-items-center">
+        <i class="fa fa-database me-2"></i>
+        <span>Respaldos disponibles</span>
+      </div>
+      <div class="card-body">
+        <ul class="list-group">
+          <li *ngFor="let backup of backups" class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <i class="fa fa-file-archive text-secondary me-2"></i>
+              <span class="fw-semibold backup-filename">{{ backup.filename }}</span>
+              <span class="badge bg-info text-dark ms-2 text-uppercase">{{ backup.type }}</span>
+            </div>
+            <button class="btn btn-success px-3" (click)="downloadBackup(backup.filename)">
+              <i class="fa fa-download me-1"></i> Descargar
+            </button>
+          </li>
+          <li *ngIf="backups.length === 0" class="list-group-item text-muted text-center">
+            <i class="fa fa-info-circle me-1"></i> No hay respaldos disponibles.
+          </li>
+        </ul>
+      </div>
+    </div> -->
+
+    <!-- Filtros -->
+    <div class="card export-archive shadow-sm border-0 mb-4 p-4 border-colored">
+      <div class="row gy-3 align-items-end">
+        <!-- Estado -->
+        <div class="col-md-4">
+          <label class="form-label">{{ 'FILTER_BY_STATE' | translate }}</label>
+          <select class="form-select" [(ngModel)]="selectedState" (change)="onStateChange()">
+            <option value="">{{ 'ALL_STATES' | translate }}</option>
+            <option *ngFor="let s of states" [value]="s.id">{{ s.name }}</option>
+          </select>
+        </div>
+
+        <!-- Municipio -->
+        <div class="col-md-4">
+          <label class="form-label">{{ 'FILTER_BY_MUNICIPALITY' | translate }}</label>
+          <select class="form-select" [(ngModel)]="selectedMunicipality" (change)="onMunicipalityChange()">
+            <option value="">{{ 'ALL_MUNICIPALITIES' | translate }}</option>
+            <option *ngFor="let m of municipalities" [value]="m.id">{{ m.name }}</option>
+          </select>
+        </div>
+
+        <!-- Localidad -->
+        <div class="col-md-4">
+          <label class="form-label">{{ 'FILTER_BY_LOCATION' | translate }}</label>
+          <select class="form-select" [(ngModel)]="selectedLocation">
+            <option value="">{{ 'ALL_LOCATIONS' | translate }}</option>
+            <option *ngFor="let l of locations" [value]="l.id">{{ l.name }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cargando -->
+    <div *ngIf="loading" class="text-center my-4">
+      <i class="fa fa-spinner fa-spin fa-2x text-primary"></i>
+      <p class="mt-2">{{ 'LOADING_DATA' | translate }}</p>
+    </div>
+
+    <!-- Tabla previa -->
+    <div class="card shadow-sm border-0 mb-4 p-4 border-colored" *ngIf="!loading">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">{{ 'PREVIEW_EXPORT' | translate }}</h5>
+        <div class="d-flex gap-2">
+          <button class="btn btn-color-action" (click)="exportToExcel()">
+            <i class="fa fa-file-excel me-2"></i> {{ 'EXPORT_EXCEL' | translate }}
+          </button>
+          <button class="btn btn-color-action" (click)="exportToPDF()">
+            <i class="fa fa-file-pdf me-2"></i> {{ 'EXPORT_PDF' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle border-colored">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>{{ 'NAME' | translate }}</th>
+              <th>{{ 'AGE' | translate }}</th>
+              <th>{{ 'GENDER' | translate }}</th>
+              <th>{{ 'ADDRESS' | translate }}</th>
+              <th>{{ 'LOCATION' | translate }}</th>
+              <th>{{ 'STATE' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of filteredArchives(); let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ a.name }} {{ a.last_name_father }} {{ a.last_name_mother }}</td>
+              <td>{{ a.age }}</td>
+              <td>{{ a.gender?.name }}</td>
+              <td>{{ a.address }}</td>
+              <td>{{ a.location?.name }}</td>
+              <td>{{ a.location?.municipality?.state?.name }}</td>
+            </tr>
+            <tr *ngIf="filteredArchives().length === 0">
+              <td colspan="7" class="text-center text-muted py-3">
+                {{ 'NO_DATA_AVAILABLE' | translate }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

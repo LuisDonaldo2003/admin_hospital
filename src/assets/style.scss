@@ -3955,6 +3955,16 @@ table.dataTable {
     display: block;
   }
 }
+
+// Asegura que los estilos globales de avatar, logo y cards usan la variable --user-border-color para el borde en todos los contextos.
+.logo-wrapper,
+.avatar-img,
+.user-img img,
+.profile-avatar {
+  border: 3px solid var(--user-border-color, red) !important;
+  border-radius: 50%;
+}
+
 .card.chat-box {
   padding: 20px;
   border-radius: 8px;

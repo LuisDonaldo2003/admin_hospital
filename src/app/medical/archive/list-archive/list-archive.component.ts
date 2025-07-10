@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ArchiveService } from '../service/archive.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,38 +13,40 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   styleUrls: ['./list-archive.component.scss']
 })
 export class ListArchiveComponent implements OnInit {
-  public archives: any[] = [];
+  public displayedArchives: any[] = [];
   public archive_selected: any;
 
   public archiveNumberSearch = '';
   public nameSearch = '';
   public selectedGender = '';
+  public selectedState = '';
+  public selectedMunicipality = '';
+  public selectedLocation = '';
 
   public states: any[] = [];
   public municipalities: any[] = [];
   public locations: any[] = [];
   public genders: any[] = [];
 
-  public selectedState: string = '';
-  public selectedMunicipality: string = '';
-  public selectedLocation: string = '';
-
   public totalRecords = 0;
+  public currentPage = 1;
+  public pageSize = 50;
+  public totalPages = 0;
 
   public selectedLang: string;
-
-  @ViewChild('scrollableTable') scrollableTable!: ElementRef;
 
   constructor(
     private archiveService: ArchiveService,
     private translate: TranslateService
   ) {
-    // Configurar idioma inicial
     this.selectedLang = localStorage.getItem('language') || 'en';
     this.translate.use(this.selectedLang);
   }
 
   ngOnInit(): void {
+    // Cargar catálogos independientes
+    this.archiveService.listStates().subscribe((res: any) => this.states = res);
+    this.archiveService.listGenders().subscribe((res: any) => this.genders = res);
     this.loadArchives();
   }
 
@@ -55,55 +57,80 @@ export class ListArchiveComponent implements OnInit {
   }
 
   loadArchives(): void {
-    this.archiveService.listArchives().subscribe({
+    const skip = (this.currentPage - 1) * this.pageSize;
+    const filters = {
+      archiveNumberSearch: this.archiveNumberSearch,
+      nameSearch: this.nameSearch,
+      selectedGender: this.selectedGender,
+      selectedState: this.selectedState,
+      selectedMunicipality: this.selectedMunicipality,
+      selectedLocation: this.selectedLocation
+    };
+
+    this.archiveService.listArchivesWithFilters(filters, skip, this.pageSize).subscribe({
       next: (res: any) => {
-        this.archives = Array.isArray(res.data) ? res.data : [];
+        this.displayedArchives = res.data || [];
         this.totalRecords = res.total || 0;
-
-        this.states = [...new Map(
-          this.archives
-            .filter(a => a.location?.municipality?.state?.id !== undefined)
-            .map(a => [a.location.municipality.state.id, a.location.municipality.state] as [number, any])
-        ).values()];
-
-        this.genders = [...new Map(
-          this.archives
-            .filter(a => a.gender?.id !== undefined)
-            .map(a => [a.gender.id, a.gender] as [number, any])
-        ).values()];
+        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
       },
-      error: (err) => console.error('Error al cargar archivos:', err)
+      error: (err) => {
+        console.error('Error al cargar archivos:', err);
+        this.displayedArchives = [];
+        this.totalRecords = 0;
+      }
     });
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadArchives();
+    }
+  }
+
+  get paginationRange(): (number | string)[] {
+    const delta = 2;
+    const range: (number | string)[] = [];
+    const left = Math.max(2, this.currentPage - delta);
+    const right = Math.min(this.totalPages - 1, this.currentPage + delta);
+
+    range.push(1);
+    if (left > 2) range.push('...');
+    for (let i = left; i <= right; i++) {
+      range.push(i);
+    }
+    if (right < this.totalPages - 1) range.push('...');
+    if (this.totalPages > 1) range.push(this.totalPages);
+
+    return range;
   }
 
   onStateChange(): void {
     this.selectedMunicipality = '';
     this.selectedLocation = '';
+    this.municipalities = [];
+    this.locations = [];
 
-    this.municipalities = this.archives
-      .filter(a => a.location?.municipality?.state?.id == this.selectedState)
-      .map(a => a.location?.municipality)
-      .filter((v, i, a) => v && a.findIndex(t => t.id === v.id) === i);
+    if (this.selectedState) {
+      this.archiveService.listMunicipalities(this.selectedState).subscribe((res: any) => {
+        this.municipalities = res;
+      });
+    }
+
+    this.changePage(1);
   }
 
   onMunicipalityChange(): void {
     this.selectedLocation = '';
+    this.locations = [];
 
-    this.locations = this.archives
-      .filter(a => a.location?.municipality?.id == this.selectedMunicipality)
-      .map(a => a.location)
-      .filter((v, i, a) => v && a.findIndex(t => t.id === v.id) === i);
-  }
+    if (this.selectedMunicipality) {
+      this.archiveService.listLocations(this.selectedMunicipality).subscribe((res: any) => {
+        this.locations = res;
+      });
+    }
 
-  filteredArchives(): any[] {
-    return this.archives.filter(a =>
-      (!this.archiveNumberSearch || a.archive_number?.toString().includes(this.archiveNumberSearch)) &&
-      (!this.nameSearch || `${a.name ?? ''} ${a.last_name_father ?? ''} ${a.last_name_mother ?? ''}`.toLowerCase().includes(this.nameSearch.toLowerCase())) &&
-      (!this.selectedGender || a.gender?.id == this.selectedGender) &&
-      (!this.selectedState || a.location?.municipality?.state?.id == this.selectedState) &&
-      (!this.selectedMunicipality || a.location?.municipality?.id == this.selectedMunicipality) &&
-      (!this.selectedLocation || a.location?.id == this.selectedLocation)
-    );
+    this.changePage(1);
   }
 
   selectArchive(archive: any): void {
@@ -113,15 +140,10 @@ export class ListArchiveComponent implements OnInit {
   deleteArchive(): void {
     if (!this.archive_selected) return;
     this.archiveService.deleteArchive(this.archive_selected.archive_number).subscribe(() => {
-      this.archives = this.archives.filter(a => a.archive_number !== this.archive_selected.archive_number);
-      this.totalRecords = this.archives.length;
+      this.displayedArchives = this.displayedArchives.filter(a => a.archive_number !== this.archive_selected.archive_number);
+      this.totalRecords--;
       this.archive_selected = null;
+      this.loadArchives();
     });
-  }
-
-  scrollTable(direction: 'left' | 'right'): void {
-    const el = this.scrollableTable.nativeElement;
-    const scrollAmount = 200;
-    el.scrollLeft += direction === 'left' ? -scrollAmount : scrollAmount;
   }
 }

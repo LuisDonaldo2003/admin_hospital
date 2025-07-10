@@ -1,0 +1,23 @@
+.settings-wrapper {
+  .form-group {
+    margin-bottom: 1.5rem;
+    label { display: block; margin-bottom: .5rem; }
+  }
+
+  .preview-card {
+    .card {
+      border: var(--card-border-width) solid var(--user-border-color);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+  }
+
+  .logo-wrapper,
+  .avatar-img,
+  .user-img img,
+  .profile-avatar {
+    border: 3px solid var(--user-border-color, red) !important;
+    border-radius: 50%;
+  }
+}

@@ -357,6 +357,13 @@ export class DataService {
           img: 'assets/img/icons/menu-icon-06.svg',
           subMenus: [
             {
+              menuValue: 'SIDEBAR_PATIENT_ADD',
+              route: routes.addArchive,
+              base: routes.addArchive,
+              permision: 'add_archive',
+              show_nav: true,
+            },
+            {
               menuValue: 'SIDEBAR_PATIENT_LIST',
               route: routes.archiveList,
               base: routes.archiveList,
@@ -364,9 +371,16 @@ export class DataService {
               show_nav: true,
             },
             {
-              menuValue: 'SIDEBAR_PATIENT_ADD',
-              route: routes.addArchive,
-              base: routes.addArchive,
+              menuValue: 'SIDEBAR_PATIENT_EXPORT',
+              route: routes.exportArchive,
+              base: routes.exportArchive,
+              permision: 'add_archive',
+              show_nav: true,
+            },
+            {
+              menuValue: 'SIDEBAR_PATIENT_BACKUP',
+              route: routes.backupArchive,
+              base: routes.backupArchive,
               permision: 'add_archive',
               show_nav: true,
             },

@@ -1,19 +1,21 @@
 .card.card-list {
   border-radius: 12px;
   padding: 1.5rem;
-  border: 4px solid #000000 !important;
-  background-color: #F8F8FF !important;
-  color: #000000 !important;
+  border: 4px solid var(--user-border-color, #000) !important; // Borde dinámico
+  background-color: var(--user-card-bg, #fff) !important; // Fondo dinámico
+  color: var(--user-card-text-color, #000) !important; // Texto dinámico
   position: relative;
   z-index: 1;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 
   .card-body {
     border-radius: 12px;
     background-color: transparent !important;
-    color: #000000 !important;
+    color: var(--user-card-text-color, #000) !important;
+    transition: color 0.3s;
 
     h4, p, span, small, th, td, .pagination-info {
-      color: #000000 !important;
+      color: var(--user-card-text-color, #000) !important;
     }
   }
 
@@ -21,7 +23,7 @@
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
-    background-color: #ffffff !important;
+    background-color: #fff !important;
     border: 1px solid #ccc;
     border-radius: 12px;
 
@@ -33,11 +35,13 @@
       white-space: normal !important;
       overflow: visible !important;
       text-overflow: unset !important;
+      color: var(--user-card-text-color, #000) !important;
+      background-color: transparent;
     }
 
     thead th {
       background-color: #f8f9fa;
-      color: #000000 !important;
+      color: var(--user-card-text-color, #000) !important;
     }
 
     thead th:first-child { border-top-left-radius: 12px; }
@@ -67,98 +71,104 @@
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
   }
+
+  // Paginación
+  .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+
+    .page-item {
+      .page-link {
+        border-radius: 6px;
+        padding: 0.4rem 0.75rem;
+        border: 1px solid #ccc;
+        color: var(--user-card-text-color, #000);
+        background-color: #fff;
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+          background-color: #e0e7ff;
+        }
+      }
+
+      &.active .page-link {
+        background-color: #3b82f6;
+        color: #fff;
+        border-color: #3b82f6;
+      }
+
+      &.disabled .page-link {
+        background-color: #e5e5e5;
+        color: #999;
+        cursor: not-allowed;
+        border-color: #ddd;
+      }
+    }
+  }
 }
 
-// 🌞 MODO CLARO para inputs/selects
-::ng-deep .custom-input,
-::ng-deep .custom-select {
-  background-color: #F8F8FF !important;
-  border: 2px solid #000000 !important;
-  border-radius: 12px;
-  padding: 0.6rem 1rem;
-  font-size: 0.95rem;
-  color: #000000 !important;
+// 🌞 y 🌚 INPUTS/SELECTS SIEMPRE BLANCOS Y LETRA DINÁMICA Y BORDE DINÁMICO
+::ng-deep input.form-control.custom-input,
+::ng-deep select.form-select.custom-select {
+  background-color: #fff !important;
+  color: var(--user-card-text-color, #000) !important;
+  border: 3px solid var(--user-border-color, #000) !important;
+  border-radius: 12px !important;
+  padding: 0.6rem 1rem !important;
+  font-size: 0.95rem !important;
   transition: all 0.3s ease;
-
-  &:focus {
-    border-color: #3b82f6 !important;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
-    outline: none;
-  }
-
-  &::placeholder {
-    color: #555 !important;
-  }
+  box-sizing: border-box;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-::ng-deep .custom-select {
-  cursor: pointer;
-  appearance: none;
+::ng-deep input.form-control.custom-input:focus,
+::ng-deep select.form-select.custom-select:focus,
+::ng-deep input.form-control.custom-input:hover,
+::ng-deep select.form-select.custom-select:hover,
+::ng-deep input.form-control.custom-input:active,
+::ng-deep select.form-select.custom-select:active {
+  background-color: #fff !important;
+  color: var(--user-card-text-color, #000) !important;
+  border: 3px solid var(--user-border-color, #000) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+// Forzar el fondo blanco y borde en el select nativo y su flecha
+::ng-deep select.form-select.custom-select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
   background-image: url("data:image/svg+xml,%3Csvg fill='black' viewBox='0 0 16 16' height='16' width='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 1rem;
-  padding-right: 2rem;
+  background-repeat: no-repeat !important;
+  background-position: right 1rem center !important;
+  background-size: 1rem !important;
+  padding-right: 2rem !important;
 }
 
-// 🌚 MODO OSCURO
-::ng-deep body.dark-mode {
-  .card.card-list {
-    background-color: #f5f0f0 !important;
-    border-color: #ff4f4f !important;
-  }
+// Forzar color de texto en las opciones del select
+::ng-deep select.form-select.custom-select option {
+  color: var(--user-card-text-color, #000) !important;
+  background: #fff !important;
+}
 
-  .card.card-list .card-body,
-  .card.card-list th,
-  .card.card-list td {
-    color: #000000 !important;
-  }
+// Placeholder de inputs
+::ng-deep input.form-control.custom-input::placeholder {
+  color: #555 !important;
+}
 
-  .card.card-list table {
-    background-color: #ffffff !important;
-    border: 1px solid #aaa;
-    border-radius: 12px;
+// 🌚 MODO OSCURO: inputs y selects siguen siendo blancos con letra dinámica y borde dinámico
+::ng-deep body.dark-mode input.form-control.custom-input,
+::ng-deep body.dark-mode select.form-select.custom-select {
+  background-color: #fff !important;
+  color: var(--user-card-text-color, #000) !important;
+  border: 3px solid var(--user-border-color, #ff4f4f) !important;
+}
 
-    th, td {
-      border: 1px solid #bbb;
-      color: #000000 !important;
-      white-space: normal !important;
-      overflow: visible !important;
-      text-overflow: unset !important;
-    }
-
-    thead th {
-      background-color: #eaeaea;
-    }
-  }
-
-  .btn-options {
-    background-color: #3b82f6;
-    &:hover {
-      background-color: #2563eb;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-    }
-  }
-
-  .custom-input,
-  .custom-select {
-    background-color: #2a2a2a !important;
-    color: #f0f0f0 !important;
-    border: 2px solid #ff4f4f !important;
-
-    &:focus {
-      border-color: #3b82f6 !important;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
-    }
-
-    &::placeholder {
-      color: #ccc !important;
-    }
-  }
-
-  .custom-select {
-    background-image: url("data:image/svg+xml,%3Csvg fill='white' viewBox='0 0 16 16' height='16' width='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-  }
+::ng-deep body.dark-mode select.form-select.custom-select {
+  background-image: url("data:image/svg+xml,%3Csvg fill='black' viewBox='0 0 16 16' height='16' width='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E") !important;
 }
 
 // Scroll horizontal nativo (sin botones flotantes)

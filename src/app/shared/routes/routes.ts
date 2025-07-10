@@ -396,8 +396,16 @@ export class routes {
     public static get addArchive(): string {
       return this.baseUrl + '/archives/add_archive';
     }
+
+    public static get backupArchive(): string {
+      return this.baseUrl + '/archives/backup_archive';
+    }
+
     public static get archiveList(): string {
       return this.baseUrl + '/archives/list_archive';
+    }
+     public static get exportArchive(): string {
+      return this.baseUrl + '/archives/export_archive';
     }
 
 }

@@ -1,5 +1,6 @@
 <div class="page-wrapper">
   <div class="content list-staff">
+
     <!-- Encabezado -->
     <div class="page-header mb-4">
       <div class="row">
@@ -13,54 +14,63 @@
     </div>
 
     <!-- Filtros -->
-    <div class="row mb-3 gy-2">
+    <div class="row mb-3 gy-2 align-items-end">
       <div class="col-md-3">
-        <input type="text" class="form-control custom-input" [placeholder]="'SEARCH_RECORD' | translate" [(ngModel)]="archiveNumberSearch">
+        <input type="text" class="form-control custom-input" [placeholder]="'SEARCH_RECORD' | translate"
+               [(ngModel)]="archiveNumberSearch" (ngModelChange)="changePage(1)">
       </div>
       <div class="col-md-3">
-        <input type="text" class="form-control custom-input" [placeholder]="'SEARCH_NAME' | translate" [(ngModel)]="nameSearch">
+        <input type="text" class="form-control custom-input" [placeholder]="'SEARCH_NAME' | translate"
+               [(ngModel)]="nameSearch" (ngModelChange)="changePage(1)">
       </div>
       <div class="col-md-3">
-        <select class="form-select custom-select" [(ngModel)]="selectedGender">
+        <select class="form-select custom-select" [(ngModel)]="selectedGender" (change)="changePage(1)">
           <option value="">{{ 'ALL_GENDERS' | translate }}</option>
           <option *ngFor="let g of genders" [value]="g.id">{{ g.name }}</option>
         </select>
       </div>
       <div class="col-md-3">
-        <select class="form-select custom-select" [(ngModel)]="selectedState" (change)="onStateChange()">
+        <select class="form-select custom-select" [(ngModel)]="selectedState" (change)="onStateChange(); changePage(1)">
           <option value="">{{ 'ALL_STATES' | translate }}</option>
           <option *ngFor="let s of states" [value]="s?.id">{{ s?.name }}</option>
         </select>
       </div>
       <div class="col-md-3">
-        <select class="form-select custom-select" [(ngModel)]="selectedMunicipality" (change)="onMunicipalityChange()">
+        <select class="form-select custom-select" [(ngModel)]="selectedMunicipality" (change)="onMunicipalityChange(); changePage(1)">
           <option value="">{{ 'ALL_MUNICIPALITIES' | translate }}</option>
           <option *ngFor="let m of municipalities" [value]="m?.id">{{ m?.name }}</option>
         </select>
       </div>
       <div class="col-md-3">
-        <select class="form-select custom-select" [(ngModel)]="selectedLocation">
+        <select class="form-select custom-select" [(ngModel)]="selectedLocation" (change)="changePage(1)">
           <option value="">{{ 'ALL_LOCATIONS' | translate }}</option>
           <option *ngFor="let l of locations" [value]="l?.id">{{ l?.name }}</option>
         </select>
       </div>
+
+      <div class="col-md-3 d-flex justify-content-center mt-2">
+        <a class="btn btn-options d-flex align-items-center gap-2 px-3" [routerLink]="['/archives/add_archive']">
+          <i class="fa fa-plus"></i>
+          <span>{{ 'ADD_PATIENT' | translate }}</span>
+        </a>
+      </div>
     </div>
 
-    <!-- Tabla sin botones de scroll -->
+    <!-- Tabla -->
     <div class="row">
       <div class="col-sm-12">
         <div class="card card-list shadow border-0">
           <div class="card-body">
+
             <div class="d-flex justify-content-between align-items-center mb-3">
               <p class="fw-semibold text-dark mb-0">
                 {{ 'GLOBAL_TOTAL' | translate }} <span class="text-primary">{{ totalRecords }}</span>
               </p>
               <p class="fw-semibold text-dark mb-0">
-                {{ 'FILTERED_MATCHES' | translate }} <span class="text-success">{{ filteredArchives().length }}</span>
+                {{ 'CURRENT_PAGE_RESULTS' | translate }} <span class="text-success">{{ displayedArchives.length }}</span>
               </p>
             </div>
 
-            <!-- Scroll horizontal nativo -->
             <div class="table-responsive">
               <table class="table table-striped table-hover text-center align-middle">
                 <thead class="table-light">
@@ -78,7 +88,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let a of filteredArchives()">
+                    <tr *ngFor="let a of displayedArchives">
                     <td>{{ a.archive_number }}</td>
                     <td>{{ a.name }} {{ a.last_name_father }} {{ a.last_name_mother }}</td>
                     <td>{{ a.age }}</td>
@@ -94,7 +104,7 @@
                           <i class="fa fa-cogs me-1"></i> {{ 'OPTIONS' | translate }}
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
-                          <a class="dropdown-item" [routerLink]="['/archives/list-archive/edit-archive/', a.archive_number]">
+                          <a class="dropdown-item" [routerLink]="['/archives/list_archive/edit_archive/', a.archive_number]">
                             <i class="fa fa-pen me-2"></i> {{ 'EDIT' | translate }}
                           </a>
                           <a class="dropdown-item text-danger"
@@ -110,6 +120,37 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
+
+            <!-- Paginación -->
+            <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+              <div class="pagination-info small">
+                {{ 'SHOWING' | translate }} {{ (currentPage - 1) * pageSize + 1 }}
+                {{ 'TO' | translate }} {{ (currentPage - 1) * pageSize + displayedArchives.length }}
+                {{ 'OF' | translate }} {{ totalRecords }} {{ 'RECORDS' | translate }}
+              </div>
+              <nav>
+                <ul class="pagination mb-0">
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" href="javascript:void(0);" (click)="changePage(currentPage - 1)">
+                      {{ 'PREVIOUS' | translate }}
+                    </a>
+                  </li>
+                  <li class="page-item"
+                      *ngFor="let page of paginationRange"
+                      [class.active]="page === currentPage"
+                      [class.disabled]="page === '...'">
+                    <a class="page-link" href="javascript:void(0);" (click)="typeof page === 'number' && changePage(page)">
+                      {{ page }}
+                    </a>
+                  </li>
+                  <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" href="javascript:void(0);" (click)="changePage(currentPage + 1)">
+                      {{ 'NEXT' | translate }}
+                    </a>
+                  </li>
+                </ul>
+              </nav>
             </div>
 
           </div>

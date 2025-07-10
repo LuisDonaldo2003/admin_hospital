@@ -10,4 +10,10 @@ export class StyleService {
       document.documentElement.style.setProperty('--user-border-color', color);
     }
   }
+
+  setUserBorderColor(color: string): void {
+    document.documentElement.style.setProperty('--user-border-color', color);
+    document.body.style.setProperty('--user-border-color', color);
+    localStorage.setItem('borderColor', color);
+  }
 }

@@ -1,0 +1,268 @@
+/* backups-archive.component.scss */
+
+/* Variables globales */
+:root {
+  --user-border-color: #3b82f6;
+  --card-bg: #ffffff;
+  --text-color: #000000;
+}
+
+/* Tarjeta de respaldos */
+.card.border-colored {
+  border-radius: 12px;
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+
+  // Solo una capa de borde visual con box-shadow
+  box-shadow: 0 0 0 5px var(--user-border-color), 0 0 10px rgba(0, 0, 0, 0.05);
+
+  .card-header {
+    background-color: var(--user-border-color);
+    color: #ffffff;
+    font-weight: 500;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .card-body {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+
+    .list-group-item {
+      background-color: #f9f9f9 !important;
+      border: 2px solid #ccc !important;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .backup-filename {
+        color: var(--text-color) !important;
+        font-weight: 600;
+      }
+
+      .badge {
+        background-color: #dbeafe;
+        color: #1e3a8a;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 6px;
+      }
+
+      .btn {
+        background-color: #22c55e !important;
+        color: #fff !important;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 6px 14px;
+        transition: all 0.2s ease-in-out;
+
+        i {
+          margin-right: 6px;
+        }
+
+        &:hover {
+          background-color: #16a34a !important;
+          box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+      }
+    }
+
+    .list-group-item:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+/* Encabezado */
+.page-header p.text-muted {
+  color: #6c757d;
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --card-bg: #1a1a1a;
+    --text-color: #f1f1f1;
+  }
+
+  body.dark-mode .card.border-colored {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+
+    // Box-shadow en modo oscuro también sin borde real
+    box-shadow: 0 0 0 12px var(--user-border-color), 0 0 10px rgba(255, 255, 255, 0.06);
+
+    .card-header {
+      background-color: #2c2c2c !important;
+      color: var(--text-color) !important;
+    }
+
+    .card-body {
+      .list-group-item {
+        background-color: #2b2b2b !important;
+        border: 2px solid #444 !important;
+        box-shadow: 0 2px 4px rgba(255, 255, 255, 0.05);
+
+        .backup-filename {
+          color: var(--text-color) !important;
+        }
+
+        .badge {
+          background-color: #3b82f6 !important;
+          color: #ffffff !important;
+        }
+
+        .btn {
+          background-color: #22c55e !important;
+
+          &:hover {
+            background-color: #16a34a !important;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+          }
+        }
+      }
+    }
+  }
+
+  .page-header p.text-muted {
+    color: #ccc !important;
+  }
+}
+/* backups-archive.component.scss */
+
+/* Variables globales */
+:root {
+  --user-border-color: #3b82f6;
+  --card-bg: #ffffff;
+  --text-color: #000000;
+}
+
+/* Tarjeta de respaldos */
+.card.border-colored {
+  border-radius: 12px;
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+
+  /* Unificado con 6px de box-shadow */
+  box-shadow: 0 0 0 6px var(--user-border-color), 0 0 10px rgba(0, 0, 0, 0.05);
+
+  .card-header {
+    background-color: var(--user-border-color);
+    color: #ffffff;
+    font-weight: 500;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .card-body {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+
+    .list-group-item {
+      background-color: #f9f9f9 !important;
+      border: 2px solid #ccc !important;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .backup-filename {
+        color: var(--text-color) !important;
+        font-weight: 600;
+      }
+
+      .badge {
+        background-color: #dbeafe;
+        color: #1e3a8a;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 6px;
+      }
+
+      .btn {
+        background-color: #22c55e !important;
+        color: #fff !important;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 6px 14px;
+        transition: all 0.2s ease-in-out;
+
+        i {
+          margin-right: 6px;
+        }
+
+        &:hover {
+          background-color: #16a34a !important;
+          box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+      }
+    }
+
+    .list-group-item:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+/* Encabezado */
+.page-header p.text-muted {
+  color: #6c757d;
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --card-bg: #1a1a1a;
+    --text-color: #f1f1f1;
+  }
+
+  body.dark-mode .card.border-colored {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+
+    /* Mismo efecto en modo oscuro */
+    box-shadow: 0 0 0 6px var(--user-border-color), 0 0 10px rgba(255, 255, 255, 0.06);
+
+    .card-header {
+      background-color: #2c2c2c !important;
+      color: var(--text-color) !important;
+    }
+
+    .card-body {
+      .list-group-item {
+        background-color: #2b2b2b !important;
+        border: 2px solid #444 !important;
+        box-shadow: 0 2px 4px rgba(255, 255, 255, 0.05);
+
+        .backup-filename {
+          color: var(--text-color) !important;
+        }
+
+        .badge {
+          background-color: #3b82f6 !important;
+          color: #ffffff !important;
+        }
+
+        .btn {
+          background-color: #22c55e !important;
+
+          &:hover {
+            background-color: #16a34a !important;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+          }
+        }
+      }
+    }
+  }
+
+  .page-header p.text-muted {
+    color: #ccc !important;
+  }
+}

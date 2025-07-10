@@ -124,7 +124,9 @@
   "SIDEBAR_PATIENT_LIST": "Lista de Pacientes",
   "SIDEBAR_PATIENT_ADD": "Agregar Paciente",
   "SIDEBAR_PATIENT_EDIT": "Editar Paciente",
+  "SIDEBAR_PATIENT_EXPORT": "Exportar Lista de Pacientes",
   "SIDEBAR_PATIENT_DELETE": "Eliminar Paciente",
+  "SIDEBAR_PATIENT_BACKUP": "Copias de Seguridad de Pacientes",
 
   "SIDEBAR_CONTRACT": "Contratos",
   "SIDEBAR_CONTRACT_LIST":"Lista de Contratos",
@@ -168,6 +170,36 @@
   "NO_MUNICIPALITY": "Sin municipio",
   "NO_STATE": "Sin estado",
   "NO_DATE": "Sin fecha",
-  "DELETE_CONFIRMATION3": "¿Estás seguro de eliminar el expediente"
+  "DELETE_CONFIRMATION3": "¿Estás seguro de eliminar el expediente",
+
+
+  "ARCHIVE_NUMBER": "Número de Expediente",
+  "FATHER_LAST_NAME": "Apellido Paterno",
+  "MOTHER_LAST_NAME": "Apellido Materno",
+  "ADMISSION_DATE": "Fecha de Ingreso",
+  "ADD_PATIENT": "Agregar Paciente",
+  "PATIENT_REGISTRATION": "Registro de Paciente",
+  "SELECT_GENDER": "Seleccionar Género",
+  "SELECT_STATE": "Seleccionar Estado",
+  "SELECT_MUNICIPALITY": "Seleccionar Municipio",
+  "SELECT_LOCATION": "Seleccionar Localidad",
+
+  "ARCHIVE_REGISTERED_SUCCESS": "El expediente ha sido registrado correctamente.",
+  "CURRENT_PAGE_RESULTS" :  "Resultados en la página actual: ",
+  "OF": "de",
+
+  "EXPORT_ARCHIVES_TITLE": "Exportar Pacientes",
+  "EXPORT_ARCHIVES_SUBTITLE": "Descarga la lista completa de expedientes de pacientes con filtros opcionales.",
+  "FILTER_BY_STATE": "Filtrar por Estado",
+  "FILTER_BY_MUNICIPALITY": "Filtrar por Municipio",
+  "FILTER_BY_LOCATION": "Filtrar por Localidad",
+  "PREVIEW_EXPORT": "Vista previa de la exportación",
+  "EXPORT_EXCEL": "Exportar a Excel",
+  "NO_DATA_AVAILABLE": "No hay datos disponibles",
+  "LOADING_DATA": "Cargando datos de pacientes, por favor espera...",
+  "EXPORT_PDF": "Exportar PDF"
+
+
+
 
 }

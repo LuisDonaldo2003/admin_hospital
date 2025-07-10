@@ -1,0 +1,153 @@
+/* export-archive.component.scss */
+
+.card.export-archive {
+  border-radius: 24px;
+  padding: 2.5rem 3.5rem;
+  background-color: var(--user-card-bg, #fffbe8) !important;
+  color: var(--user-card-text-color, #000) !important;
+  position: relative;
+  z-index: 10;
+  overflow: visible;
+  border: var(--card-border-width) solid var(--user-border-color) !important;
+  box-shadow: 0 12px 48px rgba(59, 130, 246, 0.13);
+
+  .card-header {
+    background: linear-gradient(90deg, var(--user-border-color) 60%, #60a5fa 100%);
+    color: var(--user-card-text-color, #000) !important;
+    font-weight: 700;
+    font-size: 1.35rem;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    letter-spacing: 0.7px;
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 4px 16px rgba(59,130,246,0.13);
+    border-bottom: none !important;
+  }
+
+  .card-body {
+    background-color: var(--user-card-bg, #fffbe8) !important;
+    color: var(--user-card-text-color, #000) !important;
+    padding: 2.5rem 2.5rem 1.5rem 2.5rem;
+    border-radius: 0 0 24px 24px;
+
+    h4, p, span, small, th, td {
+      color: var(--user-card-text-color, #000) !important;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background-color: var(--user-card-bg, #fffbe8) !important;
+      border: var(--table-border-width) solid var(--user-border-color) !important;
+      border-radius: 22px;
+      box-shadow: 0 4px 16px rgba(59,130,246,0.13);
+      overflow: hidden;
+
+      th, td {
+        border: var(--cell-border-width) solid var(--user-border-color) !important;
+        padding: 1.25rem 1.5rem;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 1.18rem;
+        color: var(--user-card-text-color, #000) !important;
+      }
+
+      thead th {
+        background: linear-gradient(90deg, var(--user-card-bg, #fffbe8) 80%, var(--user-border-color) 100%) !important;
+        font-weight: 700;
+        color: var(--user-card-text-color, #000) !important;
+      }
+
+      thead th:first-child {
+        border-top-left-radius: 22px;
+      }
+
+      thead th:last-child {
+        border-top-right-radius: 22px;
+      }
+
+      tbody tr:last-child td:first-child {
+        border-bottom-left-radius: 22px;
+      }
+
+      tbody tr:last-child td:last-child {
+        border-bottom-right-radius: 22px;
+      }
+    }
+  }
+
+  label,
+  .form-label,
+  .text-muted,
+  .page-header p {
+    color: var(--user-card-text-color, #000) !important;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+
+  .page-header p {
+    opacity: 0.85;
+    font-size: 1.08rem;
+  }
+
+  // Selects personalizados y accesibles
+  .form-select {
+    background-color: var(--user-card-bg, #fffbe8) !important;
+    color: var(--user-card-text-color, #000) !important;
+    border: 2px solid var(--user-border-color) !important;
+    border-radius: 14px !important;
+    font-size: 1.13rem;
+    font-weight: 500;
+    padding: 1.1rem 1.2rem;
+    box-shadow: 0 2px 8px rgba(59,130,246,0.08);
+    transition: border 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
+    appearance: none;
+    background-image: none !important;
+    outline: none;
+  }
+  .form-select:focus {
+    border-color: var(--user-border-color) !important;
+    box-shadow: 0 0 0 4px rgba(59,130,246,0.18);
+    outline: none;
+  }
+  .form-select option {
+    background: var(--user-card-bg, #fffbe8) !important;
+    color: var(--user-card-text-color, #000) !important;
+  }
+}
+
+// FORZAR SELECTS BLANCOS EN EXPORT ARCHIVE EN TODOS LOS MODOS
+.card.export-archive select.form-select,
+.card.export-archive .form-select {
+  background: #fff !important;
+  background-color: #fff !important;
+  color: #222 !important;
+  border: 2px solid var(--user-border-color) !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 1rem !important;
+  box-shadow: none !important;
+  appearance: none;
+}
+.card.export-archive select.form-select option,
+.card.export-archive .form-select option {
+  background: #fff !important;
+  background-color: #fff !important;
+  color: #222 !important;
+}
+
+// Texto secundario blanco en modo oscuro solo para el encabezado de export-archive
+body.dark-mode .card.export-archive .page-header .text-muted,
+body.dark-mode .card.export-archive .page-header p.text-muted {
+  color: #fff !important;
+  opacity: 1 !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.22);
+  font-weight: 700;
+  font-size: 1.18rem;
+  letter-spacing: 0.01em;
+}

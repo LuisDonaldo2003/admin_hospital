@@ -124,7 +124,9 @@
   "SIDEBAR_PATIENT_LIST": "Patients List",
   "SIDEBAR_PATIENT_ADD": "Add Patient",
   "SIDEBAR_PATIENT_EDIT": "Edit Patient",
+  "SIDEBAR_PATIENT_EXPORT": "Export Patient List",
   "SIDEBAR_PATIENT_DELETE": "Delete Patient",
+  "SIDEBAR_PATIENT_BACKUP": "Backup Patient Records",
 
   "SIDEBAR_CONTRACT": "Contracts",
   "SIDEBAR_CONTRACT_LIST":"Contracts List",
@@ -168,6 +170,36 @@
   "NO_MUNICIPALITY": "No municipality",
   "NO_STATE": "No state",
   "NO_DATE": "No date",
-  "DELETE_CONFIRMATION3": "Are you sure you want to delete the record"
+  "DELETE_CONFIRMATION3": "Are you sure you want to delete the record",
+
+
+  "ARCHIVE_NUMBER": "Archive Number",
+  "FATHER_LAST_NAME": "Father Last Name",
+  "MOTHER_LAST_NAME": "Mother Last Name",
+  "ADMISSION_DATE": "Admission Date",
+  "ADD_PATIENT": "Add Patient",
+  "PATIENT_REGISTRATION": "Patient Registration",
+  "SELECT_GENDER": "Select Gender",
+  "SELECT_STATE": "Select State",
+  "SELECT_MUNICIPALITY": "Select Municipality",
+  "SELECT_LOCATION": "Select Location",
+
+
+  "ARCHIVE_REGISTERED_SUCCESS": "The archive has been successfully registered.",
+   "CURRENT_PAGE_RESULTS" : "Results on current page: ",
+   "OF": "the",
+
+   "EXPORT_ARCHIVES_TITLE": "Export Patients",
+  "EXPORT_ARCHIVES_SUBTITLE": "Download the complete list of patient records with optional filters.",
+  "FILTER_BY_STATE": "Filter by State",
+  "FILTER_BY_MUNICIPALITY": "Filter by Municipality",
+  "FILTER_BY_LOCATION": "Filter by Location",
+  "PREVIEW_EXPORT": "Preview of Export",
+  "EXPORT_EXCEL": "Export to Excel",
+  "NO_DATA_AVAILABLE": "No data available",
+  "LOADING_DATA": "Loading patient data, please wait...",
+  "EXPORT_PDF": "Export PDF"
+
+
 
 }

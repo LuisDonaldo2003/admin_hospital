@@ -1,0 +1,7 @@
+.logo-wrapper,
+.avatar-img,
+.user-img img,
+.profile-avatar {
+  border: 3px solid var(--user-border-color, red) !important;
+  border-radius: 50%;
+}

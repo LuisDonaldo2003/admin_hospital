@@ -1,1 +1,122 @@
-<p>add-archive works!</p>
+<div class="page-wrapper">
+  <div class="content add-staff-form">
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item"><a href="#">{{ 'PATIENT' | translate }} ></a></li>
+            <li class="breadcrumb-item active">{{ 'ADD_PATIENT' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-xl-8">
+        <div class="card card-form shadow border-0">
+          <div class="card-body px-5 py-4">
+            <h3 class="text-center mb-4 fw-bold">{{ 'PATIENT_REGISTRATION' | translate }}</h3>
+
+            <form>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE_NUMBER' | translate }} *</label>
+                  <input type="text" class="form-control" [(ngModel)]="archive_number" name="archive_number"
+                         required [ngClass]="{ 'is-invalid': submitted && !archive_number?.trim() }" />
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'FIRST_NAME' | translate }} *</label>
+                  <input type="text" class="form-control" [(ngModel)]="name" name="name"
+                         required [ngClass]="{ 'is-invalid': submitted && !name?.trim() }" />
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'FATHER_LAST_NAME' | translate }} *</label>
+                  <input type="text" class="form-control" [(ngModel)]="last_name_father" name="last_name_father"
+                         required [ngClass]="{ 'is-invalid': submitted && !last_name_father?.trim() }" />
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'MOTHER_LAST_NAME' | translate }}</label>
+                  <input type="text" class="form-control" [(ngModel)]="last_name_mother" name="last_name_mother" />
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'AGE' | translate }} *</label>
+                  <input type="number" class="form-control" [(ngModel)]="age" name="age"
+                         required [ngClass]="{ 'is-invalid': submitted && !age }" />
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'GENDER' | translate }} *</label>
+                  <select class="form-control" [(ngModel)]="gender_id" name="gender_id"
+                          required [ngClass]="{ 'is-invalid': submitted && !gender_id }">
+                    <option value="">{{ 'SELECT_GENDER' | translate }}</option>
+                    <option *ngFor="let g of genders" [value]="g.id">{{ g.name }}</option>
+                  </select>
+                </div>
+
+                <div class="col-md-12">
+                  <label class="form-label">{{ 'ADDRESS' | translate }}</label>
+                  <input type="text" class="form-control" [(ngModel)]="address" name="address" />
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'STATE' | translate }} *</label>
+                  <select class="form-control" [(ngModel)]="state_id" name="state_id"
+                          required [ngClass]="{ 'is-invalid': submitted && !state_id }" (change)="onStateChange()">
+                    <option value="">{{ 'SELECT_STATE' | translate }}</option>
+                    <option *ngFor="let s of states" [value]="s.id">{{ s.name }}</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'MUNICIPALITY' | translate }} *</label>
+                  <select class="form-control" [(ngModel)]="municipality_id" name="municipality_id"
+                          required [ngClass]="{ 'is-invalid': submitted && !municipality_id }" (change)="onMunicipalityChange()">
+                    <option value="">{{ 'SELECT_MUNICIPALITY' | translate }}</option>
+                    <option *ngFor="let m of municipalities" [value]="m.id">{{ m.name }}</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'LOCATION' | translate }} *</label>
+                  <select class="form-control" [(ngModel)]="location_id" name="location_id"
+                          required [ngClass]="{ 'is-invalid': submitted && !location_id }">
+                    <option value="">{{ 'SELECT_LOCATION' | translate }}</option>
+                    <option *ngFor="let l of locations" [value]="l.id">{{ l.name }}</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ADMISSION_DATE' | translate }} *</label>
+                  <input type="date" class="form-control" [(ngModel)]="admission_date" name="admission_date"
+                         required [ngClass]="{ 'is-invalid': submitted && !admission_date }" />
+                </div>
+              </div>
+
+              <div class="mt-4" *ngIf="text_validation">
+                <div class="alert alert-warning alert-dismissible fade show">
+                  <strong>{{ 'WARNING' | translate }}:</strong> {{ text_validation }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+              </div>
+
+              <div class="mt-4" *ngIf="text_success">
+                <div class="alert alert-success alert-dismissible fade show">
+                  <strong>{{ 'SUCCESS' | translate }}:</strong> {{ text_success }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+              </div>
+
+              <div class="text-end mt-4">
+                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'SAVE' | translate }}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
