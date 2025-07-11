@@ -3,12 +3,16 @@
     border-radius: 1rem;
     padding: 1.5rem;
     box-sizing: border-box;
-    border: 2px solid transparent; // valor inicial
+    border: 4px solid var(--user-border-color, #000) !important; // Borde dinámico
+    background-color: var(--user-card-bg, #fff) !important;      // Fondo dinámico
+    color: var(--user-card-text-color, #000);
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
 
   .form-label {
     font-weight: 600;
+    color: var(--user-card-text-color, #000) !important;
   }
 
   .form-control,
@@ -20,7 +24,7 @@
     color: #000;
 
     &:focus {
-      border-color: #0d6efd;
+      border-color: var(--user-border-color, #0d6efd);
       box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
       outline: none;
     }
@@ -41,27 +45,17 @@
     font-size: 0.875rem;
   }
 
-  // 🌞 MODO CLARO
-  body:not(.dark-mode) & {
-    .card-form {
-      background-color: #F8F8FF !important;
-      color: #000;
-      border: 4px solid #000000 !important;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-  }
-
   // 🌚 MODO OSCURO
   body.dark-mode & {
     .card-form {
-      background-color: #f5f0f0 !important;
-      color: #000;
-      border: 4px solid #ff4f4f !important; // Color fuerte visible
+      background-color: var(--user-card-bg, #23221c) !important;
+      color: var(--user-card-text-color, #fff);
+      border: 4px solid var(--user-border-color, #ff4f4f) !important;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
 
       h3,
       .form-label {
-        color: #000 !important;
+        color: var(--user-card-text-color, #fff) !important;
       }
     }
 

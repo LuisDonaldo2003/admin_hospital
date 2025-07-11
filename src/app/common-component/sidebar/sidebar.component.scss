@@ -1,0 +1,26 @@
+.menu-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  margin-right: 10px;
+}
+
+.sidebar-icon {
+  font-size: 1.5rem;
+  color: #222; // color oscuro para modo claro
+  margin-right: 0;
+}
+
+// Modo oscuro: sobrescribe el color
+body.dark-mode .sidebar-icon {
+  color: #fff !important;
+}
+
+.sidebar-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  margin-right: 0;
+}

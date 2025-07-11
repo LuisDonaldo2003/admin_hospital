@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { ContractTypesService } from '../service/contract-types.service';
+import { TranslateModule } from '@ngx-translate/core'; // <-- IMPORTA ESTO
 
 @Component({
   selector: 'app-list-contract',
@@ -11,7 +12,8 @@ import { ContractTypesService } from '../service/contract-types.service';
     CommonModule,
     FormsModule,
     MatTableModule,
-    RouterModule
+    RouterModule,
+    TranslateModule // <-- AGREGA AQUÍ
   ],
   templateUrl: './list-contract.component.html',
   styleUrl: './list-contract.component.scss'

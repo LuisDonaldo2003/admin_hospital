@@ -45,17 +45,24 @@ export class EditStaffNComponent {
       this.staff_id = resp.id;
     });
 
-    this.staffService.showUser(this.staff_id).subscribe((resp: any) => {
-      this.staff_selected = resp.user;
-
-      this.selectedValue = this.staff_selected.roles?.[0]?.id ?? '';
-      this.name = this.staff_selected.name;
-      this.surname = this.staff_selected.surname;
-      this.email = this.staff_selected.email;
-    });
-
+    // Cargar roles primero
     this.staffService.listConfig().subscribe((resp: any) => {
-      this.roles = resp.roles ?? [];
+      // Fuerza los ids a string
+      this.roles = (resp.roles ?? []).map((r: any) => ({
+        ...r,
+        id: r.id.toString()
+      }));
+
+      // Luego cargar el usuario
+      this.staffService.showUser(this.staff_id).subscribe((resp: any) => {
+        this.staff_selected = resp.user;
+
+        // Usa el campo role (objeto) para el binding
+        this.selectedValue = this.staff_selected.role?.id?.toString() ?? '';
+        this.name = this.staff_selected.name ?? '';
+        this.surname = this.staff_selected.surname ?? '';
+        this.email = this.staff_selected.email ?? '';
+      });
     });
   }
 
@@ -65,9 +72,9 @@ export class EditStaffNComponent {
 
     const missingFields: string[] = [];
 
-    if (!this.name.trim()) missingFields.push(this.translate.instant('NAME'));
-    if (!this.surname.trim()) missingFields.push(this.translate.instant('SURNAME'));
-    if (!this.email.trim()) missingFields.push(this.translate.instant('EMAIL'));
+    if (!(`${this.name ?? ''}`.trim())) missingFields.push(this.translate.instant('NAME'));
+    if (!(`${this.surname ?? ''}`.trim())) missingFields.push(this.translate.instant('SURNAME'));
+    if (!(`${this.email ?? ''}`.trim())) missingFields.push(this.translate.instant('EMAIL'));
     if (!this.selectedValue) missingFields.push(this.translate.instant('ROLE'));
 
     if (missingFields.length > 0) {
@@ -92,6 +99,14 @@ export class EditStaffNComponent {
         this.text_validation = resp.message_text;
       } else {
         this.text_success = this.translate.instant('USER_UPDATED_SUCCESS');
+        // Refresca los datos del usuario tras guardar
+        this.staffService.showUser(this.staff_id).subscribe((resp: any) => {
+          this.staff_selected = resp.user;
+          this.selectedValue = this.staff_selected.role?.id?.toString() ?? '';
+          this.name = this.staff_selected.name ?? '';
+          this.surname = this.staff_selected.surname ?? '';
+          this.email = this.staff_selected.email ?? '';
+        });
       }
     });
   }

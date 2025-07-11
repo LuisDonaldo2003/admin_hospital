@@ -308,13 +308,16 @@ export interface MenuItem {
   menuValue: string;
   hasSubRoute: boolean;
   showSubRoute: boolean;
-  base: string;
+  base?: string;
+  base2?: string;
   route?: string;
-  img?: string;
   icon?: string;
   faIcon?: boolean;
-  subMenus: SubMenu[];
-
+  img?: string;
+  subMenus: any[];
+  permision?: string;
+  show_nav?: boolean;
+  group?: string; // <-- Agrega esta línea
 }
 
 export interface SideBarData {

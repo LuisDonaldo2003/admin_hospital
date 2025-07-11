@@ -76,18 +76,19 @@ export class EditArchiveComponent implements OnInit {
     this.archiveService.showArchive(id).subscribe({
       next: (res: any) => {
         const data = res.archive;
-        this.archive_number = data.archive_number;
-        this.name = data.name;
-        this.last_name_father = data.last_name_father;
-        this.last_name_mother = data.last_name_mother;
+        // Fuerza a string los campos que pueden venir como número
+        this.archive_number = data.archive_number !== undefined && data.archive_number !== null ? String(data.archive_number) : '';
+        this.name = data.name !== undefined && data.name !== null ? String(data.name) : '';
+        this.last_name_father = data.last_name_father !== undefined && data.last_name_father !== null ? String(data.last_name_father) : '';
+        this.last_name_mother = data.last_name_mother !== undefined && data.last_name_mother !== null ? String(data.last_name_mother) : '';
         this.age = data.age;
-        this.gender_id = data.gender_id;
-        this.address = data.address;
+        this.gender_id = data.gender_id !== undefined && data.gender_id !== null ? String(data.gender_id) : '';
+        this.address = data.address !== undefined && data.address !== null ? String(data.address) : '';
         this.admission_date = data.admission_date?.split('T')[0] || '';
 
-        this.location_id = data.location_id;
-        this.municipality_id = data.location?.municipality?.id || '';
-        this.state_id = data.location?.municipality?.state?.id || '';
+        this.location_id = data.location_id !== undefined && data.location_id !== null ? String(data.location_id) : '';
+        this.municipality_id = data.location?.municipality?.id !== undefined && data.location?.municipality?.id !== null ? String(data.location?.municipality?.id) : '';
+        this.state_id = data.location?.municipality?.state?.id !== undefined && data.location?.municipality?.state?.id !== null ? String(data.location?.municipality?.state?.id) : '';
 
         if (this.state_id) this.loadMunicipalities(this.state_id);
         if (this.municipality_id) this.loadLocations(this.municipality_id);
@@ -138,15 +139,16 @@ export class EditArchiveComponent implements OnInit {
 
     const missingFields: string[] = [];
 
-    if (!this.archive_number.trim()) missingFields.push(this.translate.instant('ARCHIVE_NUMBER'));
-    if (!this.name.trim()) missingFields.push(this.translate.instant('FIRST_NAME'));
-    if (!this.last_name_father.trim()) missingFields.push(this.translate.instant('FATHER_LAST_NAME'));
+    // Siempre trata los campos como string antes de usar trim
+    if (!(`${this.archive_number}`.trim())) missingFields.push(this.translate.instant('ARCHIVE_NUMBER'));
+    if (!(`${this.name}`.trim())) missingFields.push(this.translate.instant('FIRST_NAME'));
+    if (!(`${this.last_name_father}`.trim())) missingFields.push(this.translate.instant('FATHER_LAST_NAME'));
     if (!this.age) missingFields.push(this.translate.instant('AGE'));
-    if (!this.gender_id) missingFields.push(this.translate.instant('GENDER'));
-    if (!this.state_id) missingFields.push(this.translate.instant('STATE'));
-    if (!this.municipality_id) missingFields.push(this.translate.instant('MUNICIPALITY'));
-    if (!this.location_id) missingFields.push(this.translate.instant('LOCATION'));
-    if (!this.admission_date) missingFields.push(this.translate.instant('ADMISSION_DATE'));
+    if (!(`${this.gender_id}`.trim())) missingFields.push(this.translate.instant('GENDER'));
+    if (!(`${this.state_id}`.trim())) missingFields.push(this.translate.instant('STATE'));
+    if (!(`${this.municipality_id}`.trim())) missingFields.push(this.translate.instant('MUNICIPALITY'));
+    if (!(`${this.location_id}`.trim())) missingFields.push(this.translate.instant('LOCATION'));
+    if (!(`${this.admission_date}`.trim())) missingFields.push(this.translate.instant('ADMISSION_DATE'));
 
     if (missingFields.length > 0) {
       const campos = missingFields.join(', ');

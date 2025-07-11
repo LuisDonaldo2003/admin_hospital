@@ -1,117 +1,92 @@
 <div class="page-wrapper">
-  <div class="content">
-    <!-- Header -->
+  <div class="content list-staff">
+
+    <!-- Encabezado -->
     <div class="page-header mb-4">
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item"><a href="#">Contract</a></li>
-            <li class="breadcrumb-item active">List Contracts</li>
+            <li class="breadcrumb-item">{{ 'CONTRACT' | translate }} ></li>
+            <li class="breadcrumb-item active">{{ 'CONTRACT_LIST' | translate }}</li>
           </ol>
         </div>
       </div>
     </div>
 
-    <!-- Content -->
+    <!-- Contenido -->
     <div class="row">
       <div class="col-sm-12">
-        <div class="card shadow-sm border-0">
+        <div class="card card-list shadow border-0">
           <div class="card-body">
 
-            <!-- Table Header -->
-            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-              <h4 class="mb-0">List of Contracts</h4>
-              <div class="d-flex align-items-center gap-2">
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search..." [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
-                  <span class="input-group-text bg-white">
-                    <img src="assets/img/icons/search-normal.svg" alt="">
+            <!-- Header de tabla -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 header-bar">
+              <h4 class="mb-0 fw-semibold">{{ 'LIST_CONTRACTS' | translate }}</h4>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="input-group search-input">
+                  <input type="text" class="form-control" placeholder="{{ 'SEARCH' | translate }}..." [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
+                  <span class="input-group-text">
+                    <i class="fa fa-search"></i>
                   </span>
                 </div>
-                <a routerLink="/specialities/register" class="btn btn-primary"><img src="assets/img/icons/plus.svg" alt=""></a>
-                <button class="btn btn-outline-secondary" (click)="PageSize()"><img src="assets/img/icons/re-fresh.svg" alt=""></button>
+                <a routerLink="/contract-types/register" class="btn btn-options d-flex align-items-center gap-1">
+                  <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'NEW' | translate }}</span>
+                </a>
+                <button (click)="PageSize()" class="btn btn-outline-secondary">
+                  <i class="fa fa-refresh"></i>
+                </button>
               </div>
             </div>
 
-            <!-- Export -->
-            <div class="text-end mb-2">
-              <div class="btn-group">
-                <button class="btn btn-light"><img src="assets/img/icons/pdf-icon-01.svg" alt=""></button>
-                <button class="btn btn-light"><img src="assets/img/icons/pdf-icon-02.svg" alt=""></button>
-                <button class="btn btn-light"><img src="assets/img/icons/pdf-icon-03.svg" alt=""></button>
-                <button class="btn btn-light"><img src="assets/img/icons/pdf-icon-04.svg" alt=""></button>
-              </div>
-            </div>
-
-            <!-- Table -->
+            <!-- Tabla -->
             <div class="table-responsive">
-              <table matSort (matSortChange)="sortData($event)" class="table table-hover table-bordered align-middle">
-                <thead class="table-light">
+              <table matSort (matSortChange)="sortData($event)" class="table table-striped">
+                <thead class="table-light text-center">
                   <tr>
-                    <th mat-sort-header="name">Name</th>
-                    <th mat-sort-header="state">State</th>
-                    <th mat-sort-header="created_at">Registered</th>
-                    <th class="text-end">Actions</th>
+                    <th>{{ 'NAME' | translate }}</th>
+                    <th>{{ 'STATE' | translate }}</th>
+                    <th>{{ 'REGISTERED' | translate }}</th>
+                    <th class="text-center">{{ 'ACTIONS' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of contractList">
                     <td>{{ data.name }}</td>
-                    <td>
-                      <span class="badge rounded-pill" [ngClass]="data.state === 1 ? 'bg-success' : 'bg-danger'">
-                        {{ data.state === 1 ? 'Active' : 'Inactive' }}
-                      </span>
-                    </td>
+                    <td>{{ data.state === 1 ? ('ACTIVE' | translate) : ('INACTIVE' | translate) }}</td>
                     <td>{{ data.created_at }}</td>
-                    <td class="text-end">
-                      <div class="dropdown">
-                        <a href="javascript:void(0);" class="text-muted" data-bs-toggle="dropdown">
-                          <i class="fa fa-ellipsis-v"></i>
-                        </a>
+                    <td class="text-center">
+                      <div class="dropdown d-flex justify-content-center align-items-center">
+                        <button class="btn btn-options dropdown-toggle" data-bs-toggle="dropdown">
+                          <i class="fa fa-cogs me-1"></i> {{ 'OPTIONS' | translate }}
+                        </button>
                         <div class="dropdown-menu dropdown-menu-end">
                           <a class="dropdown-item" [routerLink]="['/contract-types/list_contract/edit_contract/', data.id]">
-                            <i class="fa-solid fa-pen-to-square me-2"></i> Edit
+                            <i class="fa fa-pen me-2"></i> {{ 'EDIT' | translate }}
                           </a>
-                          <a class="dropdown-item text-danger" href="javascript:void(0);" (click)="selectDepartament(data)" data-bs-toggle="modal" [attr.data-bs-target]="'#delete_speciality-' + data.id">
-                            <i class="fa fa-trash-alt me-2"></i> Delete
+                          <a class="dropdown-item text-danger"
+                             href="javascript:void(0);"
+                             (click)="selectDepartament(data)"
+                             data-bs-toggle="modal"
+                             data-bs-target="#deleteModalContract">
+                            <i class="fa fa-trash me-2"></i> {{ 'DELETE' | translate }}
                           </a>
                         </div>
                       </div>
                     </td>
                   </tr>
-
-                  <!-- Modal -->
-                  <ng-container *ngFor="let data of contractList">
-                    <div [attr.id]="'delete_speciality-' + data.id" class="modal fade" tabindex="-1">
-                      <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                          <div class="modal-body text-center">
-                            <img src="assets/img/sent.png" alt="" width="50" height="46" />
-                            <h5 class="mt-3" *ngIf="contract_selected">
-                              Do you want to delete <strong>{{ contract_selected.name }}</strong>?
-                            </h5>
-                            <div class="mt-4 d-flex justify-content-center gap-3">
-                              <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                              <button class="btn btn-danger" (click)="deleteContract()">Delete</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </ng-container>
                 </tbody>
               </table>
             </div>
 
-            <!-- Pagination -->
+            <!-- Paginación -->
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-              <div class="text-muted">
-                Showing {{ serialNumberArray[0] }} to {{ serialNumberArray[serialNumberArray.length - 1] }} of {{ totalData }} records
+              <div class="pagination-info small">
+                {{ 'SHOWING' | translate }} {{ serialNumberArray[0] }} {{ 'TO' | translate }} {{ serialNumberArray[serialNumberArray.length - 1] }} {{ 'OF' | translate }} {{ totalData }} {{ 'RECORDS' | translate }}
               </div>
               <nav>
                 <ul class="pagination mb-0">
                   <li class="page-item" [class.disabled]="currentPage === 1">
-                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('previous')">Previous</a>
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('previous')">{{ 'PREVIOUS' | translate }}</a>
                   </li>
                   <ng-container *ngFor="let item of pageNumberArray">
                     <li class="page-item" [class.active]="item === currentPage">
@@ -119,13 +94,31 @@
                     </li>
                   </ng-container>
                   <li class="page-item" [class.disabled]="currentPage === pageNumberArray[pageNumberArray.length - 1]">
-                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('next')">Next</a>
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('next')">{{ 'NEXT' | translate }}</a>
                   </li>
                 </ul>
               </nav>
             </div>
 
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="deleteModalContract" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center p-4">
+        <img src="assets/img/sent.png" alt="" width="50" height="46" />
+        <h5 class="mt-3" *ngIf="contract_selected">
+          {{ 'DELETE_CONFIRMATION2' | translate }} <strong>{{ contract_selected.name }}</strong>?
+        </h5>
+        <div class="mt-4 d-flex justify-content-center gap-3">
+          <button class="btn btn-light" data-bs-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+          <button class="btn btn-danger" (click)="deleteContract()" data-bs-dismiss="modal">{{ 'DELETE' | translate }}</button>
         </div>
       </div>
     </div>

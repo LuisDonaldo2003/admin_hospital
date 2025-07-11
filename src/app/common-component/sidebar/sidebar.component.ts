@@ -24,6 +24,7 @@ export class SidebarComponent implements OnDestroy {
   public sidebarData: Array<SideBarData> = [];
   public user: any;
   public isDarkMode: boolean = false;
+  public groupedSidebarData: any[] = [];
 
   private userSubscription: Subscription;
 
@@ -85,6 +86,22 @@ export class SidebarComponent implements OnDestroy {
       });
       this.sidebarData = SIDE_BAR_G;
     }
+
+    let menus = this.sidebarData[0]?.menu || [];
+    let groups: any = {};
+
+    menus.forEach(menu => {
+      const groupName = menu.group || 'OTROS';
+      if (!groups[groupName]) {
+        groups[groupName] = [];
+      }
+      groups[groupName].push(menu);
+    });
+
+    this.groupedSidebarData = Object.keys(groups).map(key => ({
+      group: key,
+      menus: groups[key]
+    }));
   }
 
   public expandSubMenus(menu: MenuItem): void {

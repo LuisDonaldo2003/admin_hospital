@@ -2,26 +2,24 @@
   <ng-scrollbar>
     <div id="sidebar-menu" class="sidebar-menu">
       <ul>
-        <ng-container *ngFor="let mainTittle of sidebarData">
+        <ng-container *ngFor="let group of groupedSidebarData">
           <li class="menu-title">
-            <span>{{ mainTittle.tittle | translate }}</span>
+            <span>{{ group.group | translate }}</span>
           </li>
-          <ng-container *ngFor="let menu of mainTittle.menu">
+          <ng-container *ngFor="let menu of group.menus">
             <li *ngIf="menu.hasSubRoute === false">
               <a [class.active]="base === menu.base" [routerLink]="menu.route">
                 <span class="menu-side">
-                  <i class="fa" [class]="menu.icon" *ngIf="menu.faIcon === true"></i>
-                  <img [src]="menu.img" alt="" />
+                  <i *ngIf="menu.faIcon && menu.icon" [ngClass]="menu.icon + ' sidebar-icon'"></i>
                 </span>
-                  <span>{{ menu.menuValue | translate }}</span>
+                <span>{{ menu.menuValue | translate }}</span>
               </a>
             </li>
             <li class="submenu" *ngIf="menu.hasSubRoute === true">
               <a [class.active]="base === menu.base" (click)="expandSubMenus(menu)" href="javascript:void(0)"
                  [ngClass]="{ subdrop: menu.showSubRoute === true }">
                 <span class="menu-side">
-                  <i class="fa" [class]="menu.icon" *ngIf="menu.faIcon === true"></i>
-                  <img [src]="menu.img" alt="" />
+                  <i *ngIf="menu.faIcon && menu.icon" [ngClass]="menu.icon + ' sidebar-icon'"></i>
                 </span>
                 <span>{{ menu.menuValue | translate }}</span>
                 <span class="menu-arrow"></span>
@@ -38,18 +36,6 @@
             </li>
           </ng-container>
         </ng-container>
-
-        <!-- Botón logout (envuelto correctamente en <li>) -->
-        <!-- <li>
-          <div class="logout-btn">
-            <a [routerLink]="routes.login">
-              <span class="menu-side">
-                <img src="assets/img/icons/logout.svg" alt="" />
-              </span>
-              <span>Logout</span>
-            </a>
-          </div>
-        </li> -->
       </ul>
     </div>
   </ng-scrollbar>
