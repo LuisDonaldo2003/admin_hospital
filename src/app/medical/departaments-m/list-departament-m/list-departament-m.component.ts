@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { DepartamentMService } from '../service/departament-m.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-list-departament-m',
@@ -11,7 +12,8 @@ import { DepartamentMService } from '../service/departament-m.service';
     CommonModule,
     FormsModule,
     MatTableModule,
-    RouterModule
+    RouterModule,
+    TranslateModule
   ],
   templateUrl: './list-departament-m.component.html',
   styleUrl: './list-departament-m.component.scss'
@@ -40,6 +42,7 @@ export class ListDepartamentMComponent {
 
   constructor(
     public departamentsService: DepartamentMService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -51,8 +54,6 @@ export class ListDepartamentMComponent {
     this.serialNumberArray = [];
 
     this.departamentsService.listDepartaments().subscribe((resp: any) => {
-      console.log(resp);
-
       this.totalData = resp.departaments.length;
       this.departament_generals = resp.departaments.sort((a: any, b: any) =>
         a.name.localeCompare(b.name)
@@ -82,7 +83,6 @@ export class ListDepartamentMComponent {
 
   deleteDepartament() {
     this.departamentsService.deleteDepartament(this.departament_selected.id).subscribe((resp: any) => {
-      console.log(resp);
       let INDEX = this.departamentsList.findIndex((item: any) => item.id == this.departament_selected.id);
       if (INDEX != -1) {
         this.departamentsList.splice(INDEX, 1);

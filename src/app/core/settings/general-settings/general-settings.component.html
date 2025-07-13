@@ -8,7 +8,7 @@
         <div class="col-sm-12">
           <ul class="breadcrumb">
             <li class="breadcrumb-item">
-              <a [routerLink]="routes.adminDashboard">{{ 'DASHBOARD' | translate }}</a>
+              <a [routerLink]="routes.adminDashboard">{{ 'DASHBOARD' | translate }} ></a>
             </li>
             <li class="breadcrumb-item">
               <i class="feather icon-chevron-right"></i>
@@ -39,14 +39,14 @@
         <div class="card-body pt-0">
           <div class="form-group mt-3">
             <div class="status-toggle d-flex justify-content-between align-items-center">
-              <p class="mb-0">{{ selectedLang === 'es' ? 'Español' : 'English' }}</p>
+              <p class="mb-0">{{ selectedLang === 'es' ? ('SPANISH' | translate) : ('ENGLISH' | translate) }}</p>
               <div class="d-flex align-items-center gap-2">
                 <img
                   src="assets/flags/us.png"
                   width="24"
                   height="16"
-                  alt="English"
-                  title="English" />
+                  alt="{{ 'ENGLISH' | translate }}"
+                  title="{{ 'ENGLISH' | translate }}" />
 
                 <input
                   type="checkbox"
@@ -54,22 +54,19 @@
                   class="check"
                   [checked]="selectedLang === 'es'"
                   (change)="toggleLanguage()" />
-                <label for="toggle-lang" class="checktoggle">switch</label>
+                <label for="toggle-lang" class="checktoggle">{{ 'SWITCH' | translate }}</label>
 
                 <img
                   src="assets/flags/mx.png"
                   width="24"
                   height="16"
-                  alt="Español"
-                  title="Español" />
+                  alt="{{ 'SPANISH' | translate }}"
+                  title="{{ 'SPANISH' | translate }}" />
               </div>
             </div>
           </div>
         </div>
       </div>
-
-
-
 
         <!-- 🌓 Dark Mode -->
         <div class="card mb-4 border-colored">
@@ -89,7 +86,7 @@
                       class="check"
                       [checked]="isDarkMode"
                       (change)="toggleTheme()" />
-                    <label for="toggle-dark" class="checktoggle">switch</label>
+                    <label for="toggle-dark" class="checktoggle">{{ 'SWITCH' | translate }}</label>
                     <span class="ms-2" style="font-size: 0.9rem;">{{ 'ON' | translate }}</span>
                   </div>
                 </div>
@@ -129,7 +126,7 @@
               </div>
               <!-- Selector de color de fondo para modo claro -->
               <div class="form-group mt-3" *ngIf="!isDarkMode">
-                <label for="cardBgColorLight" class="form-label fw-semibold mb-2">Color de fondo del card (modo claro)</label>
+                <label for="cardBgColorLight" class="form-label fw-semibold mb-2">{{ 'CARD_BG_COLOR_LIGHT' | translate }}</label>
                 <div class="d-flex flex-wrap align-items-center gap-3 mt-1">
                   <input
                     type="color"
@@ -144,13 +141,13 @@
                     [ngClass]="getBorderBtnClass(cardBgColorLight)"
                     (click)="updateCardBgColorLight()"
                     style="border-radius: 8px; min-width: 160px; font-weight: 600;">
-                    Aplicar fondo claro
+                    {{ 'APPLY_BG_LIGHT' | translate }}
                   </button>
                 </div>
               </div>
               <!-- Selector de color de fondo para modo oscuro -->
               <div class="form-group mt-3" *ngIf="isDarkMode">
-                <label for="cardBgColorDark" class="form-label fw-semibold mb-2">Color de fondo del card (modo oscuro)</label>
+                <label for="cardBgColorDark" class="form-label fw-semibold mb-2">{{ 'CARD_BG_COLOR_DARK' | translate }}</label>
                 <div class="d-flex flex-wrap align-items-center gap-3 mt-1">
                   <input
                     type="color"
@@ -165,7 +162,7 @@
                     [ngClass]="getBorderBtnClass(cardBgColorDark)"
                     (click)="updateCardBgColorDark()"
                     style="border-radius: 8px; min-width: 160px; font-weight: 600;">
-                    Aplicar fondo oscuro
+                    {{ 'APPLY_BG_DARK' | translate }}
                   </button>
                 </div>
               </div>

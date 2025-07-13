@@ -39,12 +39,27 @@ export class EditRoleUserComponent {
     this.translate.use(this.selectedLang);
   }
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    this.sideBar = this.DataService.sideBar[0].menu;
-    this.activedRoute.params.subscribe((resp:any) => {
+    this.sideBar = this.DataService.sideBar[0].menu.map((section: any) => {
+      // Traduce la sección si existe la clave
+      const sectionKey = section.menuValue;
+      const sectionTranslated = this.translate.instant(sectionKey);
+      section.menuValueTranslated = sectionTranslated !== sectionKey ? sectionTranslated : sectionKey;
+
+      // Traduce cada permiso si existe la clave
+      if (Array.isArray(section.subMenus)) {
+        section.subMenus = section.subMenus.map((subMenu: any) => {
+          const permKey = subMenu.menuValue;
+          const permTranslated = this.translate.instant(permKey);
+          subMenu.menuValueTranslated = permTranslated !== permKey ? permTranslated : permKey;
+          return subMenu;
+        });
+      }
+      return section;
+    });
+
+    this.activedRoute.params.subscribe((resp: any) => {
       this.role_id = resp.id;
-    })
+    });
     this.showRole();
   }
 
@@ -52,6 +67,23 @@ export class EditRoleUserComponent {
     this.selectedLang = this.selectedLang === 'es' ? 'en' : 'es';
     this.translate.use(this.selectedLang);
     localStorage.setItem('language', this.selectedLang);
+
+    // Actualiza traducciones dinámicas al cambiar idioma
+    this.sideBar = this.DataService.sideBar[0].menu.map((section: any) => {
+      const sectionKey = section.menuValue;
+      const sectionTranslated = this.translate.instant(sectionKey);
+      section.menuValueTranslated = sectionTranslated !== sectionKey ? sectionTranslated : sectionKey;
+
+      if (Array.isArray(section.subMenus)) {
+        section.subMenus = section.subMenus.map((subMenu: any) => {
+          const permKey = subMenu.menuValue;
+          const permTranslated = this.translate.instant(permKey);
+          subMenu.menuValueTranslated = permTranslated !== permKey ? permTranslated : permKey;
+          return subMenu;
+        });
+      }
+      return section;
+    });
   }
 
   showRole() {

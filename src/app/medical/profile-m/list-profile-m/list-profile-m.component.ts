@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { ProfileMService } from '../service/profile-m.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-list-profile-m',
@@ -11,7 +12,8 @@ import { ProfileMService } from '../service/profile-m.service';
     CommonModule,
     FormsModule,
     MatTableModule,
-    RouterModule
+    RouterModule,
+    TranslateModule
   ],
   templateUrl: './list-profile-m.component.html',
   styleUrl: './list-profile-m.component.scss'
@@ -40,6 +42,7 @@ export class ListProfileMComponent {
 
   constructor(
     public profileService: ProfileMService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -51,15 +54,12 @@ export class ListProfileMComponent {
     this.serialNumberArray = [];
 
     this.profileService.listProfile().subscribe((resp: any) => {
-      console.log(resp);
-
       this.totalData = resp.profiles.length;
       this.profile_generals = resp.profiles.sort((a: any, b: any) =>
         a.name.localeCompare(b.name)
       );
       this.getTableDataGeneral();
     });
-
   }
 
   getTableDataGeneral() {
@@ -83,7 +83,6 @@ export class ListProfileMComponent {
 
   deleteProfile() {
     this.profileService.deleteProfile(this.profile_selected.id).subscribe((resp: any) => {
-      console.log(resp);
       let INDEX = this.profileList.findIndex((item: any) => item.id == this.profile_selected.id);
       if (INDEX != -1) {
         this.profileList.splice(INDEX, 1);

@@ -5,8 +5,8 @@
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item"><a href="#">Profiles</a></li>
-            <li class="breadcrumb-item active">List Profiles</li>
+            <li class="breadcrumb-item"><a href="#">{{ 'PROFILES' | translate }} ></a></li>
+            <li class="breadcrumb-item active">{{ 'LIST_PROFILES' | translate }}</li>
           </ol>
         </div>
       </div>
@@ -20,10 +20,10 @@
 
             <!-- Table Header -->
             <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-              <h4 class="mb-0">List of Profiles</h4>
+              <h4 class="mb-0">{{ 'LIST_OF_PROFILES' | translate }}</h4>
               <div class="d-flex align-items-center gap-2">
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search..." [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
+                  <input type="text" class="form-control" [placeholder]="'SEARCH' | translate" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
                   <span class="input-group-text bg-white">
                     <img src="assets/img/icons/search-normal.svg" alt="">
                   </span>
@@ -33,25 +33,15 @@
               </div>
             </div>
 
-            <!-- Export -->
-            <div class="text-end mb-2">
-              <div class="btn-group">
-                <button class="btn btn-light"><img src="assets/img/icons/pdf-icon-01.svg" alt=""></button>
-                <button class="btn btn-light"><img src="assets/img/icons/pdf-icon-02.svg" alt=""></button>
-                <button class="btn btn-light"><img src="assets/img/icons/pdf-icon-03.svg" alt=""></button>
-                <button class="btn btn-light"><img src="assets/img/icons/pdf-icon-04.svg" alt=""></button>
-              </div>
-            </div>
-
             <!-- Table -->
             <div class="table-responsive">
               <table matSort (matSortChange)="sortData($event)" class="table table-hover table-bordered align-middle">
                 <thead class="table-light">
                   <tr>
-                    <th mat-sort-header="name">Name</th>
-                    <th mat-sort-header="state">State</th>
-                    <th mat-sort-header="created_at">Registered</th>
-                    <th class="text-end">Actions</th>
+                    <th mat-sort-header="name">{{ 'NAME' | translate }}</th>
+                    <th mat-sort-header="state">{{ 'STATE' | translate }}</th>
+                    <th mat-sort-header="created_at">{{ 'REGISTERED' | translate }}</th>
+                    <th class="text-end">{{ 'ACTIONS' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -59,7 +49,7 @@
                     <td>{{ data.name }}</td>
                     <td>
                       <span class="badge rounded-pill" [ngClass]="data.state === 1 ? 'bg-success' : 'bg-danger'">
-                        {{ data.state === 1 ? 'Active' : 'Inactive' }}
+                        {{ data.state === 1 ? ('ACTIVE' | translate) : ('INACTIVE' | translate) }}
                       </span>
                     </td>
                     <td>{{ data.created_at }}</td>
@@ -70,10 +60,10 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
                           <a class="dropdown-item" [routerLink]="['/profile-m/list_profile-m/edit_profile-m/', data.id]">
-                            <i class="fa-solid fa-pen-to-square me-2"></i> Edit
+                            <i class="fa-solid fa-pen-to-square me-2"></i> {{ 'EDIT' | translate }}
                           </a>
                           <a class="dropdown-item text-danger" href="javascript:void(0);" (click)="selectProfile(data)" data-bs-toggle="modal" [attr.data-bs-target]="'#delete_profile-' + data.id">
-                            <i class="fa fa-trash-alt me-2"></i> Delete
+                            <i class="fa fa-trash-alt me-2"></i> {{ 'DELETE' | translate }}
                           </a>
                         </div>
                       </div>
@@ -88,11 +78,11 @@
                           <div class="modal-body text-center">
                             <img src="assets/img/sent.png" alt="" width="50" height="46" />
                             <h5 class="mt-3" *ngIf="profile_selected">
-                              Do you want to delete <strong>{{ profile_selected.name }}</strong>?
+                              {{ 'DELETE_PROFILE_CONFIRM' | translate }} <strong>{{ profile_selected.name }}</strong>?
                             </h5>
                             <div class="mt-4 d-flex justify-content-center gap-3">
-                              <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                              <button class="btn btn-danger" (click)="deleteProfile()">Delete</button>
+                              <button class="btn btn-light" data-bs-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+                              <button class="btn btn-danger" (click)="deleteProfile()">{{ 'DELETE' | translate }}</button>
                             </div>
                           </div>
                         </div>
@@ -106,12 +96,12 @@
             <!-- Pagination -->
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
               <div class="text-muted">
-                Showing {{ serialNumberArray[0] }} to {{ serialNumberArray[serialNumberArray.length - 1] }} of {{ totalData }} records
+                {{ 'SHOWING' | translate }} {{ serialNumberArray[0] }} {{ 'TO' | translate }} {{ serialNumberArray[serialNumberArray.length - 1] }} {{ 'OF' | translate }} {{ totalData }} {{ 'RECORDS' | translate }}
               </div>
               <nav>
                 <ul class="pagination mb-0">
                   <li class="page-item" [class.disabled]="currentPage === 1">
-                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('previous')">Previous</a>
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('previous')">{{ 'PREVIOUS' | translate }}</a>
                   </li>
                   <ng-container *ngFor="let item of pageNumberArray">
                     <li class="page-item" [class.active]="item === currentPage">
@@ -119,7 +109,7 @@
                     </li>
                   </ng-container>
                   <li class="page-item" [class.disabled]="currentPage === pageNumberArray[pageNumberArray.length - 1]">
-                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('next')">Next</a>
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('next')">{{ 'NEXT' | translate }}</a>
                   </li>
                 </ul>
               </nav>

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProfileMService } from '../service/profile-m.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-profile-m',
@@ -12,42 +13,44 @@ import { ProfileMService } from '../service/profile-m.service';
     CommonModule,
     FormsModule,
     MatTableModule,
-    RouterModule
-  ],  templateUrl: './edit-profile-m.component.html',
+    RouterModule,
+    TranslateModule
+  ],
+  templateUrl: './edit-profile-m.component.html',
   styleUrl: './edit-profile-m.component.scss'
 })
 export class EditProfileMComponent {
 
-  name:string = '';
-  state:number = 1;
+  name: string = '';
+  state: number = 1;
   valid_form: boolean = false;
   valid_form_success: boolean = false;
-  text_validation:any = null;
+  text_validation: any = null;
 
-  profile_id:any;
+  profile_id: any;
   constructor(
     public profileService: ProfileMService,
     public activedRoute: ActivatedRoute,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.activedRoute.params.subscribe((resp:any) => {
+    this.activedRoute.params.subscribe((resp: any) => {
       this.profile_id = resp.id;
     })
     this.showProfile();
   }
 
-  showProfile(){
-    this.profileService.showProfile(this.profile_id).subscribe((resp:any) => {
-      console.log(resp);
+  showProfile() {
+    this.profileService.showProfile(this.profile_id).subscribe((resp: any) => {
       this.name = resp.name;
       this.state = resp.state;
     })
   }
 
-  save(){
+  save() {
     this.valid_form = false;
-    if(!this.name){
+    if (!this.name) {
       this.valid_form = true;
       return;
     }
@@ -57,11 +60,10 @@ export class EditProfileMComponent {
     };
     this.valid_form_success = false;
     this.text_validation = null;
-    this.profileService.editProfile(data, this.profile_id).subscribe((resp:any) => {
-      console.log(resp);
-      if(resp.message == 403){
+    this.profileService.editProfile(data, this.profile_id).subscribe((resp: any) => {
+      if (resp.message == 403) {
         this.text_validation = resp.message_text;
-        return ;
+        return;
       }
       this.valid_form_success = true;
     })

@@ -2,13 +2,15 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DepartamentMService } from '../service/departament-m.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-departament-m',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    TranslateModule
   ],
   templateUrl: './add-departament-m.component.html',
   styleUrl: './add-departament-m.component.scss'
@@ -21,6 +23,7 @@ export class AddDepartamentMComponent {
   text_validation:any = null;
   constructor(
     public departamentService: DepartamentMService,
+    private translate: TranslateService
   ) {
 
   }

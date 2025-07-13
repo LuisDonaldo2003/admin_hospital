@@ -6,7 +6,7 @@
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item">{{ 'PATIENT' | translate }} ></li>
+            <li class="breadcrumb-item">{{ 'PATIENT' | translate }} ><span>&gt;</span></li>
             <li class="breadcrumb-item active">{{ 'PATIENT_LIST' | translate }}</li>
           </ol>
         </div>
@@ -88,7 +88,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let a of displayedArchives">
+                  <tr *ngFor="let a of displayedArchives">
                     <td>{{ a.archive_number }}</td>
                     <td>{{ a.name }} {{ a.last_name_father }} {{ a.last_name_mother }}</td>
                     <td>{{ a.age }}</td>
