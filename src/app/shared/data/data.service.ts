@@ -323,7 +323,7 @@ export class DataService {
         },
         {
           menuValue: 'SIDEBAR_CONTRACT',
-          group: 'GRUPO_ADMINISTRADOR',
+          group: 'GRUPO_RH',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'contract-types',
@@ -362,7 +362,7 @@ export class DataService {
         },
         {
           menuValue: 'SIDEBAR_PROFILE',
-          group: 'GRUPO_ADMINISTRADOR',
+          group: 'GRUPO_RH',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'profile-m',
@@ -401,7 +401,7 @@ export class DataService {
         },
         {
           menuValue: 'SIDEBAR_DEPARTAMENT',
-          group: 'GRUPO_ADMINISTRADOR',
+          group: 'GRUPO_RH',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'departaments-m',

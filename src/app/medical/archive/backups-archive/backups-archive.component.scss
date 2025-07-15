@@ -7,61 +7,94 @@
   --text-color: #000000;
 }
 
-/* Tarjeta de respaldos */
+/* Tarjeta de respaldos elegante */
 .card.border-colored {
-  border-radius: 12px;
+  border-radius: 18px;
   background-color: var(--card-bg) !important;
   color: var(--text-color) !important;
-
-  // Solo una capa de borde visual con box-shadow
-  box-shadow: 0 0 0 5px var(--user-border-color), 0 0 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.13);
 
   .card-header {
-    background-color: var(--user-border-color);
-    color: #ffffff;
-    font-weight: 500;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    background: linear-gradient(90deg, #3b82f6 60%, #22c55e 100%);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.15rem;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 1rem 1.5rem;
+    border-bottom: none;
+
+    i {
+      font-size: 1.5rem;
+      margin-right: 8px;
+    }
   }
 
   .card-body {
     background-color: var(--card-bg) !important;
     color: var(--text-color) !important;
+    padding: 1.5rem;
 
     .list-group-item {
-      background-color: #f9f9f9 !important;
-      border: 2px solid #ccc !important;
-      border-radius: 8px;
-      margin-bottom: 6px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      background: #fff !important;
+      border: 1px solid #e5e5e5 !important;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.07);
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 1rem;
+      padding: 1.1rem 1.2rem;
+      transition: box-shadow 0.2s, border-color 0.2s;
+
+      &:hover {
+        border-color: var(--user-border-color);
+        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.13);
+      }
 
       .backup-filename {
         color: var(--text-color) !important;
         font-weight: 600;
+        font-size: 1.08rem;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+
+        i {
+          font-size: 1.3rem;
+          color: #3b82f6;
+        }
       }
 
       .badge {
         background-color: #dbeafe;
         color: #1e3a8a;
-        font-size: 0.75rem;
-        padding: 4px 8px;
-        border-radius: 6px;
+        font-size: 0.85rem;
+        padding: 5px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
       }
 
       .btn {
         background-color: #22c55e !important;
         color: #fff !important;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        padding: 6px 14px;
-        transition: all 0.2s ease-in-out;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 0.6rem 1.5rem;
+        box-shadow: 0 2px 8px rgba(34, 197, 94, 0.13);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: background 0.2s, box-shadow 0.2s;
 
         i {
           margin-right: 6px;
+          font-size: 1.1rem;
         }
 
         &:hover {
@@ -78,8 +111,22 @@
 }
 
 /* Encabezado */
-.page-header p.text-muted {
-  color: #6c757d;
+.page-header {
+  padding-bottom: 0.5rem;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    color: var(--user-border-color, #3b82f6);
+  }
+
+  p {
+    color: #6c757d;
+    font-size: 1.15rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
 }
 
 /* Modo oscuro */
@@ -92,20 +139,18 @@
   body.dark-mode .card.border-colored {
     background-color: var(--card-bg) !important;
     color: var(--text-color) !important;
-
-    // Box-shadow en modo oscuro también sin borde real
     box-shadow: 0 0 0 12px var(--user-border-color), 0 0 10px rgba(255, 255, 255, 0.06);
 
     .card-header {
-      background-color: #2c2c2c !important;
-      color: var(--text-color) !important;
+      background: linear-gradient(90deg, #23272f 60%, var(--user-border-color) 100%);
+      color: #fff !important;
     }
 
     .card-body {
       .list-group-item {
-        background-color: #2b2b2b !important;
-        border: 2px solid #444 !important;
-        box-shadow: 0 2px 4px rgba(255, 255, 255, 0.05);
+        background-color: #23221c !important;
+        border: 1px solid #444 !important;
+        box-shadow: 0 2px 8px rgba(255, 255, 255, 0.07);
 
         .backup-filename {
           color: var(--text-color) !important;
@@ -113,7 +158,7 @@
 
         .badge {
           background-color: #3b82f6 !important;
-          color: #ffffff !important;
+          color: #fff !important;
         }
 
         .btn {
@@ -128,141 +173,7 @@
     }
   }
 
-  .page-header p.text-muted {
-    color: #ccc !important;
-  }
-}
-/* backups-archive.component.scss */
-
-/* Variables globales */
-:root {
-  --user-border-color: #3b82f6;
-  --card-bg: #ffffff;
-  --text-color: #000000;
-}
-
-/* Tarjeta de respaldos */
-.card.border-colored {
-  border-radius: 12px;
-  background-color: var(--card-bg) !important;
-  color: var(--text-color) !important;
-
-  /* Unificado con 6px de box-shadow */
-  box-shadow: 0 0 0 6px var(--user-border-color), 0 0 10px rgba(0, 0, 0, 0.05);
-
-  .card-header {
-    background-color: var(--user-border-color);
-    color: #ffffff;
-    font-weight: 500;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-  }
-
-  .card-body {
-    background-color: var(--card-bg) !important;
-    color: var(--text-color) !important;
-
-    .list-group-item {
-      background-color: #f9f9f9 !important;
-      border: 2px solid #ccc !important;
-      border-radius: 8px;
-      margin-bottom: 6px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      .backup-filename {
-        color: var(--text-color) !important;
-        font-weight: 600;
-      }
-
-      .badge {
-        background-color: #dbeafe;
-        color: #1e3a8a;
-        font-size: 0.75rem;
-        padding: 4px 8px;
-        border-radius: 6px;
-      }
-
-      .btn {
-        background-color: #22c55e !important;
-        color: #fff !important;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        padding: 6px 14px;
-        transition: all 0.2s ease-in-out;
-
-        i {
-          margin-right: 6px;
-        }
-
-        &:hover {
-          background-color: #16a34a !important;
-          box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-        }
-      }
-    }
-
-    .list-group-item:last-child {
-      margin-bottom: 0;
-    }
-  }
-}
-
-/* Encabezado */
-.page-header p.text-muted {
-  color: #6c757d;
-}
-
-/* Modo oscuro */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --card-bg: #1a1a1a;
-    --text-color: #f1f1f1;
-  }
-
-  body.dark-mode .card.border-colored {
-    background-color: var(--card-bg) !important;
-    color: var(--text-color) !important;
-
-    /* Mismo efecto en modo oscuro */
-    box-shadow: 0 0 0 6px var(--user-border-color), 0 0 10px rgba(255, 255, 255, 0.06);
-
-    .card-header {
-      background-color: #2c2c2c !important;
-      color: var(--text-color) !important;
-    }
-
-    .card-body {
-      .list-group-item {
-        background-color: #2b2b2b !important;
-        border: 2px solid #444 !important;
-        box-shadow: 0 2px 4px rgba(255, 255, 255, 0.05);
-
-        .backup-filename {
-          color: var(--text-color) !important;
-        }
-
-        .badge {
-          background-color: #3b82f6 !important;
-          color: #ffffff !important;
-        }
-
-        .btn {
-          background-color: #22c55e !important;
-
-          &:hover {
-            background-color: #16a34a !important;
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-          }
-        }
-      }
-    }
-  }
-
-  .page-header p.text-muted {
+  .page-header p {
     color: #ccc !important;
   }
 }

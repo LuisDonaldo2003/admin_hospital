@@ -8,12 +8,12 @@
   position: relative;
   z-index: 10;
   overflow: visible;
-  border: var(--card-border-width) solid var(--user-border-color) !important;
+  border: var(--card-border-width, 3px) solid var(--user-border-color, #3b82f6) !important;
   box-shadow: 0 12px 48px rgba(59, 130, 246, 0.13);
 
   .card-header {
-    background: linear-gradient(90deg, var(--user-border-color) 60%, #60a5fa 100%);
-    color: var(--user-card-text-color, #000) !important;
+    background: linear-gradient(90deg, var(--user-border-color, #3b82f6) 60%, #60a5fa 100%);
+    color: #fff !important;
     font-weight: 700;
     font-size: 1.35rem;
     border-top-left-radius: 24px;
@@ -37,68 +37,51 @@
       color: var(--user-card-text-color, #000) !important;
     }
 
-    table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      background-color: var(--user-card-bg, #fffbe8) !important;
-      border: var(--table-border-width) solid var(--user-border-color) !important;
+    .table {
       border-radius: 22px;
-      box-shadow: 0 4px 16px rgba(59,130,246,0.13);
       overflow: hidden;
+      background-color: var(--user-card-bg, #fffbe8) !important;
+      box-shadow: 0 4px 16px rgba(59,130,246,0.13);
 
       th, td {
-        border: var(--cell-border-width) solid var(--user-border-color) !important;
-        padding: 1.25rem 1.5rem;
+        border: 1px solid var(--user-border-color, #3b82f6) !important;
+        padding: 1.15rem 1.2rem;
         text-align: center;
         vertical-align: middle;
-        font-size: 1.18rem;
+        font-size: 1.08rem;
         color: var(--user-card-text-color, #000) !important;
       }
 
       thead th {
-        background: linear-gradient(90deg, var(--user-card-bg, #fffbe8) 80%, var(--user-border-color) 100%) !important;
+        background: linear-gradient(90deg, var(--user-card-bg, #fffbe8) 80%, var(--user-border-color, #3b82f6) 100%) !important;
         font-weight: 700;
         color: var(--user-card-text-color, #000) !important;
+        border-bottom: 2px solid var(--user-border-color, #3b82f6) !important;
       }
 
-      thead th:first-child {
-        border-top-left-radius: 22px;
+      tbody tr {
+        transition: background 0.2s;
+        &:hover {
+          background-color: #e0f2fe !important;
+        }
       }
 
-      thead th:last-child {
-        border-top-right-radius: 22px;
-      }
-
-      tbody tr:last-child td:first-child {
-        border-bottom-left-radius: 22px;
-      }
-
-      tbody tr:last-child td:last-child {
-        border-bottom-right-radius: 22px;
+      tbody tr:last-child td {
+        border-bottom: none;
       }
     }
   }
 
-  label,
-  .form-label,
-  .text-muted,
-  .page-header p {
-    color: var(--user-card-text-color, #000) !important;
+  .form-label {
     font-weight: 600;
-    letter-spacing: 0.2px;
+    color: #1e293b !important;
+    margin-bottom: 0.5rem;
   }
 
-  .page-header p {
-    opacity: 0.85;
-    font-size: 1.08rem;
-  }
-
-  // Selects personalizados y accesibles
   .form-select {
-    background-color: var(--user-card-bg, #fffbe8) !important;
-    color: var(--user-card-text-color, #000) !important;
-    border: 2px solid var(--user-border-color) !important;
+    background-color: #fff !important;
+    color: #222 !important;
+    border: 2px solid var(--user-border-color, #3b82f6) !important;
     border-radius: 14px !important;
     font-size: 1.13rem;
     font-weight: 500;
@@ -106,48 +89,134 @@
     box-shadow: 0 2px 8px rgba(59,130,246,0.08);
     transition: border 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
     appearance: none;
-    background-image: none !important;
     outline: none;
+    margin-bottom: 0.5rem;
   }
   .form-select:focus {
-    border-color: var(--user-border-color) !important;
+    border-color: var(--user-border-color, #3b82f6) !important;
     box-shadow: 0 0 0 4px rgba(59,130,246,0.18);
     outline: none;
   }
   .form-select option {
-    background: var(--user-card-bg, #fffbe8) !important;
-    color: var(--user-card-text-color, #000) !important;
+    background: #fff !important;
+    color: #222 !important;
+  }
+
+  .btn-color-action {
+    background: linear-gradient(90deg, #3b82f6 60%, #22c55e 100%);
+    color: #fff !important;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.13);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, box-shadow 0.2s;
+
+    i {
+      margin-right: 6px;
+      font-size: 1.1rem;
+    }
+
+    &:hover {
+      background: linear-gradient(90deg, #2563eb 60%, #16a34a 100%);
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    }
   }
 }
 
-// FORZAR SELECTS BLANCOS EN EXPORT ARCHIVE EN TODOS LOS MODOS
-.card.export-archive select.form-select,
-.card.export-archive .form-select {
-  background: #fff !important;
-  background-color: #fff !important;
-  color: #222 !important;
-  border: 2px solid var(--user-border-color) !important;
-  font-size: 1rem !important;
-  font-weight: 500 !important;
-  border-radius: 8px !important;
-  padding: 0.5rem 1rem !important;
-  box-shadow: none !important;
-  appearance: none;
-}
-.card.export-archive select.form-select option,
-.card.export-archive .form-select option {
-  background: #fff !important;
-  background-color: #fff !important;
-  color: #222 !important;
+/* Encabezado */
+.page-header {
+  padding-bottom: 0.5rem;
+  h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+  }
+  p {
+    color: #6c757d;
+    font-size: 1.15rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
 }
 
-// Texto secundario blanco en modo oscuro solo para el encabezado de export-archive
-body.dark-mode .card.export-archive .page-header .text-muted,
-body.dark-mode .card.export-archive .page-header p.text-muted {
-  color: #fff !important;
-  opacity: 1 !important;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.22);
-  font-weight: 700;
-  font-size: 1.18rem;
-  letter-spacing: 0.01em;
+/* Variables para modo oscuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --user-card-bg: #23272f;
+    --user-card-text-color: #f1f1f1;
+    --user-border-color: #3b82f6;
+  }
+}
+
+/* Elimina cualquier sobrescritura fija para el encabezado en modo oscuro */
+body.dark-mode .export-archive .page-header h3,
+body.dark-mode .export-archive .page-header .fw-bold,
+body.dark-mode .export-archive .page-header p,
+body.dark-mode .export-archive .page-header .text-muted {
+  color: var(--user-card-text-color, #f1f1f1) !important;
+}
+
+/* Spinner */
+.text-center .fa-spinner {
+  color: #3b82f6;
+  margin-bottom: 0.5rem;
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  body.dark-mode .card.export-archive {
+    background-color: var(--user-card-bg) !important;
+    color: var(--user-card-text-color) !important;
+    box-shadow: 0 0 0 12px var(--user-border-color), 0 0 10px rgba(255, 255, 255, 0.06);
+
+    .card-header {
+      background: linear-gradient(90deg, #23272f 60%, var(--user-border-color) 100%);
+      color: #fff !important;
+    }
+
+    .card-body {
+      .table {
+        background-color: #23272f !important;
+        th, td {
+          color: #f1f1f1 !important;
+          border-color: #3b82f6 !important;
+        }
+        thead th {
+          background: linear-gradient(90deg, #23272f 80%, #3b82f6 100%) !important;
+          color: #fff !important;
+        }
+        tbody tr:hover {
+          background-color: #1e293b !important;
+        }
+      }
+    }
+  }
+
+  .form-label {
+    color: #f1f1f1 !important;
+  }
+
+  .form-select {
+    background-color: #23272f !important;
+    color: #f1f1f1 !important;
+    border: 2px solid #3b82f6 !important;
+  }
+  .form-select option {
+    background: #23272f !important;
+    color: #f1f1f1 !important;
+  }
+
+  .btn-color-action {
+    background: linear-gradient(90deg, #2563eb 60%, #16a34a 100%);
+    color: #fff !important;
+  }
+
+  .page-header p {
+    color: #ccc !important;
+  }
 }
