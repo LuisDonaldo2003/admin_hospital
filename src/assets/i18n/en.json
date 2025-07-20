@@ -27,6 +27,10 @@
   "SIDEBAR_USER_EDIT": "Edit User",
   "SIDEBAR_USER_DELETE": "Delete User",
 
+  "_organization_chart": "Organization chart section",
+  "SIDEBAR_ORGANIZATION_CHART": "Organization Chart",
+  "SIDEBAR_ORGANIZATION_CHART_LIST": "Organization Chart List",
+
   "_contracts": "Contracts section",
   "SIDEBAR_CONTRACT": "Contracts",
   "SIDEBAR_CONTRACT_LIST": "Contracts List",

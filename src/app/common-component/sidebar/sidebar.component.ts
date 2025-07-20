@@ -57,7 +57,7 @@ export class SidebarComponent implements OnDestroy {
       return;
     }
 
-    if (this.user.roles.includes("Super-Admin")) {
+    if (this.user.roles.includes("Director General")) {
       this.sidebarData = this.data.sideBar;
     } else {
       let permissions = this.user.permissions;

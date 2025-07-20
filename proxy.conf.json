@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "http://sismeg.com",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

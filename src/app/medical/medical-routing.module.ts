@@ -39,6 +39,12 @@ const routes: Routes = [
         loadChildren: () => 
           import('./archive/archive.module').then(m => m.ArchiveModule)
       },
+      {
+        path: 'organization-chart',
+        loadChildren: () => 
+          import('./organization-chart/organization-chart.module').then(m => m.OrganizationChartModule)
+      },
+
 
     ]
   }

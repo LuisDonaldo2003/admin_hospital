@@ -28,6 +28,10 @@
   "SIDEBAR_USER_EDIT": "Editar Usuario",
   "SIDEBAR_USER_DELETE": "Eliminar Usuario",
 
+  "_organization_chart": "Apartado de organigrama",
+  "SIDEBAR_ORGANIZATION_CHART": "Organigrama",
+  "SIDEBAR_ORGANIZATION_CHART_LIST": "Lista de Organigrama",
+
   "_contratos": "Apartado de contratos",
   "SIDEBAR_CONTRACT": "Contratos",
   "SIDEBAR_CONTRACT_LIST": "Lista de Contratos",

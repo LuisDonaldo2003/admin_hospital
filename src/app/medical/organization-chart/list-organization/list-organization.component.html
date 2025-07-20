@@ -1,0 +1,85 @@
+<div class="page-wrapper">
+  <div class="content list-staff">
+    <!-- Encabezado -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item">Organigrama</li>
+            <li class="breadcrumb-item active">Usuarios por Rol</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="loading">Cargando...</div>
+    <div *ngIf="!loading">
+      <div class="org-chart">
+        <!-- Card para Director General y Subdirector General juntos -->
+        <div class="card mb-4 shadow border-0">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Dirección General</h5>
+          </div>
+          <div class="card-body">
+            <div class="users-row">
+              <ng-container *ngFor="let user of (rolesMap['Director General'] || [])">
+                <div class="user-card position-relative">
+                  <div class="avatar-wrapper">
+                    <img *ngIf="user.avatar" [src]="user.avatar" alt="avatar" class="avatar-large"/>
+                    <span 
+                      class="status-dot"
+                      [ngClass]="user.online === true ? 'online' : 'offline'"
+                      [title]="user.online === true ? 'Conectado' : 'Desconectado'"
+                    ></span>
+                  </div>
+                  <div class="user-name mt-3 fw-semibold">{{ user.name }} {{ user.surname }}</div>
+                  <div class="user-email text-muted small">{{ user.email }}</div>
+                </div>
+              </ng-container>
+              <ng-container *ngFor="let user of (rolesMap['Subdirector General'] || [])">
+                <div class="user-card position-relative">
+                  <div class="avatar-wrapper">
+                    <img *ngIf="user.avatar" [src]="user.avatar" alt="avatar" class="avatar-large"/>
+                    <span 
+                      class="status-dot"
+                      [ngClass]="user.online === true ? 'online' : 'offline'"
+                      [title]="user.online === true ? 'Conectado' : 'Desconectado'"
+                    ></span>
+                  </div>
+                  <div class="user-name mt-3 fw-semibold">{{ user.name }} {{ user.surname }}</div>
+                  <div class="user-email text-muted small">{{ user.email }}</div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <!-- Cards para el resto de roles -->
+        <ng-container *ngFor="let role of (rolesMap | keyvalue)">
+          <ng-container *ngIf="role.key !== 'Director General' && role.key !== 'Subdirector General'">
+            <div class="card mb-4 shadow border-0">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">{{ role.key }}</h5>
+              </div>
+              <div class="card-body">
+                <div class="users-row">
+                  <div *ngFor="let user of role.value" class="user-card position-relative">
+                    <div class="avatar-wrapper">
+                      <img *ngIf="user.avatar" [src]="user.avatar" alt="avatar" class="avatar-large"/>
+                      <span 
+                        class="status-dot"
+                        [ngClass]="user.online === true ? 'online' : 'offline'"
+                        [title]="user.online === true ? 'Conectado' : 'Desconectado'"
+                      ></span>
+                    </div>
+                    <div class="user-name mt-3 fw-semibold">{{ user.name }} {{ user.surname }}</div>
+                    <div class="user-email text-muted small">{{ user.email }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

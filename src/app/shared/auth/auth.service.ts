@@ -13,7 +13,6 @@ export class AuthService {
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
 
-  user: any;
   token: any;
 
   constructor(private router: Router, public http: HttpClient) {
@@ -23,11 +22,9 @@ export class AuthService {
   getLocalStorage() {
     if (localStorage.getItem("token") && localStorage.getItem("user")) {
       let USER = localStorage.getItem('user');
-      this.user = JSON.parse(USER ? USER : '');
       this.token = localStorage.getItem("token");
-      this.userSubject.next(this.user);
+      this.userSubject.next(JSON.parse(USER ? USER : ''));
     } else {
-      this.user = null;
       this.token = null;
       this.userSubject.next(null);
     }
@@ -67,12 +64,31 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    localStorage.removeItem('authenticated');
-    this.userSubject.next(null);
-    this.router.navigate([routes.login]).then(() => {
-      window.location.reload();
+    // Llama al backend para eliminar el estado online
+    this.http.post('/api/auth/logout', {}).subscribe({
+      next: () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem('authenticated');
+        this.userSubject.next(null);
+        this.router.navigate([routes.login]).then(() => {
+          window.location.reload();
+        });
+      },
+      error: () => {
+        // Incluso si falla, limpia localStorage
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem('authenticated');
+        this.userSubject.next(null);
+        this.router.navigate([routes.login]).then(() => {
+          window.location.reload();
+        });
+      }
     });
+  }
+
+  public get user(): any {
+    return JSON.parse(localStorage.getItem('user') || 'null');
   }
 }

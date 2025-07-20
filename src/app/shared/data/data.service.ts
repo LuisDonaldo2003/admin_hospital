@@ -322,6 +322,24 @@ export class DataService {
           ],
         },
         {
+          menuValue: 'SIDEBAR_ORGANIZATION_CHART',
+          group: 'GRUPO_ADMINISTRADOR',
+          hasSubRoute: true,
+          showSubRoute: false,
+          base: 'staffs',
+          icon: 'fas fa-users',
+          faIcon: true,
+          subMenus: [
+            {
+              menuValue: 'SIDEBAR_ORGANIZATION_CHART_LIST',
+              route: routes.listOrganization,
+              base: routes.listOrganization,
+              permision: 'list_organization',
+              show_nav: true,
+            },
+          ],
+        },
+        {
           menuValue: 'SIDEBAR_CONTRACT',
           group: 'GRUPO_RH',
           hasSubRoute: true,

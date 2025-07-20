@@ -368,6 +368,11 @@ export class routes {
     return this.baseUrl + '/staffs/add-staff';
   }
 
+   //Organigrama
+  public static get listOrganization(): string {
+    return this.baseUrl + '/organization-chart/list-organization';
+  }
+
   //Contract
   public static get addContract(): string {
     return this.baseUrl + '/contract-types/add_contract';

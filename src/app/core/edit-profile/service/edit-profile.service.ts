@@ -37,4 +37,8 @@ export class EditProfileService {
     });
     return this.http.get(`${URL_SERVICIOS}/staffs/config`, { headers });
   }
+
+  updateAvatar(userId: string, formData: FormData) {
+    return this.http.post(`/api/profile/avatar/${userId}`, formData);
+  }
 }

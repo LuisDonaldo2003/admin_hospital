@@ -22,6 +22,8 @@ export class EditProfileComponent implements OnInit {
   userId: string = '';
   loading = true;
   avatarLoaded = false;
+  avatarFile: File | null = null;
+  avatarPreview: string | null = null;
 
   constructor(private editProfileService: EditProfileService) {}
 
@@ -30,11 +32,13 @@ export class EditProfileComponent implements OnInit {
       next: (resp: any) => {
         this.profileData = resp.user;
         this.userId = resp.user.id;
+        // Normaliza el avatar: si es vacío, null o "null", ponlo en null
+        if (!this.profileData.avatar || this.profileData.avatar === '' || this.profileData.avatar === 'null') {
+          this.profileData.avatar = null;
+        }
         this.loading = false;
-        console.log('🚀 Datos cargados directamente:', this.profileData);
       },
       error: err => {
-        console.error('Error al obtener usuario autenticado:', err);
         this.loading = false;
       }
     });
@@ -49,10 +53,40 @@ export class EditProfileComponent implements OnInit {
     });
   }
 
+  onAvatarChange(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.avatarFile = file;
+      const reader = new FileReader();
+      reader.onload = (e: any) => this.avatarPreview = e.target.result;
+      reader.readAsDataURL(file);
+    }
+  }
+
   save(): void {
     this.submitted = true;
-    console.log("💬 Enviando datos JSON:", this.profileData);
+    if (this.avatarFile) {
+      const formData = new FormData();
+      formData.append('avatar', this.avatarFile);
+      this.editProfileService.updateAvatar(this.userId, formData).subscribe({
+        next: (res: any) => {
+          this.avatarPreview = null; // Limpia la preview
+          this.profileData.avatar = res.data.avatar; // Usa la URL real
+          this.avatarFile = null;
+          this.saveProfile();
+        },
+        error: err => {
+          this.text_success = '';
+          this.text_validation = 'Error al actualizar el avatar.';
+          console.error(err);
+        }
+      });
+    } else {
+      this.saveProfile();
+    }
+  }
 
+  saveProfile(): void {
     this.editProfileService.updateProfile(this.userId, this.profileData).subscribe({
       next: res => {
         this.text_success = 'Perfil actualizado correctamente.';
