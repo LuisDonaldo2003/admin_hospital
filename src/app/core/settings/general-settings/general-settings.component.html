@@ -103,66 +103,70 @@
           </div>
           <div class="card-body">
             <form>
-              <div class="form-group mb-3">
-                <label for="borderColor" class="form-label fw-semibold mb-2">{{ 'SELECT_COLOR' | translate }}</label>
-                <div class="d-flex flex-wrap align-items-center gap-3 mt-1">
-                  <input
-                    type="color"
-                    id="borderColor"
-                    [(ngModel)]="borderColor"
-                    name="borderColor"
-                    class="form-control form-control-color"
-                    style="width: 60px; height: 60px; border-radius: 12px; border: none; box-shadow: 0 0 6px rgba(0,0,0,0.2);" />
-
-                  <button
-                    type="button"
-                    class="btn btn-color-action"
-                    [ngClass]="getBorderBtnClass(borderColor)"
-                    (click)="updateBorderColor()"
-                    style="border-radius: 8px; min-width: 160px; font-weight: 600;">
-                    {{ 'APPLY_COLOR' | translate }}
-                  </button>
+              <div class="color-settings-group">
+                <div class="color-setting-block">
+                  <label for="borderColor" class="form-label fw-semibold mb-2">{{ 'SELECT_COLOR' | translate }}</label>
+                  <div class="color-setting-row">
+                    <span class="color-preview-circle" [style.background]="borderColor"></span>
+                    <input
+                      type="color"
+                      id="borderColor"
+                      [(ngModel)]="borderColor"
+                      name="borderColor"
+                      class="form-control form-control-color color-input-circle" />
+                    <button
+                      type="button"
+                      class="btn btn-color-action ms-2"
+                      [ngClass]="getBorderBtnClass(borderColor)"
+                      (click)="updateBorderColor()">
+                      {{ 'APPLY_COLOR' | translate }}
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <!-- Selector de color de fondo para modo claro -->
-              <div class="form-group mt-3" *ngIf="!isDarkMode">
-                <label for="cardBgColorLight" class="form-label fw-semibold mb-2">{{ 'CARD_BG_COLOR_LIGHT' | translate }}</label>
-                <div class="d-flex flex-wrap align-items-center gap-3 mt-1">
-                  <input
-                    type="color"
-                    id="cardBgColorLight"
-                    [(ngModel)]="cardBgColorLight"
-                    name="cardBgColorLight"
-                    class="form-control form-control-color"
-                    style="width: 60px; height: 60px; border-radius: 12px; border: none; box-shadow: 0 0 6px rgba(0,0,0,0.2);" />
-                  <button
-                    type="button"
-                    class="btn btn-color-action"
-                    [ngClass]="getBorderBtnClass(cardBgColorLight)"
-                    (click)="updateCardBgColorLight()"
-                    style="border-radius: 8px; min-width: 160px; font-weight: 600;">
-                    {{ 'APPLY_BG_LIGHT' | translate }}
-                  </button>
+                <div class="color-setting-block" *ngIf="!isDarkMode">
+                  <label for="cardBgColorLight" class="form-label fw-semibold mb-2">{{ 'CARD_BG_COLOR_LIGHT' | translate }}</label>
+                  <div class="color-setting-row">
+                    <span class="color-preview-circle" [style.background]="cardBgColorLight"></span>
+                    <input
+                      type="color"
+                      id="cardBgColorLight"
+                      [(ngModel)]="cardBgColorLight"
+                      name="cardBgColorLight"
+                      class="form-control form-control-color color-input-circle" />
+                    <button
+                      type="button"
+                      class="btn btn-color-action ms-2"
+                      [ngClass]="getBorderBtnClass(cardBgColorLight)"
+                      (click)="updateCardBgColorLight()">
+                      {{ 'APPLY_BG_LIGHT' | translate }}
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <!-- Selector de color de fondo para modo oscuro -->
-              <div class="form-group mt-3" *ngIf="isDarkMode">
-                <label for="cardBgColorDark" class="form-label fw-semibold mb-2">{{ 'CARD_BG_COLOR_DARK' | translate }}</label>
-                <div class="d-flex flex-wrap align-items-center gap-3 mt-1">
-                  <input
-                    type="color"
-                    id="cardBgColorDark"
-                    [(ngModel)]="cardBgColorDark"
-                    name="cardBgColorDark"
-                    class="form-control form-control-color"
-                    style="width: 60px; height: 60px; border-radius: 12px; border: none; box-shadow: 0 0 6px rgba(0,0,0,0.2);" />
+                <div class="color-setting-block" *ngIf="isDarkMode">
+                  <label for="cardBgColorDark" class="form-label fw-semibold mb-2">{{ 'CARD_BG_COLOR_DARK' | translate }}</label>
+                  <div class="color-setting-row">
+                    <span class="color-preview-circle" [style.background]="cardBgColorDark"></span>
+                    <input
+                      type="color"
+                      id="cardBgColorDark"
+                      [(ngModel)]="cardBgColorDark"
+                      name="cardBgColorDark"
+                      class="form-control form-control-color color-input-circle" />
+                    <button
+                      type="button"
+                      class="btn btn-color-action ms-2"
+                      [ngClass]="getBorderBtnClass(cardBgColorDark)"
+                      (click)="updateCardBgColorDark()">
+                      {{ 'APPLY_BG_DARK' | translate }}
+                    </button>
+                  </div>
+                </div>
+                <div class="color-setting-row">
                   <button
                     type="button"
-                    class="btn btn-color-action"
-                    [ngClass]="getBorderBtnClass(cardBgColorDark)"
-                    (click)="updateCardBgColorDark()"
-                    style="border-radius: 8px; min-width: 160px; font-weight: 600;">
-                    {{ 'APPLY_BG_DARK' | translate }}
+                    class="btn btn-outline-danger ms-2"
+                    (click)="resetColorsToDefault()">
+                    Resetear colores por defecto
                   </button>
                 </div>
               </div>

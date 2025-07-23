@@ -19,6 +19,8 @@ export class HeaderComponent {
   public addClass = false;
   public user: any;
   public profileData: any = {};
+  public avatarUrl: string = 'assets/img/user-06.jpg';
+  public avatarLoading: boolean = true;
   public roles: string[] = [];
   public selectedLang: string;
 
@@ -37,6 +39,13 @@ export class HeaderComponent {
     this.user = JSON.parse(USER ? USER : '');
     console.log(this.user);
 
+    // Carga el avatar desde localStorage si existe
+    const avatarLS = localStorage.getItem('avatarUrl_' + (this.user?.id || ''));
+    if (avatarLS) {
+      this.avatarUrl = avatarLS;
+      this.avatarLoading = false;
+    }
+
     // Inicializar idioma
     this.selectedLang = localStorage.getItem('language') || 'en';
     this.translate.use(this.selectedLang);
@@ -50,6 +59,14 @@ export class HeaderComponent {
     this.profileService.getProfile().subscribe((resp: any) => {
       this.profileData = resp.data;
       this.roles = resp.roles;
+      // Si el avatar existe y es diferente al actual, actualiza y guarda en localStorage
+      if (resp.data?.avatar) {
+        this.avatarUrl = resp.data.avatar;
+        localStorage.setItem('avatarUrl_' + (this.user?.id || ''), resp.data.avatar);
+      } else {
+        this.avatarUrl = 'assets/img/user-06.jpg';
+      }
+      this.avatarLoading = false;
     });
   }
 

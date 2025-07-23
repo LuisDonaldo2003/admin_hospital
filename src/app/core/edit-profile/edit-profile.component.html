@@ -1,5 +1,5 @@
 <div class="page-wrapper">
-  <div class="content add-staff-form">
+  <div class="content edit-profile-form">
     <div class="page-header mb-4">
       <div class="row">
         <div class="col-sm-12">
@@ -103,7 +103,17 @@
 
                 <div class="col-md-6">
                   <label class="form-label">Avatar</label>
-                  <input type="file" class="form-control" (change)="onAvatarChange($event)" accept="image/*" />
+                  <div class="avatar-upload-professional">
+                    <div class="avatar-preview-wrapper">
+                      <img [src]="avatarPreview || profileData.avatar || defaultAvatar" alt="Avatar" class="avatar-preview-img"
+                           (error)="onAvatarImgError($event)" />
+                      <label class="avatar-upload-btn" for="avatarInput">
+                        <i class="fa fa-camera"></i>
+                        <input id="avatarInput" type="file" (change)="onAvatarChange($event)" accept="image/*" hidden />
+                      </label>
+                    </div>
+                    <div *ngIf="avatarFileName" class="avatar-filename mt-1">{{ avatarFileName }}</div>
+                  </div>
                 </div>
               </div>
 

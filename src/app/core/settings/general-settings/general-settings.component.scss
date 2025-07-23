@@ -1,23 +1,142 @@
-.settings-wrapper {
-  .form-group {
-    margin-bottom: 1.5rem;
-    label { display: block; margin-bottom: .5rem; }
-  }
+// --- NUEVO DISEÑO PROFESIONAL Y RESPONSIVO PARA BLOQUES DE COLOR ---
+.color-settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
 
-  .preview-card {
-    .card {
-      border: var(--card-border-width) solid var(--user-border-color);
-      padding: 1rem;
-      border-radius: 12px;
-      margin-top: 1rem;
-    }
-  }
+.color-setting-block {
+  background: #f4f7fa; // modo claro
+  border-radius: 18px;
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  margin-bottom: 0.8rem;
+  border: 2px solid var(--user-border-color, #e0e0e0);
+  transition: background 0.3s, border 0.3s;
+}
 
-  .logo-wrapper,
-  .avatar-img,
-  .user-img img,
-  .profile-avatar {
-    border: 3px solid var(--user-border-color, red) !important;
-    border-radius: 50%;
+// Aplica color de texto dinámico a todos los elementos internos
+.color-setting-block label,
+.color-setting-block label,
+.color-setting-block .block-title,
+.color-setting-block .block-desc,
+.color-setting-block,
+.color-setting-block * {
+  color: var(--user-card-text-color, #222) !important;
+  // Si el color de texto es blanco puro, agrega sombra para legibilidad
+  text-shadow: 0 1px 4px rgba(0,0,0,0.18);
+}
+.color-setting-block .block-title {
+  font-weight: 700;
+  font-size: 1.13rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.01em;
+}
+.color-setting-block .block-desc {
+  font-size: 0.98rem;
+  margin-bottom: 1.1rem;
+}
+
+.color-setting-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.color-preview-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2.5px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  margin-right: 0.7rem;
+  transition: border 0.2s, box-shadow 0.2s;
+  background: #fff;
+}
+
+.color-input-circle {
+  width: 54px !important;
+  height: 54px !important;
+  border-radius: 50% !important;
+  border: 2.5px solid #bdbdbd !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.13) !important;
+  padding: 0 !important;
+  background: #fff !important;
+  transition: border 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+.color-input-circle:focus,
+.color-input-circle:active {
+  border: 2.5px solid var(--user-border-color, #3b82f6) !important;
+  box-shadow: 0 0 0 4px rgba(59,130,246,0.13) !important;
+}
+
+// Botón siempre con contraste ideal
+.btn-color-action {
+  min-width: 150px;
+  font-weight: 700;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  font-size: 1.08rem;
+  padding: 0.6rem 1.5rem;
+  color: var(--user-btn-text-color, #fff) !important;
+  background: var(--user-btn-bg-color, #2563eb) !important;
+  border: 2px solid var(--user-border-color, #2563eb) !important;
+  display: inline-block;
+  line-height: 1.2;
+  vertical-align: middle;
+}
+.btn-color-action:hover, .btn-color-action:focus {
+  filter: brightness(0.92);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.13);
+  /* No cambia tamaño ni padding en hover/focus */
+}
+
+.color-setting-block label,
+.color-setting-block .block-title {
+  margin-bottom: 0.3rem;
+}
+
+// --- MODO OSCURO ---
+body.dark-mode .color-setting-block {
+  background: #232b32; // modo oscuro
+  box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+  border: 2px solid var(--user-border-color, #444);
+}
+body.dark-mode .color-setting-block label,
+body.dark-mode .color-setting-block .block-title,
+body.dark-mode .color-setting-block .block-desc,
+body.dark-mode .color-setting-block label {
+  color: #fff !important;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.25);
+}
+body.dark-mode .color-preview-circle {
+  border: 2.5px solid #444;
+  background: #23221c;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+body.dark-mode .color-input-circle {
+  background: #23221c !important;
+  border: 2.5px solid #888 !important;
+}
+body.dark-mode .color-input-circle:focus,
+body.dark-mode .color-input-circle:active {
+  border: 2.5px solid var(--user-border-color, #3b82f6) !important;
+  box-shadow: 0 0 0 4px rgba(59,130,246,0.22) !important;
+}
+
+// --- RESPONSIVE ---
+@media (max-width: 600px) {
+  .color-setting-block {
+    padding: 1rem 0.5rem 0.8rem 0.5rem;
+  }
+  .color-setting-row {
+    gap: 0.7rem;
+  }
+  .color-preview-circle, .color-input-circle {
+    width: 36px !important;
+    height: 36px !important;
   }
 }

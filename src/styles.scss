@@ -1,5 +1,38 @@
-// Custom Theming for Angular Material
+
 @use "@angular/material" as mat;
+// ====================
+//  INPUTS/SELECTS BLANCOS SOLO EN EDIT-PROFILE-FORM EN MODO OSCURO
+// ====================
+body.dark-mode .edit-profile-form input,
+body.dark-mode .edit-profile-form select,
+body.dark-mode .edit-profile-form textarea,
+body.dark-mode .edit-profile-form .form-control,
+body.dark-mode .edit-profile-form .form-select {
+  background-color: #fff !important;
+  color: #222 !important;
+  border: 1px solid #444 !important;
+  box-shadow: none !important;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+body.dark-mode .edit-profile-form input:focus,
+body.dark-mode .edit-profile-form select:focus,
+body.dark-mode .edit-profile-form textarea:focus,
+body.dark-mode .edit-profile-form .form-control:focus,
+body.dark-mode .edit-profile-form .form-select:focus {
+  border: 1px solid #888 !important;
+  box-shadow: none !important;
+  outline: none;
+}
+body.dark-mode .edit-profile-form .form-select option {
+  color: #222 !important;
+  background-color: #fff !important;
+}
+body.dark-mode .edit-profile-form .form-control::placeholder,
+body.dark-mode .edit-profile-form input::placeholder,
+body.dark-mode .edit-profile-form textarea::placeholder {
+  color: #888 !important;
+  opacity: 1 !important;
+}
 
 @include mat.elevation-classes();
 @include mat.app-background();

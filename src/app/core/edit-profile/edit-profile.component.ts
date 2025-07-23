@@ -11,6 +11,11 @@ import { EditProfileService } from './service/edit-profile.service';
   styleUrls: ['./edit-profile.component.scss']
 })
 export class EditProfileComponent implements OnInit {
+  defaultAvatar: string = 'assets/img/profile-user-01.jpg';
+  onAvatarImgError(event: any): void {
+    event.target.src = this.defaultAvatar;
+  }
+  avatarFileName: string = '';
   profileData: any = {};
   departamentos: any[] = [];
   perfiles: any[] = [];
@@ -57,9 +62,12 @@ export class EditProfileComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       this.avatarFile = file;
+      this.avatarFileName = file.name;
       const reader = new FileReader();
       reader.onload = (e: any) => this.avatarPreview = e.target.result;
       reader.readAsDataURL(file);
+    } else {
+      this.avatarFileName = '';
     }
   }
 

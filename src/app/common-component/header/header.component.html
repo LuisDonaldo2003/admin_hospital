@@ -30,11 +30,14 @@
                 <span>{{getRole()}}</span>
             </div>
             <img 
-            class="rounded-circle avatar-img"
-            width="60" height="60"
-            [src]="profileData?.avatar || 'assets/img/user-06.jpg'" 
-            alt="Admin"
-          />
+              class="rounded-circle avatar-img"
+              width="60" height="60"
+              [src]="avatarUrl"
+              alt="Admin"
+              (load)="avatarLoading = false"
+              (error)="avatarLoading = false"
+            />
+            <span *ngIf="avatarLoading" class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
 
         </a>
         <div class="dropdown-menu">
