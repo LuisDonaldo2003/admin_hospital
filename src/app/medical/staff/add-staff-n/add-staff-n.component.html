@@ -4,8 +4,8 @@
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item"><a href="#">{{ 'USERS' | translate }} ></a></li>
-            <li class="breadcrumb-item active">{{ 'ADD_STAFF' | translate }}</li>
+            <li class="breadcrumb-item"><a href="#">{{ 'ADD_STAFF.BREADCRUMB_USERS' | translate }} ></a></li>
+            <li class="breadcrumb-item active">{{ 'ADD_STAFF.BREADCRUMB_ADD_STAFF' | translate }}</li>
           </ol>
         </div>
       </div>
@@ -15,45 +15,45 @@
       <div class="col-lg-10 col-xl-8">
         <div class="card card-form shadow border-0">
           <div class="card-body px-5 py-4">
-            <h3 class="text-center mb-4 fw-bold">{{ 'USER_REGISTRATION' | translate }}</h3>
+            <h3 class="text-center mb-4 fw-bold">{{ 'ADD_STAFF.TITLE' | translate }}</h3>
 
             <form>
               <div class="row g-3">
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'FIRST_NAME' | translate }} *</label>
+                  <label class="form-label">{{ 'ADD_STAFF.FIRST_NAME' | translate }} *</label>
                   <input type="text" class="form-control" [(ngModel)]="name" name="name" required
                          [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'SURNAME' | translate }} *</label>
+                  <label class="form-label">{{ 'ADD_STAFF.SURNAME' | translate }} *</label>
                   <input type="text" class="form-control" [(ngModel)]="surname" name="surname" required
                          [ngClass]="{ 'is-invalid': submitted && !surname.trim() }" />
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'EMAIL' | translate }} *</label>
+                  <label class="form-label">{{ 'ADD_STAFF.EMAIL' | translate }} *</label>
                   <input type="email" class="form-control" [(ngModel)]="email" name="email" required
                          [ngClass]="{ 'is-invalid': submitted && !email.trim() }" />
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'ROLE_SELECT' | translate }} *</label>
+                  <label class="form-label">{{ 'ADD_STAFF.ROLE_SELECT' | translate }} *</label>
                   <select class="form-control" [(ngModel)]="selectedValue" name="role" required
                           [ngClass]="{ 'is-invalid': submitted && !selectedValue }">
-                    <option value="" disabled selected>{{ 'SELECT_ROLE_PLACEHOLDER' | translate }}</option>
+                    <option value="" disabled selected>{{ 'ADD_STAFF.SELECT_ROLE_PLACEHOLDER' | translate }}</option>
                     <option *ngFor="let data of roles" [value]="data.id">{{ data.name }}</option>
                   </select>
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'PASSWORD' | translate }} *</label>
+                  <label class="form-label">{{ 'ADD_STAFF.PASSWORD' | translate }} *</label>
                   <input type="password" class="form-control" [(ngModel)]="password" name="password" required
                          [ngClass]="{ 'is-invalid': submitted && !password.trim() }" />
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'CONFIRM_PASSWORD' | translate }} *</label>
+                  <label class="form-label">{{ 'ADD_STAFF.CONFIRM_PASSWORD' | translate }} *</label>
                   <input type="password" class="form-control" [(ngModel)]="password_confirmation" name="password_confirmation" required
                          [ngClass]="{ 'is-invalid': submitted && !password_confirmation.trim() }" />
                 </div>
@@ -61,20 +61,20 @@
 
               <div class="mt-4" *ngIf="text_validation">
                 <div class="alert alert-warning alert-dismissible fade show">
-                  <strong>{{ 'WARNING' | translate }}:</strong> {{ text_validation }}
+                  <strong>{{ 'ADD_STAFF.WARNING' | translate }}:</strong> {{ text_validation }}
                   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
               </div>
 
               <div class="mt-4" *ngIf="text_success">
                 <div class="alert alert-success alert-dismissible fade show">
-                  <strong>{{ 'SUCCESS' | translate }}:</strong> {{ text_success }}
+                  <strong>{{ 'ADD_STAFF.SUCCESS' | translate }}:</strong> {{ text_success }}
                   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
               </div>
 
               <div class="text-end mt-4">
-                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'SAVE' | translate }}</button>
+                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'ADD_STAFF.SAVE' | translate }}</button>
               </div>
             </form>
           </div>

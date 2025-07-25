@@ -5,20 +5,20 @@
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item">Organigrama</li>
-            <li class="breadcrumb-item active">Usuarios por Rol</li>
+            <li class="breadcrumb-item">{{ 'ORGANIZATION.BREADCRUMB' | translate }} > </li>
+            <li class="breadcrumb-item active">{{ 'ORGANIZATION.BREADCRUMB_USERS_BY_ROLE' | translate }}</li>
           </ol>
         </div>
       </div>
     </div>
 
-    <div *ngIf="loading" class="loading">Cargando...</div>
+    <div *ngIf="loading" class="loading">{{ 'ORGANIZATION.LOADING' | translate }}</div>
     <div *ngIf="!loading">
       <div class="org-chart">
         <!-- Card para Director General y Subdirector General juntos -->
         <div class="card mb-4 shadow border-0">
           <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Dirección General</h5>
+            <h5 class="mb-0">{{ 'ORGANIZATION.DIRECTION' | translate }}</h5>
           </div>
           <div class="card-body">
             <div class="users-row">
@@ -29,7 +29,7 @@
                     <span 
                       class="status-dot"
                       [ngClass]="user.online === true ? 'online' : 'offline'"
-                      [title]="user.online === true ? 'Conectado' : 'Desconectado'"
+                      [title]="user.online === true ? ('ORGANIZATION.ONLINE' | translate) : ('ORGANIZATION.OFFLINE' | translate)"
                     ></span>
                   </div>
                   <div class="user-name mt-3 fw-semibold">{{ user.name }} {{ user.surname }}</div>
@@ -43,7 +43,7 @@
                     <span 
                       class="status-dot"
                       [ngClass]="user.online === true ? 'online' : 'offline'"
-                      [title]="user.online === true ? 'Conectado' : 'Desconectado'"
+                      [title]="user.online === true ? ('ORGANIZATION.ONLINE' | translate) : ('ORGANIZATION.OFFLINE' | translate)"
                     ></span>
                   </div>
                   <div class="user-name mt-3 fw-semibold">{{ user.name }} {{ user.surname }}</div>

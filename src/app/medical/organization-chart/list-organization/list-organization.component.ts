@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { OrganizationService, OrganizationUser } from '../service/organization.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 import { interval, Subscription } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-list-organization',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './list-organization.component.html',
   styleUrls: ['./list-organization.component.scss']
 })
@@ -16,11 +17,21 @@ export class ListOrganizationComponent implements OnInit, OnDestroy {
   loading = true;
   rolesMap: { [role: string]: OrganizationUser[] } = {};
   private pollingSubscription: Subscription | undefined;
+  public selectedLang: string;
 
   constructor(
     private organizationService: OrganizationService,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private translate: TranslateService
+  ) {
+    this.selectedLang = localStorage.getItem('language') || 'es';
+    this.translate.use(this.selectedLang);
+  }
+  toggleLanguage(): void {
+    this.selectedLang = this.selectedLang === 'es' ? 'en' : 'es';
+    this.translate.use(this.selectedLang);
+    localStorage.setItem('language', this.selectedLang);
+  }
 
   ngOnInit(): void {
     this.loadUsers();

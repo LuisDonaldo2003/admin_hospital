@@ -6,8 +6,8 @@
     <div class="page-header mb-4">
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="fw-bold">{{ 'EXPORT_ARCHIVES_TITLE' | translate }} ></h3>
-          <p class="text-muted">{{ 'EXPORT_ARCHIVES_SUBTITLE' | translate }}</p>
+          <h3 class="fw-bold">{{ 'EXPORT_ARCHIVE.TITLE' | translate }} ></h3>
+          <p class="text-muted">{{ 'EXPORT_ARCHIVE.SUBTITLE' | translate }}</p>
         </div>
       </div>
     </div>
@@ -17,27 +17,27 @@
       <div class="row gy-3 align-items-end">
         <!-- Estado -->
         <div class="col-md-4">
-          <label class="form-label">{{ 'FILTER_BY_STATE' | translate }}</label>
+          <label class="form-label">{{ 'EXPORT_ARCHIVE.FILTER_BY_STATE' | translate }}</label>
           <select class="form-select" [(ngModel)]="selectedState" (change)="onStateChange()">
-            <option value="">{{ 'ALL_STATES' | translate }}</option>
+            <option value="">{{ 'EXPORT_ARCHIVE.ALL_STATES' | translate }}</option>
             <option *ngFor="let s of states" [value]="s.id">{{ s.name }}</option>
           </select>
         </div>
 
         <!-- Municipio -->
         <div class="col-md-4">
-          <label class="form-label">{{ 'FILTER_BY_MUNICIPALITY' | translate }}</label>
+          <label class="form-label">{{ 'EXPORT_ARCHIVE.FILTER_BY_MUNICIPALITY' | translate }}</label>
           <select class="form-select" [(ngModel)]="selectedMunicipality" (change)="onMunicipalityChange()">
-            <option value="">{{ 'ALL_MUNICIPALITIES' | translate }}</option>
+            <option value="">{{ 'EXPORT_ARCHIVE.ALL_MUNICIPALITIES' | translate }}</option>
             <option *ngFor="let m of municipalities" [value]="m.id">{{ m.name }}</option>
           </select>
         </div>
 
         <!-- Localidad -->
         <div class="col-md-4">
-          <label class="form-label">{{ 'FILTER_BY_LOCATION' | translate }}</label>
+          <label class="form-label">{{ 'EXPORT_ARCHIVE.FILTER_BY_LOCATION' | translate }}</label>
           <select class="form-select" [(ngModel)]="selectedLocation">
-            <option value="">{{ 'ALL_LOCATIONS' | translate }}</option>
+            <option value="">{{ 'EXPORT_ARCHIVE.ALL_LOCATIONS' | translate }}</option>
             <option *ngFor="let l of locations" [value]="l.id">{{ l.name }}</option>
           </select>
         </div>
@@ -47,19 +47,19 @@
     <!-- Cargando -->
     <div *ngIf="loading" class="text-center my-4">
       <i class="fa fa-spinner fa-spin fa-2x text-primary"></i>
-      <p class="mt-2">{{ 'LOADING_DATA' | translate }}</p>
+      <p class="mt-2">{{ 'EXPORT_ARCHIVE.LOADING_DATA' | translate }}</p>
     </div>
 
     <!-- Tabla previa -->
     <div class="card shadow-sm border-0 mb-4 p-4 border-colored" *ngIf="!loading">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">{{ 'PREVIEW_EXPORT' | translate }}</h5>
+        <h5 class="mb-0">{{ 'EXPORT_ARCHIVE.PREVIEW_EXPORT' | translate }}</h5>
         <div class="d-flex gap-2">
           <button class="btn btn-color-action" (click)="exportToExcel()">
-            <i class="fa fa-file-excel me-2"></i> {{ 'EXPORT_EXCEL' | translate }}
+            <i class="fa fa-file-excel me-2"></i> {{ 'EXPORT_ARCHIVE.EXPORT_EXCEL' | translate }}
           </button>
           <button class="btn btn-color-action" (click)="exportToPDF()">
-            <i class="fa fa-file-pdf me-2"></i> {{ 'EXPORT_PDF' | translate }}
+            <i class="fa fa-file-pdf me-2"></i> {{ 'EXPORT_ARCHIVE.EXPORT_PDF' | translate }}
           </button>
         </div>
       </div>
@@ -69,12 +69,12 @@
           <thead class="table-light">
             <tr>
               <th>#</th>
-              <th>{{ 'NAME' | translate }}</th>
-              <th>{{ 'AGE' | translate }}</th>
-              <th>{{ 'GENDER' | translate }}</th>
-              <th>{{ 'ADDRESS' | translate }}</th>
-              <th>{{ 'LOCATION' | translate }}</th>
-              <th>{{ 'STATE' | translate }}</th>
+              <th>{{ 'EXPORT_ARCHIVE.NAME' | translate }}</th>
+              <th>{{ 'EXPORT_ARCHIVE.AGE' | translate }}</th>
+              <th>{{ 'EXPORT_ARCHIVE.GENDER' | translate }}</th>
+              <th>{{ 'EXPORT_ARCHIVE.ADDRESS' | translate }}</th>
+              <th>{{ 'EXPORT_ARCHIVE.LOCATION' | translate }}</th>
+              <th>{{ 'EXPORT_ARCHIVE.STATE' | translate }}</th>
             </tr>
           </thead>
           <tbody>
@@ -89,7 +89,7 @@
             </tr>
             <tr *ngIf="filteredArchives().length === 0">
               <td colspan="7" class="text-center text-muted py-3">
-                {{ 'NO_DATA_AVAILABLE' | translate }}
+                {{ 'EXPORT_ARCHIVE.NO_DATA_AVAILABLE' | translate }}
               </td>
             </tr>
           </tbody>
