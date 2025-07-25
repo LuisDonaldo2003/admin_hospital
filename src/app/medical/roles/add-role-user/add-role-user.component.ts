@@ -24,15 +24,41 @@ export class AddRoleUserComponent implements OnInit {
   public selectedLang: string;
 
 
+
   constructor(
     public DataService: DataService,
     public RoleService: RolesService,
     private translate: TranslateService
-
   ) {
     // Establece el idioma inicial
     this.selectedLang = localStorage.getItem('language') || 'en';
     this.translate.use(this.selectedLang);
+  }
+
+  getRoleLabel(roleKey: string): string {
+    // Si la clave es tipo SIDEBAR_ROLE2, SIDEBAR_ROLE3, etc.
+    const match = roleKey.match(/^(SIDEBAR_\w+?)(\d+)$/);
+    if (match) {
+      const baseKey = match[1];
+      const number = match[2];
+      const baseTranslation = this.translate.instant(baseKey);
+      if (baseTranslation !== baseKey) {
+        return `${baseTranslation} ${number}`;
+      }
+      // Si no hay traducción, formatea el texto
+      let label = baseKey.replace(/^SIDEBAR_/, '').replace(/_/g, ' ');
+      label = label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
+      return `${label} ${number}`;
+    }
+    // Traducción normal
+    const translation = this.translate.instant(roleKey);
+    if (translation !== roleKey) {
+      return translation;
+    }
+    // Si no hay traducción, formatea el texto
+    let label = roleKey.replace(/^SIDEBAR_/, '').replace(/_/g, ' ');
+    label = label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
+    return label;
   }
 
   ngOnInit(): void {

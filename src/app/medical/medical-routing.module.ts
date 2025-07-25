@@ -44,6 +44,11 @@ const routes: Routes = [
         loadChildren: () => 
           import('./organization-chart/organization-chart.module').then(m => m.OrganizationChartModule)
       },
+       {
+        path: 'pharmacy',
+        loadChildren: () => 
+          import('./pharmacy/pharmacy.module').then(m => m.PharmacyModule)
+      },
 
 
     ]

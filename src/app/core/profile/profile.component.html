@@ -5,17 +5,17 @@
       <div class="col-sm-7 col-6">
         <ul class="breadcrumb">
           <li class="breadcrumb-item">
-            <a [routerLink]="routes.adminDashboard">{{ 'DASHBOARD' | translate }}</a>
+            <a [routerLink]="routes.adminDashboard">{{ 'DASHBOARD' | translate }} ></a>
           </li>
           <li class="breadcrumb-item">
             <i class="feather icon-chevron-right"></i>
           </li>
-          <li class="breadcrumb-item active">{{ 'PROFILES' | translate }}</li>
+          <li class="breadcrumb-item active">{{ 'PROFILE.PROFILES' | translate }}</li>
         </ul>
       </div>
       <div class="col-sm-5 col-6 text-end mb-3">
         <a [routerLink]="routes.editProfile" class="btn btn-primary btn-rounded">
-          <i class="fa fa-pencil"></i> {{ 'EDIT_PROFILE' | translate }}
+          <i class="fa fa-pencil"></i> {{ 'PROFILE.EDIT_PROFILE' | translate }}
         </a>
       </div>
     </div>
@@ -34,32 +34,32 @@
 
     <!-- Datos Básicos -->
     <div class="card-box mt-4">
-      <h4 class="card-title">{{ 'BASIC_DATES' | translate }}</h4>
+      <h4 class="card-title">{{ 'PROFILE.BASIC_DATES' | translate }}</h4>
       <ul class="list-unstyled lh-lg">
-        <li><strong>{{ 'EMAIL' | translate }}:</strong> {{ profileData?.email }}</li>
-        <li *ngIf="profileData?.mobile"><strong>{{ 'PHONE' | translate }}:</strong> {{ profileData.mobile }}</li>
-        <li *ngIf="profileData?.birth_date"><strong>{{ 'BIRTHDAY' | translate }}:</strong> {{ profileData.birth_date }}</li>
+        <li><strong>{{ 'PROFILE.EMAIL' | translate }}:</strong> {{ profileData?.email }}</li>
+        <li *ngIf="profileData?.mobile"><strong>{{ 'PROFILE.PHONE' | translate }}:</strong> {{ profileData.mobile }}</li>
+        <li *ngIf="profileData?.birth_date"><strong>{{ 'PROFILE.BIRTHDAY' | translate }}:</strong> {{ profileData.birth_date }}</li>
         <li *ngIf="profileData?.gender !== undefined">
-          <strong>{{ 'GENDER' | translate }}:</strong> {{ profileData.gender === 1 ? 'Masculino' : 'Femenino' }}
+          <strong>{{ 'PROFILE.GENDER' | translate }}:</strong> {{ profileData.gender === 1 ? 'Masculino' : 'Femenino' }}
         </li>
-        <li><strong>{{ 'ROLES' | translate }}:</strong> {{ roles[0] }}</li>
-        <li><strong>{{ 'ID_USER' | translate }}:</strong> {{ profileData?.id }}</li>
+        <li><strong>{{ 'PROFILE.ROLES' | translate }}:</strong> {{ roles[0] }}</li>
+        <li><strong>{{ 'PROFILE.ID_USER' | translate }}:</strong> {{ profileData?.id }}</li>
       </ul>
     </div>
 
     <!-- Información Profesional -->
     <div class="card-box mt-4">
-      <h4 class="card-title">{{ 'INFORMATION_PROFESSIONAL' | translate }}</h4>
+      <h4 class="card-title">{{ 'PROFILE.INFORMATION_PROFESSIONAL' | translate }}</h4>
       <ul class="list-unstyled lh-lg">
         <li *ngIf="profileData?.curp"><strong>CURP:</strong> {{ profileData.curp }}</li>
         <li *ngIf="profileData?.rfc"><strong>RFC:</strong> {{ profileData.rfc }}</li>
         <li *ngIf="profileData?.ine"><strong>INE:</strong> {{ profileData.ine }}</li>
-        <li *ngIf="profileData?.attendance_number"><strong>{{ 'ASSISTANCE' | translate }}:</strong> {{ profileData.attendance_number }}</li>
-        <li *ngIf="profileData?.professional_license"><strong>{{ 'PROFESSIONAL_LICENSE' | translate }}:</strong> {{ profileData.professional_license }}</li>
-        <li *ngIf="profileData?.funcion_real"><strong>{{ 'FUNCTION_REAL' | translate }}:</strong> {{ profileData.funcion_real }}</li>
-        <li *ngIf="profileData?.departament"><strong>{{ 'DEPARTAMENT' | translate }}:</strong> {{ profileData.departament }}</li>
-        <li *ngIf="profileData?.profile_relation"><strong>{{ 'RELATION_PROFILE' | translate }}:</strong> {{ profileData.profile_relation }}</li>
-        <li *ngIf="profileData?.contract_type"><strong>{{ 'CONTRACT_TYPE' | translate }}:</strong> {{ profileData.contract_type }}</li>
+        <li *ngIf="profileData?.attendance_number"><strong>{{ 'PROFILE.ASSISTANCE' | translate }}:</strong> {{ profileData.attendance_number }}</li>
+        <li *ngIf="profileData?.professional_license"><strong>{{ 'PROFILE.PROFESSIONAL_LICENSE' | translate }}:</strong> {{ profileData.professional_license }}</li>
+        <li *ngIf="profileData?.funcion_real"><strong>{{ 'PROFILE.FUNCTION_REAL' | translate }}:</strong> {{ profileData.funcion_real }}</li>
+        <li *ngIf="profileData?.departament"><strong>{{ 'PROFILE.DEPARTAMENT' | translate }}:</strong> {{ profileData.departament }}</li>
+        <li *ngIf="profileData?.profile_relation"><strong>{{ 'PROFILE.RELATION_PROFILE' | translate }}:</strong> {{ profileData.profile_relation }}</li>
+        <li *ngIf="profileData?.contract_type"><strong>{{ 'PROFILE.CONTRACT_TYPE' | translate }}:</strong> {{ profileData.contract_type }}</li>
 
       </ul>
     </div>

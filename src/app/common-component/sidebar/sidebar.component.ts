@@ -25,6 +25,13 @@ export class SidebarComponent implements OnDestroy {
   public user: any;
   public isDarkMode: boolean = false;
   public groupedSidebarData: any[] = [];
+  public groupTitles: { [key: string]: string } = {
+    'GRUPO_ADMINISTRADOR': 'SIDEBAR_GROUP_ADMINISTRADOR',
+    'GRUPO_RH': 'SIDEBAR_GROUP_RH',
+    'GRUPO_ARCHIVO': 'SIDEBAR_GROUP_ARCHIVO',
+    'GRUPO_PHARMACY': 'SIDEBAR_GROUP_PHARMACY',
+    'GRUPO_TABLERO': 'SIDEBAR_GROUP_TABLERO'
+  };
 
   private userSubscription: Subscription;
 
@@ -99,7 +106,7 @@ export class SidebarComponent implements OnDestroy {
     });
 
     this.groupedSidebarData = Object.keys(groups).map(key => ({
-      group: key,
+      group: this.groupTitles[key] || key,
       menus: groups[key]
     }));
   }

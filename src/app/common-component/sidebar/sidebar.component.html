@@ -12,7 +12,7 @@
                 <span class="menu-side">
                   <i *ngIf="menu.faIcon && menu.icon" [ngClass]="menu.icon + ' sidebar-icon'"></i>
                 </span>
-                <span>{{ menu.menuValue | translate }}</span>
+                <span>{{ (menu.group + '.' + menu.menuValue) | translate }}</span>
               </a>
             </li>
             <li class="submenu" *ngIf="menu.hasSubRoute === true">
@@ -21,14 +21,14 @@
                 <span class="menu-side">
                   <i *ngIf="menu.faIcon && menu.icon" [ngClass]="menu.icon + ' sidebar-icon'"></i>
                 </span>
-                <span>{{ menu.menuValue | translate }}</span>
+                <span>{{ (menu.group + '.' + menu.menuValue) | translate }}</span>
                 <span class="menu-arrow"></span>
               </a>
               <ul>
                 <ng-container *ngFor="let subMenus of menu.subMenus">
                   <li [ngClass]="menu.showSubRoute === true ? 'd-block' : 'd-none'">
                     <a [routerLink]="subMenus.route" *ngIf="subMenus.show_nav" [class.active]="currentUrl === subMenus.base">
-                      {{ subMenus.menuValue | translate }}
+                      {{ (menu.group + '.' + subMenus.menuValue) | translate }}
                     </a>
                   </li>
                 </ng-container>

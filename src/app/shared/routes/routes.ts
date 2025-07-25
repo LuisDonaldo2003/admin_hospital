@@ -413,4 +413,12 @@ export class routes {
       return this.baseUrl + '/archives/export_archive';
     }
 
+    //Farmacia
+    public static get addAntibiotics(): string {
+      return this.baseUrl + '/pharmacy/add_antibiotics';
+    }
+    public static get antibioticsList(): string {
+      return this.baseUrl + '/pharmacy/list_antibiotics';
+    }
+
 }
