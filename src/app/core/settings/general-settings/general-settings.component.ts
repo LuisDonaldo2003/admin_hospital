@@ -29,10 +29,10 @@ interface data {
 export class GeneralSettingsComponent implements OnInit {
   public routes = routes;
   public isDarkMode = false;
-  // Valores por defecto recomendados
-  readonly DEFAULT_BORDER_COLOR = '#ff9800'; // Naranja suave para contorno
-  readonly DEFAULT_CARD_BG_LIGHT = '#f4f7fa'; // Gris azulado claro
-  readonly DEFAULT_CARD_BG_DARK = '#232b32';  // Gris azulado oscuro
+  // Valores por defecto para plataforma hospitalaria - Colores profesionales
+  readonly DEFAULT_BORDER_COLOR = '#0B7285'; // Azul médico profesional (teal oscuro)
+  readonly DEFAULT_CARD_BG_LIGHT = '#F8FFFE'; // Blanco hospitalario con tinte azul muy sutil
+  readonly DEFAULT_CARD_BG_DARK = '#1A2332';  // Azul marino oscuro profesional
 
   public borderColor: string = this.DEFAULT_BORDER_COLOR;
   public cardBgColorLight: string = this.DEFAULT_CARD_BG_LIGHT;
@@ -184,6 +184,24 @@ export class GeneralSettingsComponent implements OnInit {
     this.selectedLang = this.selectedLang === 'es' ? 'en' : 'es';
     this.translate.use(this.selectedLang);
     localStorage.setItem('language', this.selectedLang);
+  }
+
+  setLanguage(lang: string): void {
+    this.selectedLang = lang;
+    this.translate.use(this.selectedLang);
+    localStorage.setItem('language', this.selectedLang);
+  }
+
+  setTheme(isDark: boolean): void {
+    this.isDarkMode = isDark;
+    if (isDark) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+    this.dataService.toggleDarkMode();
+    localStorage.setItem('darkMode', String(this.isDarkMode));
+    this.applyTheme();
   }
 
   selectedList1: data[] = [

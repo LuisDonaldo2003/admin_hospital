@@ -95,25 +95,67 @@ body.dark-mode .card.card-list {
   .card-body {
     color: var(--user-card-text-color, #fff) !important;
 
-    h4, p, span, small, th, td, .pagination-info {
+    h4, p, span, small, .pagination-info {
       color: var(--user-card-text-color, #fff) !important;
     }
-  }
 
-  table {
-    background-color: #23221c !important;
-    border: 1px solid #444;
-    border-radius: 12px;
+    // FORZAR TABLA SIEMPRE BLANCA CON TEXTO NEGRO EN MODO OSCURO
+    table {
+      background-color: #fff !important;
+      border-color: var(--user-border-color, #ff4f4f) !important;
 
-    th, td {
-      border: 1px solid #555;
-      color: var(--user-card-text-color, #fff) !important;
-      text-align: center;
-      vertical-align: middle;
-    }
+      th, td {
+        background-color: #fff !important;
+        color: #000 !important; // NEGRO FORZADO
+      }
 
-    thead th {
-      background-color: #23221c;
+      thead th {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+        color: #000 !important; // NEGRO FORZADO
+      }
+
+      tbody tr {
+        background-color: #fff !important;
+
+        &:hover {
+          background-color: rgba(0, 123, 255, 0.05) !important;
+        }
+
+        td {
+          background-color: #fff !important;
+          color: #000 !important; // NEGRO FORZADO
+        }
+      }
+
+      // FORZAR ICONOS Y DROPDOWN NEGROS
+      .dropdown-toggle {
+        color: #000 !important; // ICONO NEGRO FORZADO
+        background: transparent !important;
+        border: none !important;
+        
+        &::after {
+          border-top-color: #000 !important;
+        }
+      }
+      
+      // Iconos de acciones en negro (tuerca, etc.)
+      .fa-cog,
+      .fa-cogs,
+      .fa-settings,
+      .fa-gear,
+      i[class*="fa-"] {
+        color: #000 !important; // ICONOS NEGROS FORZADOS
+      }
+
+      // Botones dentro de las celdas
+      .btn {
+        color: #000 !important;
+      }
+
+      // Links dentro de las celdas
+      a {
+        color: #000 !important;
+      }
     }
   }
 

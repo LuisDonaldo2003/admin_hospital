@@ -70,7 +70,34 @@
     "EDIT_PROFILE": "Editar Perfil",
     "LOGOUT": "Cerrar sesión"
   },
-  
+
+  "GENERAL_SETTINGS": {
+    "TITLE": "Configuración General",
+    "SUBTITLE": "Ajustes del sistema",
+    "RESET_DEFAULTS": "Restablecer",
+    "LANGUAGE": "Idioma",
+    "CHOOSE_PREFERRED_LANGUAGE": "Selecciona tu idioma preferido",
+    "ENGLISH": "Inglés",
+    "SPANISH": "Español",
+    "COLOR_MODE": "Esquema de Color",
+    "DESCRIPTION_MODE": "Cambia entre tema claro u oscuro de acuerdo a tu preferencia",
+    "DARK_MODE": "Modo Oscuro",
+    "DARK_MODE_DESC": "Un tema oscuro para reducir la fatiga visual",
+    "LIGHT_MODE": "Modo Claro",
+    "LIGHT_MODE_DESC": "Un tema claro para una apariencia más brillante",
+    "COLOR_CUSTOMIZATION": "Personalización de Color",
+    "CUSTOMIZE_THEME_COLORS": "Personaliza los colores del tema para adaptarlo a tu estilo",
+    "OUTLINE_COLOR": "Color de Contorno",
+    "CARD_BG_COLOR_LIGHT": "Color de Fondo de Tarjeta (Claro)",
+    "CARD_BG_COLOR_DARK": "Color de Fondo de Tarjeta (Oscuro)",
+    "PREVIEW": "Vista Previa",
+    "PREVIEW_CURRENT_SETTINGS": "Vista previa de la configuración actual",
+    "SAMPLE_CARD": "Tarjeta de Ejemplo",
+    "PREVIEW_TEXT": "Este es un texto de vista previa para mostrar cómo se verá el contenido con la configuración actual.",
+    "SAMPLE_BUTTON": "Botón de Ejemplo",
+    "APPLY": "Aplicar Cambios"
+  },
+
   "PROFILE": {
     "PROFILES": "Perfiles",
     "EDIT_PROFILE": "Editar Perfil",
@@ -421,7 +448,20 @@
     "SUBTITLE": "Aquí puedes ver y descargar los respaldos disponibles de los archivos de pacientes.",
     "AVAILABLE": "Respaldos disponibles",
     "DOWNLOAD": "Descargar",
-    "NO_BACKUPS_AVAILABLE": "No hay respaldos disponibles"
+    "NO_BACKUPS_AVAILABLE": "No hay respaldos disponibles",
+    "BREADCRUMB_TITLE": "Respaldos de Pacientes",
+    "SEARCH_PATIENT": "Buscar por nombre del paciente",
+    "SEARCH_TYPE": "Buscar por tipo",
+    "SEARCH_YEAR": "Buscar por año",
+    "SEARCH_ALL": "Todos",
+    "CLEAN": "Limpiar",
+    "ALL_RESPALDOS": "Todos los respaldos",
+    "PDF_FILES": "Archivos PDF",
+    "EXCEL_FILES": "Archivos Excel",
+    "FILTERED": "Filtrados",
+    "LOADING": "Cargando...",
+    "LOADING_ARCHIVE": "Cargando respaldos...",
+    "RESPALDOS": "respaldos"
   },
 
   "EDIT_PATIENT": {
@@ -490,6 +530,8 @@
   },
 
   "EXPORT_ARCHIVE": {
+    "PATIENT": "Pacientes",
+    "BREADCRUMB_LIST": "Exportar Pacientes",
     "TITLE": "Exportar Archivos de Pacientes",
     "SUBTITLE": "Filtra y exporta los archivos de pacientes por estado, municipio o localidad.",
     "FILTER_BY_STATE": "Filtrar por estado",
@@ -508,6 +550,15 @@
     "ADDRESS": "Dirección",
     "LOCATION": "Localidad",
     "STATE": "Estado",
-    "NO_DATA_AVAILABLE": "No hay datos disponibles"
+    "NO_DATA_AVAILABLE": "No hay datos disponibles",
+    "ARCHIVE_NUMBER": "Número de Archivo",
+    "TOTAL_RECORDS": "Total de Registros",
+    "MUNICIPALITY": "Municipio",
+    "ADMISSION_DATE": "Fecha de Ingreso",
+    "ALL_GENDERS": "Todos los géneros",
+    "ALL_YEARS": "Todos los años",
+    "ALL_MONTHS": "Todos los meses",
+    "CLEAR_FILTERS": "Limpiar filtros",
+    "FILTERS_APPLICATION": "Aplica filtros para ver los datos a exportar"
   }
 }

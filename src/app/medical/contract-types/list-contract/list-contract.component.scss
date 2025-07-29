@@ -193,6 +193,78 @@ body.dark-mode .btn-primary {
   }
 }
 
+// FORZAR TABLA CON FONDO BLANCO Y TEXTO NEGRO EN MODO OSCURO
+body.dark-mode {
+  .card.card-list {
+    background-color: var(--user-card-bg, #2a2a3a) !important;
+    border-color: var(--user-border-color, #ff4f4f) !important;
+
+    .card-body {
+      background-color: var(--user-card-bg, #2a2a3a) !important;
+      color: var(--user-card-text-color, #fff) !important;
+
+      // FORZAR TABLA SIEMPRE BLANCA CON TEXTO NEGRO EN MODO OSCURO
+      table {
+        background-color: #fff !important;
+        border-color: var(--user-border-color, #ff4f4f) !important;
+
+        th, td {
+          background-color: #fff !important;
+          color: #000 !important; // NEGRO FORZADO
+        }
+
+        thead th {
+          background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+          color: #000 !important; // NEGRO FORZADO
+        }
+
+        tbody tr {
+          background-color: #fff !important;
+
+          &:hover {
+            background-color: rgba(0, 123, 255, 0.05) !important;
+          }
+
+          td {
+            background-color: #fff !important;
+            color: #000 !important; // NEGRO FORZADO
+          }
+        }
+
+        // FORZAR ICONOS Y DROPDOWN NEGROS
+        .dropdown-toggle {
+          color: #000 !important; // ICONO NEGRO FORZADO
+          background: transparent !important;
+          border: none !important;
+          
+          &::after {
+            border-top-color: #000 !important;
+          }
+        }
+        
+        // Iconos de acciones en negro (tuerca, etc.)
+        .fa-cog,
+        .fa-cogs,
+        .fa-settings,
+        .fa-gear,
+        i[class*="fa-"] {
+          color: #000 !important; // ICONOS NEGROS FORZADOS
+        }
+
+        // Botones dentro de las celdas
+        .btn {
+          color: #000 !important;
+        }
+
+        // Links dentro de las celdas
+        a {
+          color: #000 !important;
+        }
+      }
+    }
+  }
+}
+
 .card.card-list table tbody tr:hover {
   background-color: #e0e7ff !important;
   transition: background 0.2s;

@@ -1,39 +1,218 @@
 <!-- backups-archive.component.html -->
 <div class="page-wrapper">
-  <div class="content export-archive">
+  <div class="content list-staff">
 
-    <!-- Encabezado -->
+    <!-- Encabezado simple sin tarjeta -->
     <div class="page-header mb-4">
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="fw-bold">{{ 'BACKUPS_ARCHIVE.TITLE' | translate }}</h3>
-          <p class="text-muted">{{ 'BACKUPS_ARCHIVE.SUBTITLE' | translate }}</p>
+          <h3 class="page-title">{{ 'BACKUPS_ARCHIVE.TITLE' | translate }}</h3>
+          <p class="page-subtitle">{{ 'BACKUPS_ARCHIVE.SUBTITLE' | translate }}</p>
         </div>
       </div>
     </div>
 
-    <!-- Lista de respaldos -->
-    <div class="card mt- mb-4 border-colored">
-      <div class="card-header bg-primary text-white d-flex align-items-center">
-        <i class="fa fa-database me-2"></i>
-        <span>{{ 'BACKUPS_ARCHIVE.AVAILABLE' | translate }}</span>
+    <!-- Controles de filtros -->
+    <div class="filters-container mb-4">
+      <div class="row g-3">
+        <!-- Búsqueda -->
+        <div class="col-lg-4 col-md-6">
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0">
+              <i class="fa fa-search text-muted"></i>
+            </span>
+            <input type="text" 
+                   class="form-control border-start-0 ps-0" 
+                   placeholder="{{ 'BACKUPS_ARCHIVE.SEARCH_PATIENT' | translate }}"
+                   [(ngModel)]="searchTerm"
+                   [disabled]="loading">
+          </div>
+        </div>
+
+        <!-- Filtro por tipo -->
+        <div class="col-lg-2 col-md-6">
+          <select class="form-select filter-select" 
+                  [(ngModel)]="selectedType"
+                  [disabled]="loading">
+            <option value="">{{ 'BACKUPS_ARCHIVE.SEARCH_TYPE' | translate }}</option>
+            <option *ngFor="let type of availableTypes" [value]="type">{{ type | uppercase }}</option>
+          </select>
+        </div>
+
+        <!-- Filtro por año -->
+        <div class="col-lg-2 col-md-6">
+          <select class="form-select filter-select" 
+                  [(ngModel)]="selectedYear"
+                  [disabled]="loading">
+            <option value="">{{ 'BACKUPS_ARCHIVE.SEARCH_YEAR' | translate }}</option>
+            <option *ngFor="let year of availableYears" [value]="year">{{ year }}</option>
+          </select>
+        </div>
+
+        <!-- Filtro por mes -->
+        <div class="col-lg-2 col-md-6">
+          <select class="form-select filter-select" 
+                  [(ngModel)]="selectedMonth"
+                  [disabled]="loading">
+            <option value="">{{ 'BACKUPS_ARCHIVE.SEARCH_ALL' | translate }}</option>
+            <option *ngFor="let month of availableMonths" [value]="month">{{ month | titlecase }}</option>
+          </select>
+        </div>
+
+        <!-- Botón limpiar filtros -->
+        <div class="col-lg-2 col-md-6">
+          <button class="btn btn-outline-secondary w-100" 
+                  (click)="clearFilters()"
+                  [disabled]="loading">
+            <i class="fa fa-refresh me-2"></i>
+            {{ 'BACKUPS_ARCHIVE.CLEAN' | translate }}
+          </button>
+        </div>
       </div>
-      <div class="card-body">
-        <ul class="list-group">
-          <li *ngFor="let backup of backups" class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-              <i class="fa fa-file-archive text-secondary me-2"></i>
-              <span class="fw-semibold backup-filename">{{ backup.filename }}</span>
-              <span class="badge bg-info text-dark ms-2 text-uppercase">{{ backup.type }}</span>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="stats-container mb-4" *ngIf="!loading">
+      <div class="row g-3">
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-card">
+            <div class="stat-icon bg-primary">
+              <i class="fa fa-database"></i>
             </div>
-            <button class="btn btn-success px-3" (click)="downloadBackup(backup.filename)">
-              <i class="fa fa-download me-1"></i> {{ 'BACKUPS_ARCHIVE.DOWNLOAD' | translate }}
-            </button>
-          </li>
-          <li *ngIf="backups.length === 0" class="list-group-item text-muted text-center">
-            <i class="fa fa-info-circle me-1"></i> {{ 'BACKUPS_ARCHIVE.NO_BACKUPS_AVAILABLE' | translate }}
-          </li>
-        </ul>
+            <div class="stat-content">
+              <h4>{{ backups.length }}</h4>
+              <p>{{ 'BACKUPS_ARCHIVE.ALL_RESPALDOS' | translate }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-card">
+            <div class="stat-icon bg-success">
+              <i class="fa fa-file-excel"></i>
+            </div>
+            <div class="stat-content">
+              <h4>{{ getExcelCount() }}</h4>
+              <p>{{ 'BACKUPS_ARCHIVE.EXCEL_FILES' | translate }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-card">
+            <div class="stat-icon bg-danger">
+              <i class="fa fa-file-pdf"></i>
+            </div>
+            <div class="stat-content">
+              <h4>{{ getPdfCount() }}</h4>
+              <p>{{ 'BACKUPS_ARCHIVE.PDF_FILES' | translate }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-card">
+            <div class="stat-icon bg-info">
+              <i class="fa fa-filter"></i>
+            </div>
+            <div class="stat-content">
+              <h4>{{ filteredBackups().length }}</h4>
+              <p>{{ 'BACKUPS_ARCHIVE.FILTERED' | translate }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cargando -->
+    <div *ngIf="loading" class="text-center my-5">
+      <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">{{ 'BACKUPS_ARCHIVE.LOADING' | translate }}</span>
+      </div>
+      <h5 class="text-muted">{{ 'BACKUPS_ARCHIVE.LOADING_ARCHIVE' | translate }}</h5>
+    </div>
+
+    <!-- Lista de respaldos mejorada -->
+    <div class="row" *ngIf="!loading">
+      <div class="col-sm-12">
+        <div class="card card-list border-colored shadow border-0">
+          <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-semibold mb-0 backup-header-text">
+                {{ 'BACKUPS_ARCHIVE.AVAILABLE' | translate }}
+              </h5>
+              <span class="badge bg-primary fs-6 backup-count-badge">
+                {{ filteredBackups().length }} de {{ backups.length }} {{ 'BACKUPS_ARCHIVE.RESPALDOS' | translate }}
+              </span>
+            </div>
+
+            <!-- Mensaje cuando no hay resultados -->
+            <div *ngIf="filteredBackups().length === 0" class="text-center py-5">
+              <i class="fa fa-database fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted">{{ 'BACKUPS_ARCHIVE.NO_BACKUPS_AVAILABLE' | translate }}</h5>
+              <p class="text-muted">No se encontraron respaldos con los filtros aplicados</p>
+            </div>
+
+            <!-- Grid de respaldos -->
+            <div class="row g-3" *ngIf="filteredBackups().length > 0">
+              <div class="col-lg-6 col-xl-4" *ngFor="let backup of filteredBackups()">
+                <div class="backup-card" 
+                     [class.backup-excel]="backup.type === 'xlsx' || backup.type === 'excel'"
+                     [class.backup-pdf]="backup.type === 'pdf'">
+                  
+                  <!-- Header de la tarjeta -->
+                  <div class="backup-card-header">
+                    <div class="backup-icon">
+                      <i class="fa {{ getBackupIcon(backup.type) }}"></i>
+                    </div>
+                    <div class="backup-type">
+                      <span class="badge badge-type" 
+                            [class.bg-success]="backup.type === 'xlsx' || backup.type === 'excel'"
+                            [class.bg-danger]="backup.type === 'pdf'">
+                        {{ backup.type | uppercase }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Contenido de la tarjeta -->
+                  <div class="backup-card-body">
+                    <h6 class="backup-filename">{{ backup.filename }}</h6>
+                    
+                    <div class="backup-info">
+                      <div class="backup-detail">
+                        <i class="fa fa-calendar"></i>
+                        <span>{{ getBackupDate(backup.filename) }}</span>
+                      </div>
+                      <div class="backup-detail">
+                        <i class="fa fa-hdd"></i>
+                        <span>{{ getFileSize(backup) }}</span>
+                      </div>
+                      <div class="backup-detail">
+                        <i class="fa fa-filter"></i>
+                        <span class="backup-filters">{{ getBackupDescription(backup.filename) }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Acciones de la tarjeta -->
+                  <div class="backup-card-actions">
+                    <button class="btn backup-btn-download" 
+                            (click)="downloadBackup(backup.filename)">
+                      <i class="fa fa-download"></i>
+                      {{ 'BACKUPS_ARCHIVE.DOWNLOAD' | translate }}
+                    </button>
+                    <!-- 
+                    <button class="btn backup-btn-delete" 
+                            (click)="deleteBackup(backup.filename)">
+                      <i class="fa fa-trash"></i>
+                      Eliminar
+                    </button>
+                    -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
 

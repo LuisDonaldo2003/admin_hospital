@@ -24,24 +24,89 @@ export class ArchiveService {
   }
 
   listArchivesWithFilters(filters: any, skip: number, limit: number) {
-  const queryParams = new URLSearchParams();
+    const queryParams = new URLSearchParams();
 
-  if (filters.archiveNumberSearch) queryParams.append('archive_number', filters.archiveNumberSearch);
-  
-  const name = (filters.nameSearch || '').trim();
-  if (name) queryParams.append('name', name);  // ← solo si no está vacío
+    // Solo agregar parámetros que tengan valor para evitar consultas innecesarias
+    if (filters.archiveNumberSearch?.trim()) {
+      queryParams.append('archive_number', filters.archiveNumberSearch.trim());
+    }
+    
+    if (filters.nameSearch?.trim()) {
+      queryParams.append('name', filters.nameSearch.trim());
+    }
 
-  if (filters.selectedGender) queryParams.append('gender_id', filters.selectedGender);
-  if (filters.selectedState) queryParams.append('state_id', filters.selectedState);
-  if (filters.selectedMunicipality) queryParams.append('municipality_id', filters.selectedMunicipality);
-  if (filters.selectedLocation) queryParams.append('location_id', filters.selectedLocation);
+    if (filters.selectedGender) {
+      queryParams.append('gender_id', filters.selectedGender);
+    }
+    
+    if (filters.selectedState) {
+      queryParams.append('state_id', filters.selectedState);
+    }
+    
+    if (filters.selectedMunicipality) {
+      queryParams.append('municipality_id', filters.selectedMunicipality);
+    }
+    
+    if (filters.selectedLocation) {
+      queryParams.append('location_id', filters.selectedLocation);
+    }
 
-  queryParams.append('skip', skip.toString());
-  queryParams.append('limit', limit.toString());
+    // Filtros de fecha avanzados
+    if (filters.dateFilterType) {
+      queryParams.append('date_filter_type', filters.dateFilterType);
+      
+      switch (filters.dateFilterType) {
+        case 'year':
+          if (filters.specificYear) {
+            queryParams.append('filter_year', filters.specificYear);
+          }
+          break;
+        case 'month':
+          if (filters.specificYear && filters.specificMonth) {
+            queryParams.append('filter_year', filters.specificYear);
+            queryParams.append('filter_month', filters.specificMonth);
+          }
+          break;
+        case 'day':
+          if (filters.specificYear && filters.specificMonth && filters.specificDay) {
+            queryParams.append('filter_year', filters.specificYear);
+            queryParams.append('filter_month', filters.specificMonth);
+            queryParams.append('filter_day', filters.specificDay.toString().padStart(2, '0'));
+          }
+          break;
+        case 'range':
+          if (filters.dateFrom) {
+            queryParams.append('date_from', filters.dateFrom);
+          }
+          if (filters.dateTo) {
+            queryParams.append('date_to', filters.dateTo);
+          }
+          break;
+      }
+    }
 
-  const URL = `${URL_SERVICIOS}/archives?${queryParams.toString()}`;
-  return this.http.get(URL, { headers: this.getHeaders() });
-}
+    // Parámetros de paginación
+    queryParams.append('skip', skip.toString());
+    queryParams.append('limit', limit.toString());
+
+    const URL = `${URL_SERVICIOS}/archives?${queryParams.toString()}`;
+    return this.http.get(URL, { headers: this.getHeaders() });
+  }
+
+  // Búsqueda global optimizada (busca en todos los campos de texto)
+  searchArchivesGlobal(searchTerm: string, skip: number, limit: number) {
+    const queryParams = new URLSearchParams();
+    
+    if (searchTerm?.trim()) {
+      queryParams.append('global_search', searchTerm.trim());
+    }
+    
+    queryParams.append('skip', skip.toString());
+    queryParams.append('limit', limit.toString());
+
+    const URL = `${URL_SERVICIOS}/archives/search?${queryParams.toString()}`;
+    return this.http.get(URL, { headers: this.getHeaders() });
+  }
 
 
   listArchivesPaginated(skip: number, limit: number) {

@@ -2,183 +2,237 @@
   <!-- Page Content -->
   <div class="content container-fluid">
 
-    <!-- Page Header -->
+    <!-- Page Header Mejorado -->
     <div class="page-header">
-      <div class="row">
-        <div class="col-sm-12">
-          <ul class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a [routerLink]="routes.adminDashboard">{{ 'DASHBOARD' | translate }} ></a>
-            </li>
-            <li class="breadcrumb-item">
-              <i class="feather icon-chevron-right"></i>
-            </li>
-            <li class="breadcrumb-item active">{{ 'SETTINGS' | translate }}</li>
-          </ul>
+      <div class="row align-items-center">
+        <div class="col-sm-8">
+          <div class="page-header-content">
+            <h3 class="page-title">
+              <i class="fas fa-cog me-2 text-primary"></i>
+              {{ 'GENERAL_SETTINGS.TITLE' | translate }}
+            </h3>
+            <p class="page-subtitle text-muted mb-0">
+              {{ 'GENERAL_SETTINGS.SUBTITLE' | translate }}
+            </p>
+          </div>
+        </div>
+        <div class="col-sm-4 text-end">
+          <div class="settings-actions">
+            <button type="button" class="btn btn-outline-secondary btn-sm me-2" (click)="resetColorsToDefault()">
+              <i class="fas fa-undo me-1"></i>
+              {{ 'GENERAL_SETTINGS.RESET_DEFAULTS' | translate }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
     <!-- /Page Header -->
 
-    <div class="settings-menu-links">
-      <ul class="nav nav-tabs menu-tabs">
-        <li class="nav-item active">
-          <a class="nav-link" [routerLink]="routes.settings">{{ 'GENERAL_SETTINGS' | translate }}</a>
-        </li>
-      </ul>
-    </div>
+    <!-- Contenido Principal -->
+    <div class="row g-4">
+      
+      <!-- Columna Izquierda -->
+      <div class="col-lg-6">
 
-    <div class="row">
-      <div class="col-md-6">
-
-      <!-- 🌐 Idioma -->
-      <div class="card mb-4 border-colored">
-        <div class="card-header">
-          <h5 class="card-title">{{ 'SELECT_LANGUAGE' | translate }}</h5>
-        </div>
-        <div class="card-body pt-0">
-          <div class="form-group mt-3">
-            <div class="status-toggle d-flex justify-content-between align-items-center">
-              <p class="mb-0">{{ selectedLang === 'es' ? ('SPANISH' | translate) : ('ENGLISH' | translate) }}</p>
-              <div class="d-flex align-items-center gap-2">
-                <img
-                  src="assets/flags/us.png"
-                  width="24"
-                  height="16"
-                  alt="{{ 'ENGLISH' | translate }}"
-                  title="{{ 'ENGLISH' | translate }}" />
-
-                <input
-                  type="checkbox"
-                  id="toggle-lang"
-                  class="check"
-                  [checked]="selectedLang === 'es'"
-                  (change)="toggleLanguage()" />
-                <label for="toggle-lang" class="checktoggle">{{ 'SWITCH' | translate }}</label>
-
-                <img
-                  src="assets/flags/mx.png"
-                  width="24"
-                  height="16"
-                  alt="{{ 'SPANISH' | translate }}"
-                  title="{{ 'SPANISH' | translate }}" />
+        <!-- 🌐 Configuración de Idioma -->
+        <div class="settings-card language-settings">
+          <div class="settings-card-header">
+            <div class="settings-icon">
+              <i class="fas fa-globe text-info"></i>
+            </div>
+            <div class="settings-info">
+              <h5 class="settings-title">{{ 'GENERAL_SETTINGS.LANGUAGE' | translate }}</h5>
+              <p class="settings-subtitle">{{ 'GENERAL_SETTINGS.CHOOSE_PREFERRED_LANGUAGE' | translate }}</p>
+            </div>
+          </div>
+          <div class="settings-card-body">
+            <div class="language-selector">
+              <div class="language-option" [class.active]="selectedLang === 'en'" (click)="setLanguage('en')">
+                <img src="assets/flags/us.png" width="32" height="24" alt="English" class="flag-icon">
+                <div class="language-info">
+                  <span class="language-name">{{ 'GENERAL_SETTINGS.ENGLISH' | translate }}</span>
+                  <small class="language-code">EN</small>
+                </div>
+                <div class="language-check">
+                  <i class="fas fa-check" *ngIf="selectedLang === 'en'"></i>
+                </div>
+              </div>
+              <div class="language-option" [class.active]="selectedLang === 'es'" (click)="setLanguage('es')">
+                <img src="assets/flags/mx.png" width="32" height="24" alt="Español" class="flag-icon">
+                <div class="language-info">
+                  <span class="language-name">{{ 'GENERAL_SETTINGS.SPANISH' | translate }}</span>
+                  <small class="language-code">ES</small>
+                </div>
+                <div class="language-check">
+                  <i class="fas fa-check" *ngIf="selectedLang === 'es'"></i>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-        <!-- 🌓 Dark Mode -->
-        <div class="card mb-4 border-colored">
-          <div class="card-header">
-            <h5 class="card-title">{{ 'DARK_MODE' | translate }}</h5>
+        <!-- 🌓 Modo Oscuro -->
+        <div class="settings-card theme-settings">
+          <div class="settings-card-header">
+            <div class="settings-icon">
+              <i class="fas fa-moon text-secondary"></i>
+            </div>
+            <div class="settings-info">
+              <h5 class="settings-title">{{ 'GENERAL_SETTINGS.COLOR_MODE' | translate }}</h5>
+              <p class="settings-subtitle">{{ 'GENERAL_SETTINGS.DESCRIPTION_MODE' | translate }}</p>
+            </div>
           </div>
-          <div class="card-body pt-0">
-            <form>
-              <div class="form-group mt-3">
-                <div class="status-toggle d-flex justify-content-between align-items-center">
-                  <p class="mb-0">{{ 'ACTIVATE_DARK_MODE' | translate }}</p>
-                  <div class="d-flex align-items-center gap-2">
-                    <span class="me-2" style="font-size: 0.9rem;">{{ 'OFF' | translate }}</span>
-                    <input
-                      type="checkbox"
-                      id="toggle-dark"
-                      class="check"
-                      [checked]="isDarkMode"
-                      (change)="toggleTheme()" />
-                    <label for="toggle-dark" class="checktoggle">{{ 'SWITCH' | translate }}</label>
-                    <span class="ms-2" style="font-size: 0.9rem;">{{ 'ON' | translate }}</span>
-                  </div>
+          <div class="settings-card-body">
+            <div class="theme-selector">
+              <div class="theme-option" [class.active]="!isDarkMode" (click)="setTheme(false)">
+                <div class="theme-preview light-theme">
+                  <i class="fas fa-sun"></i>
+                </div>
+                <div class="theme-info">
+                  <span class="theme-name">{{ 'GENERAL_SETTINGS.LIGHT_MODE' | translate }}</span>
+                  <small class="theme-desc">{{ 'GENERAL_SETTINGS.LIGHT_MODE_DESC' | translate }}</small>
+                </div>
+                <div class="theme-check">
+                  <i class="fas fa-check" *ngIf="!isDarkMode"></i>
                 </div>
               </div>
-            </form>
-          </div>
-        </div>
-
-        <!-- 🎨 Outline Color -->
-        <div class="card border-colored">
-          <div class="card-header">
-            <h5 class="card-title mb-1">{{ 'OUTLINE_COLOR' | translate }}</h5>
-            <p class="text-muted mb-0" style="font-size: 0.9rem;">{{ 'OUTLINE_COLOR_NOTE' | translate }}</p>
-          </div>
-          <div class="card-body">
-            <form>
-              <div class="color-settings-group">
-                <div class="color-setting-block">
-                  <label for="borderColor" class="form-label fw-semibold mb-2">{{ 'SELECT_COLOR' | translate }}</label>
-                  <div class="color-setting-row">
-                    <span class="color-preview-circle" [style.background]="borderColor"></span>
-                    <input
-                      type="color"
-                      id="borderColor"
-                      [(ngModel)]="borderColor"
-                      name="borderColor"
-                      class="form-control form-control-color color-input-circle" />
-                    <button
-                      type="button"
-                      class="btn btn-color-action ms-2"
-                      [ngClass]="getBorderBtnClass(borderColor)"
-                      (click)="updateBorderColor()">
-                      {{ 'APPLY_COLOR' | translate }}
-                    </button>
-                  </div>
+              <div class="theme-option" [class.active]="isDarkMode" (click)="setTheme(true)">
+                <div class="theme-preview dark-theme">
+                  <i class="fas fa-moon"></i>
                 </div>
-                <div class="color-setting-block" *ngIf="!isDarkMode">
-                  <label for="cardBgColorLight" class="form-label fw-semibold mb-2">{{ 'CARD_BG_COLOR_LIGHT' | translate }}</label>
-                  <div class="color-setting-row">
-                    <span class="color-preview-circle" [style.background]="cardBgColorLight"></span>
-                    <input
-                      type="color"
-                      id="cardBgColorLight"
-                      [(ngModel)]="cardBgColorLight"
-                      name="cardBgColorLight"
-                      class="form-control form-control-color color-input-circle" />
-                    <button
-                      type="button"
-                      class="btn btn-color-action ms-2"
-                      [ngClass]="getBorderBtnClass(cardBgColorLight)"
-                      (click)="updateCardBgColorLight()">
-                      {{ 'APPLY_BG_LIGHT' | translate }}
-                    </button>
-                  </div>
+                <div class="theme-info">
+                  <span class="theme-name">{{ 'GENERAL_SETTINGS.DARK_MODE' | translate }}</span>
+                  <small class="theme-desc">{{ 'GENERAL_SETTINGS.DARK_MODE_DESC' | translate }}</small>
                 </div>
-                <div class="color-setting-block" *ngIf="isDarkMode">
-                  <label for="cardBgColorDark" class="form-label fw-semibold mb-2">{{ 'CARD_BG_COLOR_DARK' | translate }}</label>
-                  <div class="color-setting-row">
-                    <span class="color-preview-circle" [style.background]="cardBgColorDark"></span>
-                    <input
-                      type="color"
-                      id="cardBgColorDark"
-                      [(ngModel)]="cardBgColorDark"
-                      name="cardBgColorDark"
-                      class="form-control form-control-color color-input-circle" />
-                    <button
-                      type="button"
-                      class="btn btn-color-action ms-2"
-                      [ngClass]="getBorderBtnClass(cardBgColorDark)"
-                      (click)="updateCardBgColorDark()">
-                      {{ 'APPLY_BG_DARK' | translate }}
-                    </button>
-                  </div>
-                </div>
-                <div class="color-setting-row">
-                  <button
-                    type="button"
-                    class="btn btn-outline-danger ms-2"
-                    (click)="resetColorsToDefault()">
-                    Resetear colores por defecto
-                  </button>
+                <div class="theme-check">
+                  <i class="fas fa-check" *ngIf="isDarkMode"></i>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
 
       </div>
 
-      <div class="col-md-6">
-        <!-- Aquí puedes añadir más configuraciones o tarjetas -->
+      <!-- Columna Derecha -->
+      <div class="col-lg-6">
+
+        <!-- 🎨 Personalización de Colores -->
+        <div class="settings-card color-settings">
+          <div class="settings-card-header">
+            <div class="settings-icon">
+              <i class="fas fa-palette text-primary"></i>
+            </div>
+            <div class="settings-info">
+              <h5 class="settings-title">{{ 'GENERAL_SETTINGS.COLOR_CUSTOMIZATION' | translate }}</h5>
+              <p class="settings-subtitle">{{ 'GENERAL_SETTINGS.CUSTOMIZE_THEME_COLORS' | translate }}</p>
+            </div>
+          </div>
+          <div class="settings-card-body">
+            
+            <!-- Color de Borde -->
+            <div class="color-setting-group">
+              <label class="color-label">
+                <i class="fas fa-border-style me-2"></i>
+                {{ 'GENERAL_SETTINGS.OUTLINE_COLOR' | translate }}
+              </label>
+              <div class="color-input-group">
+                <div class="color-preview" [style.background-color]="borderColor"></div>
+                <input
+                  type="color"
+                  [(ngModel)]="borderColor"
+                  name="borderColor"
+                  class="color-input">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm apply-btn"
+                  (click)="updateBorderColor()">
+                  <i class="fas fa-check me-1"></i>
+                  {{ 'GENERAL_SETTINGS.APPLY' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Color de Fondo Claro -->
+            <div class="color-setting-group" *ngIf="!isDarkMode">
+              <label class="color-label">
+                <i class="fas fa-fill-drip me-2"></i>
+                {{ 'GENERAL_SETTINGS.CARD_BG_COLOR_LIGHT' | translate }}
+              </label>
+              <div class="color-input-group">
+                <div class="color-preview" [style.background-color]="cardBgColorLight"></div>
+                <input
+                  type="color"
+                  [(ngModel)]="cardBgColorLight"
+                  name="cardBgColorLight"
+                  class="color-input">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm apply-btn"
+                  (click)="updateCardBgColorLight()">
+                  <i class="fas fa-check me-1"></i>
+                  {{ 'GENERAL_SETTINGS.APPLY' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Color de Fondo Oscuro -->
+            <div class="color-setting-group" *ngIf="isDarkMode">
+              <label class="color-label">
+                <i class="fas fa-fill-drip me-2"></i>
+                {{ 'GENERAL_SETTINGS.CARD_BG_COLOR_DARK' | translate }}
+              </label>
+              <div class="color-input-group">
+                <div class="color-preview" [style.background-color]="cardBgColorDark"></div>
+                <input
+                  type="color"
+                  [(ngModel)]="cardBgColorDark"
+                  name="cardBgColorDark"
+                  class="color-input">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm apply-btn"
+                  (click)="updateCardBgColorDark()">
+                  <i class="fas fa-check me-1"></i>
+                  {{ 'GENERAL_SETTINGS.APPLY' | translate }}
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 💾 Vista Previa de Configuración -->
+        <div class="settings-card preview-settings">
+          <div class="settings-card-header">
+            <div class="settings-icon">
+              <i class="fas fa-eye text-success"></i>
+            </div>
+            <div class="settings-info">
+              <h5 class="settings-title">{{ 'GENERAL_SETTINGS.PREVIEW' | translate }}</h5>
+              <p class="settings-subtitle">{{ 'GENERAL_SETTINGS.PREVIEW_CURRENT_SETTINGS' | translate }}</p>
+            </div>
+          </div>
+          <div class="settings-card-body">
+            <div class="preview-container">
+              <div class="preview-card" [style.background-color]="isDarkMode ? cardBgColorDark : cardBgColorLight" 
+                   [style.border-color]="borderColor">
+                <div class="preview-header">
+                  <h6>{{ 'GENERAL_SETTINGS.SAMPLE_CARD' | translate }}</h6>
+                </div>
+                <div class="preview-body">
+                  <p>{{ 'GENERAL_SETTINGS.PREVIEW_TEXT' | translate }}</p>
+                  <div class="preview-button" [style.background-color]="borderColor">
+                    {{ 'GENERAL_SETTINGS.SAMPLE_BUTTON' | translate }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
+
   </div>
 </div>
