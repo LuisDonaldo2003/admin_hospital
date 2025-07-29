@@ -50,8 +50,8 @@ export class LoginComponent implements OnInit {
         this.loading = false;
 
         if (resp?.success) {
-          // ✅ Login exitoso
-          this.router.navigate([this.routes.adminDashboard]);
+          // ✅ Login exitoso - Redirigir a perfil
+          this.router.navigate(['/profile']);
         } else if (resp?.unverified) {
           // 🚨 Usuario no verificado
           this.unverifiedMsg = 'Tu cuenta no está verificada. Te hemos enviado un nuevo código.';

@@ -153,7 +153,7 @@ export class VerifyCodeComponent implements OnInit {
           if (!res.is_profile_complete) {
             this.router.navigate(['/complete-profile']);
           } else {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/profile']);
           }
         }, 1000);
               

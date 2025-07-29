@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from './shared/auth/auth.service';
 import { SettingsService } from './core/settings/general-settings/service/settings.service';
+import { ActivityMonitorService } from './shared/services/activity-monitor.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
@@ -17,7 +18,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private translate: TranslateService,
     private authService: AuthService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private activityMonitor: ActivityMonitorService
   ) {
     const savedLang = localStorage.getItem('language') || 'en';
     this.translate.setDefaultLang(savedLang);

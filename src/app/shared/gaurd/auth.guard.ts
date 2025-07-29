@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
-
   CanActivate,
   Router,
-
   UrlTree,
 } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { routes } from '../routes/routes';
 import { AuthService } from '../auth/auth.service';
 
@@ -16,29 +15,39 @@ import { AuthService } from '../auth/auth.service';
 export class AuthGuard implements CanActivate {
   constructor(private router: Router,public auth: AuthService) {}
   canActivate(
-
   ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-      // if (localStorage.getItem('authenticated')) {
-      //   return true;
-      // } else {
-      //   this.router.navigate([routes.login]);
-      //   return false;
-      // }
-      // console.log(this.auth.token,this.auth.user)
-      if(!localStorage.getItem("token") || !localStorage.getItem("user")){
+      
+      // Verificar si existen token y usuario en localStorage
+      if (!localStorage.getItem("token") || !localStorage.getItem("user")) {
         this.router.navigate([routes.login]);
         return false;
       }
-      let token:any = localStorage.getItem("token");
-      let expiration = (JSON.parse(atob(token.split(".")[1]))).exp;
-      if(Math.floor((new Date().getTime())/1000) >= expiration){
-        this.auth.logout();
-        return false;
+
+      // Si el token está expirado, intentar renovarlo
+      if (this.auth.isTokenExpired()) {
+        return this.auth.refreshToken().pipe(
+          map(() => true),
+          catchError(() => {
+            this.router.navigate([routes.login]);
+            return of(false);
+          })
+        );
       }
+
+      // Si el token está próximo a expirar, renovarlo en segundo plano
+      if (this.auth.isTokenExpiringSoon()) {
+        this.auth.refreshToken().subscribe({
+          error: () => {
+            // Si falla el refresh, redirigir al login
+            this.router.navigate([routes.login]);
+          }
+        });
+      }
+
       return true;
   }
 }

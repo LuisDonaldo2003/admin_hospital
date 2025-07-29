@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
+import { SessionTimeoutWarningComponent } from './shared/components/session-timeout-warning.component';
 
 // ngx-translate imports
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -27,6 +28,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     SharedModule,
     HttpClientModule, // ⬅️ Necesario para ngx-translate
+    SessionTimeoutWarningComponent, // ⬅️ Componente standalone
     TranslateModule.forRoot({
       defaultLanguage: 'en', // puedes poner 'es' si querés español por defecto
       loader: {
