@@ -6,10 +6,10 @@
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
             <li class="breadcrumb-item">
-              {{ 'EDIT_PATIENT.PATIENT' | translate }} >
+              {{ 'ARCHIVE.EDIT_PATIENT.PATIENT' | translate }} >
             </li>
             <li class="breadcrumb-item active">
-              {{ 'EDIT_PATIENT.BREADCRUMB_EDIT' | translate }}
+              {{ 'ARCHIVE.EDIT_PATIENT.BREADCRUMB_EDIT' | translate }}
             </li>
           </ol>
         </div>
@@ -22,17 +22,17 @@
         <div class="card card-form shadow border-0">
           <div class="card-body px-5 py-4">
             <h3 class="text-center mb-4 fw-bold">
-              {{ 'EDIT_PATIENT.TITLE' | translate }}
+              {{ 'ARCHIVE.EDIT_PATIENT.TITLE' | translate }}
             </h3>
 
             <!-- Alertas -->
             <div *ngIf="text_validation" class="alert alert-warning alert-dismissible fade show">
-              <strong>{{ 'EDIT_PATIENT.WARNING' | translate }}:</strong> {{ text_validation }}
+              <strong>{{ 'ARCHIVE.EDIT_PATIENT.WARNING' | translate }}:</strong> {{ text_validation }}
               <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
             <div *ngIf="text_success" class="alert alert-success alert-dismissible fade show">
-              <strong>{{ 'EDIT_PATIENT.SUCCESS' | translate }}:</strong> {{ text_success }}
+              <strong>{{ 'ARCHIVE.EDIT_PATIENT.SUCCESS' | translate }}:</strong> {{ text_success }}
               <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
@@ -40,75 +40,75 @@
             <form (ngSubmit)="update()">
               <div class="row g-3">
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'EDIT_PATIENT.ARCHIVE_NUMBER' | translate }}</label>
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.ARCHIVE_NUMBER' | translate }}</label>
                   <input type="text" [(ngModel)]="archive_number" name="archive_number" class="form-control" readonly />
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'EDIT_PATIENT.FIRST_NAME' | translate }}</label>
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.FIRST_NAME' | translate }}</label>
                   <input type="text" [(ngModel)]="name" name="name" class="form-control" />
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'EDIT_PATIENT.FATHER_LAST_NAME' | translate }}</label>
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.FATHER_LAST_NAME' | translate }}</label>
                   <input type="text" [(ngModel)]="last_name_father" name="last_name_father" class="form-control" />
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'EDIT_PATIENT.MOTHER_LAST_NAME' | translate }}</label>
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.MOTHER_LAST_NAME' | translate }}</label>
                   <input type="text" [(ngModel)]="last_name_mother" name="last_name_mother" class="form-control" />
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'EDIT_PATIENT.AGE' | translate }}</label>
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.AGE' | translate }}</label>
                   <input type="number" [(ngModel)]="age" name="age" class="form-control" />
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'EDIT_PATIENT.GENDER' | translate }}</label>
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.GENDER' | translate }}</label>
                   <select [(ngModel)]="gender_id" name="gender_id" class="form-control">
-                    <option value="">{{ 'EDIT_PATIENT.SELECT_GENDER' | translate }}</option>
+                    <option value="">{{ 'ARCHIVE.EDIT_PATIENT.SELECT_GENDER' | translate }}</option>
                     <option *ngFor="let gender of genders" [value]="gender.id">{{ gender.name }}</option>
                   </select>
                 </div>
 
                 <div class="col-md-12">
-                  <label class="form-label">{{ 'EDIT_PATIENT.ADDRESS' | translate }}</label>
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.ADDRESS' | translate }}</label>
                   <input type="text" [(ngModel)]="address" name="address" class="form-control" />
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'EDIT_PATIENT.STATE' | translate }}</label>
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.STATE' | translate }}</label>
                   <select [(ngModel)]="state_id" name="state_id" class="form-control" (change)="onStateChange()">
-                    <option value="">{{ 'EDIT_PATIENT.SELECT_STATE' | translate }}</option>
+                    <option value="">{{ 'ARCHIVE.EDIT_PATIENT.SELECT_STATE' | translate }}</option>
                     <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
                   </select>
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'EDIT_PATIENT.MUNICIPALITY' | translate }}</label>
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.MUNICIPALITY' | translate }}</label>
                   <select [(ngModel)]="municipality_id" name="municipality_id" class="form-control" (change)="onMunicipalityChange()">
-                    <option value="">{{ 'EDIT_PATIENT.SELECT_MUNICIPALITY' | translate }}</option>
+                    <option value="">{{ 'ARCHIVE.EDIT_PATIENT.SELECT_MUNICIPALITY' | translate }}</option>
                     <option *ngFor="let m of municipalities" [value]="m.id">{{ m.name }}</option>
                   </select>
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'EDIT_PATIENT.LOCATION' | translate }}</label>
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.LOCATION' | translate }}</label>
                   <select [(ngModel)]="location_id" name="location_id" class="form-control">
-                    <option value="">{{ 'EDIT_PATIENT.SELECT_LOCATION' | translate }}</option>
+                    <option value="">{{ 'ARCHIVE.EDIT_PATIENT.SELECT_LOCATION' | translate }}</option>
                     <option *ngFor="let l of locations" [value]="l.id">{{ l.name }}</option>
                   </select>
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'EDIT_PATIENT.ADMISSION_DATE' | translate }}</label>
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.ADMISSION_DATE' | translate }}</label>
                   <input type="date" [(ngModel)]="admission_date" name="admission_date" class="form-control" />
                 </div>
               </div>
 
               <div class="text-end mt-4">
-                <button type="submit" class="btn btn-primary px-4">{{ 'EDIT_PATIENT.SAVE' | translate }}</button>
+                <button type="submit" class="btn btn-primary px-4">{{ 'ARCHIVE.EDIT_PATIENT.SAVE' | translate }}</button>
               </div>
             </form>
           </div>

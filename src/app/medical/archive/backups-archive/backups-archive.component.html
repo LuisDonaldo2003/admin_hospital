@@ -6,8 +6,8 @@
     <div class="page-header mb-4">
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="page-title">{{ 'BACKUPS_ARCHIVE.TITLE' | translate }}</h3>
-          <p class="page-subtitle">{{ 'BACKUPS_ARCHIVE.SUBTITLE' | translate }}</p>
+          <h3 class="page-title">{{ 'ARCHIVE.BACKUPS.TITLE' | translate }}</h3>
+          <p class="page-subtitle">{{ 'ARCHIVE.BACKUPS.SUBTITLE' | translate }}</p>
         </div>
       </div>
     </div>
@@ -23,7 +23,7 @@
             </span>
             <input type="text" 
                    class="form-control border-start-0 ps-0" 
-                   placeholder="{{ 'BACKUPS_ARCHIVE.SEARCH_PATIENT' | translate }}"
+                   placeholder="{{ 'ARCHIVE.BACKUPS.SEARCH_PATIENT' | translate }}"
                    [(ngModel)]="searchTerm"
                    [disabled]="loading">
           </div>
@@ -34,7 +34,7 @@
           <select class="form-select filter-select" 
                   [(ngModel)]="selectedType"
                   [disabled]="loading">
-            <option value="">{{ 'BACKUPS_ARCHIVE.SEARCH_TYPE' | translate }}</option>
+            <option value="">{{ 'ARCHIVE.BACKUPS.SEARCH_TYPE' | translate }}</option>
             <option *ngFor="let type of availableTypes" [value]="type">{{ type | uppercase }}</option>
           </select>
         </div>
@@ -44,7 +44,7 @@
           <select class="form-select filter-select" 
                   [(ngModel)]="selectedYear"
                   [disabled]="loading">
-            <option value="">{{ 'BACKUPS_ARCHIVE.SEARCH_YEAR' | translate }}</option>
+            <option value="">{{ 'ARCHIVE.BACKUPS.SEARCH_YEAR' | translate }}</option>
             <option *ngFor="let year of availableYears" [value]="year">{{ year }}</option>
           </select>
         </div>
@@ -54,7 +54,7 @@
           <select class="form-select filter-select" 
                   [(ngModel)]="selectedMonth"
                   [disabled]="loading">
-            <option value="">{{ 'BACKUPS_ARCHIVE.SEARCH_ALL' | translate }}</option>
+            <option value="">{{ 'ARCHIVE.BACKUPS.SEARCH_ALL' | translate }}</option>
             <option *ngFor="let month of availableMonths" [value]="month">{{ month | titlecase }}</option>
           </select>
         </div>
@@ -65,7 +65,7 @@
                   (click)="clearFilters()"
                   [disabled]="loading">
             <i class="fa fa-refresh me-2"></i>
-            {{ 'BACKUPS_ARCHIVE.CLEAN' | translate }}
+            {{ 'ARCHIVE.BACKUPS.CLEAN' | translate }}
           </button>
         </div>
       </div>
@@ -81,7 +81,7 @@
             </div>
             <div class="stat-content">
               <h4>{{ backups.length }}</h4>
-              <p>{{ 'BACKUPS_ARCHIVE.ALL_RESPALDOS' | translate }}</p>
+              <p>{{ 'ARCHIVE.BACKUPS.ALL_RESPALDOS' | translate }}</p>
             </div>
           </div>
         </div>
@@ -92,7 +92,7 @@
             </div>
             <div class="stat-content">
               <h4>{{ getExcelCount() }}</h4>
-              <p>{{ 'BACKUPS_ARCHIVE.EXCEL_FILES' | translate }}</p>
+              <p>{{ 'ARCHIVE.BACKUPS.EXCEL_FILES' | translate }}</p>
             </div>
           </div>
         </div>
@@ -103,7 +103,7 @@
             </div>
             <div class="stat-content">
               <h4>{{ getPdfCount() }}</h4>
-              <p>{{ 'BACKUPS_ARCHIVE.PDF_FILES' | translate }}</p>
+              <p>{{ 'ARCHIVE.BACKUPS.PDF_FILES' | translate }}</p>
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@
             </div>
             <div class="stat-content">
               <h4>{{ filteredBackups().length }}</h4>
-              <p>{{ 'BACKUPS_ARCHIVE.FILTERED' | translate }}</p>
+              <p>{{ 'ARCHIVE.BACKUPS.FILTERED' | translate }}</p>
             </div>
           </div>
         </div>
@@ -124,9 +124,9 @@
     <!-- Cargando -->
     <div *ngIf="loading" class="text-center my-5">
       <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
-        <span class="visually-hidden">{{ 'BACKUPS_ARCHIVE.LOADING' | translate }}</span>
+        <span class="visually-hidden">{{ 'ARCHIVE.BACKUPS.LOADING' | translate }}</span>
       </div>
-      <h5 class="text-muted">{{ 'BACKUPS_ARCHIVE.LOADING_ARCHIVE' | translate }}</h5>
+      <h5 class="text-muted">{{ 'ARCHIVE.BACKUPS.LOADING_ARCHIVE' | translate }}</h5>
     </div>
 
     <!-- Lista de respaldos mejorada -->
@@ -137,18 +137,18 @@
 
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h5 class="fw-semibold mb-0 backup-header-text">
-                {{ 'BACKUPS_ARCHIVE.AVAILABLE' | translate }}
+                {{ 'ARCHIVE.BACKUPS.AVAILABLE' | translate }}
               </h5>
               <span class="badge bg-primary fs-6 backup-count-badge">
-                {{ filteredBackups().length }} de {{ backups.length }} {{ 'BACKUPS_ARCHIVE.RESPALDOS' | translate }}
+                {{ filteredBackups().length }} de {{ backups.length }} {{ 'ARCHIVE.BACKUPS.RESPALDOS' | translate }}
               </span>
             </div>
 
             <!-- Mensaje cuando no hay resultados -->
             <div *ngIf="filteredBackups().length === 0" class="text-center py-5">
               <i class="fa fa-database fa-3x text-muted mb-3"></i>
-              <h5 class="text-muted">{{ 'BACKUPS_ARCHIVE.NO_BACKUPS_AVAILABLE' | translate }}</h5>
-              <p class="text-muted">No se encontraron respaldos con los filtros aplicados</p>
+              <h5 class="text-muted">{{ 'ARCHIVE.BACKUPS.NO_BACKUPS_AVAILABLE' | translate }}</h5>
+              <p class="text-muted">{{ 'ARCHIVE.BACKUPS.NO_BACKUPS_FOUND' | translate }}</p>
             </div>
 
             <!-- Grid de respaldos -->
@@ -197,15 +197,8 @@
                     <button class="btn backup-btn-download" 
                             (click)="downloadBackup(backup.filename)">
                       <i class="fa fa-download"></i>
-                      {{ 'BACKUPS_ARCHIVE.DOWNLOAD' | translate }}
+                      {{ 'ARCHIVE.BACKUPS.DOWNLOAD' | translate }}
                     </button>
-                    <!-- 
-                    <button class="btn backup-btn-delete" 
-                            (click)="deleteBackup(backup.filename)">
-                      <i class="fa fa-trash"></i>
-                      Eliminar
-                    </button>
-                    -->
                   </div>
                 </div>
               </div>

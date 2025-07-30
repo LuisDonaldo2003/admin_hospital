@@ -5,8 +5,8 @@
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item"><a href="#">{{ 'ADD_PROFILE.PROFILES' | translate }} ></a></li>
-            <li class="breadcrumb-item active">{{ 'ADD_PROFILE.BREADCRUMB_REGISTER' | translate }}</li>
+            <li class="breadcrumb-item"><a href="#">{{ 'PROFILE_M.ADD_PROFILE.PROFILES' | translate }} ></a></li>
+            <li class="breadcrumb-item active">{{ 'PROFILE_M.ADD_PROFILE.BREADCRUMB_REGISTER' | translate }}</li>
           </ol>
         </div>
       </div>
@@ -17,41 +17,41 @@
       <div class="col-lg-8">
         <div class="card shadow-sm border-0">
           <div class="card-body">
-            <h4 class="mb-4">{{ 'ADD_PROFILE.TITLE' | translate }}</h4>
+            <h4 class="mb-4">{{ 'PROFILE_M.ADD_PROFILE.TITLE' | translate }}</h4>
 
             <form>
               <div class="mb-3 row">
-                <label for="name" class="col-sm-2 col-form-label">{{ 'ADD_PROFILE.NAME' | translate }}</label>
+                <label for="name" class="col-sm-2 col-form-label">{{ 'PROFILE_M.ADD_PROFILE.NAME' | translate }}</label>
                 <div class="col-sm-10">
-                  <input type="text" id="name" name="name" [(ngModel)]="name" class="form-control" [placeholder]="'ADD_PROFILE.PLACEHOLDER_NAME' | translate" />
+                  <input type="text" id="name" name="name" [(ngModel)]="name" class="form-control" [placeholder]="'PROFILE_M.ADD_PROFILE.PLACEHOLDER_NAME' | translate" />
                 </div>
               </div>
 
               <!-- Messages -->
               <div class="mb-3" *ngIf="valid_form">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                  <strong>{{ 'ADD_PROFILE.ERROR' | translate }}:</strong> {{ 'ADD_PROFILE.REQUIRED' | translate }}
+                  <strong>{{ 'PROFILE_M.ADD_PROFILE.ERROR' | translate }}:</strong> {{ 'PROFILE_M.ADD_PROFILE.REQUIRED' | translate }}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
               </div>
 
               <div class="mb-3" *ngIf="valid_form_success">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong>{{ 'ADD_PROFILE.SUCCESS' | translate }}:</strong> {{ 'ADD_PROFILE.SUCCESS_MESSAGE' | translate }}
+                  <strong>{{ 'PROFILE_M.ADD_PROFILE.SUCCESS' | translate }}:</strong> {{ 'PROFILE_M.ADD_PROFILE.SUCCESS_MESSAGE' | translate }}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
               </div>
 
               <div class="mb-3" *ngIf="text_validation">
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  <strong>{{ 'ADD_PROFILE.ATTENTION' | translate }}:</strong> {{ text_validation }}
+                  <strong>{{ 'PROFILE_M.ADD_PROFILE.ATTENTION' | translate }}:</strong> {{ text_validation }}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
               </div>
 
               <!-- Button -->
               <div class="text-end">
-                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'ADD_PROFILE.SAVE' | translate }}</button>
+                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'PROFILE_M.ADD_PROFILE.SAVE' | translate }}</button>
               </div>
             </form>
 

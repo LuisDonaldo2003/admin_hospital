@@ -25,12 +25,12 @@ export class SidebarComponent implements OnDestroy {
   public user: any;
   public isDarkMode: boolean = false;
   public groupedSidebarData: any[] = [];
-  public groupTitles: { [key: string]: string } = {
-    'GRUPO_ADMINISTRADOR': 'SIDEBAR_GROUP_ADMINISTRADOR',
-    'GRUPO_RH': 'SIDEBAR_GROUP_RH',
-    'GRUPO_ARCHIVO': 'SIDEBAR_GROUP_ARCHIVO',
-    'GRUPO_PHARMACY': 'SIDEBAR_GROUP_PHARMACY',
-    'GRUPO_TABLERO': 'SIDEBAR_GROUP_TABLERO'
+  public groupMap: { [key: string]: string } = {
+    'GRUPO_ADMINISTRADOR': 'ADMINISTRADOR',
+    'GRUPO_RH': 'RH',
+    'GRUPO_ARCHIVO': 'ARCHIVO',
+    'GRUPO_PHARMACY': 'PHARMACY',
+    'GRUPO_TABLERO': 'TABLERO'
   };
 
   private userSubscription: Subscription;
@@ -106,7 +106,7 @@ export class SidebarComponent implements OnDestroy {
     });
 
     this.groupedSidebarData = Object.keys(groups).map(key => ({
-      group: this.groupTitles[key] || key,
+      group: this.groupMap[key] || key,
       menus: groups[key]
     }));
   }
@@ -143,6 +143,18 @@ export class SidebarComponent implements OnDestroy {
 
   public toggleTheme(): void {
     this.data.toggleDarkMode();
+  }
+
+  public cleanMenuValue(value: string): string {
+    return value.replace(/^SIDEBAR_/, '').replace(/_LIST|_ADD|_EDIT|_DELETE/g, match => {
+      switch (match) {
+        case '_LIST': return '.LIST';
+        case '_ADD': return '.ADD';
+        case '_EDIT': return '.EDIT';
+        case '_DELETE': return '.DELETE';
+        default: return '';
+      }
+    });
   }
 
   ngOnDestroy(): void {

@@ -5,9 +5,9 @@
       <div class="row">
         <div class="col-sm-12">
           <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">{{ 'EDIT_STAFF.BREADCRUMB_USERS' | translate }} ></a></li>
+            <li class="breadcrumb-item"><a href="#">{{ 'STAFF.EDIT_STAFF.BREADCRUMB_USERS' | translate }} ></a></li>
             <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-            <li class="breadcrumb-item active">{{ 'EDIT_STAFF.BREADCRUMB_EDIT_STAFF' | translate }}</li>
+            <li class="breadcrumb-item active">{{ 'STAFF.EDIT_STAFF.BREADCRUMB_EDIT_STAFF' | translate }}</li>
           </ul>
         </div>
       </div>
@@ -21,25 +21,25 @@
             <form>
               <div class="row g-4">
                 <div class="col-12">
-                  <h4 class="mb-4">{{ 'EDIT_STAFF.TITLE' | translate }}: #{{ staff_selected.id }}</h4>
+                  <h4 class="mb-4">{{ 'STAFF.EDIT_STAFF.TITLE' | translate }}: #{{ staff_selected.id }}</h4>
                 </div>
 
                 <div class="col-md-4">
-                  <label class="form-label">{{ 'EDIT_STAFF.FIRST_NAME' | translate }} *</label>
+                  <label class="form-label">{{ 'STAFF.EDIT_STAFF.FIRST_NAME' | translate }} *</label>
                   <input class="form-control" [(ngModel)]="name" name="name" type="text" required />
                 </div>
                 <div class="col-md-4">
-                  <label class="form-label">{{ 'EDIT_STAFF.SURNAME' | translate }} *</label>
+                  <label class="form-label">{{ 'STAFF.EDIT_STAFF.SURNAME' | translate }} *</label>
                   <input class="form-control" [(ngModel)]="surname" name="surname" type="text" required />
                 </div>
                 <div class="col-md-4">
-                  <label class="form-label">{{ 'EDIT_STAFF.EMAIL' | translate }} *</label>
+                  <label class="form-label">{{ 'STAFF.EDIT_STAFF.EMAIL' | translate }} *</label>
                   <input class="form-control" [(ngModel)]="email" name="email" type="email" required />
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'EDIT_STAFF.ROLE_SELECT' | translate }} *</label>
-                  <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select" [placeholder]="'EDIT_STAFF.SELECT_ROLE_PLACEHOLDER' | translate">
+                  <label class="form-label">{{ 'STAFF.EDIT_STAFF.ROLE_SELECT' | translate }} *</label>
+                  <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select" [placeholder]="'STAFF.EDIT_STAFF.SELECT_ROLE_PLACEHOLDER' | translate">
                     <mat-option *ngFor="let data of roles" [value]="data.id">
                       {{ data.name }}
                     </mat-option>
@@ -49,16 +49,16 @@
                 <!-- Alerts -->
                 <div class="col-12" *ngIf="text_success || text_validation">
                   <div *ngIf="text_success" class="alert alert-success">
-                    <strong>{{ 'EDIT_STAFF.SUCCESS' | translate }}:</strong> {{ text_success }}
+                    <strong>{{ 'STAFF.EDIT_STAFF.SUCCESS' | translate }}:</strong> {{ text_success }}
                   </div>
                   <div *ngIf="text_validation" class="alert alert-warning">
-                    <strong>{{ 'EDIT_STAFF.WARNING' | translate }}:</strong> {{ text_validation }}
+                    <strong>{{ 'STAFF.EDIT_STAFF.WARNING' | translate }}:</strong> {{ text_validation }}
                   </div>
                 </div>
 
                 <!-- Button -->
                 <div class="col-12 text-end">
-                  <button type="button" class="btn btn-primary" (click)="save()">{{ 'EDIT_STAFF.SAVE' | translate }}</button>
+                  <button type="button" class="btn btn-primary" (click)="save()">{{ 'STAFF.EDIT_STAFF.SAVE' | translate }}</button>
                 </div>
               </div>
             </form>

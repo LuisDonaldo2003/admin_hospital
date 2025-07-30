@@ -50,9 +50,36 @@ export class AddArchiveComponent implements OnInit {
 
   private loadStates(): void {
     this.archiveService.listStates().subscribe({
-      next: (data: any) => this.states = data,
+      next: (data: any) => {
+        this.states = data;
+        
+        // Buscar y seleccionar automáticamente el estado "Guerrero"
+        const guerreroState = this.states.find(state => 
+          state.name.toLowerCase().includes('guerrero')
+        );
+        
+        if (guerreroState) {
+          this.state_id = guerreroState.id;
+          console.log('✅ Estado "Guerrero" seleccionado automáticamente:', guerreroState.name);
+          
+          // Cargar automáticamente los municipios de Guerrero
+          this.loadMunicipalitiesForGuerrero();
+        }
+      },
       error: (err) => console.error('Error al cargar estados:', err)
     });
+  }
+
+  private loadMunicipalitiesForGuerrero(): void {
+    if (this.state_id) {
+      this.archiveService.listMunicipalities(this.state_id).subscribe({
+        next: (data: any) => {
+          this.municipalities = data;
+          console.log(`✅ Municipios de Guerrero cargados: ${data.length} municipios`);
+        },
+        error: (err) => console.error('Error al cargar municipios de Guerrero:', err)
+      });
+    }
   }
 
   private loadGenders(): void {
@@ -108,7 +135,7 @@ export class AddArchiveComponent implements OnInit {
     if (missingFields.length > 0) {
       const plural = missingFields.length > 1;
       const campos = missingFields.join(', ');
-      this.text_validation = this.translate.instant('FIELDS_MISSING', {
+      this.text_validation = this.translate.instant('Faltan algunos datos', {
         plural: plural ? 'n' : '',
         sPlural: plural ? 's' : '',
         campos

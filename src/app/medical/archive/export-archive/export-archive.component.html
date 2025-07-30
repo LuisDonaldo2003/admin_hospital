@@ -7,8 +7,8 @@
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item">{{ 'LIST_PATIENT.PATIENT' | translate }} <span>&gt;</span></li>
-            <li class="breadcrumb-item active">{{ 'EXPORT_ARCHIVE.BREADCRUMB_LIST' | translate }}</li>
+            <li class="breadcrumb-item">{{ 'ARCHIVE.EXPORT_ARCHIVE.PATIENT' | translate }} <span>&gt;</span></li>
+            <li class="breadcrumb-item active">{{ 'ARCHIVE.EXPORT_ARCHIVE.BREADCRUMB_LIST' | translate }}</li>
           </ol>
         </div>
       </div>
@@ -24,7 +24,7 @@
                   [(ngModel)]="selectedState" 
                   (change)="onStateChange()"
                   [disabled]="loading">
-            <option value="">{{ 'EXPORT_ARCHIVE.ALL_STATES' | translate }}</option>
+            <option value="">{{ 'ARCHIVE.EXPORT_ARCHIVE.ALL_STATES' | translate }}</option>
             <option *ngFor="let s of states; trackBy: trackByStateId" [value]="s.id">{{ s.name }}</option>
           </select>
         </div>
@@ -35,7 +35,7 @@
                   [(ngModel)]="selectedMunicipality" 
                   (change)="onMunicipalityChange()"
                   [disabled]="loading || !selectedState">
-            <option value="">{{ 'EXPORT_ARCHIVE.ALL_MUNICIPALITIES' | translate }}</option>
+            <option value="">{{ 'ARCHIVE.EXPORT_ARCHIVE.ALL_MUNICIPALITIES' | translate }}</option>
             <option *ngFor="let m of municipalities; trackBy: trackByMunicipalityId" [value]="m.id">{{ m.name }}</option>
           </select>
         </div>
@@ -46,7 +46,7 @@
                   [(ngModel)]="selectedLocation"
                   (change)="onFilterChange('location')"
                   [disabled]="loading || !selectedMunicipality">
-            <option value="">{{ 'EXPORT_ARCHIVE.ALL_LOCATIONS' | translate }}</option>
+            <option value="">{{ 'ARCHIVE.EXPORT_ARCHIVE.ALL_LOCATIONS' | translate }}</option>
             <option *ngFor="let l of locations; trackBy: trackByLocationId" [value]="l.id">{{ l.name }}</option>
           </select>
         </div>
@@ -57,7 +57,7 @@
                   [(ngModel)]="selectedGender"
                   (change)="onFilterChange('gender')"
                   [disabled]="loading">
-            <option value="">{{ 'EXPORT_ARCHIVE.ALL_GENDERS' | translate }}</option>
+            <option value="">{{ 'ARCHIVE.EXPORT_ARCHIVE.ALL_GENDERS' | translate }}</option>
             <option *ngFor="let g of genders; trackBy: trackByGenderId" [value]="g.id">{{ g.name }}</option>
           </select>
         </div>
@@ -69,7 +69,7 @@
                   [(ngModel)]="selectedYear"
                   (change)="onFilterChange('year')"
                   [disabled]="loading">
-            <option value="">{{ 'EXPORT_ARCHIVE.ALL_YEARS' | translate }}</option>
+            <option value="">{{ 'ARCHIVE.EXPORT_ARCHIVE.ALL_YEARS' | translate }}</option>
             <option *ngFor="let year of years; trackBy: trackByYear" [value]="year">{{ year }}</option>
           </select>
         </div>
@@ -80,7 +80,7 @@
                   [(ngModel)]="selectedMonth"
                   (change)="onFilterChange('month')"
                   [disabled]="loading">
-            <option value="">{{ 'EXPORT_ARCHIVE.ALL_MONTHS' | translate }}</option>
+            <option value="">{{ 'ARCHIVE.EXPORT_ARCHIVE.ALL_MONTHS' | translate }}</option>
             <option *ngFor="let month of months; trackBy: trackByMonthValue" [value]="month.value">{{ month.name }}</option>
           </select>
         </div>
@@ -91,7 +91,7 @@
                   (click)="clearAllFilters()"
                   [disabled]="loading">
             <i class="fa fa-refresh me-2"></i>
-            {{ 'EXPORT_ARCHIVE.CLEAR_FILTERS' | translate }}
+            {{ 'ARCHIVE.EXPORT_ARCHIVE.CLEAR_FILTERS' | translate }}
           </button>
         </div>
 
@@ -105,7 +105,7 @@
                   (click)="exportToExcel()"
                   [disabled]="loading">
             <i class="fa fa-file-excel me-2"></i> 
-            {{ 'EXPORT_ARCHIVE.EXPORT_EXCEL' | translate }}
+            {{ 'ARCHIVE.EXPORT_ARCHIVE.EXPORT_EXCEL' | translate }}
           </button>
         </div>
 
@@ -114,7 +114,7 @@
                   (click)="exportToPDF()"
                   [disabled]="loading">
             <i class="fa fa-file-pdf me-2"></i> 
-            {{ 'EXPORT_ARCHIVE.EXPORT_PDF' | translate }}
+            {{ 'ARCHIVE.EXPORT_ARCHIVE.EXPORT_PDF' | translate }}
           </button>
         </div>
       </div>
@@ -123,9 +123,9 @@
     <!-- Cargando -->
     <div *ngIf="loading" class="text-center my-5">
       <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
-        <span class="visually-hidden">{{ 'EXPORT_ARCHIVE.LOADING_DATA' | translate }}...</span>
+        <span class="visually-hidden">{{ 'ARCHIVE.EXPORT_ARCHIVE.LOADING_DATA' | translate }}...</span>
       </div>
-      <h5 class="text-muted">{{ 'EXPORT_ARCHIVE.LOADING_DATA' | translate }}</h5>
+      <h5 class="text-muted">{{ 'ARCHIVE.EXPORT_ARCHIVE.LOADING_DATA' | translate }}</h5>
     </div>
 
     <!-- Tabla previa -->
@@ -137,20 +137,20 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
               <div>
                 <h5 class="fw-semibold mb-0 export-header-text">
-                  {{ 'EXPORT_ARCHIVE.PREVIEW_EXPORT' | translate }}
+                  {{ 'ARCHIVE.EXPORT_ARCHIVE.PREVIEW_EXPORT' | translate }}
                 </h5>
                 <small class="text-muted">{{ getPaginationInfo() }}</small>
               </div>
               <div class="text-end">
                 <p class="fw-semibold mb-0 export-header-text">
-                  {{ 'EXPORT_ARCHIVE.TOTAL_RECORDS' | translate }}: 
+                  {{ 'ARCHIVE.EXPORT_ARCHIVE.TOTAL_RECORDS' | translate }}: 
                   <span class="export-count-text">
                     {{ totalFilteredRecords }}
                   </span>
                 </p>
                 <small class="text-muted">
                   <i class="fa fa-info-circle me-1"></i>
-                  Mostrando página {{ currentPage }} de {{ totalPages }}
+                  {{ 'ARCHIVE.EXPORT_ARCHIVE.SHOWING_PAGE' | translate }} {{ currentPage }} {{ 'ARCHIVE.EXPORT_ARCHIVE.OF' | translate }} {{ totalPages }}
                 </small>
               </div>
             </div>
@@ -159,38 +159,38 @@
             <div class="applied-filters-info mb-3" *ngIf="hasActiveFilters()">
               <div class="alert alert-info d-flex align-items-center">
                 <i class="fa fa-info-circle me-2"></i>
-                <small><strong>Filtros aplicados:</strong> {{ getAppliedFiltersDescription() }}</small>
+                <small><strong>{{ 'ARCHIVE.EXPORT_ARCHIVE.APPLIED_FILTERS' | translate }}:</strong> {{ getAppliedFiltersDescription() }}</small>
               </div>
             </div>
 
             <!-- Mensaje cuando no hay resultados -->
             <div *ngIf="totalFilteredRecords === 0" class="text-center py-5">
               <i class="fa fa-file-export fa-3x text-muted mb-3"></i>
-              <h5 class="text-muted">{{ 'EXPORT_ARCHIVE.NO_DATA_AVAILABLE' | translate }}</h5>
-              <p class="text-muted">{{ 'EXPORT_ARCHIVE.FILTERS_APPLICATION' | translate }}</p>
+              <h5 class="text-muted">{{ 'ARCHIVE.EXPORT_ARCHIVE.NO_DATA_AVAILABLE' | translate }}</h5>
+              <p class="text-muted">{{ 'ARCHIVE.EXPORT_ARCHIVE.FILTERS_APPLICATION' | translate }}</p>
             </div>
 
             <!-- Indicador de carga de página -->
             <div *ngIf="isLoadingPage" class="text-center py-3">
               <div class="spinner-border spinner-border-sm text-primary" role="status">
-                <span class="visually-hidden">Cargando página...</span>
+                <span class="visually-hidden">{{ 'ARCHIVE.EXPORT_ARCHIVE.LOADING_PAGE' | translate }}</span>
               </div>
-              <small class="text-muted ms-2">Cargando página {{ currentPage }}...</small>
+              <small class="text-muted ms-2">{{ 'ARCHIVE.EXPORT_ARCHIVE.LOADING_PAGE' | translate }} {{ currentPage }}...</small>
             </div>
 
             <div class="table-responsive" *ngIf="totalFilteredRecords > 0 && !isLoadingPage">
               <table class="table table-striped table-hover text-center align-middle">
                 <thead class="table-light">
                   <tr>
-                    <th>{{ 'EXPORT_ARCHIVE.ARCHIVE_NUMBER' | translate }}</th>
-                    <th>{{ 'EXPORT_ARCHIVE.NAME' | translate }}</th>
-                    <th>{{ 'EXPORT_ARCHIVE.AGE' | translate }}</th>
-                    <th>{{ 'EXPORT_ARCHIVE.GENDER' | translate }}</th>
-                    <th>{{ 'EXPORT_ARCHIVE.ADDRESS' | translate }}</th>
-                    <th>{{ 'EXPORT_ARCHIVE.LOCATION' | translate }}</th>
-                    <th>{{ 'EXPORT_ARCHIVE.MUNICIPALITY' | translate }}</th>
-                    <th>{{ 'EXPORT_ARCHIVE.STATE' | translate }}</th>
-                    <th>{{ 'EXPORT_ARCHIVE.ADMISSION_DATE' | translate }}</th>
+                    <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.ARCHIVE_NUMBER' | translate }}</th>
+                    <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.NAME' | translate }}</th>
+                    <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.AGE' | translate }}</th>
+                    <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.GENDER' | translate }}</th>
+                    <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.ADDRESS' | translate }}</th>
+                    <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.LOCATION' | translate }}</th>
+                    <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.MUNICIPALITY' | translate }}</th>
+                    <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.STATE' | translate }}</th>
+                    <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.ADMISSION_DATE' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -258,7 +258,7 @@
               </nav>
               
               <div class="page-size-selector">
-                <small class="text-muted me-2">Registros por página:</small>
+                <small class="text-muted me-2">{{ 'ARCHIVE.EXPORT_ARCHIVE.RECORDS_PER_PAGE' | translate }}</small>
                 <select class="form-select form-select-sm d-inline-block w-auto" 
                         [(ngModel)]="itemsPerPage" 
                         (change)="applyFiltersOptimized()">

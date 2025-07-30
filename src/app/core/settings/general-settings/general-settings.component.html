@@ -9,10 +9,10 @@
           <div class="page-header-content">
             <h3 class="page-title">
               <i class="fas fa-cog me-2 text-primary"></i>
-              {{ 'GENERAL_SETTINGS.TITLE' | translate }}
+              {{ 'SETTINGS.GENERAL.TITLE' | translate }}
             </h3>
             <p class="page-subtitle text-muted mb-0">
-              {{ 'GENERAL_SETTINGS.SUBTITLE' | translate }}
+              {{ 'SETTINGS.GENERAL.SUBTITLE' | translate }}
             </p>
           </div>
         </div>
@@ -20,7 +20,7 @@
           <div class="settings-actions">
             <button type="button" class="btn btn-outline-secondary btn-sm me-2" (click)="resetColorsToDefault()">
               <i class="fas fa-undo me-1"></i>
-              {{ 'GENERAL_SETTINGS.RESET_DEFAULTS' | translate }}
+              {{ 'SETTINGS.GENERAL.RESET_DEFAULTS' | translate }}
             </button>
           </div>
         </div>
@@ -41,8 +41,8 @@
               <i class="fas fa-globe text-info"></i>
             </div>
             <div class="settings-info">
-              <h5 class="settings-title">{{ 'GENERAL_SETTINGS.LANGUAGE' | translate }}</h5>
-              <p class="settings-subtitle">{{ 'GENERAL_SETTINGS.CHOOSE_PREFERRED_LANGUAGE' | translate }}</p>
+              <h5 class="settings-title">{{ 'SETTINGS.GENERAL.LANGUAGE' | translate }}</h5>
+              <p class="settings-subtitle">{{ 'SETTINGS.GENERAL.CHOOSE_PREFERRED_LANGUAGE' | translate }}</p>
             </div>
           </div>
           <div class="settings-card-body">
@@ -50,7 +50,7 @@
               <div class="language-option" [class.active]="selectedLang === 'en'" (click)="setLanguage('en')">
                 <img src="assets/flags/us.png" width="32" height="24" alt="English" class="flag-icon">
                 <div class="language-info">
-                  <span class="language-name">{{ 'GENERAL_SETTINGS.ENGLISH' | translate }}</span>
+                  <span class="language-name">{{ 'SETTINGS.GENERAL.ENGLISH' | translate }}</span>
                   <small class="language-code">EN</small>
                 </div>
                 <div class="language-check">
@@ -60,7 +60,7 @@
               <div class="language-option" [class.active]="selectedLang === 'es'" (click)="setLanguage('es')">
                 <img src="assets/flags/mx.png" width="32" height="24" alt="Español" class="flag-icon">
                 <div class="language-info">
-                  <span class="language-name">{{ 'GENERAL_SETTINGS.SPANISH' | translate }}</span>
+                  <span class="language-name">{{ 'SETTINGS.GENERAL.SPANISH' | translate }}</span>
                   <small class="language-code">ES</small>
                 </div>
                 <div class="language-check">
@@ -78,8 +78,8 @@
               <i class="fas fa-moon text-secondary"></i>
             </div>
             <div class="settings-info">
-              <h5 class="settings-title">{{ 'GENERAL_SETTINGS.COLOR_MODE' | translate }}</h5>
-              <p class="settings-subtitle">{{ 'GENERAL_SETTINGS.DESCRIPTION_MODE' | translate }}</p>
+              <h5 class="settings-title">{{ 'SETTINGS.GENERAL.COLOR_MODE' | translate }}</h5>
+              <p class="settings-subtitle">{{ 'SETTINGS.GENERAL.DESCRIPTION_MODE' | translate }}</p>
             </div>
           </div>
           <div class="settings-card-body">
@@ -89,8 +89,8 @@
                   <i class="fas fa-sun"></i>
                 </div>
                 <div class="theme-info">
-                  <span class="theme-name">{{ 'GENERAL_SETTINGS.LIGHT_MODE' | translate }}</span>
-                  <small class="theme-desc">{{ 'GENERAL_SETTINGS.LIGHT_MODE_DESC' | translate }}</small>
+                  <span class="theme-name">{{ 'SETTINGS.GENERAL.LIGHT_MODE' | translate }}</span>
+                  <small class="theme-desc">{{ 'SETTINGS.GENERAL.LIGHT_MODE_DESC' | translate }}</small>
                 </div>
                 <div class="theme-check">
                   <i class="fas fa-check" *ngIf="!isDarkMode"></i>
@@ -101,8 +101,8 @@
                   <i class="fas fa-moon"></i>
                 </div>
                 <div class="theme-info">
-                  <span class="theme-name">{{ 'GENERAL_SETTINGS.DARK_MODE' | translate }}</span>
-                  <small class="theme-desc">{{ 'GENERAL_SETTINGS.DARK_MODE_DESC' | translate }}</small>
+                  <span class="theme-name">{{ 'SETTINGS.GENERAL.DARK_MODE' | translate }}</span>
+                  <small class="theme-desc">{{ 'SETTINGS.GENERAL.DARK_MODE_DESC' | translate }}</small>
                 </div>
                 <div class="theme-check">
                   <i class="fas fa-check" *ngIf="isDarkMode"></i>
@@ -124,8 +124,8 @@
               <i class="fas fa-palette text-primary"></i>
             </div>
             <div class="settings-info">
-              <h5 class="settings-title">{{ 'GENERAL_SETTINGS.COLOR_CUSTOMIZATION' | translate }}</h5>
-              <p class="settings-subtitle">{{ 'GENERAL_SETTINGS.CUSTOMIZE_THEME_COLORS' | translate }}</p>
+              <h5 class="settings-title">{{ 'SETTINGS.GENERAL.COLOR_CUSTOMIZATION' | translate }}</h5>
+              <p class="settings-subtitle">{{ 'SETTINGS.GENERAL.CUSTOMIZE_THEME_COLORS' | translate }}</p>
             </div>
           </div>
           <div class="settings-card-body">
@@ -134,7 +134,7 @@
             <div class="color-setting-group">
               <label class="color-label">
                 <i class="fas fa-border-style me-2"></i>
-                {{ 'GENERAL_SETTINGS.OUTLINE_COLOR' | translate }}
+                {{ 'SETTINGS.GENERAL.OUTLINE_COLOR' | translate }}
               </label>
               <div class="color-input-group">
                 <div class="color-preview" [style.background-color]="borderColor"></div>
@@ -148,7 +148,7 @@
                   class="btn btn-primary btn-sm apply-btn"
                   (click)="updateBorderColor()">
                   <i class="fas fa-check me-1"></i>
-                  {{ 'GENERAL_SETTINGS.APPLY' | translate }}
+                  {{ 'SETTINGS.GENERAL.APPLY' | translate }}
                 </button>
               </div>
             </div>
@@ -157,7 +157,7 @@
             <div class="color-setting-group" *ngIf="!isDarkMode">
               <label class="color-label">
                 <i class="fas fa-fill-drip me-2"></i>
-                {{ 'GENERAL_SETTINGS.CARD_BG_COLOR_LIGHT' | translate }}
+                {{ 'SETTINGS.GENERAL.CARD_BG_COLOR_LIGHT' | translate }}
               </label>
               <div class="color-input-group">
                 <div class="color-preview" [style.background-color]="cardBgColorLight"></div>
@@ -171,7 +171,7 @@
                   class="btn btn-primary btn-sm apply-btn"
                   (click)="updateCardBgColorLight()">
                   <i class="fas fa-check me-1"></i>
-                  {{ 'GENERAL_SETTINGS.APPLY' | translate }}
+                  {{ 'SETTINGS.GENERAL.APPLY' | translate }}
                 </button>
               </div>
             </div>
@@ -180,7 +180,7 @@
             <div class="color-setting-group" *ngIf="isDarkMode">
               <label class="color-label">
                 <i class="fas fa-fill-drip me-2"></i>
-                {{ 'GENERAL_SETTINGS.CARD_BG_COLOR_DARK' | translate }}
+                {{ 'SETTINGS.GENERAL.CARD_BG_COLOR_DARK' | translate }}
               </label>
               <div class="color-input-group">
                 <div class="color-preview" [style.background-color]="cardBgColorDark"></div>
@@ -194,7 +194,7 @@
                   class="btn btn-primary btn-sm apply-btn"
                   (click)="updateCardBgColorDark()">
                   <i class="fas fa-check me-1"></i>
-                  {{ 'GENERAL_SETTINGS.APPLY' | translate }}
+                  {{ 'SETTINGS.GENERAL.APPLY' | translate }}
                 </button>
               </div>
             </div>
@@ -209,8 +209,8 @@
               <i class="fas fa-eye text-success"></i>
             </div>
             <div class="settings-info">
-              <h5 class="settings-title">{{ 'GENERAL_SETTINGS.PREVIEW' | translate }}</h5>
-              <p class="settings-subtitle">{{ 'GENERAL_SETTINGS.PREVIEW_CURRENT_SETTINGS' | translate }}</p>
+              <h5 class="settings-title">{{ 'SETTINGS.GENERAL.PREVIEW' | translate }}</h5>
+              <p class="settings-subtitle">{{ 'SETTINGS.GENERAL.PREVIEW_CURRENT_SETTINGS' | translate }}</p>
             </div>
           </div>
           <div class="settings-card-body">
@@ -218,12 +218,12 @@
               <div class="preview-card" [style.background-color]="isDarkMode ? cardBgColorDark : cardBgColorLight" 
                    [style.border-color]="borderColor">
                 <div class="preview-header">
-                  <h6>{{ 'GENERAL_SETTINGS.SAMPLE_CARD' | translate }}</h6>
+                  <h6>{{ 'SETTINGS.GENERAL.SAMPLE_CARD' | translate }}</h6>
                 </div>
                 <div class="preview-body">
-                  <p>{{ 'GENERAL_SETTINGS.PREVIEW_TEXT' | translate }}</p>
+                  <p>{{ 'SETTINGS.GENERAL.PREVIEW_TEXT' | translate }}</p>
                   <div class="preview-button" [style.background-color]="borderColor">
-                    {{ 'GENERAL_SETTINGS.SAMPLE_BUTTON' | translate }}
+                    {{ 'SETTINGS.GENERAL.SAMPLE_BUTTON' | translate }}
                   </div>
                 </div>
               </div>

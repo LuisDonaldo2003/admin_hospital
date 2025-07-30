@@ -5,8 +5,8 @@
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item"><a href="#">{{ 'EDIT_PROFILE_M.PROFILES' | translate }} ></a></li>
-            <li class="breadcrumb-item active">{{ 'EDIT_PROFILE_M.EDIT' | translate }}</li>
+            <li class="breadcrumb-item"><a href="#">{{ 'PROFILE_M.EDIT_PROFILE.PROFILES' | translate }} ></a></li>
+            <li class="breadcrumb-item active">{{ 'PROFILE_M.EDIT_PROFILE.EDIT' | translate }}</li>
           </ol>
         </div>
       </div>
@@ -17,26 +17,26 @@
       <div class="col-lg-8">
         <div class="card shadow-sm border-0">
           <div class="card-body">
-            <h4 class="mb-4">{{ 'EDIT_PROFILE_M.TITLE' | translate }}: {{ name }}</h4>
+            <h4 class="mb-4">{{ 'PROFILE_M.EDIT_PROFILE.TITLE' | translate }}: {{ name }}</h4>
 
             <form>
               <div class="mb-3 row">
-                <label class="col-sm-2 col-form-label">{{ 'EDIT_PROFILE_M.NAME' | translate }}</label>
+                <label class="col-sm-2 col-form-label">{{ 'PROFILE_M.EDIT_PROFILE.NAME' | translate }}</label>
                 <div class="col-sm-10">
-                  <input type="text" name="name" [(ngModel)]="name" class="form-control" [placeholder]="'EDIT_PROFILE_M.PLACEHOLDER_NAME' | translate" />
+                  <input type="text" name="name" [(ngModel)]="name" class="form-control" [placeholder]="'PROFILE_M.EDIT_PROFILE.PLACEHOLDER_NAME' | translate" />
                 </div>
               </div>
 
               <div class="mb-3 row">
-                <label class="col-sm-2 col-form-label">{{ 'EDIT_PROFILE_M.STATE' | translate }}</label>
+                <label class="col-sm-2 col-form-label">{{ 'PROFILE_M.EDIT_PROFILE.STATE' | translate }}</label>
                 <div class="col-sm-10 d-flex align-items-center gap-4">
                   <div class="form-check">
                     <input type="radio" class="form-check-input" id="active" name="state" [value]="1" [(ngModel)]="state" />
-                    <label class="form-check-label" for="active">{{ 'EDIT_PROFILE_M.ACTIVE' | translate }}</label>
+                    <label class="form-check-label" for="active">{{ 'PROFILE_M.EDIT_PROFILE.ACTIVE' | translate }}</label>
                   </div>
                   <div class="form-check">
                     <input type="radio" class="form-check-input" id="inactive" name="state" [value]="2" [(ngModel)]="state" />
-                    <label class="form-check-label" for="inactive">{{ 'EDIT_PROFILE_M.INACTIVE' | translate }}</label>
+                    <label class="form-check-label" for="inactive">{{ 'PROFILE_M.EDIT_PROFILE.INACTIVE' | translate }}</label>
                   </div>
                 </div>
               </div>
@@ -44,28 +44,28 @@
               <!-- Alerts -->
               <div class="mb-3" *ngIf="valid_form">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                  <strong>{{ 'EDIT_PROFILE_M.ERROR' | translate }}:</strong> {{ 'EDIT_PROFILE_M.REQUIRED' | translate }}
+                  <strong>{{ 'PROFILE_M.EDIT_PROFILE.ERROR' | translate }}:</strong> {{ 'PROFILE_M.EDIT_PROFILE.REQUIRED' | translate }}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
               </div>
 
               <div class="mb-3" *ngIf="valid_form_success">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong>{{ 'EDIT_PROFILE_M.SUCCESS' | translate }}:</strong> {{ 'EDIT_PROFILE_M.SUCCESS_MESSAGE' | translate }}
+                  <strong>{{ 'PROFILE_M.EDIT_PROFILE.SUCCESS' | translate }}:</strong> {{ 'PROFILE_M.EDIT_PROFILE.SUCCESS_MESSAGE' | translate }}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
               </div>
 
               <div class="mb-3" *ngIf="text_validation">
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  <strong>{{ 'EDIT_PROFILE_M.ATTENTION' | translate }}:</strong> {{ text_validation }}
+                  <strong>{{ 'PROFILE_M.EDIT_PROFILE.ATTENTION' | translate }}:</strong> {{ text_validation }}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
               </div>
 
               <!-- Button -->
               <div class="text-end">
-                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'EDIT_PROFILE_M.EDIT' | translate }}</button>
+                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'PROFILE_M.EDIT_PROFILE.EDIT' | translate }}</button>
               </div>
             </form>
 
