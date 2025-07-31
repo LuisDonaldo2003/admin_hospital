@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -13,7 +13,7 @@ import { ArchiveService } from '../service/archive.service';
   templateUrl: './add-archive.component.html',
   styleUrls: ['./add-archive.component.scss']
 })
-export class AddArchiveComponent implements OnInit {
+export class AddArchiveComponent implements OnInit, OnDestroy {
   archive_number = '';
   name = '';
   last_name_father = '';
@@ -21,15 +21,18 @@ export class AddArchiveComponent implements OnInit {
   age: number | null = null;
   gender_id = '';
   address = '';
-  state_id = '';
-  municipality_id = '';
   location_id = '';
   admission_date = '';
 
+  // Nuevas propiedades para búsqueda de localidad
+  locationSearchTerm = '';
+  filteredLocations: any[] = [];
+  selectedLocationData: any = null;
+  showLocationDropdown = false;
+  isSearchingLocations = false;
+  searchTimeout: any = null;
+
   genders: any[] = [];
-  states: any[] = [];
-  municipalities: any[] = [];
-  locations: any[] = [];
 
   submitted = false;
   text_validation = '';
@@ -43,43 +46,22 @@ export class AddArchiveComponent implements OnInit {
 
   ngOnInit(): void {
     this.admission_date = new Date().toISOString().split('T')[0];
-
-    this.loadStates();
     this.loadGenders();
-  }
-
-  private loadStates(): void {
-    this.archiveService.listStates().subscribe({
-      next: (data: any) => {
-        this.states = data;
-        
-        // Buscar y seleccionar automáticamente el estado "Guerrero"
-        const guerreroState = this.states.find(state => 
-          state.name.toLowerCase().includes('guerrero')
-        );
-        
-        if (guerreroState) {
-          this.state_id = guerreroState.id;
-          console.log('✅ Estado "Guerrero" seleccionado automáticamente:', guerreroState.name);
-          
-          // Cargar automáticamente los municipios de Guerrero
-          this.loadMunicipalitiesForGuerrero();
-        }
-      },
-      error: (err) => console.error('Error al cargar estados:', err)
+    
+    // Cerrar dropdown al hacer click fuera
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.position-relative')) {
+        this.showLocationDropdown = false;
+      }
     });
   }
 
-  private loadMunicipalitiesForGuerrero(): void {
-    if (this.state_id) {
-      this.archiveService.listMunicipalities(this.state_id).subscribe({
-        next: (data: any) => {
-          this.municipalities = data;
-          console.log(`✅ Municipios de Guerrero cargados: ${data.length} municipios`);
-        },
-        error: (err) => console.error('Error al cargar municipios de Guerrero:', err)
-      });
+  ngOnDestroy(): void {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
     }
+    document.removeEventListener('click', () => {});
   }
 
   private loadGenders(): void {
@@ -89,30 +71,71 @@ export class AddArchiveComponent implements OnInit {
     });
   }
 
-  onStateChange(): void {
-    this.municipality_id = '';
-    this.location_id = '';
-    this.municipalities = [];
-    this.locations = [];
+  onLocationSearch(event: any): void {
+    const searchTerm = event.target.value.trim();
+    this.locationSearchTerm = searchTerm;
 
-    if (this.state_id) {
-      this.archiveService.listMunicipalities(this.state_id).subscribe({
-        next: (data: any) => this.municipalities = data,
-        error: (err) => console.error('Error al cargar municipios:', err)
-      });
+    // Limpiar timeout anterior
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
     }
+
+    if (searchTerm.length < 2) {
+      this.filteredLocations = [];
+      this.showLocationDropdown = false;
+      return;
+    }
+
+    this.showLocationDropdown = true;
+    this.isSearchingLocations = true;
+
+    // Debounce: esperar 300ms antes de hacer la búsqueda
+    this.searchTimeout = setTimeout(() => {
+      this.archiveService.searchLocationsByName(searchTerm).subscribe({
+        next: (data: any) => {
+          console.log('Locations found:', data);
+          this.filteredLocations = data || [];
+          this.isSearchingLocations = false;
+          
+          // Mostrar dropdown si hay resultados
+          this.showLocationDropdown = this.filteredLocations.length > 0;
+        },
+        error: (err) => {
+          console.error('Error al buscar localidades:', err);
+          this.filteredLocations = [];
+          this.isSearchingLocations = false;
+          this.showLocationDropdown = false;
+        }
+      });
+    }, 300);
   }
 
-  onMunicipalityChange(): void {
-    this.location_id = '';
-    this.locations = [];
+  selectLocation(location: any): void {
+    this.location_id = location.id;
+    this.selectedLocationData = location;
+    this.locationSearchTerm = location.name;
+    this.showLocationDropdown = false;
+    this.filteredLocations = [];
+  }
 
-    if (this.municipality_id) {
-      this.archiveService.listLocations(this.municipality_id).subscribe({
-        next: (data: any) => this.locations = data,
-        error: (err) => console.error('Error al cargar localidades:', err)
-      });
+  trackByLocationId(index: number, location: any): any {
+    return location.id;
+  }
+
+  isPriorityState(stateName: string): boolean {
+    const priorityStates = ['Guerrero', 'Michoacán', 'México', 'Morelos', 'Puebla', 'Oaxaca'];
+    return priorityStates.includes(stateName);
+  }
+
+  getPriorityIndicator(stateName: string): string {
+    if (stateName === 'Guerrero') {
+      return '4px solid #28a745'; // Verde para Guerrero
+    } else if (['Michoacán', 'México', 'Morelos'].includes(stateName)) {
+      return '4px solid #ffc107'; // Amarillo para estados colindantes principales
+    } else if (['Puebla', 'Oaxaca'].includes(stateName)) {
+      return '4px solid #17a2b8'; // Azul para otros estados colindantes
     }
+    return 'none';
   }
 
   save(): void {
@@ -127,8 +150,6 @@ export class AddArchiveComponent implements OnInit {
     if (!this.last_name_father.trim()) missingFields.push(this.translate.instant('FATHER_LAST_NAME'));
     if (!this.age) missingFields.push(this.translate.instant('AGE'));
     if (!this.gender_id) missingFields.push(this.translate.instant('GENDER'));
-    if (!this.state_id) missingFields.push(this.translate.instant('STATE'));
-    if (!this.municipality_id) missingFields.push(this.translate.instant('MUNICIPALITY'));
     if (!this.location_id) missingFields.push(this.translate.instant('LOCATION'));
     if (!this.admission_date) missingFields.push(this.translate.instant('ADMISSION_DATE'));
 
