@@ -1,7 +1,27 @@
 <div class="page-wrapper">
   <div class="content add-staff-form">
     <div class="page-header mb-4">
-      <div class="row">
+                          <!-- Mensaje cuando no hay resultados -->
+                    <div *ngIf="showLocationDropdown && locationSearchTerm && filteredLocations.length === 0 && !isSearchingLocations" 
+                         class="dropdown-menu show w-100 position-absolute"
+                         style="z-index: 9999; border: 2px solid #007bff; border-radius: 8px; 
+                                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+                                background-color: #fff; margin-top: 2px;">
+                      <div class="dropdown-item-text" style="padding: 12px 16px; text-align: center; color: #6c757d;">
+                        {{ 'ARCHIVE.ADD_PATIENT.NO_LOCATIONS_FOUND' | translate }}
+                    </div>
+
+                    <!-- Indicador de carga -->
+                    <div *ngIf="isSearchingLocations" 
+                         class="dropdown-menu show w-100 position-absolute"
+                         style="z-index: 9999; border: 2px solid #007bff; border-radius: 8px; 
+                                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+                                background-color: #fff; margin-top: 2px;">
+                      <div class="dropdown-item-text text-center" style="padding: 12px 16px; color: #6c757d;">
+                        <div class="spinner-border spinner-border-sm me-2" role="status" style="width: 14px; height: 14px;"></div>
+                        {{ 'ARCHIVE.ADD_PATIENT.SEARCHING' | translate }}...
+                      </div>
+                    </div>>
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
             <li class="breadcrumb-item"><a href="#">{{ 'ARCHIVE.ADD_PATIENT.PATIENT' | translate }} ></a></li>
@@ -62,31 +82,84 @@
                   <input type="text" class="form-control" [(ngModel)]="address" name="address" />
                 </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.STATE' | translate }} *</label>
-                  <select class="form-select" [(ngModel)]="state_id" name="state_id"
-                          required [ngClass]="{ 'is-invalid': submitted && !state_id }" (change)="onStateChange()">
-                    <option value="">{{ 'ARCHIVE.ADD_PATIENT.SELECT_STATE' | translate }}</option>
-                    <option *ngFor="let s of states" [value]="s.id">{{ s.name }}</option>
-                  </select>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.MUNICIPALITY' | translate }} *</label>
-                  <select class="form-select" [(ngModel)]="municipality_id" name="municipality_id"
-                          required [ngClass]="{ 'is-invalid': submitted && !municipality_id }" (change)="onMunicipalityChange()">
-                    <option value="">{{ 'ARCHIVE.ADD_PATIENT.SELECT_MUNICIPALITY' | translate }}</option>
-                    <option *ngFor="let m of municipalities" [value]="m.id">{{ m.name }}</option>
-                  </select>
-                </div>
-
-                <div class="col-md-6">
+                <div class="col-md-12">
                   <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.LOCATION' | translate }} *</label>
-                  <select class="form-select" [(ngModel)]="location_id" name="location_id"
-                          required [ngClass]="{ 'is-invalid': submitted && !location_id }">
-                    <option value="">{{ 'ARCHIVE.ADD_PATIENT.SELECT_LOCATION' | translate }}</option>
-                    <option *ngFor="let l of locations" [value]="l.id">{{ l.name }}</option>
-                  </select>
+                  <div class="position-relative location-dropdown">
+                    <input type="text" 
+                           class="form-control" 
+                           [(ngModel)]="locationSearchTerm" 
+                           name="locationSearchTerm"
+                           [placeholder]="'ARCHIVE.ADD_PATIENT.SEARCH_LOCATION_PLACEHOLDER' | translate"
+                           (input)="onLocationSearch($event)"
+                           (focus)="showLocationDropdown = true"
+                           required 
+                           [ngClass]="{ 'is-invalid': submitted && !location_id }"
+                           autocomplete="off" />
+                    
+                    <!-- Dropdown de resultados -->
+                    <div *ngIf="showLocationDropdown && filteredLocations.length > 0" 
+                         class="dropdown-menu show w-100 position-absolute"
+                         style="z-index: 9999; max-height: 300px; overflow-y: auto; 
+                                border: 2px solid #007bff; border-radius: 8px; 
+                                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+                                background-color: #fff; margin-top: 2px;">
+                      <div *ngFor="let location of filteredLocations; trackBy: trackByLocationId" 
+                           class="dropdown-item"
+                           (click)="selectLocation(location)"
+                           style="cursor: pointer; padding: 12px 16px; border-bottom: 1px solid #f0f0f0; 
+                                  transition: all 0.2s ease; color: #212529; background-color: #fff;"
+                           [style.border-left]="getPriorityIndicator(location.state_name)">
+                        <div class="d-flex justify-content-between align-items-start">
+                          <div class="flex-grow-1">
+                            <div class="fw-medium" style="font-size: 14px; font-weight: 600; margin-bottom: 2px; color: inherit;">
+                              {{ location.name }}
+                              <span *ngIf="isPriorityState(location.state_name)" 
+                                    class="badge bg-primary ms-2" 
+                                    style="font-size: 10px;">Prioritario</span>
+                            </div>
+                            <small style="color: #6c757d; font-size: 12px;">
+                              {{ location.municipality_name }}, {{ location.state_name }}
+                            </small>
+                          </div>
+                          <div *ngIf="location.priority <= 6" class="text-end">
+                            <i class="fas fa-star text-warning" style="font-size: 12px;"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Mensaje cuando no hay resultados -->
+                    <div *ngIf="showLocationDropdown && locationSearchTerm && filteredLocations.length === 0 && !isSearchingLocations" 
+                         class="dropdown-menu show w-100 position-absolute"
+                         style="z-index: 9999; border: 2px solid #007bff; border-radius: 8px; 
+                                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+                                background-color: #fff; margin-top: 2px;">
+                      <div class="dropdown-item-text" style="padding: 12px 16px; text-align: center; color: #6c757d;">
+                        {{ 'ARCHIVE.ADD_PATIENT.NO_LOCATIONS_FOUND' | translate }}
+                      </div>
+                    </div>
+
+                    <!-- Indicador de carga -->
+                    <div *ngIf="isSearchingLocations" 
+                         class="dropdown-menu show w-100 position-absolute"
+                         style="z-index: 9999; border: 2px solid #007bff; border-radius: 8px; 
+                                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+                                background-color: #fff; margin-top: 2px;">
+                      <div class="dropdown-item-text" style="padding: 12px 16px; text-align: center; color: #6c757d;">
+                        <div class="spinner-border spinner-border-sm me-2" role="status" style="width: 14px; height: 14px;"></div>
+                        {{ 'ARCHIVE.ADD_PATIENT.SEARCHING' | translate }}...
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Localidad seleccionada (solo lectura) -->
+                  <div *ngIf="selectedLocationData" class="mt-2 p-2 bg-light rounded">
+                    <small class="text-success">
+                      <i class="fas fa-check-circle me-1"></i>
+                      <strong>{{ 'ARCHIVE.ADD_PATIENT.SELECTED_LOCATION' | translate }}:</strong>
+                      {{ selectedLocationData.name }} - {{ selectedLocationData.municipality_name }}, {{ selectedLocationData.state_name }}
+                    </small>
+                  </div>
                 </div>
 
                 <div class="col-md-6">
