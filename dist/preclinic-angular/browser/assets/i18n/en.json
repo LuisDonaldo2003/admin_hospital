@@ -103,6 +103,7 @@
   "ADMISSION_DATE": "Admission Date",
   "WARNING": "Warning",
   "SUCCESS": "Success",
+  "ARCHIVE_REGISTERED_SUCCESS": "The archive was registered successfully.",
   "SAVE": "Save",
 
   "_list_archive": "Archive/Patient list",

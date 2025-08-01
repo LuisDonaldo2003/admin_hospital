@@ -104,6 +104,7 @@
   "ADMISSION_DATE": "Fecha de Ingreso",
   "WARNING": "Advertencia",
   "SUCCESS": "Éxito",
+  "ARCHIVE_REGISTERED_SUCCESS": "El archivo fue registrado exitosamente.",
   "SAVE": "Guardar",
 
   "_listado_archivos": "Listado de archivos/pacientes",

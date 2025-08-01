@@ -183,11 +183,13 @@
     "MUNICIPALITY": "Municipio",
     "SELECT_MUNICIPALITY": "Selecciona municipio",
     "LOCATION": "Ubicación",
-    "SELECT_LOCATION": "Selecciona ubicación",
+    "SELECT_LOCATION": "Ubicación seleccionada",
+    "SEARCH_LOCATION_PLACEHOLDER": "Escribe una ubicación",
     "ADMISSION_DATE": "Fecha de ingreso",
     "WARNING": "Advertencia",
     "SUCCESS": "Éxito",
-    "SAVE": "Guardar"
+    "SAVE": "Guardar",
+    "SEARCHING": "Buscando..."
   },
   "BACKUPS": {
     "TITLE": "Respaldo de Pacientes",

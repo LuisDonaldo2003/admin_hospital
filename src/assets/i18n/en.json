@@ -182,11 +182,13 @@
     "MUNICIPALITY": "Municipality",
     "SELECT_MUNICIPALITY": "Select municipality",
     "LOCATION": "Location",
-    "SELECT_LOCATION": "Select location",
+    "SELECT_LOCATION": "Selected location",
+    "SEARCH_LOCATION_PLACEHOLDER": "Select location",
     "ADMISSION_DATE": "Admission date",
     "WARNING": "Warning",
     "SUCCESS": "Success",
-    "SAVE": "Save"
+    "SAVE": "Save",
+    "SEARCHING": "Searching..."
   },
   "BACKUPS": {
     "TITLE": "Patient Backups",
