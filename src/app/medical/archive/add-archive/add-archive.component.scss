@@ -8,6 +8,67 @@
     color: var(--user-card-text-color, #000);
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    /* Estilos para el autocomplete de localidades */
+    .location-suggestion {
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: #f8f9fa !important;
+      }
+      
+      &:last-child {
+        border-bottom: none !important;
+      }
+    }
+
+    /* Asegurar que el dropdown esté por encima de otros elementos */
+    .position-relative .z-3 {
+      z-index: 1050;
+    }
+
+    /* Estilos para el spinner de carga */
+    .spinner-border-sm {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    /* Mejorar la apariencia del alert de localidad seleccionada */
+    .alert-success {
+      border-left: 4px solid #28a745;
+    }
+
+    .alert-info {
+      border-left: 4px solid #17a2b8;
+    }
+
+    /* Animación suave para mostrar/ocultar el dropdown */
+    .location-dropdown {
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Mejorar la navegación por teclado */
+    .location-suggestions-container {
+      border: 2px solid #007bff;
+      border-top: none;
+      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+    }
+
+    .location-suggestion.bg-light {
+      background-color: #e3f2fd !important;
+      border-left: 3px solid #007bff;
+    }
   }
 
   .form-label {
@@ -32,6 +93,72 @@
       border-color: #dc3545;
       background-color: #ffe6e6;
     }
+  }
+
+  // Estilos para el dropdown de localidades
+  .location-dropdown {
+    .dropdown-menu {
+      border-radius: 0.5rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      border: 1px solid #dee2e6;
+      background-color: #fff;
+      min-width: 100%;
+      padding: 0.5rem 0;
+      margin-top: 0.25rem;
+      z-index: 1050 !important;
+      max-height: 250px;
+      overflow-y: auto;
+      
+      .dropdown-item {
+        padding: 0.75rem 1rem;
+        border: none;
+        border-bottom: 1px solid #f1f3f4;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background-color: transparent;
+        color: #212529;
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        &:hover {
+          background-color: #f8f9fa !important;
+          color: #0d6efd;
+          transform: translateX(2px);
+        }
+        
+        .fw-medium {
+          font-size: 0.95rem;
+          font-weight: 600;
+          margin-bottom: 0.25rem;
+          display: block;
+        }
+        
+        small {
+          font-size: 0.8rem;
+          color: #6c757d;
+          display: block;
+        }
+      }
+      
+      .dropdown-item-text {
+        padding: 1rem;
+        color: #6c757d;
+        font-size: 0.9rem;
+        text-align: center;
+        
+        .spinner-border-sm {
+          width: 1rem;
+          height: 1rem;
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+
+  .hover-item {
+    transition: all 0.2s ease;
   }
 
   .btn {
@@ -74,6 +201,121 @@
     .form-select option {
       color: #000 !important;
       background-color: #fff !important;
+    }
+
+    // Dropdown de localidades - Modo claro
+    .location-dropdown .dropdown-menu {
+      background-color: #fff;
+      border: 1px solid #dee2e6;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+      
+      .dropdown-item {
+        color: #212529;
+        background-color: transparent;
+        padding: 12px 16px;
+        border-bottom: 1px solid #f8f9fa;
+        transition: all 0.2s ease;
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        &:hover {
+          background-color: #e3f2fd !important;
+          color: #1976d2;
+          transform: translateX(2px);
+        }
+        
+        .fw-medium {
+          font-weight: 600;
+          font-size: 14px;
+          margin-bottom: 2px;
+          color: #212529;
+        }
+        
+        small {
+          color: #6c757d;
+          font-size: 12px;
+        }
+      }
+      
+      .dropdown-item-text {
+        color: #6c757d;
+        padding: 12px 16px;
+        font-style: italic;
+        text-align: center;
+        
+        .spinner-border-sm {
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
+
+    // Estilos globales para dropdown de búsqueda
+    .position-relative .dropdown-menu.show {
+      background-color: #fff !important;
+      border: 2px solid #007bff !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+      border-radius: 8px !important;
+      max-height: 300px !important;
+      overflow-y: auto !important;
+      z-index: 9999 !important;
+      position: absolute !important;
+      top: 100% !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      margin-top: 2px !important;
+      
+      .dropdown-item {
+        padding: 12px 16px !important;
+        border: none !important;
+        background: #fff !important;
+        transition: all 0.2s ease !important;
+        cursor: pointer !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        color: #212529 !important;
+        
+        &:last-child {
+          border-bottom: none !important;
+        }
+        
+        &:hover, &:focus {
+          background-color: #e3f2fd !important;
+          color: #1976d2 !important;
+          transform: translateX(2px) !important;
+        }
+        
+        .fw-medium {
+          font-weight: 600 !important;
+          color: #212529 !important;
+          font-size: 14px !important;
+          margin-bottom: 2px !important;
+        }
+        
+        small {
+          color: #6c757d !important;
+          font-size: 12px !important;
+          display: block !important;
+        }
+      }
+      
+      .dropdown-item-text {
+        color: #6c757d !important;
+        padding: 12px 16px !important;
+        font-style: italic !important;
+        text-align: center !important;
+        background-color: #fff !important;
+        
+        .spinner-border-sm {
+          width: 14px !important;
+          height: 14px !important;
+        }
+      }
     }
   }
 
@@ -158,6 +400,51 @@
     .form-select option {
       color: #222 !important;
       background-color: #fff !important;
+    }
+
+    // Dropdown de localidades - Modo oscuro
+    .location-dropdown .dropdown-menu {
+      background-color: #2a2a3a;
+      border: 1px solid #444;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      z-index: 1050 !important;
+      
+      .dropdown-item {
+        color: #e9ecef;
+        background-color: transparent;
+        border-bottom-color: #444;
+        
+        &:hover {
+          background-color: #3a3a4a !important;
+          color: #3b82f6;
+        }
+        
+        .fw-medium {
+          color: #f8f9fa;
+        }
+        
+        small {
+          color: #adb5bd;
+        }
+      }
+      
+      .dropdown-item-text {
+        color: #adb5bd;
+      }
+    }
+
+    // Localidad seleccionada - Modo oscuro
+    .bg-light {
+      background-color: #2a2a3a !important;
+      border: 1px solid #444;
+      
+      small {
+        color: #28a745 !important;
+        
+        strong {
+          color: #f8f9fa !important;
+        }
+      }
     }
   }
 

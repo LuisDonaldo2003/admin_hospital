@@ -1,0 +1,227 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, BehaviorSubject, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { AuthService } from '../../../shared/auth/auth.service';
+import { LocationSearchResult, LocationAutocompleteItem } from '../models/location.interface';
+import { URL_SERVICIOS } from '../../../config/config';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LocationAutocompleteService {
+  
+  // Cache para localidades frecuentemente buscadas
+  private locationCache = new Map<string, LocationAutocompleteItem[]>();
+  private readonly CACHE_SIZE = 50;
+  private readonly CACHE_EXPIRY = 5 * 60 * 1000; // 5 minutos
+
+  // Subject para el historial de búsquedas
+  private searchHistorySubject = new BehaviorSubject<string[]>([]);
+  public searchHistory$ = this.searchHistorySubject.asObservable();
+
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {
+    this.loadSearchHistory();
+  }
+
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Authorization': 'Bearer ' + this.authService.token
+    });
+  }
+
+  /**
+   * Busca localidades por nombre con cache y debounce
+   */
+  searchLocations(searchTerm: string): Observable<LocationAutocompleteItem[]> {
+    if (!searchTerm || searchTerm.length < 2) {
+      return of([]);
+    }
+
+    const normalizedTerm = this.normalizeSearchTerm(searchTerm);
+    
+    // Verificar cache primero
+    const cached = this.getCachedResult(normalizedTerm);
+    if (cached) {
+      return of(cached);
+    }
+
+    // Hacer petición HTTP
+    const URL = `${URL_SERVICIOS}/locations/search?search=${encodeURIComponent(searchTerm)}`;
+    
+    return this.http.get(URL, { headers: this.getHeaders() })
+      .pipe(
+        map((results: any) => {
+          const mappedResults: LocationAutocompleteItem[] = results.map((location: any) => ({
+            id: location.id,
+            name: location.name,
+            fullDisplayText: location.display_text,
+            municipality: {
+              id: location.municipality_id,
+              name: location.municipality_name
+            },
+            state: {
+              id: location.state_id,
+              name: location.state_name
+            }
+          }));
+
+          // Guardar en cache
+          this.setCachedResult(normalizedTerm, mappedResults);
+          
+          // Agregar al historial
+          this.addToSearchHistory(searchTerm);
+
+          return mappedResults;
+        }),
+        catchError(error => {
+          console.error('Error en búsqueda de localidades:', error);
+          return of([]);
+        })
+      );
+  }
+
+  /**
+   * Obtiene sugerencias rápidas basadas en el historial
+   */
+  getQuickSuggestions(): string[] {
+    return this.searchHistorySubject.value.slice(0, 5);
+  }
+
+  /**
+   * Normaliza término de búsqueda
+   */
+  private normalizeSearchTerm(term: string): string {
+    return term.toLowerCase().trim()
+      .replace(/[áàäâã]/g, 'a')
+      .replace(/[éèëê]/g, 'e')
+      .replace(/[íìïî]/g, 'i')
+      .replace(/[óòöô]/g, 'o')
+      .replace(/[úùüû]/g, 'u')
+      .replace(/ñ/g, 'n');
+  }
+
+  /**
+   * Gestión de cache
+   */
+  private getCachedResult(term: string): LocationAutocompleteItem[] | null {
+    const cached = this.locationCache.get(term);
+    return cached || null;
+  }
+
+  private setCachedResult(term: string, results: LocationAutocompleteItem[]): void {
+    // Limpiar cache si está lleno
+    if (this.locationCache.size >= this.CACHE_SIZE) {
+      const firstKey = this.locationCache.keys().next().value;
+      if (firstKey) {
+        this.locationCache.delete(firstKey);
+      }
+    }
+    
+    this.locationCache.set(term, results);
+  }
+
+  /**
+   * Gestión del historial de búsquedas
+   */
+  private addToSearchHistory(term: string): void {
+    const current = this.searchHistorySubject.value;
+    const normalized = this.normalizeSearchTerm(term);
+    
+    // Evitar duplicados y mantener solo términos únicos
+    const filtered = current.filter(item => 
+      this.normalizeSearchTerm(item) !== normalized
+    );
+    
+    const newHistory = [term, ...filtered].slice(0, 10);
+    this.searchHistorySubject.next(newHistory);
+    this.saveSearchHistory(newHistory);
+  }
+
+  private loadSearchHistory(): void {
+    try {
+      const stored = localStorage.getItem('location_search_history');
+      if (stored) {
+        const history = JSON.parse(stored);
+        this.searchHistorySubject.next(history);
+      }
+    } catch (error) {
+      console.warn('Error al cargar historial de búsquedas:', error);
+    }
+  }
+
+  private saveSearchHistory(history: string[]): void {
+    try {
+      localStorage.setItem('location_search_history', JSON.stringify(history));
+    } catch (error) {
+      console.warn('Error al guardar historial de búsquedas:', error);
+    }
+  }
+
+  /**
+   * Limpia el historial de búsquedas
+   */
+  clearSearchHistory(): void {
+    this.searchHistorySubject.next([]);
+    localStorage.removeItem('location_search_history');
+  }
+
+  /**
+   * Limpia el cache de localidades
+   */
+  clearCache(): void {
+    this.locationCache.clear();
+  }
+
+  /**
+   * Valida una localidad seleccionada
+   */
+  validateLocation(location: LocationAutocompleteItem): boolean {
+    return !!(
+      location &&
+      location.id &&
+      location.name &&
+      location.municipality?.id &&
+      location.municipality?.name &&
+      location.state?.id &&
+      location.state?.name
+    );
+  }
+
+  /**
+   * Obtiene información detallada de una localidad por ID
+   */
+  getLocationById(locationId: number): Observable<LocationAutocompleteItem | null> {
+    const URL = `${URL_SERVICIOS}/locations/${locationId}`;
+    
+    return this.http.get(URL, { headers: this.getHeaders() })
+      .pipe(
+        map((response: any) => {
+          if (response && response.location) {
+            const location = response.location;
+            return {
+              id: location.id,
+              name: location.name,
+              fullDisplayText: `${location.name} - ${location.municipality.name}, ${location.municipality.state.name}`,
+              municipality: {
+                id: location.municipality.id,
+                name: location.municipality.name
+              },
+              state: {
+                id: location.municipality.state.id,
+                name: location.municipality.state.name
+              }
+            };
+          }
+          return null;
+        }),
+        catchError(error => {
+          console.error('Error al obtener localidad:', error);
+          return of(null);
+        })
+      );
+  }
+}

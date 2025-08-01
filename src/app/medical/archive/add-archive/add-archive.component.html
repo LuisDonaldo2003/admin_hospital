@@ -62,31 +62,105 @@
                   <input type="text" class="form-control" [(ngModel)]="address" name="address" />
                 </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.STATE' | translate }} *</label>
-                  <select class="form-select" [(ngModel)]="state_id" name="state_id"
-                          required [ngClass]="{ 'is-invalid': submitted && !state_id }" (change)="onStateChange()">
-                    <option value="">{{ 'ARCHIVE.ADD_PATIENT.SELECT_STATE' | translate }}</option>
-                    <option *ngFor="let s of states" [value]="s.id">{{ s.name }}</option>
-                  </select>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.MUNICIPALITY' | translate }} *</label>
-                  <select class="form-select" [(ngModel)]="municipality_id" name="municipality_id"
-                          required [ngClass]="{ 'is-invalid': submitted && !municipality_id }" (change)="onMunicipalityChange()">
-                    <option value="">{{ 'ARCHIVE.ADD_PATIENT.SELECT_MUNICIPALITY' | translate }}</option>
-                    <option *ngFor="let m of municipalities" [value]="m.id">{{ m.name }}</option>
-                  </select>
-                </div>
-
-                <div class="col-md-6">
+                <!-- Autocomplete de Localidad -->
+                <div class="col-md-12">
                   <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.LOCATION' | translate }} *</label>
-                  <select class="form-select" [(ngModel)]="location_id" name="location_id"
-                          required [ngClass]="{ 'is-invalid': submitted && !location_id }">
-                    <option value="">{{ 'ARCHIVE.ADD_PATIENT.SELECT_LOCATION' | translate }}</option>
-                    <option *ngFor="let l of locations" [value]="l.id">{{ l.name }}</option>
-                  </select>
+                  <div class="position-relative">
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      [(ngModel)]="locationSearchTerm" 
+                      name="locationSearchTerm"
+                      placeholder="Escriba el nombre de la localidad..."
+                      (input)="onLocationInputChange(($any($event.target)).value)"
+                      (focus)="onLocationInputFocus()"
+                      (blur)="onLocationInputBlur()"
+                      (keydown)="onLocationKeyDown($event)"
+                      autocomplete="off"
+                      required 
+                      [ngClass]="{ 'is-invalid': submitted && !locationSearchTerm.trim() }" />
+                    
+                    <!-- Indicador de carga -->
+                    <div *ngIf="isLoadingLocations" class="position-absolute top-50 end-0 translate-middle-y me-3">
+                      <div class="spinner-border spinner-border-sm text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                      </div>
+                    </div>
+
+                    <!-- Lista de sugerencias con scroll mejorado -->
+                    <div *ngIf="showLocationSuggestions" 
+                         class="position-absolute w-100 bg-white border border-top-0 rounded-bottom shadow-sm z-3 location-suggestions-container"
+                         style="max-height: 250px; overflow-y: auto; top: 100%;">
+                      
+                      <!-- Sugerencias de localidades -->
+                      <div *ngFor="let location of locationSuggestions; let i = index; trackBy: trackByLocationId"
+                           class="px-3 py-2 border-bottom location-suggestion hover-item"
+                           [class.bg-light]="i === highlightedIndex"
+                           style="cursor: pointer; transition: background-color 0.2s ease;"
+                           (mouseenter)="highlightedIndex = i"
+                           (mouseleave)="highlightedIndex = -1"
+                           (click)="onLocationSelected(location)">
+                        <div class="fw-semibold text-primary">{{ location.name }}</div>
+                        <small class="text-muted">{{ location.municipality.name }}, {{ location.state.name }}</small>
+                      </div>
+                      
+                      <!-- Mensaje cuando no hay resultados -->
+                      <div *ngIf="locationSuggestions.length === 0 && !isLoadingLocations && locationSearchTerm.length >= 2"
+                           class="px-3 py-3 text-muted text-center">
+                        <div class="d-flex align-items-center justify-content-center">
+                          <i class="fa fa-info-circle me-2" aria-hidden="true"></i>
+                          <small>
+                            No se encontraron localidades que coincidan con "<strong>{{ locationSearchTerm }}</strong>".
+                            <br>Puedes usar este texto como valor libre.
+                          </small>
+                        </div>
+                      </div>
+                      
+                      <!-- Ayuda de navegación -->
+                      <div *ngIf="locationSuggestions.length > 0" 
+                           class="px-3 py-2 bg-light border-top">
+                        <small class="text-muted">
+                          <i class="fa fa-keyboard-o me-1" aria-hidden="true"></i>
+                          Use ↑↓ para navegar, Enter para seleccionar, Esc para cerrar
+                        </small>
+                      </div>
+                    </div>
+
+                    <!-- Información de localidad seleccionada -->
+                    <div *ngIf="selectedLocation" class="mt-2">
+                      <div class="alert alert-success d-flex justify-content-between align-items-center py-2 mb-0">
+                        <div class="d-flex align-items-center">
+                          <i class="fa fa-check-circle text-success me-2" aria-hidden="true"></i>
+                          <div>
+                            <strong>{{ selectedLocation.name }}</strong>
+                            <br>
+                            <small class="text-muted">
+                              <i class="fa fa-map-marker me-1" aria-hidden="true"></i>
+                              {{ selectedLocation.municipality.name }}, {{ selectedLocation.state.name }}
+                            </small>
+                          </div>
+                        </div>
+                        <button type="button" 
+                                class="btn btn-sm btn-outline-secondary" 
+                                (click)="clearLocationSelection()"
+                                title="Limpiar selección">
+                          <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Información adicional cuando se usa texto libre -->
+                    <div *ngIf="!selectedLocation && locationSearchTerm.trim() && locationSearchTerm.length >= 2 && !showLocationSuggestions && !isLoadingLocations" 
+                         class="mt-2">
+                      <div class="alert alert-info d-flex align-items-center py-2 mb-0">
+                        <i class="fa fa-info-circle me-2" aria-hidden="true"></i>
+                        <small>
+                          Se usará "<strong>{{ locationSearchTerm }}</strong>" como localidad libre.
+                          El municipio y estado se asignarán automáticamente si es posible.
+                        </small>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="col-md-6">
