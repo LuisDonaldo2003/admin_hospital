@@ -6,7 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, takeUntil, catchError } from 'rxjs/operators';
 import { ArchiveService } from '../service/archive.service';
-import { LocationSearchResult, LocationAutocompleteItem, ArchiveFormData } from '../models/location.interface';
+import { LocationSearchResult, LocationAutocompleteItem, ArchiveFormData, AutoDetectLocationResponse } from '../models/location.interface';
 
 @Component({
   selector: 'app-add-archive',
@@ -20,17 +20,15 @@ export class AddArchiveComponent implements OnInit, OnDestroy {
   // Reactive Form
   archiveForm!: FormGroup;
   
-  // Autocomplete para localidades
+  // Sistema de auto-detección de localidades
   locationSearchTerm = '';
-  locationSuggestions: LocationAutocompleteItem[] = [];
-  showLocationSuggestions = false;
+  detectedLocation: LocationAutocompleteItem | null = null;
   selectedLocation: LocationAutocompleteItem | null = null;
-  isLoadingLocations = false;
+  isDetectingLocation = false;
+  detectionConfidence = 0;
+  showDetectionResult = false;
   
-  // Control de navegación por teclado
-  highlightedIndex = -1;
-  
-  // Subject para el debounce del autocomplete
+  // Subject para el debounce de auto-detección
   private locationSearchSubject = new Subject<string>();
   private destroy$ = new Subject<void>();
 
@@ -86,39 +84,79 @@ export class AddArchiveComponent implements OnInit, OnDestroy {
 
   private setupLocationAutocomplete(): void {
     this.locationSearchSubject.pipe(
-      debounceTime(300),
+      debounceTime(500), // Aumentado para dar tiempo a escribir
       distinctUntilChanged(),
       switchMap(term => {
         if (!term || term.length < 2) {
-          return of([]);
+          this.resetLocationDetection();
+          return of(null);
         }
-        this.isLoadingLocations = true;
-        return this.archiveService.searchLocationsByName(term).pipe(
+        
+        this.isDetectingLocation = true;
+        this.showDetectionResult = false;
+        
+        // Usar el nuevo endpoint de auto-detección
+        return this.archiveService.autoDetectLocation(term).pipe(
           catchError(err => {
-            console.error('Error al buscar localidades:', err);
-            return of([]);
+            console.error('Error en detección automática:', err);
+            this.isDetectingLocation = false;
+            return of(null);
           })
         );
       }),
       takeUntil(this.destroy$)
-    ).subscribe((results: any) => {
-      this.isLoadingLocations = false;
-      this.locationSuggestions = results.map((location: any) => ({
-        id: location.id,
-        name: location.name,
-        fullDisplayText: location.display_text,
-        municipality: {
-          id: location.municipality_id,
-          name: location.municipality_name
-        },
-        state: {
-          id: location.state_id,
-          name: location.state_name
+    ).subscribe((response: any) => {
+      this.isDetectingLocation = false;
+      
+      if (response && response.success && response.location) {
+        // Detección exitosa
+        this.detectedLocation = {
+          id: response.location.id,
+          name: response.location.name,
+          fullDisplayText: response.location.display_text,
+          municipality: {
+            id: response.location.municipality_id,
+            name: response.location.municipality_name
+          },
+          state: {
+            id: response.location.state_id,
+            name: response.location.state_name
+          }
+        };
+        
+        this.detectionConfidence = response.confidence || 0;
+        this.showDetectionResult = true;
+        
+        // Auto-asignar si la confianza es muy alta (>= 90%)
+        if (this.detectionConfidence >= 90) {
+          this.acceptDetectedLocation();
         }
-      }));
-      this.showLocationSuggestions = this.locationSuggestions.length > 0;
-      this.highlightedIndex = -1; // Reset highlight
+      } else {
+        // No se encontró coincidencia suficiente
+        this.detectedLocation = null;
+        this.detectionConfidence = response?.confidence || 0;
+        this.showDetectionResult = false;
+      }
     });
+  }
+
+  private resetLocationDetection(): void {
+    this.detectedLocation = null;
+    this.detectionConfidence = 0;
+    this.showDetectionResult = false;
+  }
+
+  acceptDetectedLocation(): void {
+    if (this.detectedLocation) {
+      this.selectedLocation = this.detectedLocation;
+      this.archiveForm.get('location_search')?.setValue(this.detectedLocation.name);
+      this.showDetectionResult = false;
+    }
+  }
+
+  rejectDetectedLocation(): void {
+    this.resetLocationDetection();
+    // Mantener el texto pero limpiar la detección
   }
 
   private loadGenders(): void {
@@ -128,100 +166,49 @@ export class AddArchiveComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Métodos para el autocomplete de localidades
+  // Métodos para la nueva detección automática de localidades
   onLocationInputChange(value: string): void {
     this.locationSearchTerm = value;
     
     if (!value || value.length < 2) {
-      this.locationSuggestions = [];
-      this.showLocationSuggestions = false;
+      this.resetLocationDetection();
       this.selectedLocation = null;
-      this.highlightedIndex = -1;
       return;
     }
 
+    // Activar detección automática
     this.locationSearchSubject.next(value);
   }
 
-  onLocationSelected(location: LocationAutocompleteItem): void {
-    this.selectedLocation = location;
-    this.locationSearchTerm = location.name;
-    this.showLocationSuggestions = false;
-    this.highlightedIndex = -1;
-    
-    console.log('✅ Localidad seleccionada:', {
-      location: location.name,
-      municipality: location.municipality.name,
-      state: location.state.name
-    });
-  }
-
+  // Método simplificado para auto-detección - no necesitamos selección manual
   onLocationInputFocus(): void {
-    if (this.locationSuggestions.length > 0) {
-      this.showLocationSuggestions = true;
-    }
+    // Ya no mostramos dropdown, solo feedback de detección
   }
 
   onLocationInputBlur(): void {
-    // Delay para permitir click en sugerencias
-    setTimeout(() => {
-      this.showLocationSuggestions = false;
-      this.highlightedIndex = -1;
-    }, 200);
+    // Si hay una detección exitosa con alta confianza, aplicarla automáticamente
+    if (this.detectedLocation && this.detectionConfidence >= 85) {
+      this.acceptDetectedLocation();
+    }
   }
 
-  // Navegación por teclado
+  // Método simplificado - ya no necesitamos navegación por teclado
   onLocationKeyDown(event: KeyboardEvent): void {
-    if (!this.showLocationSuggestions || this.locationSuggestions.length === 0) {
-      return;
-    }
-
-    switch (event.key) {
-      case 'ArrowDown':
-        event.preventDefault();
-        this.highlightedIndex = Math.min(this.highlightedIndex + 1, this.locationSuggestions.length - 1);
-        this.scrollToHighlighted();
-        break;
-      
-      case 'ArrowUp':
-        event.preventDefault();
-        this.highlightedIndex = Math.max(this.highlightedIndex - 1, -1);
-        this.scrollToHighlighted();
-        break;
-      
-      case 'Enter':
-        event.preventDefault();
-        if (this.highlightedIndex >= 0 && this.highlightedIndex < this.locationSuggestions.length) {
-          this.onLocationSelected(this.locationSuggestions[this.highlightedIndex]);
-        }
-        break;
-      
-      case 'Escape':
-        this.showLocationSuggestions = false;
-        this.highlightedIndex = -1;
-        break;
-    }
-  }
-
-  private scrollToHighlighted(): void {
-    if (this.highlightedIndex >= 0) {
-      const container = document.querySelector('.location-suggestions-container');
-      const item = document.querySelector(`.location-suggestion:nth-child(${this.highlightedIndex + 1})`);
-      if (container && item) {
-        item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      }
+    // Solo manejar Enter para aceptar detección automática
+    if (event.key === 'Enter' && this.detectedLocation && this.detectionConfidence >= 75) {
+      event.preventDefault();
+      this.acceptDetectedLocation();
     }
   }
 
   clearLocationSelection(): void {
     this.selectedLocation = null;
     this.locationSearchTerm = '';
-    this.locationSuggestions = [];
-    this.showLocationSuggestions = false;
-    this.highlightedIndex = -1;
+    this.resetLocationDetection();
+    this.archiveForm.get('location_search')?.setValue('');
   }
 
-  // Método trackBy para optimizar el rendimiento
+  // Método trackBy para optimizar el rendimiento (mantenido para compatibilidad)
   trackByLocationId(index: number, location: LocationAutocompleteItem): number {
     return location.id;
   }

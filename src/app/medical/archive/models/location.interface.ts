@@ -23,6 +23,23 @@ export interface LocationAutocompleteItem {
   };
 }
 
+// Interfaz para respuesta de detección automática
+export interface AutoDetectLocationResponse {
+  success: boolean;
+  location?: {
+    id: number;
+    name: string;
+    display_text: string;
+    municipality_id: number;
+    municipality_name: string;
+    state_id: number;
+    state_name: string;
+  };
+  confidence?: number;
+  score?: number;
+  message?: string;
+}
+
 // Interfaz para el formulario reactivo
 export interface ArchiveFormData {
   archive_number: string;

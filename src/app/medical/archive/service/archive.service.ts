@@ -170,6 +170,11 @@ export class ArchiveService {
     return this.http.get(URL, { headers: this.getHeaders() });
   }
 
+  autoDetectLocation(searchTerm: string) {
+    const URL = `${URL_SERVICIOS}/locations/auto-detect?search=${encodeURIComponent(searchTerm)}`;
+    return this.http.get(URL, { headers: this.getHeaders() });
+  }
+
   uploadBackup(formData: FormData) {
     const URL = `${URL_SERVICIOS}/archives/backup/upload`;
     return this.http.post(URL, formData, { headers: this.getHeaders() });
