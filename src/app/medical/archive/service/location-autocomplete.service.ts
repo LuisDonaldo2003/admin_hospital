@@ -3,7 +3,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { AuthService } from '../../../shared/auth/auth.service';
-import { LocationSearchResult, LocationAutocompleteItem } from '../models/location.interface';
+import { 
+  LocationSearchResult, 
+  LocationAutocompleteItem, 
+  LocationMappingResponse,
+  LocationSuggestion 
+} from '../models/location.interface';
 import { URL_SERVICIOS } from '../../../config/config';
 
 @Injectable({
@@ -223,5 +228,104 @@ export class LocationAutocompleteService {
           return of(null);
         })
       );
+  }
+
+  /**
+   * Mapeo inteligente para texto plano de localidades (datos legacy)
+   * Maneja variaciones como "jario pantoja" -> "jario y pantoja"
+   */
+  findOrCreateLocationFromText(locationText: string, municipalityText?: string, stateText?: string): Observable<LocationMappingResponse> {
+    const URL = `${URL_SERVICIOS}/locations/find-or-create`;
+    
+    const body = {
+      location_text: locationText,
+      municipality_text: municipalityText || '',
+      state_text: stateText || ''
+    };
+
+    return this.http.post(URL, body, { headers: this.getHeaders() })
+      .pipe(
+        map((response: any) => {
+          if (response.success && response.location) {
+            // Convertir a formato LocationAutocompleteItem
+            const location = response.location;
+            return {
+              success: true,
+              location: {
+                id: location.id,
+                name: location.name,
+                fullDisplayText: location.display_text,
+                municipality: {
+                  id: location.municipality_id,
+                  name: location.municipality_name
+                },
+                state: {
+                  id: location.state_id,
+                  name: location.state_name
+                }
+              },
+              action: response.action,
+              originalText: response.original_text,
+              normalizedText: response.normalized_text
+            } as LocationMappingResponse;
+          } else {
+            return {
+              success: false,
+              message: response.message,
+              suggestions: response.suggestions || [],
+              originalText: response.original_text,
+              normalizedText: response.normalized_text
+            } as LocationMappingResponse;
+          }
+        }),
+        catchError(error => {
+          console.error('Error en mapeo inteligente de localidad:', error);
+          return of({
+            success: false,
+            message: 'Error al procesar la localidad',
+            suggestions: [],
+            originalText: locationText,
+            normalizedText: locationText
+          } as LocationMappingResponse);
+        })
+      );
+  }
+
+  /**
+   * Procesa texto de localidad legacy y devuelve la mejor coincidencia
+   * Útil para migración de datos o entrada manual
+   */
+  processLegacyLocationText(locationText: string): Observable<LocationAutocompleteItem | null> {
+    return this.findOrCreateLocationFromText(locationText).pipe(
+      map(result => {
+        if (result.success && result.location) {
+          return result.location;
+        }
+        
+        // Si no se encontró pero hay sugerencias, tomar la primera
+        if (result.suggestions && result.suggestions.length > 0) {
+          const suggestion = result.suggestions[0];
+          return {
+            id: suggestion.id,
+            name: suggestion.name,
+            fullDisplayText: suggestion.display_text,
+            municipality: {
+              id: suggestion.municipality_id || 0,
+              name: suggestion.municipality_name || ''
+            },
+            state: {
+              id: suggestion.state_id || 0,
+              name: suggestion.state_name || ''
+            }
+          };
+        }
+        
+        return null;
+      }),
+      catchError(error => {
+        console.error('Error procesando texto legacy:', error);
+        return of(null);
+      })
+    );
   }
 }
