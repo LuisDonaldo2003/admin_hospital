@@ -184,6 +184,7 @@
     "LOCATION": "Location",
     "SELECT_LOCATION": "Selected location",
     "SEARCH_LOCATION_PLACEHOLDER": "Select location",
+    "ARCHIVE_REGISTERED_SUCCESS": "The archive was registered successfully.",
     "ADMISSION_DATE": "Admission date",
     "WARNING": "Warning",
     "SUCCESS": "Success",
