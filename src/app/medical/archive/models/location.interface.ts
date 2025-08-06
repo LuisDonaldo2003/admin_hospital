@@ -21,11 +21,17 @@ export interface LocationAutocompleteItem {
     id: number;
     name: string;
   };
+  // Propiedades adicionales para múltiples opciones
+  confidence?: number;
+  priorityIndicator?: string;
+  municipality_name?: string; // Para compatibilidad con respuesta API
+  state_name?: string; // Para compatibilidad con respuesta API
 }
 
 // Interfaz para respuesta de detección automática
 export interface AutoDetectLocationResponse {
   success: boolean;
+  multiple_matches?: boolean; // Indica si hay múltiples opciones
   location?: {
     id: number;
     name: string;
@@ -35,9 +41,25 @@ export interface AutoDetectLocationResponse {
     state_id: number;
     state_name: string;
   };
+  options?: LocationOptionItem[]; // Array de opciones cuando hay múltiples coincidencias
   confidence?: number;
   score?: number;
   message?: string;
+  search_term?: string;
+  suggestions?: LocationOptionItem[]; // Sugerencias cuando no hay coincidencias exactas
+}
+
+// Interfaz para cada opción en caso de múltiples coincidencias
+export interface LocationOptionItem {
+  id: number;
+  name: string;
+  display_text: string;
+  municipality_id: number;
+  municipality_name: string;
+  state_id: number;
+  state_name: string;
+  confidence: number;
+  priority_indicator?: string; // Indicador visual para estados prioritarios (⭐)
 }
 
 // Interfaz para mapeo inteligente de texto plano (datos legacy)

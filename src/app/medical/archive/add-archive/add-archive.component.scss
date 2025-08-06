@@ -9,7 +9,55 @@
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
-    /* Estilos para el autocomplete de localidades */
+    /* Estilos para el selector de múltiples opciones */
+    .location-options-list {
+      max-height: 120px;
+      overflow-y: auto;
+      
+      .location-option-item {
+        transition: all 0.2s ease;
+        cursor: pointer;
+        background-color: #ffffff !important;
+        border: 1px solid #dee2e6 !important;
+        
+        &:hover {
+          background-color: #0066cc !important;
+          border-color: #0066cc !important;
+          color: #ffffff !important;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
+          
+          .text-primary {
+            color: #ffffff !important;
+          }
+          
+          .text-muted {
+            color: #e6f3ff !important;
+          }
+          
+          .fas {
+            color: #ffffff !important;
+          }
+        }
+        
+        .fw-bold {
+          font-size: 0.8rem;
+          color: #0066cc !important;
+        }
+        
+        .text-muted {
+          font-size: 0.65rem;
+          color: #666666 !important;
+        }
+        
+        .badge {
+          font-size: 0.5rem;
+          padding: 1px 4px;
+        }
+      }
+    }
+
+    /* Estilos mejorados para el autocomplete de localidades */
     .location-suggestion {
       transition: background-color 0.2s ease;
       

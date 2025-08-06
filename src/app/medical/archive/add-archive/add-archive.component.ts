@@ -1,12 +1,10 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Subject, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, takeUntil, catchError } from 'rxjs/operators';
 import { ArchiveService } from '../service/archive.service';
-import { LocationSearchResult, LocationAutocompleteItem, ArchiveFormData, AutoDetectLocationResponse } from '../models/location.interface';
+import { ArchiveFormData } from '../models/location.interface';
 
 @Component({
   selector: 'app-add-archive',
@@ -16,23 +14,11 @@ import { LocationSearchResult, LocationAutocompleteItem, ArchiveFormData, AutoDe
   templateUrl: './add-archive.component.html',
   styleUrls: ['./add-archive.component.scss']
 })
-export class AddArchiveComponent implements OnInit, OnDestroy {
+export class AddArchiveComponent implements OnInit {
   // Reactive Form
   archiveForm!: FormGroup;
   
-  // Sistema de auto-detección de localidades
-  locationSearchTerm = '';
-  detectedLocation: LocationAutocompleteItem | null = null;
-  selectedLocation: LocationAutocompleteItem | null = null;
-  isDetectingLocation = false;
-  detectionConfidence = 0;
-  showDetectionResult = false;
-  
-  // Subject para el debounce de auto-detección
-  private locationSearchSubject = new Subject<string>();
-  private destroy$ = new Subject<void>();
-
-  // Datos del formulario (mantenemos compatibilidad)
+  // Datos del formulario (simplificado)
   archive_number = '';
   name = '';
   last_name_father = '';
@@ -40,6 +26,7 @@ export class AddArchiveComponent implements OnInit, OnDestroy {
   age: number | null = null;
   gender_id = '';
   address = '';
+  location = '';  // Campo simple de texto para localidad
   admission_date = '';
 
   genders: any[] = [];
@@ -60,12 +47,6 @@ export class AddArchiveComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.admission_date = new Date().toISOString().split('T')[0];
     this.loadGenders();
-    this.setupLocationAutocomplete();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   private initializeForm(): void {
@@ -78,85 +59,8 @@ export class AddArchiveComponent implements OnInit, OnDestroy {
       gender_id: ['', Validators.required],
       address: [''],
       admission_date: ['', Validators.required],
-      location_search: ['', Validators.required]
+      location: ['', Validators.required]
     });
-  }
-
-  private setupLocationAutocomplete(): void {
-    this.locationSearchSubject.pipe(
-      debounceTime(500), // Aumentado para dar tiempo a escribir
-      distinctUntilChanged(),
-      switchMap(term => {
-        if (!term || term.length < 2) {
-          this.resetLocationDetection();
-          return of(null);
-        }
-        
-        this.isDetectingLocation = true;
-        this.showDetectionResult = false;
-        
-        // Usar el nuevo endpoint de auto-detección
-        return this.archiveService.autoDetectLocation(term).pipe(
-          catchError(err => {
-            console.error('Error en detección automática:', err);
-            this.isDetectingLocation = false;
-            return of(null);
-          })
-        );
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe((response: any) => {
-      this.isDetectingLocation = false;
-      
-      if (response && response.success && response.location) {
-        // Detección exitosa
-        this.detectedLocation = {
-          id: response.location.id,
-          name: response.location.name,
-          fullDisplayText: response.location.display_text,
-          municipality: {
-            id: response.location.municipality_id,
-            name: response.location.municipality_name
-          },
-          state: {
-            id: response.location.state_id,
-            name: response.location.state_name
-          }
-        };
-        
-        this.detectionConfidence = response.confidence || 0;
-        this.showDetectionResult = true;
-        
-        // Auto-asignar si la confianza es muy alta (>= 90%)
-        if (this.detectionConfidence >= 90) {
-          this.acceptDetectedLocation();
-        }
-      } else {
-        // No se encontró coincidencia suficiente
-        this.detectedLocation = null;
-        this.detectionConfidence = response?.confidence || 0;
-        this.showDetectionResult = false;
-      }
-    });
-  }
-
-  private resetLocationDetection(): void {
-    this.detectedLocation = null;
-    this.detectionConfidence = 0;
-    this.showDetectionResult = false;
-  }
-
-  acceptDetectedLocation(): void {
-    if (this.detectedLocation) {
-      this.selectedLocation = this.detectedLocation;
-      this.archiveForm.get('location_search')?.setValue(this.detectedLocation.name);
-      this.showDetectionResult = false;
-    }
-  }
-
-  rejectDetectedLocation(): void {
-    this.resetLocationDetection();
-    // Mantener el texto pero limpiar la detección
   }
 
   private loadGenders(): void {
@@ -166,54 +70,7 @@ export class AddArchiveComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Métodos para la nueva detección automática de localidades
-  onLocationInputChange(value: string): void {
-    this.locationSearchTerm = value;
-    
-    if (!value || value.length < 2) {
-      this.resetLocationDetection();
-      this.selectedLocation = null;
-      return;
-    }
-
-    // Activar detección automática
-    this.locationSearchSubject.next(value);
-  }
-
-  // Método simplificado para auto-detección - no necesitamos selección manual
-  onLocationInputFocus(): void {
-    // Ya no mostramos dropdown, solo feedback de detección
-  }
-
-  onLocationInputBlur(): void {
-    // Si hay una detección exitosa con alta confianza, aplicarla automáticamente
-    if (this.detectedLocation && this.detectionConfidence >= 85) {
-      this.acceptDetectedLocation();
-    }
-  }
-
-  // Método simplificado - ya no necesitamos navegación por teclado
-  onLocationKeyDown(event: KeyboardEvent): void {
-    // Solo manejar Enter para aceptar detección automática
-    if (event.key === 'Enter' && this.detectedLocation && this.detectionConfidence >= 75) {
-      event.preventDefault();
-      this.acceptDetectedLocation();
-    }
-  }
-
-  clearLocationSelection(): void {
-    this.selectedLocation = null;
-    this.locationSearchTerm = '';
-    this.resetLocationDetection();
-    this.archiveForm.get('location_search')?.setValue('');
-  }
-
-  // Método trackBy para optimizar el rendimiento (mantenido para compatibilidad)
-  trackByLocationId(index: number, location: LocationAutocompleteItem): number {
-    return location.id;
-  }
-
-  // Validación mejorada
+  // Validación simplificada
   private validateForm(): string[] {
     const missingFields: string[] = [];
 
@@ -223,7 +80,7 @@ export class AddArchiveComponent implements OnInit, OnDestroy {
     if (!this.age || this.age <= 0) missingFields.push(this.translate.instant('AGE'));
     if (!this.gender_id) missingFields.push(this.translate.instant('GENDER'));
     if (!this.admission_date) missingFields.push(this.translate.instant('ADMISSION_DATE'));
-    if (!this.locationSearchTerm.trim()) missingFields.push(this.translate.instant('LOCATION'));
+    if (!this.location.trim()) missingFields.push(this.translate.instant('LOCATION'));
 
     return missingFields;
   }
@@ -254,16 +111,9 @@ export class AddArchiveComponent implements OnInit, OnDestroy {
       age: this.age,
       gender_id: this.gender_id,
       address: this.address.trim(),
-      admission_date: this.admission_date
+      admission_date: this.admission_date,
+      location_name: this.location.trim()  // Enviar como texto plano
     };
-
-    // Si se seleccionó una localidad del autocomplete, usar su ID
-    if (this.selectedLocation) {
-      formData.location_id = this.selectedLocation.id;
-    } else {
-      // Si es texto libre, enviar el nombre de la localidad para que el backend la procese
-      formData.location_name = this.locationSearchTerm.trim();
-    }
 
     this.archiveService.registerArchive(formData).subscribe({
       next: (response) => {
@@ -292,16 +142,8 @@ export class AddArchiveComponent implements OnInit, OnDestroy {
     this.age = null;
     this.gender_id = '';
     this.address = '';
+    this.location = '';
     this.admission_date = new Date().toISOString().split('T')[0];
-    this.clearLocationSelection();
     this.submitted = false;
-  }
-
-  // Método para obtener el texto de localidad a mostrar
-  getLocationDisplayText(): string {
-    if (this.selectedLocation) {
-      return `${this.selectedLocation.name} - ${this.selectedLocation.municipality.name}, ${this.selectedLocation.state.name}`;
-    }
-    return this.locationSearchTerm;
   }
 }
