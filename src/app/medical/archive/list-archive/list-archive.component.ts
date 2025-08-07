@@ -45,6 +45,7 @@ interface ArchiveData {
       state?: CatalogItem;
     };
   };
+  location_text?: string; // Campo para texto plano de localidad
   admission_date?: string;
 }
 

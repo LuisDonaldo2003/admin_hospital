@@ -200,7 +200,7 @@
                     <td>{{ a.age }}</td>
                     <td>{{ a.gender?.name || 'N/A' }}</td>
                     <td>{{ a.address || 'N/A' }}</td>
-                    <td>{{ a.location?.name || 'N/A' }}</td>
+                    <td>{{ a.location?.name || a.location_text || 'N/A' }}</td>
                     <td>{{ a.location?.municipality?.name || 'N/A' }}</td>
                     <td>{{ a.location?.municipality?.state?.name || 'N/A' }}</td>
                     <td>{{ a.admission_date || 'N/A' }}</td>

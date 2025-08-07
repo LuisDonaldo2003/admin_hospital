@@ -513,7 +513,7 @@ export class ExportArchiveComponent implements OnInit {
       'Edad': a.age,
       'Género': a.gender?.name ?? 'N/A',
       'Dirección': a.address ?? 'N/A',
-      'Localidad': a.location?.name ?? 'N/A',
+      'Localidad': a.location?.name ?? a.location_text ?? 'N/A',
       'Municipio': a.location?.municipality?.name ?? 'N/A',
       'Estado': a.location?.municipality?.state?.name ?? 'N/A',
       'Fecha de ingreso': a.admission_date ?? 'N/A'
@@ -591,7 +591,7 @@ export class ExportArchiveComponent implements OnInit {
       a.age ?? 'N/A',
       a.gender?.name ?? 'N/A',
       a.address ?? 'N/A',
-      a.location?.name ?? 'N/A',
+      a.location?.name ?? a.location_text ?? 'N/A',
       a.location?.municipality?.name ?? 'N/A',
       a.location?.municipality?.state?.name ?? 'N/A',
       a.admission_date ?? 'N/A'

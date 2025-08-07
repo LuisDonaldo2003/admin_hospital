@@ -51,15 +51,15 @@ export class AddArchiveComponent implements OnInit {
 
   private initializeForm(): void {
     this.archiveForm = this.fb.group({
-      archive_number: ['', [Validators.required, Validators.minLength(1)]],
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      last_name_father: ['', [Validators.required, Validators.minLength(2)]],
-      last_name_mother: [''],
-      age: [null, [Validators.required, Validators.min(1), Validators.max(120)]],
+      archive_number: ['', [Validators.required, Validators.minLength(1), Validators.pattern(/^[A-Za-z0-9\-_]+$/)]],
+      name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÀ-ÿ\u00f1\u00d1\s]+$/)]],
+      last_name_father: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÀ-ÿ\u00f1\u00d1\s]+$/)]],
+      last_name_mother: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÀ-ÿ\u00f1\u00d1\s]+$/)]],
+      age: [null, [Validators.required, Validators.min(1), Validators.max(120), Validators.pattern(/^\d+$/)]],
       gender_id: ['', Validators.required],
       address: [''],
       admission_date: ['', Validators.required],
-      location: ['', Validators.required]
+      location: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÿ\u00f1\u00d1\s,.\-]+$/)]]
     });
   }
 
@@ -77,12 +77,38 @@ export class AddArchiveComponent implements OnInit {
     if (!this.archive_number.trim()) missingFields.push(this.translate.instant('ARCHIVE_NUMBER'));
     if (!this.name.trim()) missingFields.push(this.translate.instant('FIRST_NAME'));
     if (!this.last_name_father.trim()) missingFields.push(this.translate.instant('FATHER_LAST_NAME'));
+    if (!this.last_name_mother.trim()) missingFields.push(this.translate.instant('MOTHER_LAST_NAME'));
     if (!this.age || this.age <= 0) missingFields.push(this.translate.instant('AGE'));
     if (!this.gender_id) missingFields.push(this.translate.instant('GENDER'));
     if (!this.admission_date) missingFields.push(this.translate.instant('ADMISSION_DATE'));
     if (!this.location.trim()) missingFields.push(this.translate.instant('LOCATION'));
 
     return missingFields;
+  }
+
+  // Validaciones en tiempo real para inputs
+  onNameKeyPress(event: KeyboardEvent): boolean {
+    const pattern = /^[A-Za-zÀ-ÿ\u00f1\u00d1\s]$/;
+    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+    return pattern.test(event.key) || allowedKeys.includes(event.key);
+  }
+
+  onAgeKeyPress(event: KeyboardEvent): boolean {
+    const pattern = /^[0-9]$/;
+    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+    return pattern.test(event.key) || allowedKeys.includes(event.key);
+  }
+
+  onArchiveNumberKeyPress(event: KeyboardEvent): boolean {
+    const pattern = /^[A-Za-z0-9\-_]$/;
+    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+    return pattern.test(event.key) || allowedKeys.includes(event.key);
+  }
+
+  onLocationKeyPress(event: KeyboardEvent): boolean {
+    const pattern = /^[A-Za-zÀ-ÿ\u00f1\u00d1\s,.\-]$/;
+    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+    return pattern.test(event.key) || allowedKeys.includes(event.key);
   }
 
   save(): void {
@@ -117,19 +143,34 @@ export class AddArchiveComponent implements OnInit {
 
     this.archiveService.registerArchive(formData).subscribe({
       next: (response) => {
-        this.text_success = this.translate.instant('ARCHIVE_REGISTERED_SUCCESS');
+        this.text_success = '✅ Paciente registrado exitosamente. Recargando formulario...';
         console.log('✅ Registro exitoso:', response);
         
-        // Reset form
+        // Reset form inmediatamente para mostrar el formulario limpio
         this.resetForm();
         
         setTimeout(() => {
-          this.router.navigate(['/archives/list_archive']);
-        }, 2000);
+          // Recargar la misma página en lugar de redirigir
+          window.location.reload();
+        }, 1500);
       },
       error: (err) => {
         console.error('❌ Error al registrar archivo:', err);
-        this.text_validation = err.error?.message || this.translate.instant('ERROR_OCCURRED');
+        
+        // Mejorar manejo de errores específicos
+        if (err.status === 422 && err.error?.errors?.archive_number) {
+          // Error de validación específico para número de expediente duplicado
+          this.text_validation = err.error.errors.archive_number[0];
+        } else if (err.error?.message) {
+          // Mensaje de error del servidor
+          this.text_validation = err.error.message;
+        } else if (err.status === 500) {
+          // Error 500 del servidor
+          this.text_validation = 'Error interno del servidor. Por favor, verifique que el número de expediente no esté duplicado.';
+        } else {
+          // Error genérico
+          this.text_validation = 'Ocurrió un error al registrar el paciente. Por favor, inténtelo nuevamente.';
+        }
       }
     });
   }
@@ -145,5 +186,11 @@ export class AddArchiveComponent implements OnInit {
     this.location = '';
     this.admission_date = new Date().toISOString().split('T')[0];
     this.submitted = false;
+    this.text_validation = '';
+    this.text_success = '';
+    
+    // Resetear el formulario reactivo también
+    this.archiveForm.reset();
+    this.initializeForm();
   }
 }

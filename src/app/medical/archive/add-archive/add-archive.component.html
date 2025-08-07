@@ -21,31 +21,69 @@
               <div class="row g-3">
                 <div class="col-md-6">
                   <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.ARCHIVE_NUMBER' | translate }} *</label>
-                  <input type="text" class="form-control" [(ngModel)]="archive_number" name="archive_number"
-                         required [ngClass]="{ 'is-invalid': submitted && !archive_number?.trim() }" />
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="archive_number" 
+                    name="archive_number"
+                    (keypress)="onArchiveNumberKeyPress($event)"
+                    placeholder="Ej: EXP-001, A123"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !archive_number.trim() }" />
                 </div>
 
                 <div class="col-md-6">
                   <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.FIRST_NAME' | translate }} *</label>
-                  <input type="text" class="form-control" [(ngModel)]="name" name="name"
-                         required [ngClass]="{ 'is-invalid': submitted && !name?.trim() }" />
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="name" 
+                    name="name"
+                    (keypress)="onNameKeyPress($event)"
+                    placeholder="Solo letras"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
                 </div>
 
                 <div class="col-md-6">
                   <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.FATHER_LAST_NAME' | translate }} *</label>
-                  <input type="text" class="form-control" [(ngModel)]="last_name_father" name="last_name_father"
-                         required [ngClass]="{ 'is-invalid': submitted && !last_name_father?.trim() }" />
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="last_name_father" 
+                    name="last_name_father"
+                    (keypress)="onNameKeyPress($event)"
+                    placeholder="Solo letras"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !last_name_father.trim() }" />
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.MOTHER_LAST_NAME' | translate }}</label>
-                  <input type="text" class="form-control" [(ngModel)]="last_name_mother" name="last_name_mother" />
+                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.MOTHER_LAST_NAME' | translate }} *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="last_name_mother" 
+                    name="last_name_mother"
+                    (keypress)="onNameKeyPress($event)"
+                    placeholder="Solo letras"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !last_name_mother.trim() }" />
                 </div>
 
                 <div class="col-md-6">
                   <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.AGE' | translate }} *</label>
-                  <input type="number" class="form-control" [(ngModel)]="age" name="age"
-                         required [ngClass]="{ 'is-invalid': submitted && !age }" />
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    [(ngModel)]="age" 
+                    name="age"
+                    (keypress)="onAgeKeyPress($event)"
+                    min="1"
+                    max="120"
+                    placeholder="Solo números (1-120)"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !age }" />
                 </div>
 
                 <div class="col-md-6">
@@ -70,10 +108,11 @@
                     class="form-control" 
                     [(ngModel)]="location" 
                     name="location"
+                    (keypress)="onLocationKeyPress($event)"
                     placeholder="Escriba la localidad"
                     autocomplete="off"
                     required 
-                    [ngClass]="{ 'is-invalid': submitted && !location?.trim() }" />
+                    [ngClass]="{ 'is-invalid': submitted && !location.trim() }" />
                 </div>
 
                 <div class="col-md-6">
