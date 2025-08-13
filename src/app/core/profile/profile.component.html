@@ -1,0 +1,68 @@
+<!-- Contenedor principal de la página de perfil de usuario -->
+<div class="page-wrapper">
+  <div class="content" *ngIf="profileData">
+    <!-- Encabezado y breadcrumb de navegación -->
+    <div class="row">
+      <div class="col-sm-7 col-6">
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a>{{ 'PROFILE.PROFILES.DASHBOARD' | translate }} ></a>
+          </li>
+          <li class="breadcrumb-item">
+            <i class="feather icon-chevron-right"></i>
+          </li>
+          <li class="breadcrumb-item active">{{ 'PROFILE.PROFILES.PROFILES' | translate }}</li>
+        </ul>
+      </div>
+      <div class="col-sm-5 col-6 text-end mb-3">
+        <!-- Botón para editar el perfil -->
+        <a [routerLink]="routes.editProfile" class="btn btn-primary btn-rounded">
+          <i class="fa fa-pencil"></i> {{ 'PROFILE.PROFILES.EDIT_PROFILE' | translate }}
+        </a>
+      </div>
+    </div>
+
+    <!-- Sección de avatar y nombre del usuario -->
+    <div class="card-box profile-header text-center py-4">
+      <div class="d-flex flex-column align-items-center">
+        <img
+          class="rounded-circle mb-3 profile-avatar"
+          [src]="profileData?.avatar || 'assets/img/default-avatar.png'"
+          alt="Avatar"
+        />
+        <h2 class="fw-bold mb-0">{{ roles[0] }}: {{ profileData?.name }} {{ profileData?.surname }}</h2>
+      </div>
+    </div>
+
+    <!-- Datos básicos del usuario -->
+    <div class="card-box mt-4">
+      <h4 class="card-title">{{ 'PROFILE.PROFILES.BASIC_DATES' | translate }}</h4>
+      <ul class="list-unstyled lh-lg">
+        <li><strong>{{ 'PROFILE.PROFILES.EMAIL' | translate }}:</strong> {{ profileData?.email }}</li>
+        <li *ngIf="profileData?.mobile"><strong>{{ 'PROFILE.PROFILES.PHONE' | translate }}:</strong> {{ profileData.mobile }}</li>
+        <li *ngIf="profileData?.birth_date"><strong>{{ 'PROFILE.PROFILES.BIRTHDAY' | translate }}:</strong> {{ profileData.birth_date }}</li>
+        <li *ngIf="profileData?.gender !== undefined">
+          <strong>{{ 'PROFILE.PROFILES.GENDER' | translate }}:</strong> {{ profileData.gender === 1 ? 'Masculino' : 'Femenino' }}
+        </li>
+        <li><strong>{{ 'PROFILE.PROFILES.ROLES' | translate }}:</strong> {{ roles[0] }}</li>
+        <li><strong>{{ 'PROFILE.PROFILES.ID_USER' | translate }}:</strong> {{ profileData?.id }}</li>
+      </ul>
+    </div>
+
+    <!-- Información profesional del usuario -->
+    <div class="card-box mt-4">
+      <h4 class="card-title">{{ 'PROFILE.PROFILES.INFORMATION_PROFESSIONAL' | translate }}</h4>
+      <ul class="list-unstyled lh-lg">
+        <li *ngIf="profileData?.curp"><strong>CURP:</strong> {{ profileData.curp }}</li>
+        <li *ngIf="profileData?.rfc"><strong>RFC:</strong> {{ profileData.rfc }}</li>
+        <li *ngIf="profileData?.ine"><strong>INE:</strong> {{ profileData.ine }}</li>
+        <li *ngIf="profileData?.attendance_number"><strong>{{ 'PROFILE.PROFILES.ASSISTANCE' | translate }}:</strong> {{ profileData.attendance_number }}</li>
+        <li *ngIf="profileData?.professional_license"><strong>{{ 'PROFILE.PROFILES.PROFESSIONAL_LICENSE' | translate }}:</strong> {{ profileData.professional_license }}</li>
+        <li *ngIf="profileData?.funcion_real"><strong>{{ 'PROFILE.PROFILES.FUNCTION_REAL' | translate }}:</strong> {{ profileData.funcion_real }}</li>
+        <li *ngIf="profileData?.departament"><strong>{{ 'PROFILE.PROFILES.DEPARTAMENT' | translate }}:</strong> {{ profileData.departament }}</li>
+        <li *ngIf="profileData?.profile_relation"><strong>{{ 'PROFILE.PROFILES.RELATION_PROFILE' | translate }}:</strong> {{ profileData.profile_relation }}</li>
+        <li *ngIf="profileData?.contract_type"><strong>{{ 'PROFILE.PROFILES.CONTRACT_TYPE' | translate }}:</strong> {{ profileData.contract_type }}</li>
+      </ul>
+    </div>
+  </div>
+</div>

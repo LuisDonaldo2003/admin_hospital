@@ -1,0 +1,134 @@
+<!-- Contenedor principal de la pantalla de completar perfil -->
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+
+      <!-- Encabezado de la página -->
+      <div class="page-header mb-4 text-center">
+        <h3 class="fw-bold">Completa tu Perfil</h3>
+      </div>
+
+      <!-- Mensaje de bienvenida y explicación -->
+      <div class="alert alert-info text-center">
+        <strong>Bienvenido {{ name }} {{ surname }}</strong><br />
+        Para brindarte una mejor experiencia, por favor completa tu información profesional.<br />
+        Los campos marcados con <strong>*</strong> son obligatorios.
+      </div>
+
+      <!-- Tarjeta principal del formulario -->
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <!-- Formulario de datos profesionales y personales -->
+          <form>
+            <div class="row g-4">
+              <!-- Campo de móvil obligatorio -->
+              <div class="col-md-4">
+                <label class="form-label">Móvil <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="mobile" name="mobile" required />
+              </div>
+              <!-- Campo CURP -->
+              <div class="col-md-4">
+                <label class="form-label">CURP</label>
+                <input type="text" class="form-control" [(ngModel)]="curp" name="curp" />
+              </div>
+              <!-- Campo RFC -->
+              <div class="col-md-4">
+                <label class="form-label">RFC</label>
+                <input type="text" class="form-control" [(ngModel)]="rfc" name="rfc" />
+              </div>
+
+              <!-- Campo INE -->
+              <div class="col-md-4">
+                <label class="form-label">INE</label>
+                <input type="text" class="form-control" [(ngModel)]="ine" name="ine" />
+              </div>
+              <!-- Campo No. de Asistencia obligatorio -->
+              <div class="col-md-4">
+                <label class="form-label">No. de Asistencia <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="attendance_number" name="attendance_number" required />
+              </div>
+              <!-- Campo Cédula Profesional -->
+              <div class="col-md-4">
+                <label class="form-label">Cédula Profesional</label>
+                <input type="text" class="form-control" [(ngModel)]="professional_license" name="professional_license" />
+              </div>
+
+              <!-- Campo Función Real -->
+              <div class="col-md-6">
+                <label class="form-label">Función Real</label>
+                <input type="text" class="form-control" [(ngModel)]="funcion_real" name="funcion_real" />
+              </div>
+              <!-- Campo Fecha de Nacimiento obligatorio -->
+              <div class="col-md-3">
+                <label class="form-label">Fecha de Nacimiento <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" [(ngModel)]="birth_date" name="birth_date" required />
+              </div>
+              <!-- Campo Género obligatorio -->
+              <div class="col-md-3">
+                <label class="form-label d-block">Género <span class="text-danger">*</span></label>
+                <div class="form-check form-check-inline">
+                  <input type="radio" class="form-check-input" id="male" name="gender" value="1" [(ngModel)]="gender" required />
+                  <label for="male" class="form-check-label">Hombre</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input type="radio" class="form-check-input" id="female" name="gender" value="2" [(ngModel)]="gender" required />
+                  <label for="female" class="form-check-label">Mujer</label>
+                </div>
+              </div>
+
+              <!-- Selector de Departamento -->
+              <div class="col-md-4">
+                <label class="form-label">Departamento</label>
+                <select class="form-control" [(ngModel)]="departament_id" name="departament_id">
+                  <option value="">Selecciona uno</option>
+                  <option *ngFor="let item of departaments" [value]="item.id">{{ item.name }}</option>
+                </select>
+              </div>
+              <!-- Selector de Perfil Relacional -->
+              <div class="col-md-4">
+                <label class="form-label">Perfil Relacional</label>
+                <select class="form-control" [(ngModel)]="profile_id" name="profile_id">
+                  <option value="">Selecciona uno</option>
+                  <option *ngFor="let item of profiles" [value]="item.id">{{ item.name }}</option>
+                </select>
+              </div>
+              <!-- Selector de Tipo de Contrato -->
+              <div class="col-md-4">
+                <label class="form-label">Tipo de Contrato</label>
+                <select class="form-control" [(ngModel)]="contract_type_id" name="contract_type_id">
+                  <option value="">Selecciona uno</option>
+                  <option *ngFor="let item of contractTypes" [value]="item.id">{{ item.name }}</option>
+                </select>
+              </div>
+
+              <!-- Campo de avatar obligatorio y previsualización -->
+              <div class="col-md-12">
+                <label class="form-label">Avatar <span class="text-danger">*</span></label>
+                <input type="file" class="form-control" accept="image/*" (change)="loadFile($event)" required />
+                <div class="mt-3 text-center" *ngIf="IMAGEN_PREVIZUALIZA">
+                  <img [src]="IMAGEN_PREVIZUALIZA" class="img-thumbnail" width="200" alt="Preview" />
+                </div>
+              </div>
+
+              <!-- Mensajes de éxito o advertencia tras guardar -->
+              <div class="col-12" *ngIf="text_success || text_validation">
+                <div *ngIf="text_success" class="alert alert-success">
+                  <strong>Éxito:</strong> {{ text_success }}
+                </div>
+                <div *ngIf="text_validation" class="alert alert-warning">
+                  <strong>Advertencia:</strong> {{ text_validation }}
+                </div>
+              </div>
+
+              <!-- Botón para guardar los datos -->
+              <div class="col-12 text-end mt-3">
+                <button type="button" class="btn btn-primary px-4" (click)="save()">Guardar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

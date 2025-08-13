@@ -1,0 +1,110 @@
+<!-- Contenedor principal de la página de organización -->
+<div class="page-wrapper">
+  <!-- Contenido principal de la lista de personal -->
+  <div class="content list-staff">
+  <!-- Encabezado de la página con breadcrumb de navegación -->
+  <div class="page-header mb-4">
+  <!-- Fila para el breadcrumb -->
+  <div class="row">
+  <div class="col-sm-12">
+          <!-- Breadcrumb que muestra la ruta de navegación actual -->
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <!-- Primer elemento del breadcrumb -->
+            <li class="breadcrumb-item">{{ 'ORGANIZATION.LIST_ORGANIZATION.BREADCRUMB' | translate }} > </li>
+            <!-- Segundo elemento del breadcrumb, activo -->
+            <li class="breadcrumb-item active">{{ 'ORGANIZATION.LIST_ORGANIZATION.BREADCRUMB_USERS_BY_ROLE' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  <!-- Mensaje de carga mientras se obtienen los datos -->
+  <div *ngIf="loading" class="loading">{{ 'ORGANIZATION.LIST_ORGANIZATION.LOADING' | translate }}</div>
+  <!-- Sección principal que se muestra cuando los datos ya están cargados -->
+  <div *ngIf="!loading">
+  <!-- Contenedor del organigrama -->
+  <div class="org-chart">
+  <!-- Card que agrupa Director General y Subdirector General -->
+  <div class="card mb-4 shadow border-0">
+          <!-- Encabezado de la card para dirección -->
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">{{ 'ORGANIZATION.LIST_ORGANIZATION.DIRECTION' | translate }}</h5>
+          </div>
+          <!-- Cuerpo de la card con los usuarios de dirección -->
+          <div class="card-body">
+            <div class="users-row">
+              <!-- Iteración sobre los usuarios con rol Director General -->
+              <ng-container *ngFor="let user of (rolesMap['Director General'] || [])">
+                <!-- Card individual para cada usuario -->
+                <div class="user-card position-relative">
+                  <!-- Sección del avatar y estado de conexión -->
+                  <div class="avatar-wrapper">
+                    <img *ngIf="user.avatar" [src]="user.avatar" alt="avatar" class="avatar-large"/>
+                    <span 
+                      class="status-dot"
+                      [ngClass]="user.online === true ? 'online' : 'offline'"
+                      [title]="user.online === true ? ('ORGANIZATION.LIST_ORGANIZATION.ONLINE' | translate) : ('ORGANIZATION.LIST_ORGANIZATION.OFFLINE' | translate)"
+                    ></span>
+                  </div>
+                  <!-- Nombre y correo del usuario -->
+                  <div class="user-name mt-3 fw-semibold">{{ user.name }} {{ user.surname }}</div>
+                  <div class="user-email text-muted small">{{ user.email }}</div>
+                </div>
+              </ng-container>
+              <!-- Iteración sobre los usuarios con rol Subdirector General -->
+              <ng-container *ngFor="let user of (rolesMap['Subdirector General'] || [])">
+                <!-- Card individual para cada usuario -->
+                <div class="user-card position-relative">
+                  <!-- Sección del avatar y estado de conexión -->
+                  <div class="avatar-wrapper">
+                    <img *ngIf="user.avatar" [src]="user.avatar" alt="avatar" class="avatar-large"/>
+                    <span 
+                      class="status-dot"
+                      [ngClass]="user.online === true ? 'online' : 'offline'"
+                      [title]="user.online === true ? ('ORGANIZATION.LIST_ORGANIZATION.ONLINE' | translate) : ('ORGANIZATION.LIST_ORGANIZATION.OFFLINE' | translate)"
+                    ></span>
+                  </div>
+                  <!-- Nombre y correo del usuario -->
+                  <div class="user-name mt-3 fw-semibold">{{ user.name }} {{ user.surname }}</div>
+                  <div class="user-email text-muted small">{{ user.email }}</div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <!-- Cards para el resto de roles distintos a dirección -->
+        <ng-container *ngFor="let role of (rolesMap | keyvalue)">
+          <!-- Solo mostrar roles que no sean Director General ni Subdirector General -->
+          <ng-container *ngIf="role.key !== 'Director General' && role.key !== 'Subdirector General'">
+            <div class="card mb-4 shadow border-0">
+              <!-- Encabezado de la card con el nombre del rol -->
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">{{ role.key }}</h5>
+              </div>
+              <!-- Cuerpo de la card con los usuarios de ese rol -->
+              <div class="card-body">
+                <div class="users-row">
+                  <!-- Iteración sobre los usuarios de cada rol -->
+                  <div *ngFor="let user of role.value" class="user-card position-relative">
+                    <!-- Sección del avatar y estado de conexión -->
+                    <div class="avatar-wrapper">
+                      <img *ngIf="user.avatar" [src]="user.avatar" alt="avatar" class="avatar-large"/>
+                      <span 
+                        class="status-dot"
+                        [ngClass]="user.online === true ? 'online' : 'offline'"
+                        [title]="user.online === true ? ('ORGANIZATION.LIST_ORGANIZATION.ONLINE' | translate) : ('ORGANIZATION.LIST_ORGANIZATION.OFFLINE' | translate)"
+                      ></span>
+                    </div>
+                    <!-- Nombre y correo del usuario -->
+                    <div class="user-name mt-3 fw-semibold">{{ user.name }} {{ user.surname }}</div>
+                    <div class="user-email text-muted small">{{ user.email }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

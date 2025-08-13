@@ -1,0 +1,137 @@
+<!-- Main Wrapper -->
+<div class="main-wrapper login-body dark-mode">
+  <div class="container-fluid px-0">
+    <div class="row">
+
+      <!-- Login logo / Imagen del hospital -->
+      <div class="col-lg-6 login-wrap">
+        <div class="login-sec">
+          <div class="log-img">
+            <img class="img-fluid" src="assets/img/login-02.png" alt="Imagen del hospital IMSS" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Login Content -->
+      <div class="col-lg-6 login-wrap-bg">
+        <div class="login-wrapper">
+          <div class="loginbox">
+            <div class="login-right">
+              <div class="login-right-wrap">
+
+                <!-- Logo y título -->
+                <div class="account-logo text-center">
+                  <a [routerLink]="routes.adminDashboard">
+                    <img src="assets/img/login-logo.png" alt="Logo SISMEG" />
+                  </a>
+                </div>
+                <h2 class="text-center">Iniciar Sesión</h2>
+
+                <!-- Formulario -->
+                <form [formGroup]="form" (ngSubmit)="loginFormSubmit()">
+
+                  <!-- Correo -->
+                  <div class="form-group">
+                    <label for="email" class="mb-2">
+                      Correo electrónico <span class="login-danger">*</span>
+                    </label>
+                    <div style="height: 12px;"></div>
+                    <input
+                      aria-label="Correo electrónico"
+                      id="email"
+                      type="email"
+                      class="form-control transition-all"
+                      formControlName="email"
+                      [ngClass]="{ 'is-invalid': f['email'].touched && f['email'].invalid }"
+                    />
+                    <div *ngIf="f['email'].touched && f['email'].invalid" class="invalid-feedback">
+                      <div *ngIf="f['email'].errors?.['required']">
+                        Ingrese el correo electrónico asociado a su cuenta.
+                      </div>
+                      <div *ngIf="f['email'].errors?.['email']">
+                        Correo no válido.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Contraseña con botón de visualización mejorado -->
+                  <div class="form-group password-group">
+                    <label for="password" class="mb-2">
+                      Contraseña <span class="login-danger">*</span>
+                    </label>
+                    <div style="height: 12px;"></div>
+                    <div class="password-wrapper">
+                      <input
+                        aria-label="Contraseña"
+                        id="password"
+                        [type]="passwordClass ? 'text' : 'password'"
+                        class="form-control pass-input"
+                        formControlName="password"
+                        [ngClass]="{ 'is-invalid': f['password'].touched && f['password'].invalid }"
+                      />
+                      <button
+                        type="button"
+                        class="toggle-password-btn"
+                        [attr.aria-label]="passwordClass ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                        (click)="togglePassword()"
+                      >
+                        <i [ngClass]="passwordClass ? 'feather icon-eye' : 'feather icon-eye-off'"></i>
+                      </button>
+                    </div>
+                    <div *ngIf="f['password'].touched && f['password'].invalid" class="invalid-feedback">
+                      <div *ngIf="f['password'].errors?.['required']">
+                        La contraseña es requerida.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Alerta de error -->
+                  <div *ngIf="ERROR" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error:</strong> Usuario o contraseña incorrectos.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar">
+                      <span aria-hidden="true"></span>
+                    </button>
+                  </div>
+
+                  <!-- Alerta de cuenta no verificada -->
+                  <div *ngIf="unverifiedMsg" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Atención:</strong> {{ unverifiedMsg }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar">
+                      <span aria-hidden="true"></span>
+                    </button>
+                  </div>
+
+                  <!-- Botón de Login -->
+                  <div class="form-group login-btn">
+                    <button
+                      class="btn btn-primary btn-block"
+                      type="submit"
+                      [disabled]="form.invalid || loading"
+                    >
+                      <span *ngIf="!loading">Login</span>
+                      <span *ngIf="loading">
+                        <i class="fa fa-spinner fa-spin me-2"></i> Cargando...
+                      </span>
+                    </button>
+                  </div>
+
+                  <div class="text-center mt-3">
+                    <a [routerLink]="routes.forgotPassword" class="text-muted">
+                      ¿Olvidaste tu contraseña?
+                    </a>
+                  </div>
+
+                </form>
+                <!-- /Formulario -->
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /Login Content -->
+
+    </div>
+  </div>
+</div>
+<!-- /Main Wrapper -->

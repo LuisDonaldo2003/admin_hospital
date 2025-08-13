@@ -1,0 +1,83 @@
+<div class="page-wrapper">
+  <div class="content">
+    <!-- Encabezado de la página: muestra la ruta de navegación (breadcrumb) -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item">
+              <a href="#">
+                {{ 'CONTRACT.ADD_CONTRACT.BREADCRUMB_CONTRACT' | translate }} <span>&gt;</span>
+              </a>
+            </li>
+            <li class="breadcrumb-item active">
+              {{ 'CONTRACT.ADD_CONTRACT.BREADCRUMB_REGISTER_CONTRACT' | translate }}
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario para registrar un nuevo contrato -->
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <!-- Título del formulario -->
+            <h4 class="mb-4">{{ 'CONTRACT.ADD_CONTRACT.TITLE' | translate }}</h4>
+
+            <form>
+              <!-- Campo para ingresar el nombre del contrato -->
+              <div class="mb-3 row">
+                <label for="name" class="col-sm-2 col-form-label">
+                  {{ 'CONTRACT.ADD_CONTRACT.NAME' | translate }}
+                </label>
+                <div class="col-sm-10">
+                  <input type="text"
+                         id="name"
+                         name="name"
+                         [(ngModel)]="name"
+                         class="form-control"
+                         [placeholder]="'CONTRACT.ADD_CONTRACT.PLACEHOLDER' | translate" />
+                </div>
+              </div>
+
+              <!-- Mensajes de validación y éxito -->
+              <div class="mb-3" *ngIf="valid_form">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <strong>{{ 'CONTRACT.ADD_CONTRACT.ERROR' | translate }}:</strong>
+                  {{ 'CONTRACT.ADD_CONTRACT.REQUIRED' | translate }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <div class="mb-3" *ngIf="valid_form_success">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>{{ 'CONTRACT.ADD_CONTRACT.SUCCESS' | translate }}:</strong>
+                  {{ 'CONTRACT.ADD_CONTRACT.CREATED' | translate }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <!-- Mensaje de validación personalizada -->
+              <div class="mb-3" *ngIf="text_validation">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong>{{ 'CONTRACT.ADD_CONTRACT.ATTENTION' | translate }}:</strong> {{ text_validation }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <!-- Botón para guardar el contrato -->
+              <div class="text-end">
+                <button type="button" class="btn btn-primary px-4" (click)="save()">
+                  {{ 'CONTRACT.ADD_CONTRACT.SAVE' | translate }}
+                </button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

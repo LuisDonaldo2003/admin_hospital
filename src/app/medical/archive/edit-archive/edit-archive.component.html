@@ -1,0 +1,139 @@
+<!--
+  Vista para editar los datos de un expediente (paciente).
+  Incluye encabezado, alertas y formulario con todos los campos editables.
+  No hay logs en este archivo, solo estructura visual y bindings.
+-->
+<div class="page-wrapper">
+  <!-- Contenido principal de la página de edición de expediente -->
+  <div class="content add-staff-form">
+  <!-- Encabezado con breadcrumb de navegación -->
+  <div class="page-header mb-4">
+  <div class="row">
+  <div class="col-sm-12">
+          <!-- Breadcrumb para mostrar la ruta de navegación -->
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item">
+              {{ 'ARCHIVE.EDIT_PATIENT.PATIENT' | translate }} >
+            </li>
+            <li class="breadcrumb-item active">
+              {{ 'ARCHIVE.EDIT_PATIENT.BREADCRUMB_EDIT' | translate }}
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  <!-- Formulario de edición de paciente -->
+  <div class="row justify-content-center">
+  <div class="col-lg-10 col-xl-8">
+  <div class="card card-form shadow border-0">
+          <div class="card-body px-5 py-4">
+            <!-- Título principal del formulario -->
+            <h3 class="text-center mb-4 fw-bold">
+              {{ 'ARCHIVE.EDIT_PATIENT.TITLE' | translate }}
+            </h3>
+
+            <!-- Alertas de validación y éxito -->
+            <div *ngIf="text_validation" class="alert alert-warning alert-dismissible fade show">
+              <strong>{{ 'ARCHIVE.EDIT_PATIENT.WARNING' | translate }}:</strong> {{ text_validation }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div *ngIf="text_success" class="alert alert-success alert-dismissible fade show">
+              <strong>{{ 'ARCHIVE.EDIT_PATIENT.SUCCESS' | translate }}:</strong> {{ text_success }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Formulario principal para editar los datos del paciente -->
+            <form (ngSubmit)="update()">
+              <div class="row g-3">
+                <!-- Número de expediente (solo lectura) -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.ARCHIVE_NUMBER' | translate }}</label>
+                  <input type="text" [(ngModel)]="archive_number" name="archive_number" class="form-control" readonly />
+                </div>
+
+                <!-- Nombre del paciente -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.FIRST_NAME' | translate }}</label>
+                  <input type="text" [(ngModel)]="name" name="name" class="form-control" />
+                </div>
+
+                <!-- Apellido paterno -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.FATHER_LAST_NAME' | translate }}</label>
+                  <input type="text" [(ngModel)]="last_name_father" name="last_name_father" class="form-control" />
+                </div>
+
+                <!-- Apellido materno -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.MOTHER_LAST_NAME' | translate }}</label>
+                  <input type="text" [(ngModel)]="last_name_mother" name="last_name_mother" class="form-control" />
+                </div>
+
+                <!-- Edad -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.AGE' | translate }}</label>
+                  <input type="number" [(ngModel)]="age" name="age" class="form-control" />
+                </div>
+
+                <!-- Género -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.GENDER' | translate }}</label>
+                  <select [(ngModel)]="gender_id" name="gender_id" class="form-control">
+                    <option value="">{{ 'ARCHIVE.EDIT_PATIENT.SELECT_GENDER' | translate }}</option>
+                    <option *ngFor="let gender of genders" [value]="gender.id">{{ gender.name }}</option>
+                  </select>
+                </div>
+
+                <!-- Dirección -->
+                <div class="col-md-12">
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.ADDRESS' | translate }}</label>
+                  <input type="text" [(ngModel)]="address" name="address" class="form-control" />
+                </div>
+
+                <!-- Estado -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.STATE' | translate }}</label>
+                  <select [(ngModel)]="state_id" name="state_id" class="form-control" (change)="onStateChange()">
+                    <option value="">{{ 'ARCHIVE.EDIT_PATIENT.SELECT_STATE' | translate }}</option>
+                    <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
+                  </select>
+                </div>
+
+                <!-- Municipio -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.MUNICIPALITY' | translate }}</label>
+                  <select [(ngModel)]="municipality_id" name="municipality_id" class="form-control" (change)="onMunicipalityChange()">
+                    <option value="">{{ 'ARCHIVE.EDIT_PATIENT.SELECT_MUNICIPALITY' | translate }}</option>
+                    <option *ngFor="let m of municipalities" [value]="m.id">{{ m.name }}</option>
+                  </select>
+                </div>
+
+                <!-- Localidad -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.LOCATION' | translate }}</label>
+                  <select [(ngModel)]="location_id" name="location_id" class="form-control">
+                    <option value="">{{ 'ARCHIVE.EDIT_PATIENT.SELECT_LOCATION' | translate }}</option>
+                    <option *ngFor="let l of locations" [value]="l.id">{{ l.name }}</option>
+                  </select>
+                </div>
+
+                <!-- Fecha de admisión -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.ADMISSION_DATE' | translate }}</label>
+                  <input type="date" [(ngModel)]="admission_date" name="admission_date" class="form-control" />
+                </div>
+              </div>
+
+              <!-- Botón para guardar cambios -->
+              <div class="text-end mt-4">
+                <button type="submit" class="btn btn-primary px-4">{{ 'ARCHIVE.EDIT_PATIENT.SAVE' | translate }}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

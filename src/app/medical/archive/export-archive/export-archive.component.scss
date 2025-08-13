@@ -1,0 +1,913 @@
+
+.page-wrapper {
+  .content.list-staff {
+    padding: 1.5rem;
+
+    .page-header {
+      margin-bottom: 2rem;
+      
+              table {
+          font-size: 0.9rem; // TEXTO APROPIADO EN MÓVILES PERO MÁS GRANDE
+          
+          th, td {
+            padding: 0.8rem 0.5rem; // PADDING BALANCEADO MÁS GENEROSO
+            font-size: 0.85rem; // FUENTE LEGIBLE EN MÓVILES MÁS GRANDE
+            line-height: 1.4 !important;
+            min-height: 50px !important; 
+          }
+          
+          th {
+            font-size: 0.8rem; // HEADERS EN MÓVILES MÁS GRANDES
+            min-height: 45px !important;
+          }
+      }
+      .page-title {
+        color: var(--user-card-text-color, #000) !important;
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .page-subtitle {
+        color: var(--user-card-text-color, #6b7280) !important;
+        font-size: 1.1rem;
+        margin-bottom: 0;
+      }
+    }
+
+    // ========================================
+    // CONTENEDOR DE FILTROS
+    // ========================================
+    .filters-container {
+      background: var(--user-card-bg, #fff) !important;
+      border: 3px solid var(--user-border-color, #dee2e6) !important;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      color: var(--user-card-text-color, #000) !important;
+
+      label, p, span, h1, h2, h3, h4, h5, h6 {
+        color: var(--user-card-text-color, #000) !important;
+      }
+
+      // Selects de filtro
+      .filter-select {
+        background-color: #fff !important;
+        color: #000 !important;
+        border: 3px solid var(--user-border-color, #dee2e6) !important;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        outline: none !important;
+        
+        &:focus {
+          border-color: var(--user-border-color, #dee2e6) !important;
+          box-shadow: none !important;
+        }
+
+        option {
+          background-color: #fff !important;
+          color: #000 !important;
+        }
+      }
+
+      // Botones de exportación
+      .export-btn-excel {
+        background: #28a745 !important;
+        border: 3px solid var(--user-border-color, #dee2e6) !important;
+        color: #fff !important;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        
+        &:hover:not(:disabled) {
+          background: #218838 !important;
+          color: #fff !important;
+        }
+
+        &:disabled {
+          opacity: 0.65;
+          cursor: not-allowed;
+        }
+      }
+
+      .export-btn-pdf {
+        background: #dc3545 !important;
+        border: 3px solid var(--user-border-color, #dee2e6) !important;
+        color: #fff !important;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        
+        &:hover:not(:disabled) {
+          background: #c82333 !important;
+          color: #fff !important;
+        }
+
+        &:disabled {
+          opacity: 0.65;
+          cursor: not-allowed;
+        }
+      }
+
+      // Botón limpiar filtros - VISIBILIDAD MEJORADA
+      .btn-outline-secondary {
+        border: 3px solid var(--user-border-color, #dee2e6) !important;
+        color: #000000 !important; 
+        background: #fff !important;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        
+        // FORZAR VISIBILIDAD COMPLETA DE TEXTO E ICONO
+        i, span {
+          color: #000000 !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+        }
+        
+        // ASEGURAR QUE EL TEXTO SIEMPRE SEA VISIBLE
+        &, * {
+          color: #000000 !important;
+          text-shadow: none !important;
+        }
+        
+        &:hover:not(:disabled) {
+          background: #6c757d !important;
+          color: #fff !important;
+          
+          i, span, * {
+            color: #fff !important;
+          }
+        }
+
+        &:disabled {
+          opacity: 0.65;
+          cursor: not-allowed;
+          
+          i, span, * {
+            color: #666666 !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+// ========================================
+// ESTILOS DE LA TABLA Y CONTENIDO PRINCIPAL
+// ========================================
+.card.card-list {
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 3px solid var(--user-border-color, #dee2e6) !important;
+  background-color: var(--user-card-bg, #fff) !important;
+  color: var(--user-card-text-color, #000) !important;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  .card-body {
+    border-radius: 1rem;
+    background-color: transparent !important;
+    color: var(--user-card-text-color, #000) !important;
+
+    // Información de totales - SIN DEGRADADO
+    .d-flex.justify-content-between {
+      background: var(--user-card-bg, #fff) !important;
+      border-radius: 0.75rem;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--user-border-color, #dee2e6);
+
+      .export-header-text,
+      h5, p {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--user-card-text-color, #000) !important;
+        
+        span {
+          font-weight: 700;
+          font-size: 1.2rem;
+          color: var(--user-card-text-color, #000) !important;
+        }
+      }
+
+      .spinner-border-sm {
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+    }
+
+    // Mensajes sin resultados
+    .text-center.py-5 {
+      padding: 4rem 2rem !important;
+      
+      .fa-file-export {
+        color: #dee2e6;
+        margin-bottom: 1.5rem;
+      }
+
+      h5, p {
+        color: var(--user-card-text-color, #000) !important;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  // Contenedor de tabla optimizado - SIN SCROLL HORIZONTAL
+  .table-responsive {
+    border-radius: 1rem;
+    border: none; // QUITAR BORDE YA QUE LA TABLA TIENE EL SUYO
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: visible; // PERMITIR VISIBILIDAD COMPLETA
+    width: 100%; // ANCHO COMPLETO
+  }
+
+  // Tabla optimizada - SIN SCROLL HORIZONTAL
+  table,
+  table.table,
+  table.table-striped,  
+  table.table-hover {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100% !important; // ANCHO COMPLETO SIN SCROLL
+    background-color: #fff !important;
+    border: 2px solid var(--user-border-color, #dee2e6); // BORDE COMO EN LIST-ARCHIVE
+    border-radius: 1rem;
+    overflow: hidden;
+    margin-bottom: 0; // Quitar margen para que encaje bien en el contenedor
+    table-layout: fixed; // LAYOUT FIJO PARA CONTROLAR ANCHOS
+
+    th, td {
+      border-bottom: 1px solid #f1f3f4 !important;
+      padding: 1rem 0.75rem !important; // PADDING COMO EN LIST-ARCHIVE PARA MEJOR ESPACIADO
+      text-align: center !important;
+      vertical-align: middle !important; // ALINEACIÓN CENTRADA COMO EN LIST-ARCHIVE
+      color: #000000 !important; // NEGRO FORZADO CON CONSISTENCIA
+      background-color: #fff !important; // FONDO BLANCO FORZADO
+      white-space: normal !important; // PERMITIR SALTO DE LÍNEA
+      word-wrap: break-word !important; // DIVIDIR PALABRAS LARGAS
+      word-break: break-word !important; // FORZAR DIVISIÓN DE PALABRAS
+      overflow-wrap: break-word !important; // COMPATIBILIDAD ADICIONAL
+      line-height: 1.4 !important; // ESPACIADO ENTRE LÍNEAS MEJORADO
+      font-size: 1rem !important; // TAMAÑO DE FUENTE COMO EN LIST-ARCHIVE
+      min-height: 60px !important; // ALTURA MÍNIMA MAYOR PARA MÚLTIPLES LÍNEAS
+    }
+
+    thead th {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important; // DEGRADADO COMO EN LIST-ARCHIVE
+      color: #000000 !important; // TEXTO NEGRO FORZADO CON CONSISTENCIA
+      font-weight: 700 !important;
+      font-size: 0.9rem !important; // TAMAÑO COMO EN LIST-ARCHIVE
+      text-transform: uppercase !important;
+      letter-spacing: 0.5px !important; // ESPACIADO COMO EN LIST-ARCHIVE
+      border-bottom: 2px solid var(--user-border-color, #dee2e6) !important;
+      white-space: normal !important; // PERMITIR SALTO DE LÍNEA EN HEADERS
+      line-height: 1.3 !important; // ESPACIADO ENTRE LÍNEAS EN HEADERS MEJORADO
+      min-height: 50px !important; // ALTURA MÍNIMA BALANCEADA PARA HEADERS
+      
+      // Anchos específicos optimizados para ocupar todo el ancho disponible
+      &:nth-child(1) { width: 10%; } // NÚMERO DE ARCHIVO
+      &:nth-child(2) { width: 15%; } // NOMBRE
+      &:nth-child(3) { width: 6%; }  // EDAD
+      &:nth-child(4) { width: 8%; }  // GÉNERO
+      &:nth-child(5) { width: 12%; } // DIRECCIÓN
+      &:nth-child(6) { width: 12%; } // LOCALIDAD
+      &:nth-child(7) { width: 12%; } // MUNICIPIO
+      &:nth-child(8) { width: 10%; }  // ESTADO
+      &:nth-child(9) { width: 10%; }  // FECHA DE INGRESO
+    }
+
+    tbody tr {
+      transition: all 0.3s ease;
+      background-color: #fff !important; // FONDO BLANCO FORZADO
+      
+      &:hover {
+        background-color: rgba(0, 123, 255, 0.05) !important;
+        transform: scale(1.01); // EFECTO DE HOVER COMO EN LIST-ARCHIVE
+      }
+
+      &:last-child td {
+        border-bottom: none !important;
+      }
+      
+      td {
+        background-color: #fff !important; // FONDO BLANCO FORZADO
+        color: #000000 !important; // TEXTO NEGRO FORZADO CON CONSISTENCIA
+        
+        // Anchos específicos optimizados para el tbody
+        &:nth-child(1) { width: 10%; } // NÚMERO DE ARCHIVO
+        &:nth-child(2) { width: 20%; } // NOMBRE
+        &:nth-child(3) { width: 6%; }  // EDAD
+        &:nth-child(4) { width: 8%; }  // GÉNERO
+        &:nth-child(5) { width: 18%; } // DIRECCIÓN
+        &:nth-child(6) { width: 12%; } // LOCALIDAD
+        &:nth-child(7) { width: 12%; } // MUNICIPIO
+        &:nth-child(8) { width: 8%; }  // ESTADO
+        &:nth-child(9) { width: 6%; }  // FECHA DE INGRESO
+      }
+    }
+
+    // SOBRESCRIBIR ESTILOS DE BOOTSTRAP STRIPED
+    tbody tr:nth-of-type(odd) {
+      background-color: #fff !important; // QUITAR RAYADO
+      
+      td {
+        background-color: #fff !important;
+        color: #000 !important;
+      }
+    }
+
+    tbody tr:nth-of-type(even) {
+      background-color: #fff !important; // QUITAR RAYADO
+      
+      td {
+        background-color: #fff !important;
+        color: #000 !important;
+      }
+    }
+
+    // Número de archivo destacado
+    td:first-child,
+    tbody tr td:first-child {
+      font-weight: 700 !important;
+      color: #007bff !important; // AZUL FORZADO PARA NÚMEROS
+      font-size: 1.1rem !important; // TAMAÑO COMO EN LIST-ARCHIVE
+      background-color: #fff !important;
+    }
+
+    // FORZAR TODOS LOS ELEMENTOS STRONG DENTRO DE LA TABLA
+    strong,
+    .text-primary {
+      color: #007bff !important;
+      font-weight: 700 !important;
+    }
+  }
+}
+
+// ========================================
+// ESTADO DE CARGA Y PAGINACIÓN OPTIMIZADA
+// ========================================
+.text-center.my-5 {
+  .spinner-border {
+    border-width: 0.3rem;
+    border-color: var(--user-border-color, #007bff) !important;
+    border-right-color: transparent !important;
+  }
+
+  h5 {
+    color: var(--user-card-text-color, #000) !important;
+    font-weight: 600;
+    margin-top: 1rem;
+  }
+}
+
+// PAGINACIÓN OPTIMIZADA PARA ALTO RENDIMIENTO
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  justify-content: center;
+  margin: 0;
+
+  .page-item {
+    .page-link {
+      border-radius: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border: 2px solid var(--user-border-color, #dee2e6) !important;
+      color: var(--user-card-text-color, #495057) !important;
+      background-color: var(--user-card-bg, #fff) !important;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: all 0.2s ease; // TRANSICIÓN MÁS RÁPIDA
+      min-width: 40px;
+      text-align: center;
+      
+      &:hover:not([disabled]) {
+        background: var(--user-border-color, #007bff) !important;
+        color: #fff !important;
+        border-color: var(--user-border-color, #007bff) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+      }
+      
+      &[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
+    }
+
+    &.active .page-link {
+      background: linear-gradient(135deg, #007bff, #0056b3) !important;
+      color: #fff !important;
+      border-color: #007bff !important;
+      box-shadow: 0 2px 6px rgba(0, 123, 255, 0.4);
+      font-weight: 700;
+    }
+
+    &.disabled .page-link {
+      background-color: var(--user-card-bg, #f8f9fa) !important;
+      color: #6c757d !important;
+      border-color: #dee2e6 !important;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// INFORMACIÓN DE PAGINACIÓN
+.pagination-info {
+  color: var(--user-card-text-color, #495057) !important;
+  font-size: 0.875rem;
+  font-weight: 600;
+  
+  i {
+    color: var(--user-border-color, #007bff) !important;
+  }
+}
+
+// SELECTOR DE TAMAÑO DE PÁGINA
+.page-size-selector {
+  display: flex;
+  align-items: center;
+  
+  .form-select {
+    background-color: var(--user-card-bg, #fff) !important;
+    color: var(--user-card-text-color, #000) !important;
+    border: 2px solid var(--user-border-color, #dee2e6) !important;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    
+    &:focus {
+      border-color: var(--user-border-color, #007bff) !important;
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2) !important;
+      outline: none !important;
+    }
+  }
+  
+  small {
+    color: var(--user-card-text-color, #6c757d) !important;
+  }
+}
+
+// OPTIMIZACIÓN DE RENDIMIENTO - CONTENEDOR DE TABLA CON SCROLL VIRTUAL
+.table-container-optimized {
+  position: relative;
+  min-height: 400px; // ALTURA MÍNIMA PARA ESTABILIDAD
+  max-height: 70vh; // MÁXIMO PARA EVITAR SCROLL EXCESIVO
+}
+
+// INDICADOR DE CARGA DE PÁGINA RÁPIDO
+.page-loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  border: 2px solid var(--user-border-color, #007bff);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  
+  .spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.15rem;
+  }
+}
+
+// Información de filtros aplicados
+.applied-filters-info {
+  .alert {
+    background: var(--user-card-bg, #e3f2fd) !important;
+    border: 2px solid var(--user-border-color, #2196f3) !important;
+    color: var(--user-card-text-color, #1565c0) !important;
+    border-radius: 0.75rem;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    padding: 0.75rem 1rem;
+
+    i {
+      color: var(--user-border-color, #2196f3) !important;
+      font-size: 1rem;
+    }
+  }
+}
+
+// ========================================
+// RESPONSIVE DESIGN
+// ========================================
+@media (max-width: 768px) {
+  .page-wrapper .content.list-staff {
+    padding: 1rem;
+
+    .filters-container {
+      padding: 1rem;
+      
+      .filter-select {
+        font-size: 0.875rem;
+        padding: 0.6rem 0.8rem;
+      }
+
+      .export-btn-excel,
+      .export-btn-pdf {
+        font-size: 0.875rem;
+        padding: 0.6rem 1rem;
+      }
+    }
+
+    .card.card-list {
+      padding: 1rem;
+
+      .card-body {
+        .d-flex.justify-content-between {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+
+        .table-responsive {
+          border-radius: 0.5rem;
+          
+          // Barra de scroll más pequeña en móviles
+          &::-webkit-scrollbar {
+            height: 8px;
+          }
+        }
+
+        table {
+          font-size: 0.9rem; // TEXTO APROPIADO MÁS GRANDE EN MÓVILES
+          
+          th, td {
+            padding: 0.8rem 0.5rem; // PADDING BALANCEADO MÁS GENEROSO
+            font-size: 0.85rem; // FUENTE LEGIBLE MÁS GRANDE EN MÓVILES
+            line-height: 1.4 !important; // ESPACIADO APROPIADO MEJORADO EN MÓVILES
+            min-height: 50px !important; // ALTURA MÍNIMA MAYOR EN MÓVILES
+          }
+          
+          th {
+            font-size: 0.8rem; // HEADERS MÁS GRANDES EN MÓVILES
+            min-height: 45px !important; // ALTURA MÍNIMA MAYOR PARA HEADERS EN MÓVILES
+          }
+        }
+      }
+    }
+
+    // PAGINACIÓN OPTIMIZADA PARA MÓVILES
+    .pagination {
+      gap: 0.2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      
+      .page-item .page-link {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+        min-width: 35px;
+        border-width: 1px; // BORDES MÁS FINOS EN MÓVILES
+      }
+    }
+
+    .pagination-info {
+      font-size: 0.8rem;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-size-selector {
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      
+      .form-select {
+        font-size: 0.8rem;
+        padding: 0.2rem 0.4rem;
+        min-width: 80px;
+      }
+      
+      small {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}
+
+// ========================================
+// MODO OSCURO
+// ========================================
+body.dark-mode {
+  .page-wrapper .content.list-staff {
+    // Encabezado en modo oscuro
+    .page-header {
+      .page-title {
+        color: #ffffff !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .page-subtitle {
+        color: #ffffff !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6) !important;
+        font-weight: 600 !important;
+      }
+    }
+
+    // Filtros en modo oscuro
+    .filters-container {
+      background: var(--user-card-bg, #fff) !important;
+      border-color: var(--user-border-color, #ff4f4f) !important;
+
+      label, p, span, h1, h2, h3, h4, h5, h6 {
+        color: var(--user-card-text-color, #fff) !important;
+      }
+
+      .filter-select {
+        background: #fff !important;
+        color: #000 !important;
+        border-color: var(--user-border-color, #ff4f4f) !important;
+
+        &:focus {
+          border-color: var(--user-border-color, #ff4f4f) !important;
+        }
+
+        option {
+          background-color: #fff !important;
+          color: #000 !important;
+        }
+      }
+    }
+  }
+
+  // Card y tabla en modo oscuro
+  .card.card-list {
+    .card-body {
+      // Textos del header de la tabla
+      .d-flex.justify-content-between {
+        background: var(--user-card-bg, #fff) !important;
+        
+        .export-header-text,
+        h5, p {
+          color: var(--user-card-text-color, #fff) !important;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+          
+          span {
+            color: var(--user-card-text-color, #fff) !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+          }
+        }
+      }
+      
+      // Mensajes de no hay datos
+      .text-center.py-5 {
+        h5, p {
+          color: #ffffff !important;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .fa-file-export {
+          color: #6c757d !important;
+        }
+      }
+      
+      // Contenedor optimizado para modo oscuro - SIN SCROLL HORIZONTAL
+      .table-responsive {
+        border: none !important; // QUITAR BORDE YA QUE LA TABLA TIENE EL SUYO
+        overflow: visible !important; // PERMITIR VISIBILIDAD COMPLETA
+        width: 100% !important; // ANCHO COMPLETO
+      }
+    }
+
+    table,
+    table.table,
+    table.table-striped,  
+    table.table-hover {
+      background-color: #fff !important;
+      border: 2px solid var(--user-border-color, #ff4f4f) !important; // BORDE CONSISTENTE EN MODO OSCURO
+      width: 100% !important; // ANCHO COMPLETO SIN SCROLL
+      table-layout: fixed; // LAYOUT FIJO PARA CONTROLAR ANCHOS
+      
+      th, td {
+        background-color: #fff !important; // FONDO BLANCO FORZADO
+        color: #000000 !important; // TEXTO NEGRO FORZADO CON CONSISTENCIA
+        border-bottom: 1px solid #f1f3f4 !important;
+        white-space: normal !important; // PERMITIR SALTO DE LÍNEA
+        word-wrap: break-word !important; // DIVIDIR PALABRAS LARGAS
+        word-break: break-word !important; // FORZAR DIVISIÓN DE PALABRAS
+        overflow-wrap: break-word !important; // COMPATIBILIDAD ADICIONAL
+        line-height: 1.4 !important; // ESPACIADO ENTRE LÍNEAS MEJORADO
+        font-size: 1rem !important; // TAMAÑO COMO EN LIST-ARCHIVE
+        padding: 1rem 0.75rem !important; // PADDING COMO EN LIST-ARCHIVE
+        vertical-align: middle !important; // ALINEACIÓN CENTRADA
+        min-height: 60px !important; // ALTURA MÍNIMA MAYOR PARA MÚLTIPLES LÍNEAS
+        text-align: center !important;
+      }
+      
+      thead th {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important; // DEGRADADO COMO EN LIST-ARCHIVE
+        color: #000000 !important; // TEXTO NEGRO FORZADO CON CONSISTENCIA
+        text-shadow: none !important;
+        border-bottom: 2px solid var(--user-border-color, #ff4f4f) !important;
+        font-size: 0.9rem !important; // TAMAÑO COMO EN LIST-ARCHIVE
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important; // ESPACIADO COMO EN LIST-ARCHIVE
+        white-space: normal !important; // PERMITIR SALTO DE LÍNEA EN HEADERS MODO OSCURO
+        line-height: 1.3 !important; // ESPACIADO ENTRE LÍNEAS EN HEADERS MEJORADO
+        min-height: 50px !important; // ALTURA MÍNIMA BALANCEADA PARA HEADERS
+        
+        // Anchos específicos optimizados para modo oscuro
+        &:nth-child(1) { width: 10%; } // NÚMERO DE ARCHIVO
+        &:nth-child(2) { width: 20%; } // NOMBRE
+        &:nth-child(3) { width: 6%; }  // EDAD
+        &:nth-child(4) { width: 8%; }  // GÉNERO
+        &:nth-child(5) { width: 18%; } // DIRECCIÓN
+        &:nth-child(6) { width: 12%; } // LOCALIDAD
+        &:nth-child(7) { width: 12%; } // MUNICIPIO
+        &:nth-child(8) { width: 8%; }  // ESTADO
+        &:nth-child(9) { width: 6%; }  // FECHA DE INGRESO
+      }
+
+      tbody {
+        background-color: #fff !important;
+        
+        tr {
+          background-color: #fff !important;
+          
+          &:hover {
+            background-color: rgba(0, 123, 255, 0.05) !important;
+            transform: scale(1.01); // EFECTO DE HOVER COMO EN LIST-ARCHIVE
+          }
+          
+          // SOBRESCRIBIR ESTILOS DE BOOTSTRAP STRIPED EN MODO OSCURO
+          &:nth-of-type(odd) {
+            background-color: #fff !important;
+            
+            td {
+              background-color: #fff !important;
+              color: #000 !important;
+            }
+          }
+
+          &:nth-of-type(even) {
+            background-color: #fff !important;
+            
+            td {
+              background-color: #fff !important;
+              color: #000 !important;
+            }
+          }
+        }
+        
+        td {
+          background-color: #fff !important;
+          color: #000 !important;
+          text-shadow: none !important;
+          
+          // Anchos específicos optimizados para columnas del tbody en modo oscuro
+          &:nth-child(1) { width: 10%; } // NÚMERO DE ARCHIVO
+          &:nth-child(2) { width: 20%; } // NOMBRE
+          &:nth-child(3) { width: 6%; }  // EDAD
+          &:nth-child(4) { width: 8%; }  // GÉNERO
+          &:nth-child(5) { width: 18%; } // DIRECCIÓN
+          &:nth-child(6) { width: 12%; } // LOCALIDAD
+          &:nth-child(7) { width: 12%; } // MUNICIPIO
+          &:nth-child(8) { width: 8%; }  // ESTADO
+          &:nth-child(9) { width: 6%; }  // FECHA DE INGRESO
+        }
+
+        // Número de archivo destacado en azul pero legible
+        td:first-child {
+          color: #007bff !important;
+          background-color: #fff !important;
+          text-shadow: none !important;
+          font-weight: 700 !important;
+          font-size: 1.1rem !important; // TAMAÑO COMO EN LIST-ARCHIVE
+        }
+
+        // FORZAR TODOS LOS ELEMENTOS STRONG DENTRO DE LA TABLA EN MODO OSCURO
+        strong,
+        .text-primary {
+          color: #007bff !important;
+          font-weight: 700 !important;
+          background-color: #fff !important;
+        }
+
+        // Iconos y botones dentro de las celdas
+        .dropdown-toggle {
+          color: #000 !important;
+          
+          &::after {
+            border-top-color: #000 !important;
+          }
+        }
+        
+        // Todos los iconos en negro
+        i[class*="fa-"] {
+          color: #000 !important;
+        }
+
+        // Botones y links
+        .btn, a {
+          color: #000 !important;
+        }
+      }
+    }
+  }
+
+  // Estado de carga en modo oscuro
+  .text-center.my-5 {
+    h5 {
+      color: #ffffff !important;
+    }
+    
+    .spinner-border {
+      border-color: var(--user-border-color, #4dabf7) !important;
+      border-right-color: transparent !important;
+    }
+  }
+
+  // Información de filtros aplicados en modo oscuro
+  .applied-filters-info {
+    .alert {
+      background: rgba(33, 150, 243, 0.15) !important;
+      border-color: #4fc3f7 !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+      i {
+        color: #4fc3f7 !important;
+      }
+
+      small {
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+
+  // Asegurar que todos los text-muted sean visibles
+  .text-muted,
+  h5.text-muted,
+  p.text-muted {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6) !important;
+    font-weight: 600 !important;
+    opacity: 0.95 !important;
+  }
+
+  // PAGINACIÓN EN MODO OSCURO
+  .pagination {
+    .page-item {
+      .page-link {
+        background-color: var(--user-card-bg, #2a2a3a) !important;
+        color: #ffffff !important;
+        border-color: var(--user-border-color, #ff4f4f) !important;
+        
+        &:hover:not([disabled]) {
+          background-color: var(--user-border-color, #ff4f4f) !important;
+          color: #fff !important;
+          border-color: var(--user-border-color, #ff4f4f) !important;
+        }
+      }
+
+      &.active .page-link {
+        background: linear-gradient(135deg, #ff4f4f, #cc3f3f) !important;
+        color: #fff !important;
+        border-color: #ff4f4f !important;
+      }
+
+      &.disabled .page-link {
+        background-color: #1a1a1a !important;
+        color: #6c757d !important;
+        border-color: #444 !important;
+      }
+    }
+  }
+
+  .pagination-info {
+    color: #ffffff !important;
+    
+    i {
+      color: var(--user-border-color, #ff4f4f) !important;
+    }
+  }
+
+  .page-size-selector {
+    .form-select {
+      background-color: var(--user-card-bg, #2a2a3a) !important;
+      color: #ffffff !important;
+      border-color: var(--user-border-color, #ff4f4f) !important;
+      
+      &:focus {
+        border-color: var(--user-border-color, #ff4f4f) !important;
+        box-shadow: 0 0 0 2px rgba(255, 79, 79, 0.2) !important;
+      }
+    }
+    
+    small {
+      color: #ffffff !important;
+    }
+  }
+}

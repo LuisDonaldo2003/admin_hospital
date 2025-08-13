@@ -1,0 +1,112 @@
+<!--
+  Contenedor principal de la página de agregar staff
+-->
+<div class="page-wrapper">
+  <!-- Sección del contenido principal y formulario -->
+  <div class="content add-staff-form">
+    <!-- Encabezado de la página con breadcrumb de navegación -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <!-- Breadcrumb para mostrar la ruta de navegación -->
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item">
+              <!-- Enlace al listado de usuarios -->
+              <a href="#">{{ 'STAFF.ADD_STAFF.BREADCRUMB_USERS' | translate }} ></a>
+            </li>
+            <li class="breadcrumb-item active">
+              <!-- Texto del breadcrumb para agregar staff -->
+              {{ 'STAFF.ADD_STAFF.BREADCRUMB_ADD_STAFF' | translate }}
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección central del formulario -->
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-xl-8">
+        <!-- Card que contiene el formulario -->
+        <div class="card card-form shadow border-0">
+          <div class="card-body px-5 py-4">
+            <!-- Título del formulario -->
+            <h3 class="text-center mb-4 fw-bold">{{ 'STAFF.ADD_STAFF.TITLE' | translate }}</h3>
+
+            <!-- Formulario para agregar staff -->
+            <form>
+              <div class="row g-3">
+                <!-- Campo para el nombre -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'STAFF.ADD_STAFF.FIRST_NAME' | translate }} *</label>
+                  <input type="text" class="form-control" [(ngModel)]="name" name="name" required
+                         [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
+                </div>
+
+                <!-- Campo para el apellido -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'STAFF.ADD_STAFF.SURNAME' | translate }} *</label>
+                  <input type="text" class="form-control" [(ngModel)]="surname" name="surname" required
+                         [ngClass]="{ 'is-invalid': submitted && !surname.trim() }" />
+                </div>
+
+                <!-- Campo para el correo electrónico -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'STAFF.ADD_STAFF.EMAIL' | translate }} *</label>
+                  <input type="email" class="form-control" [(ngModel)]="email" name="email" required
+                         [ngClass]="{ 'is-invalid': submitted && !email.trim() }" />
+                </div>
+
+                <!-- Selección de rol para el staff -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'STAFF.ADD_STAFF.ROLE_SELECT' | translate }} *</label>
+                  <select class="form-control" [(ngModel)]="selectedValue" name="role" required
+                          [ngClass]="{ 'is-invalid': submitted && !selectedValue }">
+                    <!-- Opción por defecto -->
+                    <option value="" disabled selected>{{ 'STAFF.ADD_STAFF.SELECT_ROLE_PLACEHOLDER' | translate }}</option>
+                    <!-- Opciones de roles disponibles -->
+                    <option *ngFor="let data of roles" [value]="data.id">{{ data.name }}</option>
+                  </select>
+                </div>
+
+                <!-- Campo para la contraseña -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'STAFF.ADD_STAFF.PASSWORD' | translate }} *</label>
+                  <input type="password" class="form-control" [(ngModel)]="password" name="password" required
+                         [ngClass]="{ 'is-invalid': submitted && !password.trim() }" />
+                </div>
+
+                <!-- Campo para confirmar la contraseña -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'STAFF.ADD_STAFF.CONFIRM_PASSWORD' | translate }} *</label>
+                  <input type="password" class="form-control" [(ngModel)]="password_confirmation" name="password_confirmation" required
+                         [ngClass]="{ 'is-invalid': submitted && !password_confirmation.trim() }" />
+                </div>
+              </div>
+
+              <!-- Mensaje de validación si hay advertencias -->
+              <div class="mt-4" *ngIf="text_validation">
+                <div class="alert alert-warning alert-dismissible fade show">
+                  <strong>{{ 'STAFF.ADD_STAFF.WARNING' | translate }}:</strong> {{ text_validation }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+              </div>
+
+              <!-- Mensaje de éxito si la operación fue exitosa -->
+              <div class="mt-4" *ngIf="text_success">
+                <div class="alert alert-success alert-dismissible fade show">
+                  <strong>{{ 'STAFF.ADD_STAFF.SUCCESS' | translate }}:</strong> {{ text_success }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+              </div>
+
+              <!-- Botón para guardar el nuevo staff -->
+              <div class="text-end mt-4">
+                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'STAFF.ADD_STAFF.SAVE' | translate }}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

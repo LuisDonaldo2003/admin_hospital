@@ -1,0 +1,136 @@
+<!-- Contenedor principal de la página para agregar rol de usuario -->
+<div class="page-wrapper">
+  <!-- Contenido principal de la página -->
+  <div class="content">
+  <!-- Encabezado de la página con breadcrumb de navegación -->
+  <div class="page-header mb-4">
+  <!-- Fila para el breadcrumb -->
+  <div class="row">
+  <div class="col">
+          <!-- Breadcrumb que muestra la ruta de navegación actual -->
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-light p-2 rounded">
+              <!-- Primer elemento del breadcrumb -->
+              <li class="breadcrumb-item">
+                <a href="#">{{ 'ROLES.ADD_ROLE.BREADCRUMB_ROLES' | translate }} ></a>
+              </li>
+              <!-- Segundo elemento del breadcrumb, activo -->
+              <li class="breadcrumb-item active" aria-current="page">
+                {{ 'ROLES.ADD_ROLE.BREADCRUMB_REGISTER_ROLE' | translate }}
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  <!-- /Fin del encabezado de la página -->
+
+  <!-- Fila principal con dos secciones: crear rol y asignar permisos -->
+  <div class="row justify-content-center g-4">
+  <!-- Sección para crear un nuevo rol -->
+  <div class="col-lg-8">
+  <!-- Card que contiene el formulario de creación de rol -->
+  <div class="card shadow-sm border-0">
+        <!-- Cuerpo de la card con el formulario -->
+          <div class="card-body">
+            <!-- Título del formulario de rol -->
+            <h4 class="card-title mb-4">{{ 'ROLES.ADD_ROLE.CREATE_ROLE' | translate }}</h4>
+            <!-- Formulario para crear un nuevo rol -->
+            <form action="#" novalidate>
+              <!-- Campo para el nombre del rol -->
+              <div class="mb-3 row align-items-center">
+                <label for="text" class="col-md-2 col-form-label">{{ 'ROLES.ADD_ROLE.NAME' | translate }}</label>
+                <div class="col-md-10">
+                  <input type="text" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'ROLES.ADD_ROLE.PLACEHOLDER_NAME' | translate">
+                </div>
+              </div>
+
+              <!-- Botón para guardar el rol -->
+              <div class="text-end">
+                <button class="btn btn-primary" (click)="save($event)">
+                  {{ 'ROLES.ADD_ROLE.SAVE' | translate }}
+                </button>
+              </div>
+
+              <!-- Alertas de validación y éxito -->
+              <div class="mt-3" *ngIf="valid_form">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <strong>{{ 'ROLES.ADD_ROLE.ERROR' | translate }}:</strong> {{ 'ROLES.ADD_ROLE.ALERT1' | translate }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <div class="mt-3" *ngIf="valid_form_succes">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>{{ 'ROLES.ADD_ROLE.GREAT' | translate }}:</strong> {{ 'ROLES.ADD_ROLE.GREAT_ROLE' | translate }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <div class="mt-3" *ngIf="text_validation">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong>{{ 'ROLES.ADD_ROLE.ATTENTION' | translate }}:</strong> {{ text_validation }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+  <!-- Sección para asignar permisos al rol -->
+  <div class="col-lg-8">
+  <!-- Card que contiene la tabla de asignación de permisos -->
+  <div class="card shadow-sm border-0">
+        <!-- Cuerpo de la card con la tabla de permisos -->
+          <div class="card-body">
+            <!-- Título de la sección de asignación de permisos -->
+            <h4 class="card-title mb-4">{{ 'ROLES.ADD_ROLE.ASIGNATION' | translate }}</h4>
+            <!-- Tabla de asignación de permisos por sección -->
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <!-- Encabezados de la tabla -->
+                    <th>{{ 'ROLES.ADD_ROLE.SECCION' | translate }}</th>
+                    <th>{{ 'ROLES.ADD_ROLE.PERMISSIONS' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Iteración sobre las secciones del sidebar para mostrar permisos -->
+                  <ng-container *ngFor="let side of sideBar">
+                    <tr>
+                      <!-- Sección traducida -->
+                      <td>{{ side.group + '.' + side.menuValue | translate }}</td>
+                      <td>
+                        <!-- Subpermisos traducidos -->
+                        <div *ngIf="side.subMenus?.length > 0">
+                          <div class="form-check mb-1" *ngFor="let subMenu of side.subMenus">
+                            <input class="form-check-input" type="checkbox" (click)="addPermission(subMenu)" id="{{subMenu.menuValue}}">
+                            <label class="form-check-label" [for]="subMenu.menuValue">
+                              {{ side.group + '.' + subMenu.menuValue | translate }}
+                            </label>
+                          </div>
+                        </div>
+                        <!-- Permiso directo sin submenus -->
+                        <div *ngIf="side.subMenus?.length === 0">
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" (click)="addPermission(side)" id="{{side.menuValue}}">
+                            <label class="form-check-label" [for]="side.menuValue">
+                              {{ side.group + '.' + side.menuValue | translate }}
+                            </label>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

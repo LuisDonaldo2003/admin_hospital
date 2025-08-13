@@ -1,0 +1,77 @@
+<!-- Contenedor principal de la página para agregar perfil -->
+<div class="page-wrapper">
+  <!-- Contenido principal de la página -->
+  <div class="content">
+  <!-- Encabezado de la página con breadcrumb de navegación -->
+  <div class="page-header mb-4">
+  <!-- Fila para el breadcrumb -->
+  <div class="row">
+  <div class="col-sm-12">
+          <!-- Breadcrumb que muestra la ruta de navegación actual -->
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <!-- Primer elemento del breadcrumb -->
+            <li class="breadcrumb-item"><a href="#">{{ 'PROFILE_M.ADD_PROFILE.PROFILES' | translate }} ></a></li>
+            <!-- Segundo elemento del breadcrumb, activo -->
+            <li class="breadcrumb-item active">{{ 'PROFILE_M.ADD_PROFILE.BREADCRUMB_REGISTER' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  <!-- Formulario para agregar un nuevo perfil -->
+  <div class="row justify-content-center">
+  <!-- Columna principal del formulario -->
+  <div class="col-lg-8">
+  <!-- Card que contiene el formulario -->
+  <div class="card shadow-sm border-0">
+          <!-- Cuerpo de la card con el formulario -->
+          <div class="card-body">
+            <!-- Título del formulario -->
+            <h4 class="mb-4">{{ 'PROFILE_M.ADD_PROFILE.TITLE' | translate }}</h4>
+
+            <!-- Formulario de registro de perfil -->
+            <form>
+              <!-- Campo para el nombre del perfil -->
+              <div class="mb-3 row">
+                <label for="name" class="col-sm-2 col-form-label">{{ 'PROFILE_M.ADD_PROFILE.NAME' | translate }}</label>
+                <div class="col-sm-10">
+                  <input type="text" id="name" name="name" [(ngModel)]="name" class="form-control" [placeholder]="'PROFILE_M.ADD_PROFILE.PLACEHOLDER_NAME' | translate" />
+                </div>
+              </div>
+
+              <!-- Mensaje de error si el formulario no es válido -->
+              <div class="mb-3" *ngIf="valid_form">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <strong>{{ 'PROFILE_M.ADD_PROFILE.ERROR' | translate }}:</strong> {{ 'PROFILE_M.ADD_PROFILE.REQUIRED' | translate }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <!-- Mensaje de éxito si el registro fue exitoso -->
+              <div class="mb-3" *ngIf="valid_form_success">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>{{ 'PROFILE_M.ADD_PROFILE.SUCCESS' | translate }}:</strong> {{ 'PROFILE_M.ADD_PROFILE.SUCCESS_MESSAGE' | translate }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <!-- Mensaje de advertencia si hay alguna validación de texto -->
+              <div class="mb-3" *ngIf="text_validation">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong>{{ 'PROFILE_M.ADD_PROFILE.ATTENTION' | translate }}:</strong> {{ text_validation }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <!-- Botón para guardar el perfil -->
+              <div class="text-end">
+                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'PROFILE_M.ADD_PROFILE.SAVE' | translate }}</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

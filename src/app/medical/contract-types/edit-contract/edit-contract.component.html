@@ -1,0 +1,83 @@
+<div class="page-wrapper">
+  <div class="content">
+    <!-- Encabezado de la página: muestra la ruta de navegación (breadcrumb) -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item">
+              <a href="#">{{ 'CONTRACT.EDIT_CONTRACT.CONTRACT' | translate }} ></a>
+            </li>
+            <li class="breadcrumb-item active">{{ 'CONTRACT.EDIT_CONTRACT.EDIT' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario para editar contrato -->
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <!-- Título del formulario con el nombre del contrato -->
+            <h4 class="mb-4">{{ 'CONTRACT.EDIT_CONTRACT.TITLE' | translate }}: {{ name }}</h4>
+
+            <form>
+              <!-- Campo para editar el nombre del contrato -->
+              <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">{{ 'CONTRACT.EDIT_CONTRACT.NAME' | translate }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="name" [(ngModel)]="name" class="form-control" [placeholder]="'CONTRACT.EDIT_CONTRACT.PLACEHOLDER_NAME' | translate" />
+                </div>
+              </div>
+
+              <!-- Selección de estado del contrato (activo/inactivo) -->
+              <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">{{ 'CONTRACT.EDIT_CONTRACT.STATE' | translate }}</label>
+                <div class="col-sm-10 d-flex align-items-center gap-4">
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="active" name="state" [value]="1" [(ngModel)]="state" />
+                    <label class="form-check-label" for="active">{{ 'CONTRACT.EDIT_CONTRACT.ACTIVE' | translate }}</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="inactive" name="state" [value]="2" [(ngModel)]="state" />
+                    <label class="form-check-label" for="inactive">{{ 'CONTRACT.EDIT_CONTRACT.INACTIVE' | translate }}</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Alertas de validación y éxito -->
+              <div class="mb-3" *ngIf="valid_form">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <strong>{{ 'CONTRACT.EDIT_CONTRACT.ERROR' | translate }}:</strong> {{ 'CONTRACT.EDIT_CONTRACT.REQUIRED' | translate }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <div class="mb-3" *ngIf="valid_form_success">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>{{ 'CONTRACT.EDIT_CONTRACT.SUCCESS' | translate }}:</strong> {{ 'CONTRACT.EDIT_CONTRACT.SUCCESS_MESSAGE' | translate }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <!-- Alerta de validación personalizada -->
+              <div class="mb-3" *ngIf="text_validation">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong>{{ 'CONTRACT.EDIT_CONTRACT.ATTENTION' | translate }}:</strong> {{ text_validation }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <!-- Botón para guardar cambios -->
+              <div class="text-end">
+                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'CONTRACT.EDIT_CONTRACT.EDIT' | translate }}</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,92 @@
+<!--
+  Contenedor principal de la página de edición de staff
+-->
+<div class="page-wrapper">
+  <div class="content">
+    <!-- Encabezado de la página con breadcrumb de navegación -->
+    <div class="page-header">
+      <div class="row">
+        <div class="col-sm-12">
+          <!-- Breadcrumb para mostrar la ruta de navegación -->
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+              <!-- Enlace al listado de usuarios -->
+              <a href="#">{{ 'STAFF.EDIT_STAFF.BREADCRUMB_USERS' | translate }} ></a>
+            </li>
+            <li class="breadcrumb-item">
+              <!-- Icono de separación -->
+              <i class="feather icon-chevron-right"></i>
+            </li>
+            <li class="breadcrumb-item active">
+              <!-- Texto del breadcrumb para editar staff -->
+              {{ 'STAFF.EDIT_STAFF.BREADCRUMB_EDIT_STAFF' | translate }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección del formulario de edición -->
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <!-- Card que contiene el formulario, solo si hay staff seleccionado -->
+          <div class="card-body" *ngIf="staff_selected">
+            <form>
+              <div class="row g-4">
+                <div class="col-12">
+                  <!-- Título con el ID del staff a editar -->
+                  <h4 class="mb-4">{{ 'STAFF.EDIT_STAFF.TITLE' | translate }}: #{{ staff_selected.id }}</h4>
+                </div>
+
+                <!-- Campo para el nombre -->
+                <div class="col-md-4">
+                  <label class="form-label">{{ 'STAFF.EDIT_STAFF.FIRST_NAME' | translate }} *</label>
+                  <input class="form-control" [(ngModel)]="name" name="name" type="text" required />
+                </div>
+                <!-- Campo para el apellido -->
+                <div class="col-md-4">
+                  <label class="form-label">{{ 'STAFF.EDIT_STAFF.SURNAME' | translate }} *</label>
+                  <input class="form-control" [(ngModel)]="surname" name="surname" type="text" required />
+                </div>
+                <!-- Campo para el correo electrónico -->
+                <div class="col-md-4">
+                  <label class="form-label">{{ 'STAFF.EDIT_STAFF.EMAIL' | translate }} *</label>
+                  <input class="form-control" [(ngModel)]="email" name="email" type="email" required />
+                </div>
+
+                <!-- Selección de rol para el staff -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'STAFF.EDIT_STAFF.ROLE_SELECT' | translate }} *</label>
+                  <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select" [placeholder]="'STAFF.EDIT_STAFF.SELECT_ROLE_PLACEHOLDER' | translate">
+                    <!-- Opciones de roles disponibles -->
+                    <mat-option *ngFor="let data of roles" [value]="data.id">
+                      {{ data.name }}
+                    </mat-option>
+                  </mat-select>
+                </div>
+
+                <!-- Sección de alertas de éxito o advertencia -->
+                <div class="col-12" *ngIf="text_success || text_validation">
+                  <!-- Alerta de éxito -->
+                  <div *ngIf="text_success" class="alert alert-success">
+                    <strong>{{ 'STAFF.EDIT_STAFF.SUCCESS' | translate }}:</strong> {{ text_success }}
+                  </div>
+                  <!-- Alerta de advertencia -->
+                  <div *ngIf="text_validation" class="alert alert-warning">
+                    <strong>{{ 'STAFF.EDIT_STAFF.WARNING' | translate }}:</strong> {{ text_validation }}
+                  </div>
+                </div>
+
+                <!-- Botón para guardar los cambios -->
+                <div class="col-12 text-end">
+                  <button type="button" class="btn btn-primary" (click)="save()">{{ 'STAFF.EDIT_STAFF.SAVE' | translate }}</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,92 @@
+<!-- Contenedor principal de la página para editar perfil -->
+<div class="page-wrapper">
+  <!-- Contenido principal de la página -->
+  <div class="content">
+  <!-- Encabezado de la página con breadcrumb de navegación -->
+  <div class="page-header mb-4">
+  <!-- Fila para el breadcrumb -->
+  <div class="row">
+  <div class="col-sm-12">
+          <!-- Breadcrumb que muestra la ruta de navegación actual -->
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <!-- Primer elemento del breadcrumb -->
+            <li class="breadcrumb-item"><a href="#">{{ 'PROFILE_M.EDIT_PROFILE.PROFILES' | translate }} ></a></li>
+            <!-- Segundo elemento del breadcrumb, activo -->
+            <li class="breadcrumb-item active">{{ 'PROFILE_M.EDIT_PROFILE.EDIT' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  <!-- Formulario para editar el perfil -->
+  <div class="row justify-content-center">
+  <!-- Columna principal del formulario -->
+  <div class="col-lg-8">
+  <!-- Card que contiene el formulario -->
+  <div class="card shadow-sm border-0">
+          <!-- Cuerpo de la card con el formulario -->
+          <div class="card-body">
+            <!-- Título del formulario con el nombre del perfil -->
+            <h4 class="mb-4">{{ 'PROFILE_M.EDIT_PROFILE.TITLE' | translate }}: {{ name }}</h4>
+
+            <!-- Formulario de edición de perfil -->
+            <form>
+              <!-- Campo para el nombre del perfil -->
+              <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">{{ 'PROFILE_M.EDIT_PROFILE.NAME' | translate }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="name" [(ngModel)]="name" class="form-control" [placeholder]="'PROFILE_M.EDIT_PROFILE.PLACEHOLDER_NAME' | translate" />
+                </div>
+              </div>
+
+              <!-- Campo para el estado del perfil (activo/inactivo) -->
+              <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">{{ 'PROFILE_M.EDIT_PROFILE.STATE' | translate }}</label>
+                <div class="col-sm-10 d-flex align-items-center gap-4">
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="active" name="state" [value]="1" [(ngModel)]="state" />
+                    <label class="form-check-label" for="active">{{ 'PROFILE_M.EDIT_PROFILE.ACTIVE' | translate }}</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="inactive" name="state" [value]="2" [(ngModel)]="state" />
+                    <label class="form-check-label" for="inactive">{{ 'PROFILE_M.EDIT_PROFILE.INACTIVE' | translate }}</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mensaje de error si el formulario no es válido -->
+              <div class="mb-3" *ngIf="valid_form">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <strong>{{ 'PROFILE_M.EDIT_PROFILE.ERROR' | translate }}:</strong> {{ 'PROFILE_M.EDIT_PROFILE.REQUIRED' | translate }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <!-- Mensaje de éxito si la edición fue exitosa -->
+              <div class="mb-3" *ngIf="valid_form_success">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>{{ 'PROFILE_M.EDIT_PROFILE.SUCCESS' | translate }}:</strong> {{ 'PROFILE_M.EDIT_PROFILE.SUCCESS_MESSAGE' | translate }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <!-- Mensaje de advertencia si hay alguna validación de texto -->
+              <div class="mb-3" *ngIf="text_validation">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong>{{ 'PROFILE_M.EDIT_PROFILE.ATTENTION' | translate }}:</strong> {{ text_validation }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <!-- Botón para guardar los cambios del perfil -->
+              <div class="text-end">
+                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'PROFILE_M.EDIT_PROFILE.EDIT' | translate }}</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

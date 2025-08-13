@@ -1,0 +1,68 @@
+<div class="page-wrapper">
+  <div class="content">
+    <!-- Encabezado de la página: muestra la ruta de navegación (breadcrumb) -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item">
+              <a href="#">{{ 'DEPARTAMENT.ADD_DEPARTAMENT.DEPARTMENTS' | translate }} ></a>
+            </li>
+            <li class="breadcrumb-item active">{{ 'DEPARTAMENT.ADD_DEPARTAMENT.BREADCRUMB_REGISTER' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario para registrar un nuevo departamento -->
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <!-- Título del formulario -->
+            <h4 class="mb-4">{{ 'DEPARTAMENT.ADD_DEPARTAMENT.TITLE' | translate }}</h4>
+
+            <form>
+              <!-- Campo para ingresar el nombre del departamento -->
+              <div class="mb-3 row">
+                <label for="name" class="col-sm-2 col-form-label">{{ 'DEPARTAMENT.ADD_DEPARTAMENT.NAME' | translate }}</label>
+                <div class="col-sm-10">
+                  <input type="text" id="name" name="name" [(ngModel)]="name" class="form-control" [placeholder]="'DEPARTAMENT.ADD_DEPARTAMENT.PLACEHOLDER_NAME' | translate" />
+                </div>
+              </div>
+
+              <!-- Mensajes de validación y éxito -->
+              <div class="mb-3" *ngIf="valid_form">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <strong>{{ 'DEPARTAMENT.ADD_DEPARTAMENT.ERROR' | translate }}:</strong> {{ 'DEPARTAMENT.ADD_DEPARTAMENT.REQUIRED' | translate }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <div class="mb-3" *ngIf="valid_form_success">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>{{ 'DEPARTAMENT.ADD_DEPARTAMENT.SUCCESS' | translate }}:</strong> {{ 'DEPARTAMENT.ADD_DEPARTAMENT.SUCCESS_MESSAGE' | translate }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <!-- Mensaje de validación personalizada -->
+              <div class="mb-3" *ngIf="text_validation">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong>{{ 'DEPARTAMENT.ADD_DEPARTAMENT.ATTENTION' | translate }}:</strong> {{ text_validation }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+
+              <!-- Botón para guardar el departamento -->
+              <div class="text-end">
+                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'DEPARTAMENT.ADD_DEPARTAMENT.SAVE' | translate }}</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

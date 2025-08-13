@@ -1,0 +1,145 @@
+<!-- Contenedor principal de la página para listar perfiles médicos -->
+<div class="page-wrapper">
+  <!-- Contenido principal de la página -->
+  <div class="content">
+  <!-- Encabezado de la página con breadcrumb de navegación -->
+  <div class="page-header mb-4">
+  <!-- Fila para el breadcrumb -->
+  <div class="row">
+  <div class="col-sm-12">
+          <!-- Breadcrumb que muestra la ruta de navegación actual -->
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <!-- Primer elemento del breadcrumb -->
+            <li class="breadcrumb-item"><a href="#">{{ 'PROFILE_M.LIST_PROFILE.PROFILES' | translate }} ></a></li>
+            <!-- Segundo elemento del breadcrumb, activo -->
+            <li class="breadcrumb-item active">{{ 'PROFILE_M.LIST_PROFILE.BREADCRUMB_LIST' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  <!-- Sección principal de contenido -->
+  <div class="row">
+  <!-- Columna principal que contiene la tabla y controles -->
+  <div class="col-sm-12">
+  <!-- Card que contiene la tabla de perfiles -->
+  <div class="card shadow-sm border-0">
+          <!-- Cuerpo de la card con la tabla y controles -->
+          <div class="card-body">
+
+            <!-- Encabezado de la tabla con título, búsqueda y acciones -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+              <!-- Título de la tabla -->
+              <h4 class="mb-0">{{ 'PROFILE_M.LIST_PROFILE.TITLE' | translate }}</h4>
+              <!-- Controles de búsqueda y acciones -->
+              <div class="d-flex align-items-center gap-2">
+                <!-- Campo de búsqueda -->
+                <div class="input-group">
+                  <input type="text" class="form-control" [placeholder]="'PROFILE_M.LIST_PROFILE.SEARCH_PLACEHOLDER' | translate" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
+                  <span class="input-group-text bg-white">
+                    <img src="assets/img/icons/search-normal.svg" alt="">
+                  </span>
+                </div>
+                <!-- Botón para registrar nuevo perfil -->
+                <a routerLink="/profile-m/register" class="btn btn-primary"><img src="assets/img/icons/plus.svg" alt=""></a>
+                <!-- Botón para refrescar la tabla -->
+                <button class="btn btn-outline-secondary" (click)="PageSize()"><img src="assets/img/icons/re-fresh.svg" alt=""></button>
+              </div>
+            </div>
+
+            <!-- Tabla de perfiles médicos -->
+            <div class="table-responsive">
+              <table matSort (matSortChange)="sortData($event)" class="table table-hover table-bordered align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <!-- Encabezados de la tabla -->
+                    <th mat-sort-header="name">{{ 'PROFILE_M.LIST_PROFILE.NAME' | translate }}</th>
+                    <th mat-sort-header="state">{{ 'PROFILE_M.LIST_PROFILE.STATE' | translate }}</th>
+                    <th mat-sort-header="created_at">{{ 'PROFILE_M.LIST_PROFILE.REGISTERED' | translate }}</th>
+                    <th class="text-end">{{ 'PROFILE_M.LIST_PROFILE.ACTIONS' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Iteración sobre la lista de perfiles para mostrar cada fila -->
+                  <tr *ngFor="let data of profileList">
+                    <td>{{ data.name }}</td>
+                    <td>
+                      <!-- Badge que indica el estado del perfil -->
+                      <span class="badge rounded-pill" [ngClass]="data.state === 1 ? 'bg-success' : 'bg-danger'">
+                        {{ data.state === 1 ? ('PROFILE_M.LIST_PROFILE.ACTIVE' | translate) : ('PROFILE_M.LIST_PROFILE.INACTIVE' | translate) }}
+                      </span>
+                    </td>
+                    <td>{{ data.created_at }}</td>
+                    <td class="text-end">
+                      <!-- Menú de acciones para editar o eliminar perfil -->
+                      <div class="dropdown">
+                        <a href="javascript:void(0);" class="text-muted" data-bs-toggle="dropdown">
+                          <i class="fa fa-ellipsis-v"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                          <!-- Opción para editar perfil -->
+                          <a class="dropdown-item" [routerLink]="['/profile-m/list_profile-m/edit_profile-m/', data.id]">
+                            <i class="fa-solid fa-pen-to-square me-2"></i> {{ 'PROFILE_M.LIST_PROFILE.EDIT' | translate }}
+                          </a>
+                          <!-- Opción para eliminar perfil, abre modal -->
+                          <a class="dropdown-item text-danger" href="javascript:void(0);" (click)="selectProfile(data)" data-bs-toggle="modal" [attr.data-bs-target]="'#delete_profile-' + data.id">
+                            <i class="fa fa-trash-alt me-2"></i> {{ 'PROFILE_M.LIST_PROFILE.DELETE' | translate }}
+                          </a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Modal de confirmación para eliminar perfil -->
+                  <ng-container *ngFor="let data of profileList">
+                    <div [attr.id]="'delete_profile-' + data.id" class="modal fade" tabindex="-1">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-body text-center">
+                            <img src="assets/img/sent.png" alt="" width="50" height="46" />
+                            <h5 class="mt-3" *ngIf="profile_selected">
+                              {{ 'PROFILE_M.LIST_PROFILE.DELETE_CONFIRMATION2' | translate }} <strong>{{ profile_selected.name }}</strong>?
+                            </h5>
+                            <div class="mt-4 d-flex justify-content-center gap-3">
+                              <button class="btn btn-light" data-bs-dismiss="modal">{{ 'PROFILE_M.LIST_PROFILE.CANCEL' | translate }}</button>
+                              <button class="btn btn-danger" (click)="deleteProfile()">{{ 'PROFILE_M.LIST_PROFILE.DELETE' | translate }}</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Paginación de la tabla -->
+            <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+              <!-- Información de registros mostrados -->
+              <div class="text-muted">
+                {{ 'PROFILE_M.LIST_PROFILE.SHOWING' | translate }} {{ serialNumberArray[0] }} {{ 'PROFILE_M.LIST_PROFILE.TO' | translate }} {{ serialNumberArray[serialNumberArray.length - 1] }} {{ 'PROFILE_M.LIST_PROFILE.OF' | translate }} {{ totalData }} {{ 'PROFILE_M.LIST_PROFILE.RECORDS' | translate }}
+              </div>
+              <!-- Controles de paginación -->
+              <nav>
+                <ul class="pagination mb-0">
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('previous')">{{ 'PROFILE_M.LIST_PROFILE.PREVIOUS' | translate }}</a>
+                  </li>
+                  <ng-container *ngFor="let item of pageNumberArray">
+                    <li class="page-item" [class.active]="item === currentPage">
+                      <a class="page-link" href="javascript:void(0);" (click)="moveToPage(item)">{{ item }}</a>
+                    </li>
+                  </ng-container>
+                  <li class="page-item" [class.disabled]="currentPage === pageNumberArray[pageNumberArray.length - 1]">
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('next')">{{ 'PROFILE_M.LIST_PROFILE.NEXT' | translate }}</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

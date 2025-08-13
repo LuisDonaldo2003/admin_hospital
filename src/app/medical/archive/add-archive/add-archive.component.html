@@ -1,0 +1,171 @@
+<!-- Contenedor principal de la página para agregar un nuevo archivo/paciente -->
+<div class="page-wrapper">
+  <div class="content add-staff-form">
+    <!-- Encabezado y breadcrumb de navegación -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item"><a href="#">{{ 'ARCHIVE.ADD_PATIENT.PATIENT' | translate }} ></a></li>
+            <li class="breadcrumb-item active">{{ 'ARCHIVE.ADD_PATIENT.BREADCRUMB_REGISTER' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-xl-8">
+        <!-- Tarjeta principal del formulario -->
+        <div class="card card-form shadow border-0">
+          <div class="card-body px-5 py-4">
+            <!-- Título del formulario -->
+            <h3 class="text-center mb-4 fw-bold">{{ 'ARCHIVE.ADD_PATIENT.TITLE' | translate }}</h3>
+
+            <!-- Formulario para agregar archivo/paciente -->
+            <form (keydown.enter)="save()">
+              <div class="row g-3">
+                <!-- Campo: Número de archivo -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.ARCHIVE_NUMBER' | translate }} *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="archive_number" 
+                    name="archive_number"
+                    (keypress)="onArchiveNumberKeyPress($event)"
+                    placeholder="{{ 'ARCHIVE.ADD_PATIENT.EXPEDITION' | translate }}"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !archive_number.trim() }" />
+                </div>
+
+                <!-- Campo: Nombre -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.FIRST_NAME' | translate }} *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="name" 
+                    name="name"
+                    (keypress)="onNameKeyPress($event)"
+                    placeholder="{{ 'ARCHIVE.ADD_PATIENT.LETTERS' | translate }}"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
+                </div>
+
+                <!-- Campo: Apellido paterno -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.FATHER_LAST_NAME' | translate }} *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="last_name_father" 
+                    name="last_name_father"
+                    (keypress)="onNameKeyPress($event)"
+                    placeholder="{{ 'ARCHIVE.ADD_PATIENT.LETTERS' | translate }}"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !last_name_father.trim() }" />
+                </div>
+
+                <!-- Campo: Apellido materno -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.MOTHER_LAST_NAME' | translate }} *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="last_name_mother" 
+                    name="last_name_mother"
+                    (keypress)="onNameKeyPress($event)"
+                    placeholder="{{ 'ARCHIVE.ADD_PATIENT.LETTERS' | translate }}"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !last_name_mother.trim() }" />
+                </div>
+
+                <!-- Campo: Edad -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.AGE' | translate }} *</label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    [(ngModel)]="age" 
+                    name="age"
+                    (keypress)="onAgeKeyPress($event)"
+                    min="1"
+                    max="120"
+                    placeholder="{{ 'ARCHIVE.ADD_PATIENT.NUMBERS' | translate }}"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !age }" />
+                </div>
+
+                <!-- Campo: Género -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.GENDER' | translate }} *</label>
+                  <select class="form-select" [(ngModel)]="gender_id" name="gender_id"
+                          required [ngClass]="{ 'is-invalid': submitted && !gender_id }">
+                    <option value="">{{ 'ARCHIVE.ADD_PATIENT.SELECT_GENDER' | translate }}</option>
+                    <option *ngFor="let g of genders" [value]="g.id">{{ g.name }}</option>
+                  </select>
+                </div>
+
+                <!-- Campo: Dirección -->
+                <div class="col-md-12">
+                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.ADDRESS' | translate }}</label>
+                  <input type="text" 
+                  class="form-control" 
+                  [(ngModel)]="address" 
+                  name="address"
+                  placeholder="{{ 'ARCHIVE.ADD_PATIENT.ADDRESS_PACIENT' | translate }}"/>
+                </div>
+
+                <!-- Campo: Localidad -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.LOCATION' | translate }} *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="location" 
+                    name="location"
+                    (keypress)="onLocationKeyPress($event)"
+                    placeholder="Escriba la localidad"
+                    autocomplete="off"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !location.trim() }" />
+                </div>
+
+                <!-- Campo: Fecha de admisión -->
+                <div class="col-md-6">
+                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.ADMISSION_DATE' | translate }} *</label>
+                  <input type="date" class="form-control" [(ngModel)]="admission_date" name="admission_date"
+                         required [ngClass]="{ 'is-invalid': submitted && !admission_date }" />
+                </div>
+              </div>
+
+              <!-- Alerta de éxito -->
+              <div class="mt-4" *ngIf="text_success">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>✅ ¡Éxito!</strong> {{ text_success }}
+                  <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
+                </div>
+              </div>
+
+              <!-- Alerta de validación/error -->
+              <div class="mt-4" *ngIf="text_validation">
+                <div class="alert alert-warning alert-dismissible fade show">
+                  <strong>{{ 'ARCHIVE.ADD_PATIENT.WARNING' | translate }}:</strong> {{ text_validation }}
+                  <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+                </div>
+              </div>
+
+              <!-- Botones de acción: guardar y ver lista -->
+              <div class="text-end mt-4 d-flex gap-2 justify-content-end">
+                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'ARCHIVE.ADD_PATIENT.SAVE' | translate }}</button>
+                <button type="button" class="btn btn-outline-secondary px-4" (click)="goToList()">
+                  <i class="fa fa-list"></i> {{ 'ARCHIVE.ADD_PATIENT.LIST' | translate }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

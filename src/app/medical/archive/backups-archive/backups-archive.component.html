@@ -1,0 +1,231 @@
+<!-- backups-archive.component.html -->
+<!--
+  Vista de respaldos de expedientes médicos.
+  Muestra filtros, estadísticas y listado de archivos respaldados.
+  No hay logs en este archivo, solo estructura visual y bindings.
+-->
+<!-- Contenedor principal de la página de respaldos -->
+<div class="page-wrapper">
+  <!-- Contenido principal -->
+  <div class="content list-staff">
+
+  <!-- Encabezado de la sección con título y subtítulo -->
+  <div class="page-header mb-4">
+  <div class="row">
+  <div class="col-sm-12">
+          <!-- Título y subtítulo traducidos -->
+          <h3 class="page-title">{{ 'ARCHIVE.BACKUPS.TITLE' | translate }}</h3>
+          <p class="page-subtitle">{{ 'ARCHIVE.BACKUPS.SUBTITLE' | translate }}</p>
+        </div>
+      </div>
+    </div>
+
+  <!-- Filtros para búsqueda y selección de respaldos -->
+  <div class="filters-container mb-4">
+  <div class="row g-3">
+  <!-- Filtro de búsqueda por nombre de paciente -->
+  <div class="col-lg-4 col-md-6">
+          <div class="input-group">
+            <!-- Icono de búsqueda y campo de texto para filtrar por paciente -->
+            <span class="input-group-text bg-light border-end-0">
+              <i class="fa fa-search text-muted"></i>
+            </span>
+            <input type="text" 
+                   class="form-control border-start-0 ps-0" 
+                   placeholder="{{ 'ARCHIVE.BACKUPS.SEARCH_PATIENT' | translate }}"
+                   [(ngModel)]="searchTerm"
+                   [disabled]="loading">
+          </div>
+        </div>
+
+  <!-- Filtro por tipo de archivo (Excel, PDF, etc.) -->
+  <div class="col-lg-2 col-md-6">
+          <!-- Select para filtrar por tipo de respaldo -->
+          <select class="form-select filter-select" 
+                  [(ngModel)]="selectedType"
+                  [disabled]="loading">
+            <option value="">{{ 'ARCHIVE.BACKUPS.SEARCH_TYPE' | translate }}</option>
+            <option *ngFor="let type of availableTypes" [value]="type">{{ type | uppercase }}</option>
+          </select>
+        </div>
+
+  <!-- Filtro por año de respaldo -->
+  <div class="col-lg-2 col-md-6">
+          <!-- Select para filtrar por año -->
+          <select class="form-select filter-select" 
+                  [(ngModel)]="selectedYear"
+                  [disabled]="loading">
+            <option value="">{{ 'ARCHIVE.BACKUPS.SEARCH_YEAR' | translate }}</option>
+            <option *ngFor="let year of availableYears" [value]="year">{{ year }}</option>
+          </select>
+        </div>
+
+  <!-- Filtro por mes de respaldo -->
+  <div class="col-lg-2 col-md-6">
+          <!-- Select para filtrar por mes -->
+          <select class="form-select filter-select" 
+                  [(ngModel)]="selectedMonth"
+                  [disabled]="loading">
+            <option value="">{{ 'ARCHIVE.BACKUPS.SEARCH_ALL' | translate }}</option>
+            <option *ngFor="let month of availableMonths" [value]="month">{{ month | titlecase }}</option>
+          </select>
+        </div>
+
+  <!-- Botón para limpiar todos los filtros -->
+  <div class="col-lg-2 col-md-6">
+          <button class="btn btn-outline-secondary w-100" 
+                  (click)="clearFilters()"
+                  [disabled]="loading">
+            <i class="fa fa-refresh me-2"></i>
+            {{ 'ARCHIVE.BACKUPS.CLEAN' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+  <!-- Estadísticas de respaldos filtrados y por tipo -->
+  <div class="stats-container mb-4" *ngIf="!loading">
+  <div class="row g-3">
+  <!-- Tarjeta: Total de respaldos -->
+  <div class="col-lg-3 col-md-6">
+          <div class="stat-card">
+            <div class="stat-icon bg-primary">
+              <i class="fa fa-database"></i>
+            </div>
+            <div class="stat-content">
+              <h4>{{ backups.length }}</h4>
+              <p>{{ 'ARCHIVE.BACKUPS.ALL_RESPALDOS' | translate }}</p>
+            </div>
+          </div>
+        </div>
+  <!-- Tarjeta: Archivos Excel -->
+  <div class="col-lg-3 col-md-6">
+          <div class="stat-card">
+            <div class="stat-icon bg-success">
+              <i class="fa fa-file-excel"></i>
+            </div>
+            <div class="stat-content">
+              <h4>{{ getExcelCount() }}</h4>
+              <p>{{ 'ARCHIVE.BACKUPS.EXCEL_FILES' | translate }}</p>
+            </div>
+          </div>
+        </div>
+  <!-- Tarjeta: Archivos PDF -->
+  <div class="col-lg-3 col-md-6">
+          <div class="stat-card">
+            <div class="stat-icon bg-danger">
+              <i class="fa fa-file-pdf"></i>
+            </div>
+            <div class="stat-content">
+              <h4>{{ getPdfCount() }}</h4>
+              <p>{{ 'ARCHIVE.BACKUPS.PDF_FILES' | translate }}</p>
+            </div>
+          </div>
+        </div>
+  <!-- Tarjeta: Respaldos filtrados -->
+  <div class="col-lg-3 col-md-6">
+          <div class="stat-card">
+            <div class="stat-icon bg-info">
+              <i class="fa fa-filter"></i>
+            </div>
+            <div class="stat-content">
+              <h4>{{ filteredBackups().length }}</h4>
+              <p>{{ 'ARCHIVE.BACKUPS.FILTERED' | translate }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!-- Spinner y mensaje de carga -->
+  <div *ngIf="loading" class="text-center my-5">
+      <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">{{ 'ARCHIVE.BACKUPS.LOADING' | translate }}</span>
+      </div>
+      <h5 class="text-muted">{{ 'ARCHIVE.BACKUPS.LOADING_ARCHIVE' | translate }}</h5>
+    </div>
+
+  <!-- Listado de respaldos con tarjetas y acciones -->
+  <div class="row" *ngIf="!loading">
+  <div class="col-sm-12">
+  <div class="card card-list border-colored shadow border-0">
+          <div class="card-body">
+
+            <!-- Encabezado del listado de respaldos -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-semibold mb-0 backup-header-text">
+                {{ 'ARCHIVE.BACKUPS.AVAILABLE' | translate }}
+              </h5>
+              <span class="badge bg-primary fs-6 backup-count-badge">
+                {{ filteredBackups().length }} de {{ backups.length }} {{ 'ARCHIVE.BACKUPS.RESPALDOS' | translate }}
+              </span>
+            </div>
+
+            <!-- Mensaje cuando no hay respaldos filtrados -->
+            <div *ngIf="filteredBackups().length === 0" class="text-center py-5">
+              <i class="fa fa-database fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted">{{ 'ARCHIVE.BACKUPS.NO_BACKUPS_AVAILABLE' | translate }}</h5>
+              <p class="text-muted">{{ 'ARCHIVE.BACKUPS.NO_BACKUPS_FOUND' | translate }}</p>
+            </div>
+
+            <!-- Grid de tarjetas de respaldos -->
+            <div class="row g-3" *ngIf="filteredBackups().length > 0">
+              <div class="col-lg-6 col-xl-4" *ngFor="let backup of filteredBackups()">
+       <!-- Tarjeta individual de respaldo -->
+       <div class="backup-card" 
+         [class.backup-excel]="backup.type === 'xlsx' || backup.type === 'excel'"
+         [class.backup-pdf]="backup.type === 'pdf'">
+                  
+                  <!-- Header de la tarjeta con icono y tipo -->
+                  <div class="backup-card-header">
+                    <div class="backup-icon">
+                      <i class="fa {{ getBackupIcon(backup.type) }}"></i>
+                    </div>
+                    <div class="backup-type">
+                      <span class="badge badge-type" 
+                            [class.bg-success]="backup.type === 'xlsx' || backup.type === 'excel'"
+                            [class.bg-danger]="backup.type === 'pdf'">
+                        {{ backup.type | uppercase }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Contenido de la tarjeta con nombre, fecha, tamaño y descripción -->
+                  <div class="backup-card-body">
+                    <h6 class="backup-filename">{{ backup.filename }}</h6>
+                    <!-- Información adicional del respaldo -->
+                    <div class="backup-info">
+                      <div class="backup-detail">
+                        <i class="fa fa-calendar"></i>
+                        <span>{{ getBackupDate(backup.filename) }}</span>
+                      </div>
+                      <div class="backup-detail">
+                        <i class="fa fa-hdd"></i>
+                        <span>{{ getFileSize(backup) }}</span>
+                      </div>
+                      <div class="backup-detail">
+                        <i class="fa fa-filter"></i>
+                        <span class="backup-filters">{{ getBackupDescription(backup.filename) }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Acciones de la tarjeta: botón para descargar respaldo -->
+                  <div class="backup-card-actions">
+                    <button class="btn backup-btn-download" 
+                            (click)="downloadBackup(backup.filename)">
+                      <i class="fa fa-download"></i>
+                      {{ 'ARCHIVE.BACKUPS.DOWNLOAD' | translate }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

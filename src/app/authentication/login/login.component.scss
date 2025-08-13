@@ -1,0 +1,264 @@
+/* SCSS profesional para login limpio, accesible, con diseño visual moderno para modo claro y oscuro */
+
+.login-wrapper {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.13);
+  padding: 3rem 2.5rem 2.5rem;
+  margin: 0 auto;
+  max-width: 520px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body.dark-mode .login-wrapper {
+  background: #23272f;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.32);
+}
+
+.loginbox,
+.login-right,
+.login-right-wrap {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  backdrop-filter: none !important;
+}
+
+.account-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  width: 270px;
+  height: 270px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 4px 32px rgba(44, 62, 80, 0.13);
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+
+.account-logo img {
+  max-width: 320px;
+  width: 320px;
+  height: 320px;
+  object-fit: contain;
+  margin-bottom: 0;
+  filter: drop-shadow(0 2px 12px rgba(44, 62, 80, 0.13));
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+h2.text-center {
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #2e37a4;
+  letter-spacing: 0.5px;
+}
+body.dark-mode h2.text-center {
+  color: #fff;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.form-group label {
+  font-size: 1.08rem;
+  color: #111 !important;
+  font-weight: 600;
+  margin-bottom: 1.1rem;
+  display: block;
+}
+body.dark-mode .form-group label {
+  color: #fff;
+}
+
+.form-control {
+  border-radius: 12px;
+  padding: 0.85rem 1.2rem;
+  font-size: 1.08rem;
+  background: #232323;
+  color: #fff;
+  border: 1.5px solid #232323;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.06);
+}
+.form-control:focus {
+  border-color: #2e37a4;
+  box-shadow: 0 0 0 4px rgba(46, 55, 164, 0.13);
+  background: #fff;
+  color: #222;
+}
+.form-control::placeholder {
+  color: #888;
+}
+body.dark-mode .form-control {
+  background: #23272f;
+  color: #fff;
+  border: 2px solid #3b82f6;
+}
+body.dark-mode .form-control:focus {
+  background: #23272f;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18);
+}
+body.dark-mode .form-control::placeholder {
+  color: #bbb;
+}
+
+// ✅ Contraseña con botón toggle modernizado
+.password-group {
+  position: relative;
+}
+.password-wrapper {
+  position: relative;
+}
+.pass-input {
+  padding-right: 3.2rem !important;
+}
+.toggle-password-btn {
+  position: absolute;
+  top: 50%;
+  right: 0.8rem;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 0.4rem;
+  font-size: 1.2rem;
+  color: #888;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  border-radius: 50%;
+  transition: color 0.2s, background 0.2s;
+}
+.toggle-password-btn:hover,
+.toggle-password-btn:focus {
+  color: #2e37a4;
+  background: rgba(46, 55, 164, 0.05);
+}
+body.dark-mode .toggle-password-btn {
+  color: #bbb;
+}
+body.dark-mode .toggle-password-btn:hover,
+body.dark-mode .toggle-password-btn:focus {
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.1);
+}
+
+.login-btn .btn {
+  border-radius: 12px;
+  font-size: 1.18rem;
+  font-weight: 700;
+  padding: 0.95rem 0;
+  background: linear-gradient(90deg, #2e37a4 60%, #60a5fa 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.13);
+  transition: all 0.2s ease;
+}
+.login-btn .btn:disabled {
+  background: #e5e7eb;
+  color: #b3b3b3;
+  cursor: not-allowed;
+  box-shadow: none;
+  border: 1.5px solid #d1d5db;
+}
+.login-btn .btn:hover:not(:disabled),
+.login-btn .btn:focus:not(:disabled) {
+  background: linear-gradient(90deg, #60a5fa 60%, #2e37a4 100%);
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.18);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.alert {
+  border-radius: 10px;
+  font-size: 1.05rem;
+  margin-top: 1rem;
+}
+
+.text-muted,
+.form-text.text-muted,
+a.text-muted,
+.login-wrapper .text-muted {
+  color: #111 !important;
+  font-size: 1rem;
+}
+body.dark-mode .text-muted,
+body.dark-mode .form-text.text-muted {
+  color: #bbb !important;
+}
+
+// ✅ Diseño visual para imagen del hospital
+.login-wrap {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border-radius: 0 32px 32px 0;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.1);
+}
+.login-sec {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.log-img {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 32px 32px 0;
+  overflow: hidden;
+}
+.log-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0 32px 32px 0;
+}
+
+@media (max-width: 991px) {
+  .login-wrapper {
+    padding: 1.2rem 0.5rem;
+    margin: 1.2rem 0;
+    max-width: 98vw;
+  }
+
+  .account-logo img {
+    max-width: 120px;
+  }
+
+  .login-wrap,
+  .log-img,
+  .log-img img {
+    border-radius: 0 !important;
+    height: auto;
+    min-height: 220px;
+  }
+}

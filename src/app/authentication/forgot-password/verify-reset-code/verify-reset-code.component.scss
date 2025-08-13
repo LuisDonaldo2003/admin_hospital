@@ -1,0 +1,97 @@
+/* Fondo general */
+.background {
+    background-color: #f4f2fc;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Tarjeta blanca */
+  .card-container {
+    background: white;
+    padding: 60px 50px;
+    border-radius: 24px;
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.12);
+    width: auto;
+    min-width: 550px; /* <--- Aumentamos */
+    max-width: 600px;
+  }
+  
+  /* Logo circular */
+  .logo-wrapper {
+    width: 220px; /* Más grande */
+    height: 220px;
+    border: 2px solid #3d3d3d;
+    border-radius: 50%;
+    padding: 15px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .logo-img {
+    width: 85%; /* Mejor proporción */
+    height: 85%;
+    object-fit: contain;
+  }
+  
+  /* Títulos */
+  .title {
+    font-weight: 700;
+    font-size: 28px; /* Más grande */
+    margin-top: 20px;
+  }
+  
+  .subtitle {
+    font-size: 16px; /* Un poco más grande */
+    color: #666;
+    margin-top: 10px;
+  }
+  
+  /* Inputs de código */
+  .code-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 30px;
+    padding: 0;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+  
+  /* Cada input */
+  .code-box {
+    width: 50px; /* <--- Ligero ajuste (antes 55px) */
+    height: 60px;
+    text-align: center;
+    font-size: 28px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    background-color: #f9f9f9;
+  }
+  
+  .code-box:focus {
+    border-color: #5c6ac4;
+    box-shadow: 0 0 12px rgba(92, 106, 196, 0.6); /* Más glow, pero sin escalar */
+    outline: none;
+  }
+  
+  
+  /* Botón Verificar */
+  .verify-btn {
+    background-color: #3b3dbf;
+    border: none;
+    padding: 12px 50px; /* Más grande */
+    border-radius: 12px;
+    font-size: 18px;
+    margin-top: 30px;
+    width: auto;
+  }
+  
+  .verify-btn:hover {
+    background-color: #2f31a2;
+  }
+  

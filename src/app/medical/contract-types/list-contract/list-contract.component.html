@@ -1,0 +1,137 @@
+<div class="page-wrapper">
+  <div class="content list-staff">
+
+    <!-- Encabezado de la página: muestra la ruta de navegación (breadcrumb) -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item">{{ 'CONTRACT.LIST_CONTRACT.CONTRACT' | translate }} ></li>
+            <li class="breadcrumb-item active">{{ 'CONTRACT.LIST_CONTRACT.BREADCRUMB_LIST' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenido principal: tarjeta con la tabla de contratos -->
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card card-list shadow border-0">
+          <div class="card-body">
+
+            <!-- Barra superior de la tabla: título, búsqueda, botón nuevo y refrescar -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 header-bar">
+              <h4 class="mb-0 fw-semibold">{{ 'CONTRACT.LIST_CONTRACT.TITLE' | translate }}</h4>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <!-- Campo de búsqueda -->
+                <div class="input-group search-input">
+                  <input type="text" class="form-control" placeholder="{{ 'CONTRACT.LIST_CONTRACT.SEARCH_PLACEHOLDER' | translate }}" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
+                  <span class="input-group-text">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
+                <!-- Botón para registrar nuevo contrato -->
+                <a routerLink="/contract-types/register" class="btn btn-options d-flex align-items-center gap-1">
+                  <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'CONTRACT.LIST_CONTRACT.NEW' | translate }}</span>
+                </a>
+                <!-- Botón para refrescar la tabla -->
+                <button (click)="PageSize()" class="btn btn-outline-secondary">
+                  <i class="fa fa-refresh"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tabla de contratos: muestra nombre, estado, fecha y acciones -->
+            <div class="table-responsive">
+              <table matSort (matSortChange)="sortData($event)" class="table table-striped">
+                <thead class="table-light text-center">
+                  <tr>
+                    <th>{{ 'CONTRACT.LIST_CONTRACT.NAME' | translate }}</th>
+                    <th>{{ 'CONTRACT.LIST_CONTRACT.STATE' | translate }}</th>
+                    <th>{{ 'CONTRACT.LIST_CONTRACT.REGISTERED' | translate }}</th>
+                    <th class="text-center">{{ 'CONTRACT.LIST_CONTRACT.ACTIONS' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Recorre la lista de contratos y muestra cada fila -->
+                  <tr *ngFor="let data of contractList">
+                    <td>{{ data.name }}</td>
+                    <td>{{ data.state === 1 ? ('CONTRACT.LIST_CONTRACT.ACTIVE' | translate) : ('CONTRACT.LIST_CONTRACT.INACTIVE' | translate) }}</td>
+                    <td>{{ data.created_at }}</td>
+                    <td class="text-center">
+                      <!-- Menú de acciones para cada contrato -->
+                      <div class="dropdown d-flex justify-content-center align-items-center">
+                        <button class="btn btn-options dropdown-toggle" data-bs-toggle="dropdown">
+                          <i class="fa fa-cogs me-1"></i> {{ 'CONTRACT.LIST_CONTRACT.OPTIONS' | translate }}
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                          <!-- Opción para editar contrato -->
+                          <a class="dropdown-item" [routerLink]="['/contract-types/list_contract/edit_contract/', data.id]">
+                            <i class="fa fa-pen me-2"></i> {{ 'CONTRACT.LIST_CONTRACT.EDIT' | translate }}
+                          </a>
+                          <!-- Opción para eliminar contrato (abre modal) -->
+                          <a class="dropdown-item text-danger"
+                             href="javascript:void(0);"
+                             (click)="selectDepartament(data)"
+                             data-bs-toggle="modal"
+                             data-bs-target="#deleteModalContract">
+                            <i class="fa fa-trash me-2"></i> {{ 'CONTRACT.LIST_CONTRACT.DELETE' | translate }}
+                          </a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Paginación: muestra información y controles para navegar entre páginas -->
+            <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+              <div class="pagination-info small">
+                {{ 'CONTRACT.LIST_CONTRACT.SHOWING' | translate }} {{ serialNumberArray[0] }} {{ 'CONTRACT.LIST_CONTRACT.TO' | translate }} {{ serialNumberArray[serialNumberArray.length - 1] }} {{ 'CONTRACT.LIST_CONTRACT.OF' | translate }} {{ totalData }} {{ 'CONTRACT.LIST_CONTRACT.RECORDS' | translate }}
+              </div>
+              <nav>
+                <ul class="pagination mb-0">
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('previous')">{{ 'CONTRACT.LIST_CONTRACT.PREVIOUS' | translate }}</a>
+                  </li>
+                  <ng-container *ngFor="let item of pageNumberArray">
+                    <li class="page-item" [class.active]="item === currentPage">
+                      <a class="page-link" href="javascript:void(0);" (click)="moveToPage(item)">{{ item }}</a>
+                    </li>
+                  </ng-container>
+                  <li class="page-item" [class.disabled]="currentPage === pageNumberArray[pageNumberArray.length - 1]">
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('next')">{{ 'CONTRACT.LIST_CONTRACT.NEXT' | translate }}</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmación para eliminar contrato -->
+<div class="modal fade" id="deleteModalContract" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center p-4">
+        <!-- Imagen de advertencia -->
+        <img src="assets/img/sent.png" alt="" width="50" height="46" />
+        <!-- Mensaje de confirmación con nombre del contrato -->
+        <h5 class="mt-3" *ngIf="contract_selected">
+          {{ 'CONTRACT.LIST_CONTRACT.DELETE_CONFIRMATION2' | translate }} <strong>{{ contract_selected.name }}</strong>?
+        </h5>
+        <div class="mt-4 d-flex justify-content-center gap-3">
+          <!-- Botón para cancelar -->
+          <button class="btn btn-light" data-bs-dismiss="modal">{{ 'CONTRACT.LIST_CONTRACT.CANCEL' | translate }}</button>
+          <!-- Botón para confirmar eliminación -->
+          <button class="btn btn-danger" (click)="deleteContract()" data-bs-dismiss="modal">{{ 'CONTRACT.LIST_CONTRACT.DELETE' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

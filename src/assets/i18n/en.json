@@ -1,0 +1,651 @@
+{
+"SIDEBAR": {
+  "ADMINISTRADOR": {
+    "TITLE": "Administrator",
+    "ROL": {
+      "TITLE": "Role",
+      "REGISTER": "Register Role",
+      "LIST": "Role List",
+      "EDIT": "Edit Role",
+      "DELETE": "Delete Role"
+    },
+    "USER": {
+      "TITLE": "Users",
+      "LIST": "User List",
+      "ADD": "Add User",
+      "EDIT": "Edit User",
+      "DELETE": "Delete User"
+    },
+    "ORGANIZATION_CHART": {
+      "TITLE": "Organization Chart",
+      "LIST": "Organization Chart List"
+    }
+  },
+  "RH": {
+    "TITLE": "Human Resources",
+    "CONTRACT": {
+      "TITLE": "Contracts",
+      "LIST": "Contract List",
+      "ADD": "Add Contract",
+      "EDIT": "Edit Contract",
+      "DELETE": "Delete Contract"
+    },
+    "PROFILE": {
+      "TITLE": "Profiles",
+      "LIST": "Profile List",
+      "ADD": "Add Profile",
+      "EDIT": "Edit Profile",
+      "DELETE": "Delete Profile"
+    },
+    "DEPARTAMENT": {
+      "TITLE": "Departments",
+      "LIST": "Department List",
+      "ADD": "Add Department",
+      "EDIT": "Edit Department",
+      "DELETE": "Delete Department"
+    }
+  },
+  "ARCHIVO": {
+    "TITLE": "Archive",
+    "PATIENT": {
+      "TITLE": "Patients",
+      "ADD": "Add Patient",
+      "LIST": "Patient List",
+      "EXPORT": "Export Patients",
+      "BACKUP": "Backup Patients",
+      "EDIT": "Edit Patient",
+      "DELETE": "Delete Patient"
+    }
+  },
+  "PHARMACY": {
+    "TITLE": "Pharmacy",
+    "ANTIBIOTICS": {
+      "TITLE": "Antibiotics",
+      "ADD": "Add Antibiotic",
+      "LIST": "Antibiotic List",
+      "EDIT": "Edit Antibiotic",
+      "DELETE": "Delete Antibiotic"
+    },
+    "INVENTORY": {
+      "TITLE": "Inventory",
+      "ADD": "Add Inventory",
+      "LIST": "Inventory List",
+      "EDIT": "Edit Inventory",
+      "DELETE": "Delete Inventory"
+    }
+  },
+
+  
+  "TABLERO": {
+    "TITLE": "Dashboard",
+    "SIDEBAR": {
+      "TITLE": "Dashboard",
+      "ADMIN": "Administrator Dashboard",
+      "DOCTOR": "Doctor Dashboard",
+      "PATIENT": "Patient Dashboard",
+      "ARCHIVO": "Archive Dashboard"
+    }
+  }
+},
+
+"DASHBOARD": {
+  "DASHBOARD_ARCHIVE": {
+    "DASHBOARD": "Archive Dashboard",
+    "ARCHIVE": "Archive",
+    "SUMMARY": "Summary",
+    "VISION": "Overview of registered records",
+    "TODAY": "Today",
+    "WEEK": "Week",
+    "MONTH": "Month",
+    "TOTAL": "Total",
+    "REGISTER": "Register",
+    "ACCUMULATED": "Accumulated",
+    "HISTORICAL": "Historical",
+    "DISTRIBUTION_BY_GENDER": "Distribution by gender (Today)",
+    "MAN": "Male",
+    "WOMAN": "Female",
+    "NOT_DATES": "No data today.",
+    "TOP_LOCATIONS": "Top locations (7 days)",
+    "NOT_REGISTERS": "No recent records.",
+    "ACTIONS": "Quick actions",
+    "NEW": "New",
+    "LIST": "List",
+    "EXPORT": "Export",
+    "BACKUP": "Backups",
+    "RECENT_REGISTERS": "Records registered in the last 7 days",
+    "STATISTICS_LOADING": "Loading statistics..."
+  }
+},
+
+"HEADER": {
+  "PROFILES": "Profiles",
+  "EDIT_PROFILE": "Edit Profile",
+  "LOGOUT": "Logout"
+},
+
+"SETTINGS": {
+  "GENERAL": {
+    "TITLE": "General Settings",
+    "SUBTITLE": "Customize the system appearance and language.",
+    "RESET_DEFAULTS": "Reset to defaults",
+    "LANGUAGE": "Language",
+    "CHOOSE_PREFERRED_LANGUAGE": "Choose your preferred language",
+    "ENGLISH": "English",
+    "SPANISH": "Spanish",
+    "COLOR_MODE": "Color mode",
+    "DESCRIPTION_MODE": "Select between light or dark mode.",
+    "LIGHT_MODE": "Light Mode",
+    "LIGHT_MODE_DESC": "Light appearance for the system.",
+    "DARK_MODE": "Dark Mode",
+    "DARK_MODE_DESC": "Dark appearance for the system.",
+    "COLOR_CUSTOMIZATION": "Color customization",
+    "CUSTOMIZE_THEME_COLORS": "Customize theme colors.",
+    "OUTLINE_COLOR": "Border color",
+    "APPLY": "Apply",
+    "CARD_BG_COLOR_LIGHT": "Light background color",
+    "CARD_BG_COLOR_DARK": "Dark background color",
+    "PREVIEW": "Preview",
+    "PREVIEW_CURRENT_SETTINGS": "Preview of current settings.",
+    "SAMPLE_CARD": "Sample card",
+    "PREVIEW_TEXT": "This is an example card with the selected colors.",
+    "SAMPLE_BUTTON": "Sample button"
+  }
+},
+
+"PROFILE": {
+  "EDIT_PROFILE": {
+    "BREADCRUMB_PROFILE": "Profile",
+    "BREADCRUMB_EDIT_PROFILE": "Edit Profile",
+    "TITLE": "Edit Profile",
+    "NAME": "Name",
+    "SURNAME": "Surname",
+    "PHONE": "Phone",
+    "BIRTHDAY": "Date of birth",
+    "GENDER": "Gender",
+    "GENDER_MALE": "Male",
+    "GENDER_FEMALE": "Female",
+    "CURP": "CURP",
+    "RFC": "RFC",
+    "INE": "INE",
+    "ASSISTANCE": "Assistance number",
+    "PROFESSIONAL_LICENSE": "Professional license",
+    "FUNCTION_REAL": "Actual function",
+    "DEPARTAMENT": "Department",
+    "RELATION_PROFILE": "Related profile",
+    "CONTRACT_TYPE": "Contract type",
+    "AVATAR": "Avatar",
+    "WARNING": "Warning",
+    "SUCCESS": "Success",
+    "SAVE_CHANGES": "Save changes"
+  },
+  "PROFILES": {
+    "DASHBOARD": "Home",
+    "PROFILES": "Profile",
+    "EDIT_PROFILE": "Edit Profile",
+    "BASIC_DATES": "Basic Information",
+    "EMAIL": "Email",
+    "PHONE": "Phone",
+    "BIRTHDAY": "Date of birth",
+    "GENDER": "Gender",
+    "ROLES": "Role",
+    "ID_USER": "User ID",
+    "INFORMATION_PROFESSIONAL": "Professional Information",
+    "ASSISTANCE": "Assistance number",
+    "PROFESSIONAL_LICENSE": "Professional license",
+    "FUNCTION_REAL": "Actual function",
+    "DEPARTAMENT": "Department",
+    "RELATION_PROFILE": "Related profile",
+    "CONTRACT_TYPE": "Contract type"
+  }
+},
+
+"ARCHIVE": {
+  "ADD_PATIENT": {
+    "PATIENT": "Patients",
+    "BREADCRUMB_REGISTER": "Register Patient",
+    "TITLE": "Register Patient",
+    "ARCHIVE_NUMBER": "Archive number",
+    "EXPEDITION": "Example: 150012",
+    "LETTERS": "Only letters",
+    "NUMBERS": "Only numbers",
+    "ADDRESS_PACIENT": "Patient's address",
+    "FIRST_NAME": "First Name(s)",
+    "FATHER_LAST_NAME": "Father's last name",
+    "MOTHER_LAST_NAME": "Mother's last name",
+    "AGE": "Age",
+    "GENDER": "Gender",
+    "SELECT_GENDER": "Select gender",
+    "ADDRESS": "Address",
+    "STATE": "State",
+    "SELECT_STATE": "Select state",
+    "MUNICIPALITY": "Municipality",
+    "SELECT_MUNICIPALITY": "Select municipality",
+    "LOCATION": "Location",
+    "SELECT_LOCATION": "Select location",
+    "ADMISSION_DATE": "Admission date",
+    "WARNING": "Warning",
+    "SUCCESS": "Success",
+    "SAVE": "Save",
+    "LIST": "Go to list"
+  },
+  "BACKUPS": {
+    "TITLE": "Patient Backups",
+    "SUBTITLE": "Manage and download patient backups.",
+    "SEARCH_PATIENT": "Search patient...",
+    "SEARCH_TYPE": "File type",
+    "SEARCH_YEAR": "Year",
+    "SEARCH_ALL": "All months",
+    "CLEAN": "Clear filters",
+    "ALL_RESPALDOS": "All backups",
+    "EXCEL_FILES": "Excel files",
+    "PDF_FILES": "PDF files",
+    "FILTERED": "Filtered",
+    "LOADING": "Loading...",
+    "LOADING_ARCHIVE": "Loading backups...",
+    "AVAILABLE": "Available backup(s)",
+    "RESPALDOS": "backups",
+    "NO_BACKUPS_AVAILABLE": "No backups available",
+    "NO_BACKUPS_FOUND": "No backups found with applied filters",
+    "DOWNLOAD": "Download"
+  },
+
+  "EDIT_PATIENT": {
+    "PATIENT": "Patients",
+    "BREADCRUMB_EDIT": "Edit Patient",
+    "TITLE": "Edit Patient",
+    "WARNING": "Warning",
+    "SUCCESS": "Success",
+    "ARCHIVE_NUMBER": "Archive number",
+    "FIRST_NAME": "First Name(s)",
+    "FATHER_LAST_NAME": "Father's last name",
+    "MOTHER_LAST_NAME": "Mother's last name",
+    "AGE": "Age",
+    "GENDER": "Gender",
+    "SELECT_GENDER": "Select gender",
+    "ADDRESS": "Address",
+    "STATE": "State",
+    "SELECT_STATE": "Select state",
+    "MUNICIPALITY": "Municipality",
+    "SELECT_MUNICIPALITY": "Select municipality",
+    "LOCATION": "Location",
+    "SELECT_LOCATION": "Select location",
+    "ADMISSION_DATE": "Admission date",
+    "SAVE": "Save"
+  },
+
+  "EXPORT_ARCHIVE": {
+    "PATIENT": "Patients",
+    "BREADCRUMB_LIST": "Export Patients",
+    "ALL_STATES": "All states",
+    "ALL_MUNICIPALITIES": "All municipalities",
+    "ALL_LOCATIONS": "All locations",
+    "ALL_GENDERS": "All genders",
+    "ALL_YEARS": "All years",
+    "ALL_MONTHS": "All months",
+    "CLEAR_FILTERS": "Clear filters",
+    "EXPORT_EXCEL": "Export to Excel",
+    "EXPORT_PDF": "Export to PDF",
+    "LOADING_DATA": "Loading data...",
+    "PREVIEW_EXPORT": "Export preview",
+    "TOTAL_RECORDS": "Total records",
+    "SHOWING_PAGE": "Showing page",
+    "OF": "of",
+    "APPLIED_FILTERS": "Applied filters",
+    "NO_DATA_AVAILABLE": "No data available",
+    "FILTERS_APPLICATION": "Adjust filters to see results.",
+    "LOADING_PAGE": "Loading page",
+    "ARCHIVE_NUMBER": "Archive No.",
+    "NAME": "Name",
+    "AGE": "Age",
+    "GENDER": "Gender",
+    "ADDRESS": "Address",
+    "LOCATION": "Location",
+    "MUNICIPALITY": "Municipality",
+    "STATE": "State",
+    "ADMISSION_DATE": "Admission date",
+    "RECORDS_PER_PAGE": "Records per page"
+  },
+
+  "LIST_PATIENT": {
+    "PATIENT": "Patients",
+    "BREADCRUMB_LIST": "Patient List",
+    "SEARCH_RECORD": "Search by archive",
+    "SEARCH_NAME": "Search by name",
+    "ALL_GENDERS": "All genders",
+    "ALL_STATES": "All states",
+    "ALL_MUNICIPALITIES": "All municipalities",
+    "ALL_LOCATIONS": "All locations",
+    "ALL_DATES": "All dates",
+    "BY_YEAR": "By year",
+    "BY_MONTH": "By month",
+    "BY_DAY": "By specific day",
+    "BY_RANGE": "By date range",
+    "SELECT_YEAR": "Select year",
+    "SELECT_MONTH": "Select month",
+    "SELECT_DAY": "Select day",
+    "DATE_FROM": "Date from",
+    "DATE_TO": "Date to",
+    "ADD_PATIENT": "Add Patient",
+    "CLEAR_FILTERS": "Clear filters",
+    "GLOBAL_TOTAL": "Global total",
+    "CURRENT_PAGE_RESULTS": "Results on page",
+    "LOADING": "Loading...",
+    "NO_RESULTS": "No results found",
+    "TRY_DIFFERENT_FILTERS": "Try different filters.",
+    "NUMBER": "Archive",
+    "FULL_NAME": "Full name",
+    "AGE": "Age",
+    "GENDER": "Gender",
+    "ADDRESS": "Address",
+    "LOCATION": "Location",
+    "MUNICIPALITY": "Municipality",
+    "STATE": "State",
+    "ADMISSION": "Admission",
+    "ACTIONS": "Actions",
+    "NOT_DEFINED": "Not defined",
+    "NO_ADDRESS": "No address",
+    "NO_LOCATION": "No location",
+    "NO_MUNICIPALITY": "No municipality",
+    "NO_STATE": "No state",
+    "NO_DATE": "No date",
+    "OPTIONS": "Options",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "SHOWING": "Showing",
+    "TO": "to",
+    "OF": "of",
+    "RECORDS": "records",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next",
+    "DELETE_CONFIRMATION3": "Are you sure you want to delete the patient",
+    "CANCEL": "Cancel"
+  }
+},
+
+"CONTRACT": {
+  "ADD_CONTRACT": {
+    "BREADCRUMB_CONTRACT": "Contracts",
+    "BREADCRUMB_REGISTER_CONTRACT": "Register Contract",
+    "TITLE": "Register Contract",
+    "NAME": "Contract name",
+    "PLACEHOLDER": "Enter contract name",
+    "ERROR": "Error",
+    "REQUIRED": "Name is required.",
+    "SUCCESS": "Success",
+    "CREATED": "Contract created successfully.",
+    "ATTENTION": "Attention",
+    "SAVE": "Save"
+  },
+  "EDIT_CONTRACT": {
+    "CONTRACT": "Contracts",
+    "EDIT": "Edit Contract",
+    "TITLE": "Edit Contract",
+    "NAME": "Contract name",
+    "PLACEHOLDER_NAME": "Enter contract name",
+    "STATE": "State",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "ERROR": "Error",
+    "REQUIRED": "Name is required.",
+    "SUCCESS": "Success",
+    "SUCCESS_MESSAGE": "Contract updated successfully.",
+    "ATTENTION": "Attention"
+  },
+  "LIST_CONTRACT": {
+    "CONTRACT": "Contracts",
+    "BREADCRUMB_LIST": "Contract List",
+    "TITLE": "Contract List",
+    "SEARCH_PLACEHOLDER": "Search contract...",
+    "NEW": "New",
+    "NAME": "Name",
+    "STATE": "State",
+    "REGISTERED": "Registered",
+    "ACTIONS": "Actions",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "OPTIONS": "Options",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "SHOWING": "Showing",
+    "TO": "to",
+    "OF": "of",
+    "RECORDS": "records",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next",
+    "DELETE_CONFIRMATION2": "Are you sure you want to delete the contract",
+    "CANCEL": "Cancel"
+  }
+},
+
+"DEPARTAMENT": {
+  "ADD_DEPARTAMENT": {
+    "DEPARTMENTS": "Departments",
+    "BREADCRUMB_REGISTER": "Register Department",
+    "TITLE": "Register Department",
+    "NAME": "Department name",
+    "PLACEHOLDER_NAME": "Enter department name",
+    "ERROR": "Error",
+    "REQUIRED": "Name is required.",
+    "SUCCESS": "Success",
+    "SUCCESS_MESSAGE": "Department created successfully.",
+    "ATTENTION": "Attention",
+    "SAVE": "Save"
+  },
+
+  "EDIT_DEPARTAMENT": {
+    "DEPARTMENTS": "Departments",
+    "EDIT": "Edit Department",
+    "TITLE": "Edit Department",
+    "NAME": "Department name",
+    "PLACEHOLDER_NAME": "Enter department name",
+    "STATE": "State",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "ERROR": "Error",
+    "REQUIRED": "Name is required.",
+    "SUCCESS": "Success",
+    "SUCCESS_MESSAGE": "Department updated successfully.",
+    "ATTENTION": "Attention"
+  },
+
+  "LIST_DEPARTAMENT": {
+    "DEPARTMENTS": "Departments",
+    "BREADCRUMB_LIST": "Department List",
+    "TITLE": "Department List",
+    "SEARCH_PLACEHOLDER": "Search department...",
+    "NAME": "Name",
+    "STATE": "State",
+    "REGISTERED": "Registered",
+    "ACTIONS": "Actions",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "DELETE_CONFIRMATION2": "Are you sure you want to delete the department",
+    "CANCEL": "Cancel",
+    "SHOWING": "Showing",
+    "TO": "to",
+    "OF": "of",
+    "RECORDS": "records",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next"
+  }
+},
+
+"ORGANIZATION": {
+  "LIST_ORGANIZATION": {
+    "BREADCRUMB": "Organization Chart",
+    "BREADCRUMB_USERS_BY_ROLE": "Users by role",
+    "LOADING": "Loading...",
+    "DIRECTION": "Direction",
+    "ONLINE": "Online",
+    "OFFLINE": "Offline"
+  }
+},
+
+"PROFILE_M": {
+  "ADD_PROFILE": {
+    "PROFILES": "Profiles",
+    "BREADCRUMB_REGISTER": "Register Profile",
+    "TITLE": "Register Profile",
+    "NAME": "Profile name",
+    "PLACEHOLDER_NAME": "Enter profile name",
+    "ERROR": "Error",
+    "REQUIRED": "Name is required.",
+    "SUCCESS": "Success",
+    "SUCCESS_MESSAGE": "Profile created successfully.",
+    "ATTENTION": "Attention",
+    "SAVE": "Save"
+  },
+
+  "EDIT_PROFILE": {
+    "PROFILES": "Profiles",
+    "EDIT": "Edit Profile",
+    "TITLE": "Edit Profile",
+    "NAME": "Profile name",
+    "PLACEHOLDER_NAME": "Enter profile name",
+    "STATE": "State",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "ERROR": "Error",
+    "REQUIRED": "Name is required.",
+    "SUCCESS": "Success",
+    "SUCCESS_MESSAGE": "Profile updated successfully.",
+    "ATTENTION": "Attention"
+  },
+
+  "LIST_PROFILE": {
+    "PROFILES": "Profiles",
+    "BREADCRUMB_LIST": "Profile List",
+    "TITLE": "Profile List",
+    "SEARCH_PLACEHOLDER": "Search profile...",
+    "NAME": "Name",
+    "STATE": "State",
+    "REGISTERED": "Registered",
+    "ACTIONS": "Actions",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "DELETE_CONFIRMATION2": "Are you sure you want to delete the profile",
+    "CANCEL": "Cancel",
+    "SHOWING": "Showing",
+    "TO": "to",
+    "OF": "of",
+    "RECORDS": "records",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next"
+  }
+},
+
+"ROLES": {
+  "ADD_ROLE": {
+    "BREADCRUMB_ROLES": "Roles",
+    "BREADCRUMB_REGISTER_ROLE": "Register Role",
+    "CREATE_ROLE": "Create Role",
+    "NAME": "Role name",
+    "PLACEHOLDER_NAME": "e.g. Administrator",
+    "SAVE": "Save",
+    "ERROR": "Error",
+    "ALERT1": "Name is required.",
+    "GREAT": "Success",
+    "GREAT_ROLE": "Role created successfully.",
+    "ATTENTION": "Attention",
+    "ASIGNATION": "Permission Assignment",
+    "SECCION": "Section",
+    "PERMISSIONS": "Permissions"
+  },
+  "EDIT_ROLE": {
+    "BREADCRUMB_ROLES": "Roles",
+    "BREADCRUMB_EDIT_ROLE": "Edit Role",
+    "TITLE": "Edit Role",
+    "NAME": "Role name",
+    "PLACEHOLDER_NAME": "e.g. Administrator",
+    "SAVE_CHANGES": "Save Changes",
+    "WARNING": "Warning",
+    "ALERT1": "Name is required.",
+    "SUCCESS": "Success",
+    "GREAT_ROLE": "Role updated successfully.",
+    "ASIGNATION": "Permission Assignment",
+    "SECCION": "Section",
+    "PERMISSIONS": "Permissions"
+  },
+
+  "LIST_ROLE": {
+    "BREADCRUMB_ROLES": "Roles",
+    "BREADCRUMB_LIST_ROLE": "Role List",
+    "TITLE": "Role List",
+    "SEARCH_PLACEHOLDER": "Search role...",
+    "NEW": "New",
+    "NAME": "Name",
+    "PERMISSIONS": "Permissions",
+    "REGISTER": "Registered",
+    "ACTIONS": "Actions",
+    "ALL_PERMISSIONS": "All permissions",
+    "OPTIONS": "Options",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "DELETE_CONFIRMATION2": "Are you sure you want to delete the role",
+    "CANCEL": "Cancel",
+    "SHOWING": "Showing",
+    "TO": "to",
+    "OF": "of",
+    "RECORDS": "records",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next"
+  }
+},
+
+"STAFF": {
+  "ADD_STAFF": {
+    "BREADCRUMB_USERS": "Users",
+    "BREADCRUMB_ADD_STAFF": "Add Staff",
+    "TITLE": "Add Staff",
+    "FIRST_NAME": "First Name",
+    "SURNAME": "Surname",
+    "EMAIL": "Email",
+    "ROLE_SELECT": "Role",
+    "SELECT_ROLE_PLACEHOLDER": "Select a role",
+    "PASSWORD": "Password",
+    "CONFIRM_PASSWORD": "Confirm password",
+    "WARNING": "Warning",
+    "SUCCESS": "Success",
+    "SAVE": "Save"
+  },
+  "EDIT_STAFF": {
+    "BREADCRUMB_USERS": "Users",
+    "BREADCRUMB_EDIT_STAFF": "Edit Staff",
+    "TITLE": "Edit Staff",
+    "FIRST_NAME": "First Name",
+    "SURNAME": "Surname",
+    "EMAIL": "Email",
+    "ROLE_SELECT": "Role",
+    "SELECT_ROLE_PLACEHOLDER": "Select a role",
+    "SUCCESS": "Success",
+    "WARNING": "Warning",
+    "SAVE": "Save"
+  },
+
+  "LIST_STAFF": {
+    "BREADCRUMB_USERS": "Users",
+    "BREADCRUMB_USER_LIST": "User List",
+    "TITLE": "User List",
+    "SEARCH_PLACEHOLDER": "Search user...",
+    "NEW": "New",
+    "COMPLETE_NAME": "Full name",
+    "EMAIL": "Email",
+    "ROLE": "Role",
+    "ACTIONS": "Actions",
+    "OPTIONS": "Options",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "DELETE_CONFIRMATION2": "Are you sure you want to delete the user",
+    "CANCEL": "Cancel",
+    "SHOWING": "Showing",
+    "TO": "to",
+    "RECORDS": "records",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next"
+  }
+}
+}

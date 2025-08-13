@@ -1,0 +1,651 @@
+{
+"SIDEBAR": {
+  "ADMINISTRADOR": {
+    "TITLE": "Administrador",
+    "ROL": {
+      "TITLE": "Rol",
+      "REGISTER": "Registrar Rol",
+      "LIST": "Lista de Roles",
+      "EDIT": "Editar Rol",
+      "DELETE": "Eliminar Rol"
+    },
+    "USER": {
+      "TITLE": "Usuarios",
+      "LIST": "Lista de Usuarios",
+      "ADD": "Agregar Usuario",
+      "EDIT": "Editar Usuario",
+      "DELETE": "Eliminar Usuario"
+    },
+    "ORGANIZATION_CHART": {
+      "TITLE": "Organigrama",
+      "LIST": "Lista de Organigrama"
+    }
+  },
+  "RH": {
+    "TITLE": "Recursos Humanos",
+    "CONTRACT": {
+      "TITLE": "Contratos",
+      "LIST": "Lista de Contratos",
+      "ADD": "Agregar Contrato",
+      "EDIT": "Editar Contrato",
+      "DELETE": "Eliminar Contrato"
+    },
+    "PROFILE": {
+      "TITLE": "Perfiles",
+      "LIST": "Lista de Perfiles",
+      "ADD": "Agregar Perfil",
+      "EDIT": "Editar Perfil",
+      "DELETE": "Eliminar Perfil"
+    },
+    "DEPARTAMENT": {
+      "TITLE": "Departamentos",
+      "LIST": "Lista de Departamentos",
+      "ADD": "Agregar Departamento",
+      "EDIT": "Editar Departamento",
+      "DELETE": "Eliminar Departamento"
+    }
+  },
+  "ARCHIVO": {
+    "TITLE": "Archivo",
+    "PATIENT": {
+      "TITLE": "Pacientes",
+      "ADD": "Agregar Paciente",
+      "LIST": "Lista de Pacientes",
+      "EXPORT": "Exportar Pacientes",
+      "BACKUP": "Respaldar Pacientes",
+      "EDIT": "Editar Paciente",
+      "DELETE": "Eliminar Paciente"
+    }
+  },
+  "PHARMACY": {
+    "TITLE": "Farmacia",
+    "ANTIBIOTICS": {
+      "TITLE": "Antibióticos",
+      "ADD": "Agregar Antibiótico",
+      "LIST": "Lista de Antibióticos",
+      "EDIT": "Editar Antibiótico",
+      "DELETE": "Eliminar Antibiótico"
+    },
+    "INVENTORY": {
+      "TITLE": "Inventario",
+      "ADD": "Agregar Inventario",
+      "LIST": "Lista de Inventarios",
+      "EDIT": "Editar Inventario",
+      "DELETE": "Eliminar Inventario"
+    }
+  },
+  
+  "TABLERO": {
+    "TITLE": "Tablero",
+    "SIDEBAR": {
+      "TITLE": "Dashboard",
+      "ADMIN": "Tablero de Administrador",
+      "DOCTOR": "Tablero de Doctor",
+      "PATIENT": "Tablero de Paciente",
+      "ARCHIVO": "Tablero de Archivo"
+      
+    }
+  }
+},
+
+"DASHBOARD": {
+  "DASHBOARD_ARCHIVE": {
+    "DASHBOARD": "Tablero de Archivo",
+    "ARCHIVE": "Archivo",
+    "SUMMARY": "Resumen",
+    "VISION": "Visión general de los expedientes registrados",
+    "TODAY": "Hoy",
+    "WEEK": "Semana",
+    "MONTH": "Mes",
+    "TOTAL": "Total",
+    "REGISTER": "Registro",
+    "ACCUMULATED": "Acumulado",
+    "HISTORICAL": "Histórico",
+    "DISTRIBUTION_BY_GENDER": "Distribución por género (Hoy)",
+    "MAN": "Hombre",
+    "WOMAN": "Mujer",
+    "NOT_DATES": "Sin datos hoy.",
+    "TOP_LOCATIONS": "Top ubicaciones (7 días)",
+    "NOT_REGISTERS": "Sin registros recientes.",
+    "ACTIONS": "Acciones rápidas",
+    "NEW": "Nuevo",
+    "LIST": "Listar",
+    "EXPORT": "Exportar",
+    "BACKUP": "Respaldos",
+    "RECENT_REGISTERS": "Registros realizados en los últimos 7 días",
+    "STATISTICS_LOADING": "Cargando estadísticas..."
+  }
+},
+
+"HEADER": {
+  "PROFILES": "Perfiles",
+  "EDIT_PROFILE": "Editar Perfil",
+  "LOGOUT": "Cerrar sesión"
+},
+
+"SETTINGS": {
+  "GENERAL": {
+    "TITLE": "Configuración General",
+    "SUBTITLE": "Personaliza la apariencia y el idioma del sistema.",
+    "RESET_DEFAULTS": "Restablecer valores por defecto",
+    "LANGUAGE": "Idioma",
+    "CHOOSE_PREFERRED_LANGUAGE": "Elige tu idioma preferido",
+    "ENGLISH": "Inglés",
+    "SPANISH": "Español",
+    "COLOR_MODE": "Modo de color",
+    "DESCRIPTION_MODE": "Selecciona entre modo claro u oscuro.",
+    "LIGHT_MODE": "Modo Claro",
+    "LIGHT_MODE_DESC": "Apariencia clara para el sistema.",
+    "DARK_MODE": "Modo Oscuro",
+    "DARK_MODE_DESC": "Apariencia oscura para el sistema.",
+    "COLOR_CUSTOMIZATION": "Personalización de colores",
+    "CUSTOMIZE_THEME_COLORS": "Personaliza los colores del tema.",
+    "OUTLINE_COLOR": "Color de borde",
+    "APPLY": "Aplicar",
+    "CARD_BG_COLOR_LIGHT": "Color de fondo claro",
+    "CARD_BG_COLOR_DARK": "Color de fondo oscuro",
+    "PREVIEW": "Vista previa",
+    "PREVIEW_CURRENT_SETTINGS": "Vista previa de la configuración actual.",
+    "SAMPLE_CARD": "Tarjeta de ejemplo",
+    "PREVIEW_TEXT": "Este es un ejemplo de tarjeta con los colores seleccionados.",
+    "SAMPLE_BUTTON": "Botón de ejemplo"
+  }
+},
+
+"PROFILE": {
+  "EDIT_PROFILE": {
+    "BREADCRUMB_PROFILE": "Perfil",
+    "BREADCRUMB_EDIT_PROFILE": "Editar Perfil",
+    "TITLE": "Editar Perfil",
+    "NAME": "Nombre",
+    "SURNAME": "Apellido",
+    "PHONE": "Teléfono",
+    "BIRTHDAY": "Fecha de nacimiento",
+    "GENDER": "Género",
+    "GENDER_MALE": "Masculino",
+    "GENDER_FEMALE": "Femenino",
+    "CURP": "CURP",
+    "RFC": "RFC",
+    "INE": "INE",
+    "ASSISTANCE": "Número de asistencia",
+    "PROFESSIONAL_LICENSE": "Cédula profesional",
+    "FUNCTION_REAL": "Función real",
+    "DEPARTAMENT": "Departamento",
+    "RELATION_PROFILE": "Perfil relacionado",
+    "CONTRACT_TYPE": "Tipo de contrato",
+    "AVATAR": "Avatar",
+    "WARNING": "Advertencia",
+    "SUCCESS": "Éxito",
+    "SAVE_CHANGES": "Guardar cambios"
+  },
+  "PROFILES": {
+    "DASHBOARD": "Inicio",
+    "PROFILES": "Perfil",
+    "EDIT_PROFILE": "Editar Perfil",
+    "BASIC_DATES": "Datos Básicos",
+    "EMAIL": "Correo electrónico",
+    "PHONE": "Teléfono",
+    "BIRTHDAY": "Fecha de nacimiento",
+    "GENDER": "Género",
+    "ROLES": "Rol",
+    "ID_USER": "ID de usuario",
+    "INFORMATION_PROFESSIONAL": "Información Profesional",
+    "ASSISTANCE": "Número de asistencia",
+    "PROFESSIONAL_LICENSE": "Cédula profesional",
+    "FUNCTION_REAL": "Función real",
+    "DEPARTAMENT": "Departamento",
+    "RELATION_PROFILE": "Perfil relacionado",
+    "CONTRACT_TYPE": "Tipo de contrato"
+  }
+},
+
+"ARCHIVE": {
+  "ADD_PATIENT": {
+    "PATIENT": "Pacientes",
+    "BREADCRUMB_REGISTER": "Registrar Paciente",
+    "TITLE": "Registrar Paciente",
+    "ARCHIVE_NUMBER": "Número de expediente",
+    "EXPEDITION": "Ejemplo: 150012",
+    "LETTERS": "Solo letras",
+    "NUMBERS": "Solo números",
+    "ADDRESS_PACIENT": "Dirección del paciente",
+    "FIRST_NAME": "Nombre(s)",
+    "FATHER_LAST_NAME": "Apellido paterno",
+    "MOTHER_LAST_NAME": "Apellido materno",
+    "AGE": "Edad",
+    "GENDER": "Género",
+    "SELECT_GENDER": "Selecciona género",
+    "ADDRESS": "Dirección",
+    "STATE": "Estado",
+    "SELECT_STATE": "Selecciona estado",
+    "MUNICIPALITY": "Municipio",
+    "SELECT_MUNICIPALITY": "Selecciona municipio",
+    "LOCATION": "Ubicación",
+    "SELECT_LOCATION": "Selecciona ubicación",
+    "ADMISSION_DATE": "Fecha de ingreso",
+    "WARNING": "Advertencia",
+    "SUCCESS": "Éxito",
+    "SAVE": "Guardar",
+    "LIST": "Ir al listado"
+  },
+  "BACKUPS": {
+    "TITLE": "Respaldo de Pacientes",
+    "SUBTITLE": "Administra y descarga los respaldos de pacientes.",
+    "SEARCH_PATIENT": "Buscar paciente...",
+    "SEARCH_TYPE": "Tipo de archivo",
+    "SEARCH_YEAR": "Año",
+    "SEARCH_ALL": "Todos los meses",
+    "CLEAN": "Limpiar filtros",
+    "ALL_RESPALDOS": "Todos los respaldos",
+    "EXCEL_FILES": "Archivos Excel",
+    "PDF_FILES": "Archivos PDF",
+    "FILTERED": "Filtrados",
+    "LOADING": "Cargando...",
+    "LOADING_ARCHIVE": "Cargando respaldos...",
+    "AVAILABLE": "Respaldo(s) disponible(s)",
+    "RESPALDOS": "respaldos",
+    "NO_BACKUPS_AVAILABLE": "No hay respaldos disponibles",
+    "NO_BACKUPS_FOUND": "No se encontraron respaldos con los filtros aplicados",
+    "DOWNLOAD": "Descargar"
+  },
+
+  "EDIT_PATIENT": {
+    "PATIENT": "Pacientes",
+    "BREADCRUMB_EDIT": "Editar Paciente",
+    "TITLE": "Editar Paciente",
+    "WARNING": "Advertencia",
+    "SUCCESS": "Éxito",
+    "ARCHIVE_NUMBER": "Número de expediente",
+    "FIRST_NAME": "Nombre(s)",
+    "FATHER_LAST_NAME": "Apellido paterno",
+    "MOTHER_LAST_NAME": "Apellido materno",
+    "AGE": "Edad",
+    "GENDER": "Género",
+    "SELECT_GENDER": "Selecciona género",
+    "ADDRESS": "Dirección",
+    "STATE": "Estado",
+    "SELECT_STATE": "Selecciona estado",
+    "MUNICIPALITY": "Municipio",
+    "SELECT_MUNICIPALITY": "Selecciona municipio",
+    "LOCATION": "Ubicación",
+    "SELECT_LOCATION": "Selecciona ubicación",
+    "ADMISSION_DATE": "Fecha de ingreso",
+    "SAVE": "Guardar"
+  },
+
+  "EXPORT_ARCHIVE": {
+    "PATIENT": "Pacientes",
+    "BREADCRUMB_LIST": "Exportar Pacientes",
+    "ALL_STATES": "Todos los estados",
+    "ALL_MUNICIPALITIES": "Todos los municipios",
+    "ALL_LOCATIONS": "Todas las localidades",
+    "ALL_GENDERS": "Todos los géneros",
+    "ALL_YEARS": "Todos los años",
+    "ALL_MONTHS": "Todos los meses",
+    "CLEAR_FILTERS": "Limpiar filtros",
+    "EXPORT_EXCEL": "Exportar a Excel",
+    "EXPORT_PDF": "Exportar a PDF",
+    "LOADING_DATA": "Cargando datos...",
+    "PREVIEW_EXPORT": "Vista previa de exportación",
+    "TOTAL_RECORDS": "Total de registros",
+    "SHOWING_PAGE": "Mostrando página",
+    "OF": "de",
+    "APPLIED_FILTERS": "Filtros aplicados",
+    "NO_DATA_AVAILABLE": "No hay datos disponibles",
+    "FILTERS_APPLICATION": "Ajusta los filtros para ver resultados.",
+    "LOADING_PAGE": "Cargando página",
+    "ARCHIVE_NUMBER": "N° Expediente",
+    "NAME": "Nombre",
+    "AGE": "Edad",
+    "GENDER": "Género",
+    "ADDRESS": "Dirección",
+    "LOCATION": "Localidad",
+    "MUNICIPALITY": "Municipio",
+    "STATE": "Estado",
+    "ADMISSION_DATE": "Fecha de ingreso",
+    "RECORDS_PER_PAGE": "Registros por página"
+  },
+
+  "LIST_PATIENT": {
+    "PATIENT": "Pacientes",
+    "BREADCRUMB_LIST": "Lista de Pacientes",
+    "SEARCH_RECORD": "Buscar por expediente",
+    "SEARCH_NAME": "Buscar por nombre",
+    "ALL_GENDERS": "Todos los géneros",
+    "ALL_STATES": "Todos los estados",
+    "ALL_MUNICIPALITIES": "Todos los municipios",
+    "ALL_LOCATIONS": "Todas las localidades",
+    "ALL_DATES": "Todas las fechas",
+    "BY_YEAR": "Por año",
+    "BY_MONTH": "Por mes",
+    "BY_DAY": "Por día específico",
+    "BY_RANGE": "Por rango de fechas",
+    "SELECT_YEAR": "Seleccionar año",
+    "SELECT_MONTH": "Seleccionar mes",
+    "SELECT_DAY": "Seleccionar día",
+    "DATE_FROM": "Fecha desde",
+    "DATE_TO": "Fecha hasta",
+    "ADD_PATIENT": "Agregar Paciente",
+    "CLEAR_FILTERS": "Limpiar filtros",
+    "GLOBAL_TOTAL": "Total global",
+    "CURRENT_PAGE_RESULTS": "Resultados en página",
+    "LOADING": "Cargando...",
+    "NO_RESULTS": "No se encontraron resultados",
+    "TRY_DIFFERENT_FILTERS": "Intenta con otros filtros.",
+    "NUMBER": "Expediente",
+    "FULL_NAME": "Nombre completo",
+    "AGE": "Edad",
+    "GENDER": "Género",
+    "ADDRESS": "Dirección",
+    "LOCATION": "Localidad",
+    "MUNICIPALITY": "Municipio",
+    "STATE": "Estado",
+    "ADMISSION": "Ingreso",
+    "ACTIONS": "Acciones",
+    "NOT_DEFINED": "No definido",
+    "NO_ADDRESS": "Sin dirección",
+    "NO_LOCATION": "Sin localidad",
+    "NO_MUNICIPALITY": "Sin municipio",
+    "NO_STATE": "Sin estado",
+    "NO_DATE": "Sin fecha",
+    "OPTIONS": "Opciones",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "SHOWING": "Mostrando",
+    "TO": "a",
+    "OF": "de",
+    "RECORDS": "registros",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Siguiente",
+    "DELETE_CONFIRMATION3": "¿Seguro que deseas eliminar el paciente",
+    "CANCEL": "Cancelar"
+  }
+},
+
+"CONTRACT": {
+  "ADD_CONTRACT": {
+    "BREADCRUMB_CONTRACT": "Contratos",
+    "BREADCRUMB_REGISTER_CONTRACT": "Registrar Contrato",
+    "TITLE": "Registrar Contrato",
+    "NAME": "Nombre del contrato",
+    "PLACEHOLDER": "Ingrese el nombre del contrato",
+    "ERROR": "Error",
+    "REQUIRED": "El nombre es obligatorio.",
+    "SUCCESS": "Éxito",
+    "CREATED": "Contrato creado correctamente.",
+    "ATTENTION": "Atención",
+    "SAVE": "Guardar"
+  },
+  "EDIT_CONTRACT": {
+    "CONTRACT": "Contratos",
+    "EDIT": "Editar Contrato",
+    "TITLE": "Editar Contrato",
+    "NAME": "Nombre del contrato",
+    "PLACEHOLDER_NAME": "Ingrese el nombre del contrato",
+    "STATE": "Estado",
+    "ACTIVE": "Activo",
+    "INACTIVE": "Inactivo",
+    "ERROR": "Error",
+    "REQUIRED": "El nombre es obligatorio.",
+    "SUCCESS": "Éxito",
+    "SUCCESS_MESSAGE": "Contrato actualizado correctamente.",
+    "ATTENTION": "Atención"
+  },
+  "LIST_CONTRACT": {
+    "CONTRACT": "Contratos",
+    "BREADCRUMB_LIST": "Lista de Contratos",
+    "TITLE": "Lista de Contratos",
+    "SEARCH_PLACEHOLDER": "Buscar contrato...",
+    "NEW": "Nuevo",
+    "NAME": "Nombre",
+    "STATE": "Estado",
+    "REGISTERED": "Registrado",
+    "ACTIONS": "Acciones",
+    "ACTIVE": "Activo",
+    "INACTIVE": "Inactivo",
+    "OPTIONS": "Opciones",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "SHOWING": "Mostrando",
+    "TO": "a",
+    "OF": "de",
+    "RECORDS": "registros",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Siguiente",
+    "DELETE_CONFIRMATION2": "¿Seguro que deseas eliminar el contrato",
+    "CANCEL": "Cancelar"
+  }
+},
+
+"DEPARTAMENT": {
+  "ADD_DEPARTAMENT": {
+    "DEPARTMENTS": "Departamentos",
+    "BREADCRUMB_REGISTER": "Registrar Departamento",
+    "TITLE": "Registrar Departamento",
+    "NAME": "Nombre del departamento",
+    "PLACEHOLDER_NAME": "Ingrese el nombre del departamento",
+    "ERROR": "Error",
+    "REQUIRED": "El nombre es obligatorio.",
+    "SUCCESS": "Éxito",
+    "SUCCESS_MESSAGE": "Departamento creado correctamente.",
+    "ATTENTION": "Atención",
+    "SAVE": "Guardar"
+  },
+
+  "EDIT_DEPARTAMENT": {
+    "DEPARTMENTS": "Departamentos",
+    "EDIT": "Editar Departamento",
+    "TITLE": "Editar Departamento",
+    "NAME": "Nombre del departamento",
+    "PLACEHOLDER_NAME": "Ingrese el nombre del departamento",
+    "STATE": "Estado",
+    "ACTIVE": "Activo",
+    "INACTIVE": "Inactivo",
+    "ERROR": "Error",
+    "REQUIRED": "El nombre es obligatorio.",
+    "SUCCESS": "Éxito",
+    "SUCCESS_MESSAGE": "Departamento actualizado correctamente.",
+    "ATTENTION": "Atención"
+  },
+
+  "LIST_DEPARTAMENT": {
+    "DEPARTMENTS": "Departamentos",
+    "BREADCRUMB_LIST": "Lista de Departamentos",
+    "TITLE": "Lista de Departamentos",
+    "SEARCH_PLACEHOLDER": "Buscar departamento...",
+    "NAME": "Nombre",
+    "STATE": "Estado",
+    "REGISTERED": "Registrado",
+    "ACTIONS": "Acciones",
+    "ACTIVE": "Activo",
+    "INACTIVE": "Inactivo",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "DELETE_CONFIRMATION2": "¿Seguro que deseas eliminar el departamento",
+    "CANCEL": "Cancelar",
+    "SHOWING": "Mostrando",
+    "TO": "a",
+    "OF": "de",
+    "RECORDS": "registros",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Siguiente"
+  }
+},
+
+"ORGANIZATION": {
+  "LIST_ORGANIZATION": {
+    "BREADCRUMB": "Organigrama",
+    "BREADCRUMB_USERS_BY_ROLE": "Usuarios por rol",
+    "LOADING": "Cargando...",
+    "DIRECTION": "Dirección",
+    "ONLINE": "Conectado",
+    "OFFLINE": "Desconectado"
+  }
+},
+
+"PROFILE_M": {
+  "ADD_PROFILE": {
+    "PROFILES": "Perfiles",
+    "BREADCRUMB_REGISTER": "Registrar Perfil",
+    "TITLE": "Registrar Perfil",
+    "NAME": "Nombre del perfil",
+    "PLACEHOLDER_NAME": "Ingrese el nombre del perfil",
+    "ERROR": "Error",
+    "REQUIRED": "El nombre es obligatorio.",
+    "SUCCESS": "Éxito",
+    "SUCCESS_MESSAGE": "Perfil creado correctamente.",
+    "ATTENTION": "Atención",
+    "SAVE": "Guardar"
+  },
+
+  "EDIT_PROFILE": {
+    "PROFILES": "Perfiles",
+    "EDIT": "Editar Perfil",
+    "TITLE": "Editar Perfil",
+    "NAME": "Nombre del perfil",
+    "PLACEHOLDER_NAME": "Ingrese el nombre del perfil",
+    "STATE": "Estado",
+    "ACTIVE": "Activo",
+    "INACTIVE": "Inactivo",
+    "ERROR": "Error",
+    "REQUIRED": "El nombre es obligatorio.",
+    "SUCCESS": "Éxito",
+    "SUCCESS_MESSAGE": "Perfil actualizado correctamente.",
+    "ATTENTION": "Atención"
+  },
+
+  "LIST_PROFILE": {
+    "PROFILES": "Perfiles",
+    "BREADCRUMB_LIST": "Lista de Perfiles",
+    "TITLE": "Lista de Perfiles",
+    "SEARCH_PLACEHOLDER": "Buscar perfil...",
+    "NAME": "Nombre",
+    "STATE": "Estado",
+    "REGISTERED": "Registrado",
+    "ACTIONS": "Acciones",
+    "ACTIVE": "Activo",
+    "INACTIVE": "Inactivo",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "DELETE_CONFIRMATION2": "¿Seguro que deseas eliminar el perfil",
+    "CANCEL": "Cancelar",
+    "SHOWING": "Mostrando",
+    "TO": "a",
+    "OF": "de",
+    "RECORDS": "registros",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Siguiente"
+  }
+},
+
+"ROLES": {
+  "ADD_ROLE": {
+    "BREADCRUMB_ROLES": "Roles",
+    "BREADCRUMB_REGISTER_ROLE": "Registrar Rol",
+    "CREATE_ROLE": "Crear Rol",
+    "NAME": "Nombre del rol",
+    "PLACEHOLDER_NAME": "Ej. Administrador",
+    "SAVE": "Guardar",
+    "ERROR": "Error",
+    "ALERT1": "El nombre es obligatorio.",
+    "GREAT": "Éxito",
+    "GREAT_ROLE": "Rol creado correctamente.",
+    "ATTENTION": "Atención",
+    "ASIGNATION": "Asignación de Permisos",
+    "SECCION": "Sección",
+    "PERMISSIONS": "Permisos"
+  },
+  "EDIT_ROLE": {
+    "BREADCRUMB_ROLES": "Roles",
+    "BREADCRUMB_EDIT_ROLE": "Editar Rol",
+    "TITLE": "Editar Rol",
+    "NAME": "Nombre del rol",
+    "PLACEHOLDER_NAME": "Ej. Administrador",
+    "SAVE_CHANGES": "Guardar Cambios",
+    "WARNING": "Advertencia",
+    "ALERT1": "El nombre es obligatorio.",
+    "SUCCESS": "Éxito",
+    "GREAT_ROLE": "Rol actualizado correctamente.",
+    "ASIGNATION": "Asignación de Permisos",
+    "SECCION": "Sección",
+    "PERMISSIONS": "Permisos"
+  },
+
+  "LIST_ROLE": {
+    "BREADCRUMB_ROLES": "Roles",
+    "BREADCRUMB_LIST_ROLE": "Lista de Roles",
+    "TITLE": "Lista de Roles",
+    "SEARCH_PLACEHOLDER": "Buscar rol...",
+    "NEW": "Nuevo",
+    "NAME": "Nombre",
+    "PERMISSIONS": "Permisos",
+    "REGISTER": "Registrado",
+    "ACTIONS": "Acciones",
+    "ALL_PERMISSIONS": "Todos los permisos",
+    "OPTIONS": "Opciones",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "DELETE_CONFIRMATION2": "¿Seguro que deseas eliminar el rol",
+    "CANCEL": "Cancelar",
+    "SHOWING": "Mostrando",
+    "TO": "a",
+    "OF": "de",
+    "RECORDS": "registros",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Siguiente"
+  }
+},
+
+"STAFF": {
+  "ADD_STAFF": {
+    "BREADCRUMB_USERS": "Usuarios",
+    "BREADCRUMB_ADD_STAFF": "Agregar Personal",
+    "TITLE": "Agregar Personal",
+    "FIRST_NAME": "Nombre",
+    "SURNAME": "Apellido",
+    "EMAIL": "Correo electrónico",
+    "ROLE_SELECT": "Rol",
+    "SELECT_ROLE_PLACEHOLDER": "Seleccione un rol",
+    "PASSWORD": "Contraseña",
+    "CONFIRM_PASSWORD": "Confirmar contraseña",
+    "WARNING": "Advertencia",
+    "SUCCESS": "Éxito",
+    "SAVE": "Guardar"
+  },
+  "EDIT_STAFF": {
+    "BREADCRUMB_USERS": "Usuarios",
+    "BREADCRUMB_EDIT_STAFF": "Editar Personal",
+    "TITLE": "Editar Personal",
+    "FIRST_NAME": "Nombre",
+    "SURNAME": "Apellido",
+    "EMAIL": "Correo electrónico",
+    "ROLE_SELECT": "Rol",
+    "SELECT_ROLE_PLACEHOLDER": "Seleccione un rol",
+    "SUCCESS": "Éxito",
+    "WARNING": "Advertencia",
+    "SAVE": "Guardar"
+  },
+
+  "LIST_STAFF": {
+    "BREADCRUMB_USERS": "Usuarios",
+    "BREADCRUMB_USER_LIST": "Lista de Usuarios",
+    "TITLE": "Lista de Usuarios",
+    "SEARCH_PLACEHOLDER": "Buscar usuario...",
+    "NEW": "Nuevo",
+    "COMPLETE_NAME": "Nombre completo",
+    "EMAIL": "Correo electrónico",
+    "ROLE": "Rol",
+    "ACTIONS": "Acciones",
+    "OPTIONS": "Opciones",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "DELETE_CONFIRMATION2": "¿Seguro que deseas eliminar al usuario",
+    "CANCEL": "Cancelar",
+    "SHOWING": "Mostrando",
+    "TO": "a",
+    "RECORDS": "registros",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Siguiente"
+  }
+}
+}

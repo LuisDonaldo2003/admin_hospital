@@ -1,0 +1,56 @@
+<!-- Barra lateral principal de navegación -->
+<div class="sidebar" id="sidebar" (mouseover)="miniSideBarMouseHover('over')" (mouseout)="miniSideBarMouseHover('out')">
+  <!-- Scroll personalizado para el menú -->
+  <ng-scrollbar>
+    <div id="sidebar-menu" class="sidebar-menu">
+      <ul>
+        <!-- Itera por cada grupo de menús -->
+        <ng-container *ngFor="let group of groupedSidebarData">
+          <!-- Título del grupo de menú -->
+          <li class="menu-title">
+            <span>{{ 'SIDEBAR.' + groupMap[group.menus[0]?.group] + '.TITLE' | translate }}</span>
+          </li>
+          <!-- Itera por cada menú dentro del grupo -->
+          <ng-container *ngFor="let menu of group.menus">
+            <!-- Menú sin subrutas -->
+            <li *ngIf="menu.hasSubRoute === false">
+              <a [class.active]="base === menu.base" [routerLink]="menu.route">
+                <span class="menu-side">
+                  <!-- Icono del menú -->
+                  <i *ngIf="menu.faIcon && menu.icon" [ngClass]="menu.icon + ' sidebar-icon'"></i>
+                </span>
+                <span>
+                  {{ 'SIDEBAR.' + groupMap[menu.group] + '.' + cleanMenuValue(menu.menuValue) + '.TITLE' | translate }}
+                </span>
+              </a>
+            </li>
+            <!-- Menú con subrutas -->
+            <li class="submenu" *ngIf="menu.hasSubRoute === true">
+              <a [class.active]="base === menu.base" (click)="expandSubMenus(menu)" href="javascript:void(0)"
+                 [ngClass]="{ subdrop: menu.showSubRoute === true }">
+                <span class="menu-side">
+                  <!-- Icono del menú principal -->
+                  <i *ngIf="menu.faIcon && menu.icon" [ngClass]="menu.icon + ' sidebar-icon'"></i>
+                </span>
+                <span>
+                  {{ 'SIDEBAR.' + groupMap[menu.group] + '.' + cleanMenuValue(menu.menuValue) + '.TITLE' | translate }}
+                </span>
+                <span class="menu-arrow"></span>
+              </a>
+              <ul>
+                <!-- Itera por cada submenú -->
+                <ng-container *ngFor="let subMenus of menu.subMenus">
+                  <li [ngClass]="menu.showSubRoute === true ? 'd-block' : 'd-none'">
+                    <a [routerLink]="subMenus.route" *ngIf="subMenus.show_nav" [class.active]="currentUrl === subMenus.base">
+                      {{ 'SIDEBAR.' + groupMap[menu.group] + '.' + cleanMenuValue(menu.menuValue) + '.' + cleanMenuValue(subMenus.menuValue) | translate }}
+                    </a>
+                  </li>
+                </ng-container>
+              </ul>
+            </li>
+          </ng-container>
+        </ng-container>
+      </ul>
+    </div>
+  </ng-scrollbar>
+</div>
