@@ -22,26 +22,28 @@
   <!-- Primera fila: Filtros básicos -->
   <!-- Filtro por número de expediente -->
   <div class="col-lg-3 col-md-6">
-          <input type="text" 
-                 class="form-control filter-input custom-input" 
-                 style="border: 3px solid var(--user-border-color, #000) !important;"
-                 [placeholder]="'ARCHIVE.LIST_PATIENT.SEARCH_RECORD' | translate"
-                 [(ngModel)]="archiveNumberSearch" 
-                 (input)="onArchiveNumberSearch()"
-                 [disabled]="isLoading"
-                 maxlength="10">
+     <input type="text" 
+       class="form-control filter-input custom-input" 
+       style="border: 3px solid var(--user-border-color, #000) !important;"
+       [placeholder]="'ARCHIVE.LIST_PATIENT.SEARCH_RECORD' | translate"
+       [(ngModel)]="archiveNumberSearch" 
+                 (keyup.enter)="onArchiveNumberSearch()"
+                 (input)="archiveNumberSearch === '' && onArchiveNumberSearch()"
+       [disabled]="isLoading"
+       maxlength="10">
         </div>
         
   <!-- Filtro por nombre del paciente -->
   <div class="col-lg-3 col-md-6">
-          <input type="text" 
-                 class="form-control filter-input custom-input" 
-                 style="border: 3px solid var(--user-border-color, #000) !important;"
-                 [placeholder]="'ARCHIVE.LIST_PATIENT.SEARCH_NAME' | translate"
-                 [(ngModel)]="nameSearch" 
-                 (input)="onNameSearch()"
-                 [disabled]="isLoading"
-                 minlength="2">
+     <input type="text" 
+       class="form-control filter-input custom-input" 
+       style="border: 3px solid var(--user-border-color, #000) !important;"
+       [placeholder]="'ARCHIVE.LIST_PATIENT.SEARCH_NAME' | translate"
+       [(ngModel)]="nameSearch" 
+                 (keyup.enter)="onNameSearch()"
+                 (input)="nameSearch === '' && onNameSearch()"
+       [disabled]="isLoading"
+       minlength="2">
         </div>
         
   <!-- Filtro por género -->

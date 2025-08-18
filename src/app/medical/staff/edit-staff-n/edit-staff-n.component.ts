@@ -98,8 +98,21 @@ export class EditStaffNComponent {
 
         // Asigna los datos del usuario a los campos del formulario
         this.selectedValue = this.staff_selected.role?.id?.toString() ?? '';
-        this.name = this.staff_selected.name ?? '';
-        this.surname = this.staff_selected.surname ?? '';
+        const fullName = this.staff_selected.name ?? '';
+        const providedSurname = this.staff_selected.surname ?? '';
+
+        // Si el backend no separó apellido (apellido vacío) y el nombre contiene espacios,
+        // inferimos: primera palabra => nombre, resto => apellido.
+        if ((!providedSurname || String(providedSurname).trim() === '') && fullName && fullName.includes(' ')) {
+          const parts = String(fullName).trim().split(/\s+/);
+          this.name = parts.shift() || '';
+          this.surname = parts.join(' ') || '';
+        } else {
+          // Uso directo cuando el backend ya provee nombre y apellido por separado
+          this.name = fullName;
+          this.surname = providedSurname;
+        }
+
         this.email = this.staff_selected.email ?? '';
       });
     });

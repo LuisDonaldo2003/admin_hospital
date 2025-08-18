@@ -1,5 +1,5 @@
 // Importación de módulos y servicios necesarios para el componente de edición de rol de usuario
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RolesService } from '../service/roles.service';
 import { DataService } from 'src/app/shared/data/data.service';
@@ -17,9 +17,9 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   standalone: true,
   imports: [FormsModule,CommonModule,TranslateModule],
   templateUrl: './edit-role-user.component.html',
-  styleUrl: './edit-role-user.component.scss'
+  styleUrls: ['./edit-role-user.component.scss']
 })
-export class EditRoleUserComponent {
+export class EditRoleUserComponent implements OnInit {
   /**
    * Menú lateral con las secciones y permisos disponibles
    */
@@ -74,54 +74,26 @@ export class EditRoleUserComponent {
    * Traduce dinámicamente el menú lateral y obtiene el id del rol desde la ruta
    */
   ngOnInit(): void {
-    this.sideBar = this.DataService.sideBar[0].menu.map((section: any) => {
-      // Traduce la sección si existe la clave
-      const sectionKey = section.menuValue;
-      const sectionTranslated = this.translate.instant(sectionKey);
-      section.menuValueTranslated = sectionTranslated !== sectionKey ? sectionTranslated : sectionKey;
-
-      // Traduce cada permiso si existe la clave
-      if (Array.isArray(section.subMenus)) {
-        section.subMenus = section.subMenus.map((subMenu: any) => {
-          const permKey = subMenu.menuValue;
-          const permTranslated = this.translate.instant(permKey);
-          subMenu.menuValueTranslated = permTranslated !== permKey ? permTranslated : permKey;
-          return subMenu;
-        });
-      }
-      return section;
-    });
+    // Cargar el menú lateral tal y como hace AddRoleComponent
+    if (this.DataService.sideBar && this.DataService.sideBar.length > 0) {
+      this.sideBar = this.DataService.sideBar[0].menu;
+    }
 
     this.activedRoute.params.subscribe((resp: any) => {
       this.role_id = resp.id;
+      // Llamar a showRole después de obtener el id
+      this.showRole();
     });
-    this.showRole();
   }
 
   /**
    * Alterna el idioma entre español e inglés y actualiza las traducciones dinámicas
    */
   toggleLanguage(): void {
-    this.selectedLang = this.selectedLang === 'es' ? 'en' : 'es';
-    this.translate.use(this.selectedLang);
-    localStorage.setItem('language', this.selectedLang);
-
-    // Actualiza traducciones dinámicas al cambiar idioma
-    this.sideBar = this.DataService.sideBar[0].menu.map((section: any) => {
-      const sectionKey = section.menuValue;
-      const sectionTranslated = this.translate.instant(sectionKey);
-      section.menuValueTranslated = sectionTranslated !== sectionKey ? sectionTranslated : sectionKey;
-
-      if (Array.isArray(section.subMenus)) {
-        section.subMenus = section.subMenus.map((subMenu: any) => {
-          const permKey = subMenu.menuValue;
-          const permTranslated = this.translate.instant(permKey);
-          subMenu.menuValueTranslated = permTranslated !== permKey ? permTranslated : permKey;
-          return subMenu;
-        });
-      }
-      return section;
-    });
+  // Simpler language toggle: translate pipe updates the template automatically
+  this.selectedLang = this.selectedLang === 'es' ? 'en' : 'es';
+  this.translate.use(this.selectedLang);
+  localStorage.setItem('language', this.selectedLang);
   }
 
   /**
@@ -146,6 +118,33 @@ export class EditRoleUserComponent {
         this.permissions.push(subMenu.permision);
       }
     }
+  }
+
+  // Helpers reused from AddRoleUserComponent to build correct translation keys
+  cleanGroup(group: string): string {
+    return group.replace(/^GRUPO_/, '');
+  }
+
+  getRoleLabel(roleKey: string): string {
+    const match = roleKey.match(/^(SIDEBAR_\w+?)(\d+)$/);
+    if (match) {
+      const baseKey = match[1];
+      const number = match[2];
+      const baseTranslation = this.translate.instant(baseKey);
+      if (baseTranslation !== baseKey) {
+        return `${baseTranslation} ${number}`;
+      }
+      let label = baseKey.replace(/^SIDEBAR_/, '').replace(/_/g, ' ');
+      label = label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
+      return `${label} ${number}`;
+    }
+    const translation = this.translate.instant(roleKey);
+    if (translation !== roleKey) {
+      return translation;
+    }
+    let label = roleKey.replace(/^SIDEBAR_/, '').replace(/_/g, ' ');
+    label = label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
+    return label;
   }
 
   /**

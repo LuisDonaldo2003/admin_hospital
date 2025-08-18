@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, map, of, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, of, Observable, throwError, interval, Subscription } from 'rxjs';
 import { routes } from '../routes/routes';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { URL_SERVICIOS } from 'src/app/config/config';
 
 @Injectable({
@@ -20,6 +20,10 @@ export class AuthService {
   private refreshInProgress = false;
   // Subject para el token renovado
   private refreshTokenSubject = new BehaviorSubject<any>(null);
+  
+  // Variables para el heartbeat de actividad de usuario
+  private heartbeatSubscription: Subscription | undefined;
+  private readonly HEARTBEAT_INTERVAL = 90 * 1000; // 1.5 minutos (90 segundos)
 
   /**
    * Inyecta el router y el cliente HTTP, inicializa el usuario desde localStorage
@@ -36,6 +40,11 @@ export class AuthService {
       let USER = localStorage.getItem('user');
       this.token = localStorage.getItem("token");
       this.userSubject.next(JSON.parse(USER ? USER : ''));
+      
+      // Si hay token válido, iniciar heartbeat
+      if (this.token && !this.isTokenExpired()) {
+        this.startUserActivityTracking();
+      }
     } else {
       this.token = null;
       this.userSubject.next(null);
@@ -79,6 +88,11 @@ export class AuthService {
       localStorage.setItem("user", JSON.stringify(auth.user));
       localStorage.setItem('authenticated', 'true');
       this.userSubject.next(auth.user);
+      this.token = auth.access_token;
+      
+      // Iniciar heartbeat para mantener vivo el estado del usuario
+      this.startUserActivityTracking();
+      
       return true;
     }
     return false;
@@ -88,6 +102,9 @@ export class AuthService {
    * Realiza el logout, limpia el localStorage y navega al login
    */
   logout() {
+    // Detener heartbeat antes del logout
+    this.stopUserActivityTracking();
+    
     const URL = URL_SERVICIOS + "/auth/logout";
     this.http.post(URL, {}).subscribe({
       next: () => {
@@ -105,6 +122,7 @@ export class AuthService {
    * Limpia el localStorage y el estado de usuario/token
    */
   private clearLocalStorage(): void {
+    this.stopUserActivityTracking(); // Detener heartbeat
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem('authenticated');
@@ -215,5 +233,60 @@ export class AuthService {
       const minutesUntilExpiry = Math.floor(((expirationTime - currentTime) % 3600) / 60);
     } catch {
     }
+  }
+
+  /**
+   * Inicia el seguimiento de actividad del usuario mediante heartbeat
+   */
+  private startUserActivityTracking(): void {
+    this.stopUserActivityTracking(); // Asegurar que no hay múltiples intervalos
+    
+    if (this.token) {
+      this.sendHeartbeat(); // Enviar inmediatamente
+      
+      // Luego enviar cada 2 minutos
+      this.heartbeatSubscription = interval(this.HEARTBEAT_INTERVAL).subscribe(() => {
+        if (this.token) {
+          this.sendHeartbeat();
+        } else {
+          this.stopUserActivityTracking();
+        }
+      });
+    }
+  }
+
+  /**
+   * Detiene el seguimiento de actividad del usuario
+   */
+  private stopUserActivityTracking(): void {
+    if (this.heartbeatSubscription) {
+      this.heartbeatSubscription.unsubscribe();
+      this.heartbeatSubscription = undefined;
+    }
+  }
+
+  /**
+   * Envía un heartbeat al servidor para mantener vivo el estado de conexión
+   */
+  private sendHeartbeat(): void {
+    if (!this.token) return;
+    
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + this.token
+    });
+
+    const URL = URL_SERVICIOS + "/auth/heartbeat";
+    
+    this.http.post(URL, {}, { headers }).subscribe({
+      next: () => {
+        // Heartbeat exitoso - no hacer nada específico
+      },
+      error: (error) => {
+        // Si hay error de autenticación, hacer logout
+        if (error.status === 401) {
+          this.logout();
+        }
+      }
+    });
   }
 }

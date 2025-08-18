@@ -20,6 +20,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 })
 export class AddRoleUserComponent implements OnInit {
   /**
+   * Limpia el prefijo 'GRUPO_' del nombre del grupo para usar en traducción
+   */
+  cleanGroup(group: string): string {
+    return group.replace(/^GRUPO_/, '');
+  }
+  /**
    * Menú lateral con las secciones y permisos disponibles
    */
   sideBar: any = [];

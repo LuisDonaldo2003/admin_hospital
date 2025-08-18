@@ -67,8 +67,8 @@ export class ListOrganizationComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.loadUsers();
-    // Polling cada 10 segundos para actualizar la lista de usuarios
-    this.pollingSubscription = interval(10000).subscribe(() => this.loadUsers());
+    // Polling cada 30 segundos para actualizar la lista de usuarios (más frecuente para mejor UX)
+    this.pollingSubscription = interval(30000).subscribe(() => this.loadUsers());
   }
 
   /**
@@ -85,10 +85,10 @@ export class ListOrganizationComponent implements OnInit, OnDestroy {
   loadUsers() {
     this.organizationService.listUsers().subscribe({
       next: (resp: any) => {
-        // Mapea los usuarios y fuerza el valor booleano de online
+        // Mapea los usuarios y normaliza el valor booleano de online
         this.users = resp.users.map((u: any) => ({
           ...u,
-          online: u.online === true // fuerza booleano
+          online: this.normalizeOnline(u)
         }));
         // Agrupa los usuarios por rol
         this.groupUsersByRole();
@@ -117,5 +117,94 @@ export class ListOrganizationComponent implements OnInit, OnDestroy {
         this.rolesMap[role.name].push(user);
       });
     });
+  }
+
+  /**
+   * Normaliza diferentes formatos de estado "online" que puedan venir del backend.
+   * Soporta: `online` boolean, `is_online`, `status` string ('online'|'offline'),
+   * y `last_seen` (timestamp) — si existe y fue reciente lo considera conectado.
+   */
+  private normalizeOnline(u: any): boolean {
+    if (u === undefined || u === null) return false;
+    if (typeof u.online === 'boolean') return u.online;
+    if (u.is_online !== undefined) return Boolean(u.is_online);
+    if (u.status && typeof u.status === 'string') return u.status.toLowerCase().includes('online');
+    if (u.last_seen) {
+      const last = new Date(u.last_seen).getTime();
+      if (!isNaN(last)) {
+        const now = Date.now();
+        // Considerar conectado si la última actividad fue hace menos de 2 minutos
+        return now - last < 2 * 60 * 1000;
+      }
+    }
+    return false;
+  }
+
+  /** Helper público usado desde el template */
+  public isOnline(user: any): boolean {
+    return this.normalizeOnline(user);
+  }
+
+  /** Devuelve la clave de traducción apropiada para el tooltip */
+  public onlineTitleKey(user: any): string {
+    return this.isOnline(user) ? 'ORGANIZATION.LIST_ORGANIZATION.ONLINE' : 'ORGANIZATION.LIST_ORGANIZATION.OFFLINE';
+  }
+
+  /** Cuenta usuarios online totales */
+  public getOnlineUsersCount(): number {
+    return this.users.filter(user => this.isOnline(user)).length;
+  }
+
+  /** Cuenta usuarios offline totales */
+  public getOfflineUsersCount(): number {
+    return this.users.filter(user => !this.isOnline(user)).length;
+  }
+
+  /** Cuenta usuarios online para un rol específico */
+  public getOnlineCountForRole(users: any[]): number {
+    return users.filter(user => this.isOnline(user)).length;
+  }
+
+  /** Obtiene el icono apropiado para cada rol */
+  public getRoleIcon(roleName: string): string {
+    const iconMap: { [key: string]: string } = {
+      'Administrador': 'fas fa-cog',
+      'Médico': 'fas fa-user-md',
+      'Enfermero': 'fas fa-user-nurse',
+      'Archivo': 'fas fa-archive',
+      'Developer': 'fas fa-code',
+      'Recepcionista': 'fas fa-desk',
+      'Farmacéutico': 'fas fa-pills',
+      'Laboratorista': 'fas fa-microscope',
+      'default': 'fas fa-user-friends'
+    };
+    return iconMap[roleName] || iconMap['default'];
+  }
+
+  /** Maneja click en usuario */
+  public onUserClick(user: any): void {
+    // Aquí puedes agregar lógica para mostrar más detalles del usuario
+    console.log('Usuario seleccionado:', user);
+    // Ejemplo: mostrar modal, navegar a perfil, etc.
+  }
+
+  /** Maneja errores de imagen */
+  public onImageError(event: any): void {
+    // Fallback cuando la imagen no carga
+    console.log('Error loading image for user');
+  }
+
+  /** Obtiene la hora de última actualización */
+  public getLastUpdateTime(): string {
+    return new Date().toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+  }
+
+  /** Devuelve el número de roles activos */
+  public getRolesCount(): number {
+    return Object.keys(this.rolesMap).length;
   }
 }

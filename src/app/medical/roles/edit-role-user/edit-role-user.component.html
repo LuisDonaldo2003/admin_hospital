@@ -100,24 +100,24 @@
                     <!-- Iteración sobre las secciones del sidebar para mostrar permisos -->
                     <ng-container *ngFor="let side of sideBar">
                       <tr>
-                        <!-- Sección traducida -->
-                        <td>{{ side.group + '.' + side.menuValue | translate }}</td>
+                        <!-- Sección traducida: usar la misma estrategia que AddRole -->
+                        <td>{{ ('SIDEBAR.' + cleanGroup(side.group) + '.' + side.menuValue + '.TITLE') | translate }}</td>
                         <td>
                           <!-- Subpermisos traducidos -->
                           <div *ngIf="side.subMenus?.length > 0">
                             <div class="form-check mb-1" *ngFor="let subMenu of side.subMenus">
-                              <input class="form-check-input" type="checkbox" (click)="addPermission(subMenu)" id="{{subMenu.menuValue}}">
+                              <input class="form-check-input" type="checkbox" (change)="addPermission(subMenu)" [checked]="permissions.includes(subMenu.permision)" id="{{subMenu.menuValue}}">
                               <label class="form-check-label" [for]="subMenu.menuValue">
-                                {{ side.group + '.' + subMenu.menuValue | translate }}
+                                {{ ('SIDEBAR.' + cleanGroup(side.group) + '.' + side.menuValue + '.' + subMenu.menuValue) | translate }}
                               </label>
                             </div>
                           </div>
                           <!-- Permiso directo sin submenus -->
                           <div *ngIf="side.subMenus?.length === 0">
                             <div class="form-check">
-                              <input class="form-check-input" type="checkbox" (click)="addPermission(side)" id="{{side.menuValue}}">
+                              <input class="form-check-input" type="checkbox" (change)="addPermission(side)" [checked]="permissions.includes(side.permision)" id="{{side.menuValue}}">
                               <label class="form-check-label" [for]="side.menuValue">
-                                {{ side.group + '.' + side.menuValue | translate }}
+                                {{ ('SIDEBAR.' + cleanGroup(side.group) + '.' + side.menuValue + '.TITLE') | translate }}
                               </label>
                             </div>
                           </div>
