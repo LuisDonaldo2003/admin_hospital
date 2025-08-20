@@ -40,6 +40,7 @@ export class CompleteProfileComponent {
   departaments: any[] = [];
   profiles: any[] = [];
   contractTypes: any[] = [];
+  genders: any[] = []; // lista de géneros desde el backend
 
   // Mensajes de éxito y validación
   text_success = '';
@@ -69,6 +70,19 @@ export class CompleteProfileComponent {
         this.text_validation = 'Error al cargar catálogos.';
       }
     });
+
+    // Obtener géneros desde el endpoint público
+    this.http.get<any>(`${URL_SERVICIOS}/genders`).subscribe({
+      next: res => {
+        // El endpoint devuelve un array [{id,name},...]
+        this.genders = res || [];
+      },
+      error: err => {
+        console.warn('No se pudo cargar lista de géneros:', err);
+        // No es crítico, se puede usar un fallback estático si es necesario
+        this.genders = [ { id: 1, name: 'Hombre' }, { id: 2, name: 'Mujer' } ];
+      }
+    });
   }
 
   // Carga y previsualiza el archivo de imagen seleccionado para el avatar
@@ -88,27 +102,40 @@ export class CompleteProfileComponent {
     this.text_success = '';
 
     // Validación de campos obligatorios
-    if (!this.mobile || !this.birth_date || !this.gender || !this.contract_type_id || !this.attendance_number || !this.avatarFile) {
-      this.text_validation = 'Todos los campos obligatorios deben completarse.';
+    if (!this.mobile || !this.birth_date || !this.gender || !this.attendance_number || !this.avatarFile) {
+      this.text_validation = 'Por favor completa los campos obligatorios: número de móvil, fecha de nacimiento, género, No. de asistencia y foto de perfil.';
       return;
     }
 
-    // Construye el objeto FormData con todos los datos del formulario
+    // Construye el objeto FormData: solo añadir campos opcionales si tienen valor
     const formData = new FormData();
+    // Campos obligatorios (siempre)
     formData.append('mobile', this.mobile);
-    formData.append('curp', this.curp);
-    formData.append('rfc', this.rfc);
-    formData.append('ine', this.ine);
     formData.append('attendance_number', this.attendance_number);
-    formData.append('professional_license', this.professional_license);
-    formData.append('funcion_real', this.funcion_real);
     formData.append('birth_date', this.birth_date);
     formData.append('gender_id', this.gender);
-    formData.append('departament_id', this.departament_id);
-    formData.append('profile_id', this.profile_id);
-    formData.append('contract_type_id', this.contract_type_id);
+
+    // Opcionales: añadir solo si tienen contenido
+    if (this.curp) formData.append('curp', this.curp);
+    if (this.rfc) formData.append('rfc', this.rfc);
+    if (this.ine) formData.append('ine', this.ine);
+    if (this.professional_license) formData.append('professional_license', this.professional_license);
+    if (this.funcion_real) formData.append('funcion_real', this.funcion_real);
+    if (this.departament_id) formData.append('departament_id', this.departament_id);
+    if (this.profile_id) formData.append('profile_id', this.profile_id);
+    if (this.contract_type_id) formData.append('contract_type_id', this.contract_type_id);
+
     if (this.avatarFile) {
       formData.append('avatar', this.avatarFile);
+    }
+
+    // DEBUG: imprimir contenido de FormData antes de enviar
+    try {
+      for (const pair of (formData as any).entries()) {
+        console.log('FormData ->', pair[0], pair[1]);
+      }
+    } catch (e) {
+      console.warn('No se pudo iterar FormData para debug:', e);
     }
 
     // Envía el perfil al backend y muestra mensajes según el resultado

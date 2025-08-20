@@ -479,7 +479,17 @@
     "LOADING": "Loading...",
     "DIRECTION": "Direction",
     "ONLINE": "Online",
-    "OFFLINE": "Offline"
+    "OFFLINE": "Offline",
+    "INFORMATION": "Fetching organization chart information",
+      "USERS_ONLINE": "Users online",
+      "USERS_OFFLINE": "Users offline",
+      "TOTAL_USERS": "Total Users",
+      "ROLES_ACTIVATED": "Active Roles",
+      "MEMBERS": "Members",
+      "DIRECTOR": "Director",
+      "SUBDIRECTOR": "Deputy Director",
+      "UPDATE": "Last update: ",
+      "CONDITION": "Connection statuses are updated automatically every 30 seconds."
   }
 },
 

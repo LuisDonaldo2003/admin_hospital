@@ -10,11 +10,9 @@
           <!-- Breadcrumb moderno con iconos -->
           <ol class="breadcrumb bg-light p-3 rounded-lg shadow-sm">
             <li class="breadcrumb-item">
-              <i class="fas fa-sitemap me-2 text-primary"></i>
-              {{ 'ORGANIZATION.LIST_ORGANIZATION.BREADCRUMB' | translate }}
+              {{ 'ORGANIZATION.LIST_ORGANIZATION.BREADCRUMB' | translate }} >
             </li>
             <li class="breadcrumb-item active fw-bold">
-              <i class="fas fa-users me-2"></i>
               {{ 'ORGANIZATION.LIST_ORGANIZATION.BREADCRUMB_USERS_BY_ROLE' | translate }}
             </li>
           </ol>
@@ -29,7 +27,7 @@
           <span class="visually-hidden">{{ 'ORGANIZATION.LIST_ORGANIZATION.LOADING' | translate }}</span>
         </div>
         <h5 class="text-muted">{{ 'ORGANIZATION.LIST_ORGANIZATION.LOADING' | translate }}...</h5>
-        <p class="text-secondary">Obteniendo información del organigrama</p>
+        <p class="text-secondary">{{ 'ORGANIZATION.LIST_ORGANIZATION.INFORMATION' | translate }}</p>
       </div>
     </div>
 
@@ -45,7 +43,7 @@
             </div>
             <div class="stats-content">
               <h4>{{ getOnlineUsersCount() }}</h4>
-              <span>Usuarios Online</span>
+              <span>{{ 'ORGANIZATION.LIST_ORGANIZATION.USERS_ONLINE' | translate }}</span>
             </div>
           </div>
         </div>
@@ -56,7 +54,7 @@
             </div>
             <div class="stats-content">
               <h4>{{ getOfflineUsersCount() }}</h4>
-              <span>Usuarios Offline</span>
+              <span>{{ 'ORGANIZATION.LIST_ORGANIZATION.USERS_OFFLINE' | translate }}</span>
             </div>
           </div>
         </div>
@@ -67,7 +65,7 @@
             </div>
             <div class="stats-content">
               <h4>{{ users.length }}</h4>
-              <span>Total Usuarios</span>
+              <span>{{ 'ORGANIZATION.LIST_ORGANIZATION.TOTAL_USERS' | translate }}</span>
             </div>
           </div>
         </div>
@@ -78,7 +76,7 @@
             </div>
             <div class="stats-content">
               <h4>{{ getRolesCount() }}</h4>
-              <span>Roles Activos</span>
+              <span>{{ 'ORGANIZATION.LIST_ORGANIZATION.ROLES_ACTIVATED' | translate }}</span>
             </div>
           </div>
         </div>
@@ -98,7 +96,7 @@
               </h5>
                 <span class="badge bg-light text-dark">
                 {{ (rolesMap['Director General'].length || 0) + (rolesMap['Subdirector General'].length || 0) }} 
-                miembros
+                {{ 'ORGANIZATION.LIST_ORGANIZATION.MEMBERS' | translate }}
               </span>
             </div>
           </div>
@@ -135,11 +133,11 @@
                   
                   <div class="user-info">
                     <div class="user-name">{{ user.name }} {{ user.surname }}</div>
-                    <div class="user-role text-primary fw-bold">Director General</div>
+                    <div class="user-role text-primary fw-bold">{{ 'ORGANIZATION.LIST_ORGANIZATION.DIRECTOR' | translate }}</div>
                     <div class="user-status">
                       <span class="badge status-pill" [ngClass]="{ 'bg-success': isOnline(user), 'bg-secondary': !isOnline(user) }">
                         <i class="fas fa-circle me-1"></i>
-                        {{ isOnline(user) ? 'En línea' : 'Desconectado' }}
+                        {{ isOnline(user) ? ('ORGANIZATION.LIST_ORGANIZATION.ONLINE' | translate) : ('ORGANIZATION.LIST_ORGANIZATION.OFFLINE' | translate) }}
                       </span>
                     </div>
                   </div>
@@ -173,11 +171,11 @@
                   
                   <div class="user-info">
                     <div class="user-name">{{ user.name }} {{ user.surname }}</div>
-                    <div class="user-role text-info fw-bold">Subdirector General</div>
+                    <div class="user-role text-info fw-bold">{{ 'ORGANIZATION.LIST_ORGANIZATION.SUBDIRECTOR' | translate }}</div>
                     <div class="user-status">
                       <span class="badge status-pill" [ngClass]="{ 'bg-success': isOnline(user), 'bg-secondary': !isOnline(user) }">
                         <i class="fas fa-circle me-1"></i>
-                        {{ isOnline(user) ? 'En línea' : 'Desconectado' }}
+                        {{ isOnline(user) ? ('ORGANIZATION.LIST_ORGANIZATION.ONLINE' | translate) : ('ORGANIZATION.LIST_ORGANIZATION.OFFLINE' | translate) }}
                       </span>
                     </div>
                   </div>
@@ -201,7 +199,7 @@
                 </h5>
                 <div class="d-flex align-items-center gap-2">
                   <span class="badge bg-light text-dark">
-                    {{ role.value.length }} miembros
+                    {{ role.value.length }} {{ 'ORGANIZATION.LIST_ORGANIZATION.MEMBERS' | translate }}
                   </span>
                   <span class="badge bg-success" *ngIf="getOnlineCountForRole(role.value) > 0">
                     {{ getOnlineCountForRole(role.value) }} online
@@ -238,7 +236,7 @@
                     <div class="user-status">
                       <span class="badge status-pill" [ngClass]="{ 'bg-success': isOnline(user), 'bg-secondary': !isOnline(user) }">
                         <i class="fas fa-circle me-1"></i>
-                        {{ isOnline(user) ? 'En línea' : 'Desconectado' }}
+                        {{ isOnline(user) ? ('ORGANIZATION.LIST_ORGANIZATION.ONLINE' | translate) : ('ORGANIZATION.LIST_ORGANIZATION.OFFLINE' | translate) }}
                       </span>
                     </div>
                   </div>
@@ -251,9 +249,9 @@
   <!-- Sección de estadísticas al final -->
         <div class="stats-summary card border-0 shadow-sm bg-light">
           <div class="card-body text-center">
-            <h6 class="text-muted mb-2">Última actualización: {{ getLastUpdateTime() }}</h6>
+            <h6 class="text-muted mb-2">{{ 'ORGANIZATION.LIST_ORGANIZATION.UPDATE' | translate }} {{ getLastUpdateTime() }}</h6>
             <small class="text-secondary">
-              Los estados se actualizan automáticamente cada 30 segundos
+              {{ 'ORGANIZATION.LIST_ORGANIZATION.CONDITION' | translate }}
             </small>
           </div>
         </div>

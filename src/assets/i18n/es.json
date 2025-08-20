@@ -479,7 +479,17 @@
     "LOADING": "Cargando...",
     "DIRECTION": "Dirección",
     "ONLINE": "Conectado",
-    "OFFLINE": "Desconectado"
+    "OFFLINE": "Desconectado",
+    "INFORMATION": "Obteniendo información del organigrama",
+    "USERS_ONLINE": "Usuarios en línea",
+    "USERS_OFFLINE": "Usuarios desconectados",
+    "TOTAL_USERS": "Total de Usuarios",
+    "ROLES_ACTIVATED": "Roles Activos",
+    "MEMBERS": "Miembros",
+    "DIRECTOR": "Director",
+    "SUBDIRECTOR": "Subdirector",
+    "UPDATE":"Última actualización: ",
+    "CONDITION": "Los estados de conexión se actualizan automáticamente cada 30 segundos."
   }
 },
 

@@ -53,16 +53,25 @@ export class ActivityMonitorService {
     setInterval(() => {
       const timeSinceLastActivity = Date.now() - this.lastActivity;
       const minutesInactive = Math.floor(timeSinceLastActivity / (60 * 1000));
+
+      // Si no hay token presente, estamos en una ruta pública (login/verify/forgot).
+      // No forzar logout ni redirección en páginas públicas.
+      if (!this.authService.token) {
+        return;
+      }
+
       // Verificar si el token está próximo a expirar o ya expiró
       if (this.authService.isTokenExpired()) {
         this.authService.logout();
         return;
       }
+
       // Si hay mucha inactividad, cerrar sesión
       if (timeSinceLastActivity > this.INACTIVITY_TIMEOUT) {
         this.authService.logout();
         return;
       }
+
       // Renovar token si está próximo a expirar y hay actividad reciente
       if (this.authService.isTokenExpiringSoon() && timeSinceLastActivity < this.WARNING_TIME) {
         this.authService.refreshToken().subscribe({

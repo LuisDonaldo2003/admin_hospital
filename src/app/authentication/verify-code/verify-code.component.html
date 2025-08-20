@@ -1,63 +1,98 @@
-<!-- Fondo general de la pantalla de verificación de cuenta -->
-<div class="background">
-  <!-- Contenedor principal de la tarjeta -->
-  <div class="card-container">
-    <!-- Sección superior: logo y título -->
-    <div class="text-center">
-      <div class="logo-wrapper mb-3">
-        <!-- Logo del hospital -->
-        <img src="assets/img/logo-hospital.png" alt="Logo" class="logo-img" />
-      </div>
-
-      <h2 class="title">Verifica tu cuenta</h2>
-      <!-- Muestra el email al que se envió el código -->
-      <p class="subtitle">
-        Te enviamos un código a <b>{{ form.get('email')?.value }}</b>
-      </p>
+<!-- Layout moderno de verificación con imagen lateral -->
+<div class="auth-layout">
+  <aside class="side-visual" aria-hidden="true">
+    <div class="image-frame">
+      <img src="assets/img/login-02.png" alt="Fachada del hospital IMSS Bienestar" />
     </div>
+  </aside>
 
-    <!-- Formulario de verificación de código -->
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <!-- Inputs para ingresar el código, uno por cada carácter -->
-      <div class="code-inputs mb-3">
-        <input *ngFor="let ctrl of codeControls; let i = index"
-          type="text"
-          maxlength="1"
-          class="code-box"
-          [formControl]="ctrl"
-          (input)="autoFocusNext($event, i)"
-          (keydown.backspace)="autoFocusPrev($event, i)"
-          (paste)="handlePaste($event)"
-        />
+  <main class="auth-col" aria-labelledby="verifyTitle">
+    <section class="auth-panel">
+      <div class="brand" aria-label="Logo institucional">
+        <img src="assets/img/login-logo.png" alt="Logo SISMEG" />
       </div>
 
-      <!-- Temporizador de expiración del código -->
-      <div *ngIf="!timerExpired" class="text-center small text-muted mb-2">
-        El código expira en <b>{{ timerDisplay }}</b>
-      </div>
+      <h1 id="verifyTitle" class="title">Verificar código</h1>
+      <p class="subtitle">
+        Te enviamos un código de recuperación a<br>
+        <strong>{{ form.get('email')?.value }}</strong>
+      </p>
 
-      <!-- Mensaje y botón para reenviar el código si expiró -->
-      <div *ngIf="timerExpired" class="alert alert-warning p-2 small text-center">
-        El código ha expirado. <br>
-        <button type="button" class="btn btn-sm btn-outline-secondary mt-2" (click)="resendCode()">Reenviar código</button>
-      </div>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <!-- Inputs para ingresar el código -->
+        <div class="code-section">
+          <label class="code-label">Ingresa el código de 8 dígitos</label>
+          <div class="code-inputs">
+            <input *ngFor="let ctrl of codeControls; let i = index"
+              type="text"
+              maxlength="1"
+              class="code-box"
+              [formControl]="ctrl"
+              (input)="autoFocusNext($event, i)"
+              (keydown.backspace)="autoFocusPrev($event, i)"
+              (paste)="handlePaste($event)"
+              [attr.aria-label]="'Dígito ' + (i + 1) + ' del código'"
+            />
+          </div>
+        </div>
 
-      <!-- Mensaje de error si la verificación falla -->
-      <div *ngIf="errorMsg" class="alert alert-danger text-center mt-2">
-        {{ errorMsg }}
-      </div>
+        <!-- Temporizador de expiración del código -->
+        <div *ngIf="!timerExpired" class="timer-display">
+          <i class="feather icon-clock" aria-hidden="true"></i>
+          El código expira en <strong>{{ timerDisplay }}</strong>
+        </div>
 
-      <!-- Mensaje de éxito si la verificación es correcta -->
-      <div *ngIf="successMsg" class="alert alert-success text-center mt-2">
-        {{ successMsg }}
-      </div>
+        <!-- Mensaje y botón para reenviar el código si expiró -->
+        <div *ngIf="timerExpired" class="alert alert-warning">
+          <i class="feather icon-alert-triangle" aria-hidden="true"></i>
+          El código ha expirado
+          <button type="button" class="btn btn-outline-secondary btn-sm mt-2" (click)="resendCode()">
+            <i class="feather icon-refresh-cw" aria-hidden="true"></i>
+            Reenviar código
+          </button>
+        </div>
 
-      <!-- Botón para enviar el formulario de verificación -->
-      <div class="d-flex justify-content-center">
-        <button [disabled]="loading || timerExpired" class="btn btn-primary verify-btn mt-3">
-          Verificar
-        </button>
-      </div>
-    </form>
-  </div>
+        <!-- Mensaje de error -->
+        <div *ngIf="errorMsg" class="alert alert-danger">
+          <i class="feather icon-x-circle" aria-hidden="true"></i>
+          {{ errorMsg }}
+        </div>
+
+        <!-- Mensaje de éxito -->
+        <div *ngIf="successMsg" class="alert alert-success">
+          <i class="feather icon-check-circle" aria-hidden="true"></i>
+          {{ successMsg }}
+        </div>
+
+        <!-- Mensaje de reenvío exitoso -->
+        <div *ngIf="resendSuccessMsg" class="alert alert-info">
+          <i class="feather icon-mail" aria-hidden="true"></i>
+          {{ resendSuccessMsg }}
+        </div>
+
+        <div class="actions">
+          <button 
+            type="submit" 
+            class="btn btn-primary w-100" 
+            [disabled]="loading || timerExpired"
+          >
+            <span *ngIf="!loading">
+              <i class="feather icon-shield-check" aria-hidden="true"></i>
+              Verificar código
+            </span>
+            <span *ngIf="loading">
+              <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+              Verificando...
+            </span>
+          </button>
+        </div>
+
+        <div class="footer-links">
+          <a href="#" class="muted" (click)="$event.preventDefault(); resendCode()" *ngIf="!timerExpired">
+            ¿No recibiste el código? Reenviar
+          </a>
+        </div>
+      </form>
+    </section>
+  </main>
 </div>
