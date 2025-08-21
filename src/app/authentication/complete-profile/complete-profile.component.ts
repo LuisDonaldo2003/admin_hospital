@@ -66,7 +66,6 @@ export class CompleteProfileComponent {
         this.contractTypes = res.contractTypes;
       },
       error: err => {
-        console.error('Error al cargar catálogos:', err);
         this.text_validation = 'Error al cargar catálogos.';
       }
     });
@@ -78,8 +77,7 @@ export class CompleteProfileComponent {
         this.genders = res || [];
       },
       error: err => {
-        console.warn('No se pudo cargar lista de géneros:', err);
-        // No es crítico, se puede usar un fallback estático si es necesario
+        // fallback estático si el endpoint falla
         this.genders = [ { id: 1, name: 'Hombre' }, { id: 2, name: 'Mujer' } ];
       }
     });
@@ -129,14 +127,7 @@ export class CompleteProfileComponent {
       formData.append('avatar', this.avatarFile);
     }
 
-    // DEBUG: imprimir contenido de FormData antes de enviar
-    try {
-      for (const pair of (formData as any).entries()) {
-        console.log('FormData ->', pair[0], pair[1]);
-      }
-    } catch (e) {
-      console.warn('No se pudo iterar FormData para debug:', e);
-    }
+  // (Debug removed) enviar FormData al backend
 
     // Envía el perfil al backend y muestra mensajes según el resultado
     this.http.post(`${URL_SERVICIOS}/complete-profile`, formData).subscribe({
@@ -145,7 +136,6 @@ export class CompleteProfileComponent {
         setTimeout(() => this.router.navigate(['/profile']), 1000);
       },
       error: err => {
-        console.error('Error al guardar:', err);
         this.text_validation = err?.error?.message || 'Error al guardar';
       }
     });

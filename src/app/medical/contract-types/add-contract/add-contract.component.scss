@@ -1,0 +1,174 @@
+
+// Estilos compartidos con Add Role (misma lógica visual)
+// Basado en variables globales definidas por GeneralSettingsComponent
+
+:host {
+	display: block;
+}
+
+.page-wrapper .card {
+	border-radius: 1rem;
+	border: 4px solid var(--user-border-color, #0B7285) !important;
+	background-color: var(--user-card-bg, #ffffff) !important;
+	color: var(--user-card-text-color, #111827) !important;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+	transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease,
+		box-shadow 200ms ease, transform 120ms ease;
+
+	&:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+	}
+}
+
+.card .card-body {
+	color: var(--user-card-text-color, #111827) !important;
+}
+
+.page-wrapper .card .card-title,
+.page-wrapper .card label,
+.page-wrapper .card .form-label,
+.page-wrapper .card .form-check-label,
+.page-wrapper .breadcrumb,
+.page-wrapper .breadcrumb .breadcrumb-item {
+	color: var(--user-card-text-color, #111827) !important;
+}
+
+.form-control,
+select.form-control,
+select.form-select,
+textarea.form-control {
+	border-radius: 0.6rem;
+	padding: 0.6rem 0.9rem;
+	border: 1px solid rgba(0, 0, 0, 0.18);
+	background-color: #ffffff;
+	color: #111827;
+	transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
+
+	&::placeholder {
+		color: #9ca3af;
+		opacity: 1;
+	}
+
+	&:focus {
+		border-color: var(--user-border-color, #0B7285);
+		outline: none;
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent);
+	}
+
+	&.is-invalid {
+		border-color: #dc3545 !important;
+		background-color: #fff5f5 !important;
+	}
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+	accent-color: var(--user-border-color, #0B7285);
+}
+
+.btn {
+	font-weight: 600;
+	padding: 0.55rem 1.2rem;
+	border-radius: 0.6rem;
+}
+
+.btn-primary {
+	background-color: var(--user-border-color, #0B7285);
+	border-color: var(--user-border-color, #0B7285);
+	color: #ffffff;
+	&:hover { filter: brightness(0.95); }
+	&:active { filter: brightness(0.9); }
+}
+
+.btn-outline-primary {
+	border-color: var(--user-btn-border-color, currentColor);
+	color: var(--user-card-text-color, #111827);
+	&:hover {
+		background: var(--user-btn-border-color, rgba(0, 0, 0, 0.08));
+		color: #ffffff;
+		border-color: var(--user-btn-border-color, currentColor);
+	}
+}
+
+.alert {
+	border-radius: 0.5rem;
+	font-size: 0.925rem;
+	border-left: 4px solid var(--user-border-color, #0B7285);
+}
+
+.page-wrapper .card .table,
+.page-wrapper .card .table thead,
+.page-wrapper .card .table tbody,
+.page-wrapper .card .table thead th,
+.page-wrapper .card .table tbody td,
+.page-wrapper .card .table th label,
+.page-wrapper .card .table td label,
+.page-wrapper .card .table .form-check-label {
+	color: var(--user-card-text-color, #111827) !important;
+	background-color: transparent !important;
+}
+
+.page-wrapper .card .table thead {
+	background: color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent) !important;
+}
+
+.page-wrapper .card .table thead th {
+	color: var(--user-card-text-color, #111827) !important;
+	border-bottom: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent) !important;
+}
+
+.page-wrapper .card .table tbody td {
+	color: var(--user-card-text-color, #111827) !important;
+}
+
+.page-wrapper .card .table tbody tr:hover {
+	background: color-mix(in srgb, var(--user-border-color, #0B7285) 7%, transparent) !important;
+}
+
+:host-context(.dark-mode) {
+	.page-wrapper .card {
+		box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
+	}
+
+	.page-wrapper .card .card-title,
+	.page-wrapper .card label,
+	.page-wrapper .card .form-label,
+	.page-wrapper .card .form-check-label {
+		color: var(--user-card-text-color, #ffffff) !important;
+	}
+
+	.form-control,
+	select.form-control,
+	select.form-select,
+	textarea.form-control {
+		background-color: #2a2f3a !important;
+		color: #f1f5f9 !important;
+		border: 1px solid #3a3f4a !important;
+
+		&::placeholder {
+			color: #bfc7cf !important;
+			opacity: 1 !important;
+		}
+
+		&:focus {
+			border-color: var(--user-border-color, #0B7285) !important;
+			box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent);
+		}
+	}
+
+	.card .table { color: var(--user-card-text-color, #ffffff) !important; }
+
+	.card .table thead { background: color-mix(in srgb, var(--user-border-color, #0B7285) 18%, transparent); }
+
+	.card .table thead th,
+	.card .table tbody td { color: var(--user-card-text-color, #ffffff) !important; border-color: rgba(255, 255, 255, 0.06) !important; }
+
+	.btn-outline-primary:hover { color: #0b0e14; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.page-wrapper .card,
+	.form-control,
+	.btn { transition: none !important; }
+}

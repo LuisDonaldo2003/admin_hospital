@@ -37,6 +37,18 @@
   }
 }
 
+// For dropdowns inside the archive card list we want white text (the dropdown
+// uses a dark background in this layout), make rule more specific so it wins
+// over the generic .dropdown-menu .dropdown-item color.
+.card.card-list .dropdown-menu .dropdown-item {
+  color: #ffffff !important;
+}
+.card.card-list .dropdown-menu .dropdown-item svg,
+.card.card-list .dropdown-menu .dropdown-item i {
+  color: #ffffff !important;
+  filter: none !important;
+}
+
 .dropdown-menu .dropdown-item:hover:not(:disabled) {
   background: linear-gradient(90deg, #007bff22 0%, #e9ecef 100%) !important;
   color: #007bff !important;
@@ -216,26 +228,26 @@ body.dark-mode .dropdown-menu .dropdown-item.text-danger:hover {
           font-size: 1rem;
         }
       }
+      /* Clear filters button: match dimensions & weight of add-patient-btn */
       .clear-filters-btn {
-        border: 2px solid var(--user-border-color, #6c757d) !important;
-        border-radius: 0.5rem;
-        padding: 0.5rem 1rem;
-        color: #495057 !important; // Texto visible sobre fondo blanco
-        background: #fff !important; // Fondo sólido para que el texto no se "pierda"
-        font-size: 0.875rem;
-        font-weight: 500;
+        border: 3px solid var(--user-border-color, #6c757d) !important;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        height: 54px;
+        color: #495057 !important;
+        background: #fff !important;
+        font-size: 0.95rem;
+        font-weight: 600;
         display: inline-flex;
         align-items: center;
-        gap: 0.35rem;
-        line-height: 1.1;
-        white-space: nowrap;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: background 0.18s, color 0.18s;
         &:hover:not(:disabled) {
           background: var(--user-border-color, #6c757d) !important;
           color: #fff !important;
         }
-        &:disabled {
-          opacity: 0.65;
-        }
+        &:disabled { opacity: 0.65; }
       }
     }
   }
@@ -430,7 +442,7 @@ body.dark-mode .text-info-numbers {
     .btn {
       color: #000000 !important;
     }
-    a {
+    a:not(.dropdown-item) {
       color: #000000 !important;
     }
   }
@@ -498,18 +510,21 @@ body.dark-mode .pagination-info {
 @media (max-width: 768px) {
   .page-wrapper .content.list-staff {
     padding: 1rem;
-    .filters-container {
-      padding: 1rem;
-      .filter-input,
-      .filter-select {
-        font-size: 0.875rem;
-        padding: 0.6rem 0.8rem;
+      .filters-container {
+        padding: 1rem;
+        .filter-input {
+          font-size: 0.9rem;
+          padding: 0.55rem 0.75rem;
+        }
+        .clear-filters-btn,
+        .add-patient-btn {
+          font-size: 0.9rem;
+          padding: 0.6rem 0.6rem;
+        }
+        .w-100.d-flex.gap-2 {
+          flex-direction: column;
+        }
       }
-      .add-patient-btn {
-        font-size: 0.875rem;
-        padding: 0.6rem 0.8rem;
-      }
-    }
     .card.card-list {
       padding: 1rem;
       .card-body {
@@ -537,162 +552,39 @@ body.dark-mode .pagination-info {
 }
 
 // ========================================
-// MODO OSCURO CON COLORES DINÁMICOS
+// MODO OSCURO CON COLORES DINÁMICOS (corregido)
 // ========================================
 body.dark-mode {
-  .filters-container input,
-  .filters-container input.form-control,
-  .filters-container input.filter-input,
-  .filters-container input.custom-input {
-    background-color: transparent !important; // Fondo transparente en modo oscuro
-    color: #fff !important;
-  }
-  // Placeholder en modo oscuro: blanco semitransparente
-  ::ng-deep .filters-container input::placeholder {
-    color: rgba(255,255,255,0.7) !important;
-    opacity: 1 !important;
-    font-weight: 500 !important;
-    font-size: 0.95rem !important;
-    transition: color 0.2s;
-  }
-  .filters-container label, 
-  .filters-container p, 
-  .filters-container span, 
-  .filters-container h1, 
-  .filters-container h2, 
-  .filters-container h3, 
-  .filters-container h4, 
-  .filters-container h5, 
-  .filters-container h6 {
-    color: var(--user-card-text-color, #fff) !important;
-  }
   .filters-container {
     background: var(--user-card-bg, #2a2a3a) !important;
     border-color: var(--user-border-color, #ff4f4f) !important;
     color: var(--user-card-text-color, #fff) !important;
+
+    .filter-input,
+    .custom-input {
+      background-color: transparent !important;
+      color: #fff !important;
+      border: 3px solid var(--user-border-color, #444) !important;
+    }
+
+    .filter-input::placeholder {
+      color: rgba(255,255,255,0.7) !important;
+    }
+
+    .add-patient-btn {
+      border: 3px solid var(--user-border-color, #ff4f4f) !important;
+    }
   }
+
   .card.card-list {
     background-color: var(--user-card-bg, #2a2a3a) !important;
     border-color: var(--user-border-color, #ff4f4f) !important;
-    .card-body {
-      background-color: var(--user-card-bg, #2a2a3a) !important;
-      color: var(--user-card-text-color, #fff) !important;
-      .d-flex.justify-content-between {
-        background: linear-gradient(135deg, var(--user-card-bg, #2a2a3a) 0%, rgba(45, 45, 58, 0.95) 100%) !important;
-        h4, h5, p, span, small {
-          color: #ffffff !important; // Blanco fijo en modo oscuro
-        }
-        p.fw-semibold,
-        .fw-semibold,
-        span {
-          color: #ffffff !important; // Blanco fijo para elementos semibold
-          font-weight: 700 !important;
-          opacity: 1 !important;
-        }
-      }
-      .pagination-info {
-        color: var(--user-card-text-color, #fff) !important;
-      }
-      p, span, div, h1, h2, h3, h4, h5, h6, small, strong {
-        color: var(--user-card-text-color, #fff) !important;
-      }
-      .d-flex.justify-content-between p,
-      .d-flex.justify-content-between span,
-      .d-flex.justify-content-between strong {
-        color: #ffffff !important; // Blanco fijo en modo oscuro
-        font-weight: 600 !important;
-      }
-      .text-center.py-5 {
-        h5, p {
-          color: var(--user-card-text-color, #fff) !important;
-        }
-        .fa-search {
-          color: var(--user-card-text-color, #fff) !important;
-        }
-        .btn-outline-primary {
-          color: var(--user-card-text-color, #fff) !important;
-          border-color: var(--user-border-color, #ff4f4f) !important;
-          &:hover {
-            background-color: var(--user-border-color, #ff4f4f) !important;
-            color: #fff !important;
-          }
-        }
-      }
-      table {
-        background-color: #fff !important;
-        border-color: var(--user-border-color, #ff4f4f) !important;
-        th, td {
-          background-color: #fff !important;
-          color: #000 !important;
-        }
-        thead th {
-          background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
-          color: #000 !important;
-        }
-        tbody tr {
-          background-color: #fff !important;
-          &:hover {
-            background-color: rgba(0, 123, 255, 0.05) !important;
-          }
-          td {
-            background-color: #fff !important;
-            color: #000 !important;
-          }
-        }
-        td:first-child {
-          color: #007bff !important;
-          background-color: #fff !important;
-        }
-        .dropdown-toggle {
-          color: #000 !important;
-          background: transparent !important;
-          border: none !important;
-          &::after {
-            border-top-color: #000 !important;
-          }
-        }
-        .fa-cog,
-        .fa-cogs,
-        .fa-settings,
-        .fa-gear,
-        i[class*="fa-"] {
-          color: #000 !important;
-        }
-        .btn {
-          color: #000 !important;
-        }
-        a {
-          color: #000 !important;
-        }
-      }
-    }
-    .pagination {
-      .page-link {
-        background-color: #2a2a3a !important;
-        color: #ffffff !important;
-        border-color: var(--user-border-color, #ff4f4f) !important;
-        &:hover {
-          background-color: var(--user-border-color, #ff4f4f) !important;
-          color: #fff !important;
-        }
-      }
-      .page-item.active .page-link {
-        background-color: var(--user-border-color, #ff4f4f) !important;
-        border-color: var(--user-border-color, #ff4f4f) !important;
-        color: #fff !important;
-      }
-      .page-item.disabled .page-link {
-        background-color: #1a1a1a !important;
-        color: #6c757d !important;
-        border-color: #444 !important;
-      }
+
+    table {
+      background-color: #fff !important;
+      thead th, td { color: #000 !important; }
     }
   }
-  .page-wrapper .content.list-staff {
-    background-color: transparent !important;
-    color: var(--user-card-text-color, #ffffff) !important;
-    h1, h2, h3, h4, h5, h6, p, span, label {
-      color: var(--user-card-text-color, #ffffff) !important;
-    }
-  }
+
+  .pagination-info { color: #fff !important; }
 }

@@ -18,182 +18,57 @@
 
   <!-- Filtros principales para buscar y filtrar pacientes archivados -->
   <div class="filters-container border-colored mb-4">
-  <div class="row g-3">
-  <!-- Primera fila: Filtros básicos -->
-  <!-- Filtro por número de expediente -->
-  <div class="col-lg-3 col-md-6">
-     <input type="text" 
-       class="form-control filter-input custom-input" 
-       style="border: 3px solid var(--user-border-color, #000) !important;"
-       [placeholder]="'ARCHIVE.LIST_PATIENT.SEARCH_RECORD' | translate"
-       [(ngModel)]="archiveNumberSearch" 
-                 (keyup.enter)="onArchiveNumberSearch()"
-                 (input)="archiveNumberSearch === '' && onArchiveNumberSearch()"
-       [disabled]="isLoading"
-       maxlength="10">
-        </div>
-        
-  <!-- Filtro por nombre del paciente -->
-  <div class="col-lg-3 col-md-6">
-     <input type="text" 
-       class="form-control filter-input custom-input" 
-       style="border: 3px solid var(--user-border-color, #000) !important;"
-       [placeholder]="'ARCHIVE.LIST_PATIENT.SEARCH_NAME' | translate"
-       [(ngModel)]="nameSearch" 
-                 (keyup.enter)="onNameSearch()"
-                 (input)="nameSearch === '' && onNameSearch()"
-       [disabled]="isLoading"
-       minlength="2">
-        </div>
-        
-  <!-- Filtro por género -->
-  <div class="col-lg-3 col-md-6">
-          <select class="form-select filter-select custom-select" 
-                  style="border: 3px solid var(--user-border-color, #000) !important;"
-                  [(ngModel)]="selectedGender" 
-                  (change)="onFilterChange()"
-                  [disabled]="isLoading || isLoadingCatalogs">
-            <option value="">{{ 'ARCHIVE.LIST_PATIENT.ALL_GENDERS' | translate }}</option>
-            <option *ngFor="let g of genders" [value]="g.id">{{ g.name }}</option>
-          </select>
-        </div>
-        
-  <!-- Filtro por estado -->
-  <div class="col-lg-3 col-md-6">
-          <select class="form-select filter-select custom-select" 
-                  style="border: 3px solid var(--user-border-color, #000) !important;"
-                  [(ngModel)]="selectedState" 
-                  (change)="onStateChange()"
-                  [disabled]="isLoading || isLoadingCatalogs">
-            <option value="">{{ 'ARCHIVE.LIST_PATIENT.ALL_STATES' | translate }}</option>
-            <option *ngFor="let s of states" [value]="s?.id">{{ s?.name }}</option>
-          </select>
-        </div>
-        
-  <!-- Segunda fila: Filtros dependientes -->
-  <!-- Filtro por municipio (depende del estado seleccionado) -->
-  <div class="col-lg-3 col-md-6">
-          <select class="form-select filter-select custom-select" 
-                  style="border: 3px solid var(--user-border-color, #000) !important;"
-                  [(ngModel)]="selectedMunicipality" 
-                  (change)="onMunicipalityChange()"
-                  [disabled]="isLoading || !selectedState || municipalities.length === 0">
-            <option value="">{{ 'ARCHIVE.LIST_PATIENT.ALL_MUNICIPALITIES' | translate }}</option>
-            <option *ngFor="let m of municipalities" [value]="m?.id">{{ m?.name }}</option>
-          </select>
-        </div>
-        
-  <!-- Filtro por localidad (depende del municipio seleccionado) -->
-  <div class="col-lg-3 col-md-6">
-          <select class="form-select filter-select custom-select" 
-                  style="border: 3px solid var(--user-border-color, #000) !important;"
-                  [(ngModel)]="selectedLocation" 
-                  (change)="onFilterChange()"
-                  [disabled]="isLoading || !selectedMunicipality || locations.length === 0">
-            <option value="">{{ 'ARCHIVE.LIST_PATIENT.ALL_LOCATIONS' | translate }}</option>
-            <option *ngFor="let l of locations" [value]="l?.id">{{ l?.name }}</option>
-          </select>
-        </div>
-        
-  <!-- Filtro de fechas: permite seleccionar tipo de filtro de fecha -->
-  <div class="col-lg-3 col-md-6">
-          <select class="form-select filter-select custom-select" 
-                  style="border: 3px solid var(--user-border-color, #000) !important;"
-                  [(ngModel)]="dateFilterType" 
-                  (change)="onDateFilterTypeChange()"
-                  [disabled]="isLoading">
-            <option value="">{{ 'ARCHIVE.LIST_PATIENT.ALL_DATES' | translate }}</option>
-            <option value="year">{{ 'ARCHIVE.LIST_PATIENT.BY_YEAR' | translate }}</option>
-            <option value="month">{{ 'ARCHIVE.LIST_PATIENT.BY_MONTH' | translate }}</option>
-            <option value="day">{{ 'ARCHIVE.LIST_PATIENT.BY_DAY' | translate }}</option>
-            <option value="range">{{ 'ARCHIVE.LIST_PATIENT.BY_RANGE' | translate }}</option>
-          </select>
-        </div>
-        
-  <!-- Botón para agregar un nuevo paciente archivado -->
-  <div class="col-lg-3 col-md-6 d-flex align-items-end">
-          <button class="btn btn-primary w-100 add-patient-btn" 
-                  [routerLink]="['/archives/add_archive']"
-                  [disabled]="isLoading">
-            <i class="fa fa-plus me-2"></i>
-            {{ 'ARCHIVE.LIST_PATIENT.ADD_PATIENT' | translate }}
-          </button>
-        </div>
+    <!-- Fila superior: Inputs de búsqueda -->
+    <div class="row g-3 mb-3">
+      <!-- Búsqueda por expediente -->
+      <div class="col-lg-6 col-md-6">
+        <input type="text"
+               class="form-control filter-input custom-input"
+               [placeholder]="'ARCHIVE.LIST_PATIENT.SEARCH_RECORD' | translate"
+               [(ngModel)]="archiveNumberSearch"
+               (keyup.enter)="onArchiveNumberSearch()"
+               (input)="archiveNumberSearch === '' && onArchiveNumberSearch()"
+               [disabled]="isLoading"
+               maxlength="10">
       </div>
-      
-  <!-- Filtros de fecha específicos (aparecen dinámicamente según el tipo de filtro seleccionado) -->
-  <div class="row g-3 mt-2" *ngIf="dateFilterType">
 
-  <!-- Filtro específico por año (visible si el filtro es por año o día) -->
-  <div class="col-lg-2 col-md-4" *ngIf="dateFilterType === 'year' || dateFilterType === 'day'">
-          <select class="form-select filter-select-sm custom-select" 
-                  style="border: 3px solid var(--user-border-color, #000) !important;"
-                  [(ngModel)]="specificYear" 
-                  (change)="onDateFilterChange()"
-                  [disabled]="isLoading">
-            <option value="">{{ 'ARCHIVE.LIST_PATIENT.SELECT_YEAR' | translate }}</option>
-            <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-          </select>
-        </div>
-
-  <!-- Filtro específico por mes (visible si el filtro es por mes o día con año seleccionado) -->
-  <div class="col-lg-2 col-md-4" *ngIf="dateFilterType === 'month' || (dateFilterType === 'day' && specificYear)">
-          <select class="form-select filter-select-sm custom-select" 
-                  style="border: 3px solid var(--user-border-color, #000) !important;"
-                  [(ngModel)]="specificMonth" 
-                  (change)="onDateFilterChange()"
-                  [disabled]="isLoading">
-            <option value="">{{ 'ARCHIVE.LIST_PATIENT.SELECT_MONTH' | translate }}</option>
-            <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
-          </select>
-        </div>
-
-  <!-- Filtro específico por día (visible si se seleccionó año, mes y el tipo es día) -->
-  <div class="col-lg-2 col-md-4" *ngIf="dateFilterType === 'day' && specificYear && specificMonth">
-          <select class="form-select filter-select-sm custom-select" 
-                  style="border: 3px solid var(--user-border-color, #000) !important;"
-                  [(ngModel)]="specificDay" 
-                  (change)="onDateFilterChange()"
-                  [disabled]="isLoading">
-            <option value="">{{ 'ARCHIVE.LIST_PATIENT.SELECT_DAY' | translate }}</option>
-            <option *ngFor="let day of days" [value]="day">{{ day }}</option>
-          </select>
-        </div>
-
-  <!-- Filtros por rango de fechas (fecha desde) -->
-  <div class="col-lg-3 col-md-6" *ngIf="dateFilterType === 'range'">
-          <input type="date" 
-                 class="form-control filter-input-sm" 
-                 style="border: 3px solid var(--user-border-color, #000) !important;"
-                 [placeholder]="'ARCHIVE.LIST_PATIENT.DATE_FROM' | translate"
-                 [(ngModel)]="dateFrom" 
-                 (input)="onDateRangeInputChange()"
-                 [disabled]="isLoading">
-        </div>
-
-  <!-- Filtros por rango de fechas (fecha hasta) -->
-  <div class="col-lg-3 col-md-6" *ngIf="dateFilterType === 'range'">
-          <input type="date" 
-                 class="form-control filter-input-sm" 
-                 style="border: 3px solid var(--user-border-color, #000) !important;"
-                 [placeholder]="'ARCHIVE.LIST_PATIENT.DATE_TO' | translate"
-                 [(ngModel)]="dateTo" 
-                 (input)="onDateRangeInputChange()"
-                 [disabled]="isLoading">
-        </div>
-        
-  <!-- Botón para limpiar todos los filtros activos -->
-  <div class="col-auto ms-auto" *ngIf="hasActiveFilters">
-          <button class="btn btn-outline-secondary clear-filters-btn"
-                  (click)="clearAllFilters()"
-                  [disabled]="isLoading"
-                  title="{{ 'ARCHIVE.LIST_PATIENT.CLEAR_FILTERS' | translate }}">
-            <i class="fa fa-refresh me-2"></i>
-            {{ 'ARCHIVE.LIST_PATIENT.CLEAR_FILTERS' | translate }}
-          </button>
-        </div>
+      <!-- Búsqueda por nombre -->
+      <div class="col-lg-6 col-md-6">
+        <input type="text"
+               class="form-control filter-input custom-input"
+               [placeholder]="'ARCHIVE.LIST_PATIENT.SEARCH_NAME' | translate"
+               [(ngModel)]="nameSearch"
+               (keyup.enter)="onNameSearch()"
+               (input)="nameSearch === '' && onNameSearch()"
+               [disabled]="isLoading"
+               minlength="2">
       </div>
     </div>
+
+    <!-- Fila inferior: Botones de acción -->
+    <div class="row g-3">
+      <!-- Botón limpiar filtros -->
+      <div class="col-lg-6 col-md-6">
+        <button class="btn btn-outline-secondary clear-filters-btn w-100"
+                (click)="clearAllFilters()"
+                [disabled]="isLoading"
+                title="{{ 'ARCHIVE.LIST_PATIENT.CLEAR_FILTERS' | translate }}">
+          <i class="fa fa-refresh me-2"></i>
+          {{ 'ARCHIVE.LIST_PATIENT.CLEAR_FILTERS' | translate }}
+        </button>
+      </div>
+
+      <!-- Botón agregar paciente -->
+      <div class="col-lg-6 col-md-6">
+        <button class="btn btn-primary add-patient-btn w-100"
+                [routerLink]="['/archives/add_archive']"
+                [disabled]="isLoading">
+          <i class="fa fa-plus me-2"></i>
+          {{ 'ARCHIVE.LIST_PATIENT.ADD_PATIENT' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Tabla de resultados de pacientes archivados -->
   <div class="row">

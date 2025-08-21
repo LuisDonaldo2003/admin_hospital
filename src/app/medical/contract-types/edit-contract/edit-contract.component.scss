@@ -1,0 +1,122 @@
+
+// Estilos alineados con AddStaff para respetar variables y modo oscuro
+:host {
+	display: block;
+}
+
+.card {
+	border-radius: 1rem;
+	padding: 1.5rem;
+	border: 4px solid var(--user-border-color, #0B7285) !important; // Borde dinámico
+	background-color: var(--user-card-bg, #ffffff) !important;      // Fondo dinámico
+	color: var(--user-card-text-color, #111827) !important;         // Texto dinámico
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+	transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+	position: relative;
+	z-index: 2;
+
+	.card-body {
+		color: var(--user-card-text-color, #111827) !important;
+
+		h4,
+		.form-label {
+			color: var(--user-card-text-color, #111827) !important;
+			font-weight: 600;
+		}
+	}
+}
+
+.card.card,
+.card:not(.border-0) {
+	border: 4px solid var(--user-border-color, #0B7285) !important;
+}
+
+// Inputs y selects
+.form-control,
+.select {
+	border-radius: 0.5rem;
+	padding: 0.6rem 1rem;
+	border: 1px solid rgba(0,0,0,0.12);
+	background-color: var(--user-card-bg, #ffffff);
+	color: var(--user-card-text-color, #111827);
+
+	&:focus {
+		border-color: var(--user-border-color, #0B7285);
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 18%, transparent);
+		outline: none;
+	}
+
+	&.is-invalid {
+		border-color: #dc3545;
+		background-color: #fff5f5;
+	}
+}
+
+// Botón
+.btn {
+	font-weight: 500;
+	padding: 0.5rem 1.5rem;
+}
+
+// Alertas
+.alert {
+	border-radius: 0.375rem;
+	font-size: 0.875rem;
+}
+
+/* Modo oscuro: usar :host-context para heredar estado del body */
+:host-context(.dark-mode) {
+	.card,
+	.card.card,
+	.card:not(.border-0) {
+		background-color: var(--user-card-bg, #23221c) !important;
+		border: 4px solid var(--user-border-color, #0B7285) !important;
+		color: var(--user-card-text-color, #ffffff) !important;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+
+		.card-body,
+		h4,
+		.form-label {
+			color: var(--user-card-text-color, #ffffff) !important;
+		}
+	}
+
+	.form-control,
+	.select {
+		background-color: #2a2f3a !important;
+		color: #f1f5f9 !important;
+		border: 1px solid #3a3f4a !important;
+	}
+
+	.form-control::placeholder {
+		color: #bfc7cf !important;
+	}
+
+	.form-control.is-invalid,
+	.select.is-invalid {
+		border-color: #f87171 !important;
+		background-color: #442626 !important;
+	}
+
+	.btn-primary {
+		background-color: var(--user-border-color, #0B7285) !important;
+		border-color: var(--user-border-color, #0B7285) !important;
+		color: #fff !important;
+	}
+
+	.alert-warning {
+		background-color: #5c3d03 !important;
+		color: #f6e58d !important;
+	}
+
+	.alert-success {
+		background-color: #024d36 !important;
+		color: #c7f9cc !important;
+	}
+}
+
+// Selección de texto
+::selection {
+	background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 60%, transparent);
+	color: #fff;
+}

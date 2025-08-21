@@ -1,112 +1,81 @@
 <div class="page-wrapper">
-  <div class="content">
-    <!-- Encabezado de la página: muestra la ruta de navegación (breadcrumb) -->
+  <div class="content list-staff">
+
     <div class="page-header mb-4">
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item"><a href="#">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.DEPARTMENTS' | translate }} ></a></li>
+            <li class="breadcrumb-item">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.DEPARTMENTS' | translate }} &gt;</li>
             <li class="breadcrumb-item active">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.BREADCRUMB_LIST' | translate }}</li>
           </ol>
         </div>
       </div>
     </div>
 
-    <!-- Contenido principal: tarjeta con la tabla de departamentos -->
     <div class="row">
       <div class="col-sm-12">
-        <div class="card shadow-sm border-0">
+        <div class="card card-list shadow border-0">
           <div class="card-body">
 
-            <!-- Barra superior de la tabla: título, búsqueda, botón nuevo y refrescar -->
-            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-              <h4 class="mb-0">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.TITLE' | translate }}</h4>
-              <div class="d-flex align-items-center gap-2">
-                <!-- Campo de búsqueda -->
-                <div class="input-group">
-                  <input type="text" class="form-control" [placeholder]="'DEPARTAMENT.LIST_DEPARTAMENT.SEARCH_PLACEHOLDER' | translate" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
-                  <span class="input-group-text bg-white">
-                    <img src="assets/img/icons/search-normal.svg" alt="">
+            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 header-bar">
+              <h4 class="mb-0 fw-semibold">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.TITLE' | translate }}</h4>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="input-group search-input">
+                  <input type="text" class="form-control" placeholder="{{ 'DEPARTAMENT.LIST_DEPARTAMENT.SEARCH_PLACEHOLDER' | translate }}" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
+                  <span class="input-group-text">
+                    <i class="fa fa-search"></i>
                   </span>
                 </div>
-                <!-- Botón para registrar nuevo departamento -->
-                <a routerLink="/departaments-m/register" class="btn btn-primary"><img src="assets/img/icons/plus.svg" alt=""></a>
-                <!-- Botón para refrescar la tabla -->
-                <button class="btn btn-outline-secondary" (click)="PageSize()"><img src="assets/img/icons/re-fresh.svg" alt=""></button>
+                <a routerLink="/departaments-m/register" class="btn btn-options d-flex align-items-center gap-1">
+                  <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.NEW' | translate }}</span>
+                </a>
+                <button (click)="PageSize()" class="btn btn-outline-secondary">
+                  <i class="fa fa-refresh"></i>
+                </button>
               </div>
             </div>
 
-            <!-- Tabla de departamentos: muestra nombre, estado, fecha y acciones -->
             <div class="table-responsive">
-              <table matSort (matSortChange)="sortData($event)" class="table table-hover table-bordered align-middle">
-                <thead class="table-light">
+              <table matSort (matSortChange)="sortData($event)" class="table table-striped">
+                <thead class="table-light text-center">
                   <tr>
-                    <th mat-sort-header="name">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.NAME' | translate }}</th>
-                    <th mat-sort-header="state">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.STATE' | translate }}</th>
-                    <th mat-sort-header="created_at">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.REGISTERED' | translate }}</th>
-                    <th class="text-end">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.ACTIONS' | translate }}</th>
+                    <th>{{ 'DEPARTAMENT.LIST_DEPARTAMENT.NAME' | translate }}</th>
+                    <th>{{ 'DEPARTAMENT.LIST_DEPARTAMENT.STATE' | translate }}</th>
+                    <th>{{ 'DEPARTAMENT.LIST_DEPARTAMENT.REGISTERED' | translate }}</th>
+                    <th class="text-center">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.ACTIONS' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <!-- Recorre la lista de departamentos y muestra cada fila -->
                   <tr *ngFor="let data of departamentsList">
                     <td>{{ data.name }}</td>
-                    <td>
-                      <span class="badge rounded-pill" [ngClass]="data.state === 1 ? 'bg-success' : 'bg-danger'">
-                        {{ data.state === 1 ? ('DEPARTAMENT.LIST_DEPARTAMENT.ACTIVE' | translate) : ('DEPARTAMENT.LIST_DEPARTAMENT.INACTIVE' | translate) }}
-                      </span>
-                    </td>
-                    <td>{{ data.created_at }}</td>
-                    <td class="text-end">
-                      <!-- Menú de acciones para cada departamento -->
-                      <div class="dropdown">
-                        <a href="javascript:void(0);" class="text-muted" data-bs-toggle="dropdown">
-                          <i class="fa fa-ellipsis-v"></i>
-                        </a>
+                    <td class="text-center">{{ data.state === 1 ? ('DEPARTAMENT.LIST_DEPARTAMENT.ACTIVE' | translate) : ('DEPARTAMENT.LIST_DEPARTAMENT.INACTIVE' | translate) }}</td>
+                    <td class="text-center">{{ data.created_at }}</td>
+                    <td class="text-center">
+                      <div class="dropdown d-flex justify-content-center align-items-center">
+                        <button class="btn btn-options dropdown-toggle" data-bs-toggle="dropdown">
+                          <i class="fa fa-cogs me-1"></i> {{ 'DEPARTAMENT.LIST_DEPARTAMENT.OPTIONS' | translate }}
+                        </button>
                         <div class="dropdown-menu dropdown-menu-end">
-                          <!-- Opción para editar departamento -->
                           <a class="dropdown-item" [routerLink]="['/departaments-m/list-departament/edit-departament/', data.id]">
-                            <i class="fa-solid fa-pen-to-square me-2"></i> {{ 'DEPARTAMENT.LIST_DEPARTAMENT.EDIT' | translate }}
+                            <i class="fa fa-pen me-2"></i> {{ 'DEPARTAMENT.LIST_DEPARTAMENT.EDIT' | translate }}
                           </a>
-                          <!-- Opción para eliminar departamento (abre modal) -->
-                          <a class="dropdown-item text-danger" href="javascript:void(0);" (click)="selectDepartament(data)" data-bs-toggle="modal" [attr.data-bs-target]="'#delete_departament-' + data.id">
-                            <i class="fa fa-trash-alt me-2"></i> {{ 'DEPARTAMENT.LIST_DEPARTAMENT.DELETE' | translate }}
+                          <a class="dropdown-item text-danger"
+                             href="javascript:void(0);"
+                             (click)="selectDepartament(data)"
+                             data-bs-toggle="modal"
+                             data-bs-target="#deleteModalDepartament">
+                            <i class="fa fa-trash me-2"></i> {{ 'DEPARTAMENT.LIST_DEPARTAMENT.DELETE' | translate }}
                           </a>
                         </div>
                       </div>
                     </td>
                   </tr>
-
-                  <!-- Modal de confirmación para eliminar departamento -->
-                  <ng-container *ngFor="let data of departamentsList">
-                    <div [attr.id]="'delete_departament-' + data.id" class="modal fade" tabindex="-1">
-                      <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                          <div class="modal-body text-center">
-                            <!-- Imagen de advertencia -->
-                            <img src="assets/img/sent.png" alt="" width="50" height="46" />
-                            <!-- Mensaje de confirmación con nombre del departamento -->
-                            <h5 class="mt-3" *ngIf="departament_selected">
-                              {{ 'DEPARTAMENT.LIST_DEPARTAMENT.DELETE_CONFIRMATION2' | translate }} <strong>{{ departament_selected.name }}</strong>?
-                            </h5>
-                            <div class="mt-4 d-flex justify-content-center gap-3">
-                              <!-- Botón para cancelar -->
-                              <button class="btn btn-light" data-bs-dismiss="modal">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.CANCEL' | translate }}</button>
-                              <!-- Botón para confirmar eliminación -->
-                              <button class="btn btn-danger" (click)="deleteDepartament()">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.DELETE' | translate }}</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </ng-container>
                 </tbody>
               </table>
             </div>
 
-            <!-- Paginación: muestra información y controles para navegar entre páginas -->
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-              <div class="text-muted">
+              <div class="pagination-info small">
                 {{ 'DEPARTAMENT.LIST_DEPARTAMENT.SHOWING' | translate }} {{ serialNumberArray[0] }} {{ 'DEPARTAMENT.LIST_DEPARTAMENT.TO' | translate }} {{ serialNumberArray[serialNumberArray.length - 1] }} {{ 'DEPARTAMENT.LIST_DEPARTAMENT.OF' | translate }} {{ totalData }} {{ 'DEPARTAMENT.LIST_DEPARTAMENT.RECORDS' | translate }}
               </div>
               <nav>
@@ -127,6 +96,24 @@
             </div>
 
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmación para eliminar departamento -->
+<div class="modal fade" id="deleteModalDepartament" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center p-4">
+        <img src="assets/img/sent.png" alt="" width="50" height="46" />
+        <h5 class="mt-3" *ngIf="departament_selected">
+          {{ 'DEPARTAMENT.LIST_DEPARTAMENT.DELETE_CONFIRMATION2' | translate }} <strong>{{ departament_selected.name }}</strong>?
+        </h5>
+        <div class="mt-4 d-flex justify-content-center gap-3">
+          <button class="btn btn-light" data-bs-dismiss="modal">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.CANCEL' | translate }}</button>
+          <button class="btn btn-danger" (click)="deleteDepartament()" data-bs-dismiss="modal">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.DELETE' | translate }}</button>
         </div>
       </div>
     </div>
