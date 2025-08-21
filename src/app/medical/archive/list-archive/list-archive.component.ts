@@ -574,6 +574,9 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
     this.selectedLocation = '';
     this.municipalities = [];
     this.locations = [];
+  // Importante: reiniciar últimos valores buscados para permitir repetir la misma búsqueda después de limpiar
+  this.lastArchiveSearchValue = '';
+  this.lastNameSearchValue = '';
     
     // Limpiar filtros de fecha
     this.dateFilterType = '';
@@ -583,8 +586,8 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
     this.dateFrom = '';
     this.dateTo = '';
     
-    this.currentPage = 1;
-    this.loadArchives();
+  this.currentPage = 1;
+  this.loadArchives();
   }
 
   // Método para verificar si hay filtros activos (actualizado)
