@@ -103,6 +103,43 @@
     </div>
   </section>
 
+  <!-- Gráfico por mes del año actual -->
+  <section class="monthly-chart" *ngIf="monthlyChart">
+    <div class="panel panel-chart">
+      <header class="panel-hd"><h3>Pacientes por mes (año actual)</h3></header>
+      <div class="chart-wrapper">
+        <apx-chart
+          *ngIf="monthlyChart"
+          [series]="monthlyChart.series"
+          [chart]="monthlyChart.chart"
+          [xaxis]="monthlyChart.xaxis"
+          [yaxis]="monthlyChart.yaxis"
+          [dataLabels]="monthlyChart.dataLabels"
+          [stroke]="monthlyChart.stroke"
+          [grid]="monthlyChart.grid"
+          [tooltip]="monthlyChart.tooltip"
+          [fill]="monthlyChart.fill"
+        ></apx-chart>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resumen anual -->
+  <section class="yearly-summary" *ngIf="yearlyCounts?.length">
+    <div class="panel panel-yearly">
+      <header class="panel-hd"><h3>Pacientes por año</h3></header>
+      <div class="yearly-list">
+  <div class="year-row" *ngFor="let y of yearlyCounts" [class.is-current]="y.year === currentYear">
+          <div class="col-year">{{ y.year }}</div>
+          <div class="col-bar">
+            <div class="bar-outer"><div class="bar-inner" [style.width]="yearPercent(y.count) + '%'"></div></div>
+          </div>
+          <div class="col-count">{{ y.count }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
     <div *ngIf="error" class="alert alert-danger py-2 px-3 small mb-0">{{error}}</div>
   </div>
 </div>

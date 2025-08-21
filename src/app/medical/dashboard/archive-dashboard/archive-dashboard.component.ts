@@ -19,6 +19,7 @@ export class ArchiveDashboardComponent implements OnInit {
   routes = routes;
   // Fecha actual para mostrar en dashboard
   todayDate = new Date();
+  currentYear = new Date().getFullYear();
   // Estadísticas principales (KPI)
   stats = {
     todayAdded: 0,
@@ -50,6 +51,21 @@ export class ArchiveDashboardComponent implements OnInit {
     tooltip: ApexTooltip;
     fill: ApexFill;
   } | null = null;
+
+  // Datos para gráfico mensual (año actual) y totales anuales
+  monthlyChart: {
+    series: ApexAxisChartSeries;
+    chart: ApexChart;
+    dataLabels: ApexDataLabels;
+    stroke: ApexStroke;
+    xaxis: ApexXAxis;
+    yaxis: ApexYAxis;
+    grid: ApexGrid;
+    tooltip: ApexTooltip;
+    fill: ApexFill;
+  } | null = null;
+  yearlyCounts: Array<{ year: number; count: number }> = [];
+  yearlyMax = 0;
 
   /**
    * Inyecta el servicio de archivos y traducción
@@ -83,6 +99,11 @@ export class ArchiveDashboardComponent implements OnInit {
         // Obtiene la serie diaria para el gráfico (según el nombre que envíe el backend)
         const rawDaily = res?.dailySeries || res?.dailyTrend || res?.last7Days || res?.daily || null;
         this.prepareWeeklyChart(rawDaily);
+
+  // Nuevos datos: mensual y anual
+  this.prepareMonthlyChart(res?.monthlyCounts || res?.perMonth || null);
+  this.yearlyCounts = Array.isArray(res?.yearlyCounts) ? [...res.yearlyCounts].sort((a:any,b:any)=>a.year-b.year) : [];
+  this.yearlyMax = this.yearlyCounts.length ? Math.max(...this.yearlyCounts.map(y=>Number(y.count||0))) : 0;
         this.loading = false;
       },
       error: (err) => {
@@ -137,6 +158,46 @@ export class ArchiveDashboardComponent implements OnInit {
       tooltip: { theme: 'dark', x: { show: true }, y: { formatter: (v) => v + ' pacientes' } },
       fill: { type: 'gradient', gradient: { shadeIntensity: 0.4, opacityFrom: 0.35, opacityTo: 0, stops: [0, 100] } }
     };
+  }
+
+  /**
+   * Prepara la gráfica de conteos por mes del año actual
+   * raw esperado: [{year:number, month:1-12, count:number}]
+   */
+  private prepareMonthlyChart(raw: any) {
+    const now = new Date();
+    const year = now.getFullYear();
+    const months = Array.from({ length: 12 }, (_, i) => i + 1);
+    const dataMap = new Map<number, number>();
+    if (Array.isArray(raw)) {
+      raw.forEach((r: any) => {
+        const y = Number(r.year ?? r.y);
+        const m = Number(r.month ?? r.m ?? r.month_number);
+        if (y === year && m >= 1 && m <= 12) {
+          dataMap.set(m, Number(r.count ?? r.total ?? 0));
+        }
+      });
+    }
+    const counts = months.map((m) => dataMap.get(m) ?? 0);
+    const labels = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    this.monthlyChart = {
+      series: [{ name: 'Pacientes', data: counts }],
+      chart: { type: 'bar', height: 240, toolbar: { show: false }, animations: { enabled: true } },
+      dataLabels: { enabled: false },
+      stroke: { curve: 'smooth', width: 2 },
+      xaxis: { categories: labels, labels: { style: { colors: '#8fa2c2', fontSize: '11px' } } },
+      yaxis: { labels: { style: { colors: '#8fa2c2', fontSize: '11px' } }, min: 0 },
+      grid: { borderColor: 'rgba(255,255,255,0.06)', strokeDashArray: 4 },
+      tooltip: { theme: 'dark', x: { show: true }, y: { formatter: (v) => v + ' pacientes' } },
+      fill: { type: 'gradient', gradient: { shadeIntensity: 0.3, opacityFrom: 0.3, opacityTo: 0, stops: [0, 100] } }
+    };
+  }
+
+  // Porcentaje de un conteo respecto al máximo anual (para barra visual)
+  yearPercent(count: number) {
+    const max = this.yearlyMax || 1;
+    const pct = Math.round((Number(count||0) / max) * 100);
+    return Math.max(0, Math.min(100, pct));
   }
 
   /**

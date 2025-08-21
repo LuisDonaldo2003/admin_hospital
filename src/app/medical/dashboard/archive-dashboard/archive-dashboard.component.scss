@@ -113,10 +113,31 @@ ul.breadcrumb a { color: #8fb4ff; text-decoration: none; }
 
 /* Gráfico semanal */
 .weekly-chart { margin-bottom: 1.25rem; }
+.monthly-chart { margin-bottom: 1.25rem; }
+.yearly-summary { margin-top: .75rem; }
 .panel-chart { min-height: 200px; }
 .chart-wrapper { position: relative; width: 100%; height: 240px; }
 .chart-wrapper ::ng-deep .apexcharts-tooltip { background: #1e222b !important; border: 1px solid #2c3240 !important; }
 .chart-wrapper ::ng-deep .apexcharts-tooltip-title { background: #171b22 !important; border-bottom: 1px solid #2c3240 !important; }
+
+/* Resumen anual */
+.panel-yearly { padding-top: .6rem; }
+.yearly-list { display: grid; gap: .5rem; }
+.year-row {
+	display: grid;
+	grid-template-columns: 72px 1fr 80px;
+	gap: .6rem;
+	align-items: center;
+	background: #12141b;
+	border: 1px solid #222836;
+	border-radius: 12px;
+	padding: .5rem .7rem;
+}
+.year-row.is-current { outline: 1px solid #2dd6c7; box-shadow: 0 0 0 3px rgba(45,214,199,.08) inset; }
+.col-year { font-weight: 800; color: #e8efff; letter-spacing: .3px; }
+.col-count { text-align: right; font-weight: 700; color: #9fb4d6; }
+.bar-outer { position: relative; height: 10px; background: #212730; border-radius: 6px; overflow: hidden; }
+.bar-inner { position: absolute; inset: 0; width: 0; background: linear-gradient(90deg, #6ea8ff, #2dd6c7); transition: width .6s ease; }
 
 /* Breakpoints de afinado */
 @media (max-width: 992px) {
