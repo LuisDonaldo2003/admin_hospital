@@ -5,6 +5,7 @@ import { ArchiveService } from '../service/archive.service';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { DriverTourService } from '../../../shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-backups-archive',
@@ -49,13 +50,35 @@ export class BackupsArchiveComponent implements OnInit {
   /**
    * Inyección del servicio de archivos.
    */
-  constructor(private archiveService: ArchiveService) {}
+  constructor(
+    private archiveService: ArchiveService,
+    private driverTourService: DriverTourService
+  ) {}
 
   /**
    * Inicializa la carga de respaldos al montar el componente.
    */
   ngOnInit(): void {
     this.loadBackups();
+    this.checkAndShowBackupsTour();
+  }
+
+  /**
+   * Verifica si debe mostrar el tour de bienvenida
+   */
+  checkAndShowBackupsTour(): void {
+    if (!this.driverTourService.isTourCompleted('backups-archive')) {
+      setTimeout(() => {
+        this.startBackupsArchiveTour();
+      }, 1000);
+    }
+  }
+
+  /**
+   * Inicia el tour guiado para gestión de respaldos
+   */
+  startBackupsArchiveTour(): void {
+    this.driverTourService.startBackupsArchiveTour();
   }
 
   /**

@@ -22,7 +22,7 @@
             <h3 class="text-center mb-4 fw-bold">{{ 'ARCHIVE.ADD_PATIENT.TITLE' | translate }}</h3>
 
             <!-- Formulario para agregar archivo/paciente -->
-            <form (keydown.enter)="save()">
+            <form (keydown.enter)="save()" class="form-section">
               <div class="row g-3">
                 <!-- Campo: Número de archivo -->
                 <div class="col-md-6">
@@ -81,7 +81,7 @@
                 </div>
 
                 <!-- Campo: Edad -->
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.AGE' | translate }} *</label>
                   <input 
                     type="number" 
@@ -89,46 +89,79 @@
                     [(ngModel)]="age" 
                     name="age"
                     (keypress)="onAgeKeyPress($event)"
-                    min="1"
+                    min="0"
                     max="120"
                     placeholder="{{ 'ARCHIVE.ADD_PATIENT.NUMBERS' | translate }}"
                     required 
                     [ngClass]="{ 'is-invalid': submitted && !age }" />
                 </div>
 
+                <!-- Campo: Unidad de edad -->
+                <div class="col-md-2">
+                  <label class="form-label">Unidad *</label>
+                  <select class="form-select" 
+                          [(ngModel)]="age_unit" 
+                          name="age_unit"
+                          required 
+                          [ngClass]="{ 'is-invalid': submitted && !age_unit }">
+                    <option value="años">Años</option>
+                    <option value="meses">Meses</option>
+                    <option value="días">Días</option>
+                  </select>
+                </div>
+
                 <!-- Campo: Género -->
                 <div class="col-md-6">
                   <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.GENDER' | translate }} *</label>
-                  <select class="form-select" [(ngModel)]="gender_id" name="gender_id"
-                          required [ngClass]="{ 'is-invalid': submitted && !gender_id }">
+                  <select class="form-select" 
+                          [(ngModel)]="gender_id" 
+                          name="gender_id"
+                          required 
+                          [ngClass]="{ 'is-invalid': submitted && !gender_id }">
                     <option value="">{{ 'ARCHIVE.ADD_PATIENT.SELECT_GENDER' | translate }}</option>
                     <option *ngFor="let g of genders" [value]="g.id">{{ g.name }}</option>
                   </select>
                 </div>
 
-                <!-- Campo: Dirección -->
-                <div class="col-md-12">
-                  <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.ADDRESS' | translate }}</label>
-                  <input type="text" 
-                  class="form-control" 
-                  [(ngModel)]="address" 
-                  name="address"
-                  placeholder="{{ 'ARCHIVE.ADD_PATIENT.ADDRESS_PACIENT' | translate }}"/>
-                </div>
-
                 <!-- Campo: Localidad -->
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label class="form-label">{{ 'ARCHIVE.ADD_PATIENT.LOCATION' | translate }} *</label>
                   <input 
                     type="text" 
                     class="form-control" 
-                    [(ngModel)]="location" 
-                    name="location"
+                    [(ngModel)]="location_text" 
+                    name="location_text"
                     (keypress)="onLocationKeyPress($event)"
                     placeholder="Escriba la localidad"
                     autocomplete="off"
                     required 
-                    [ngClass]="{ 'is-invalid': submitted && !location.trim() }" />
+                    [ngClass]="{ 'is-invalid': submitted && !location_text.trim() }" />
+                </div>
+
+                <!-- Campo: Municipio -->
+                <div class="col-md-4">
+                  <label class="form-label">Municipio</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="municipality_text" 
+                    name="municipality_text"
+                    (keypress)="onLocationKeyPress($event)"
+                    placeholder="Escriba el municipio"
+                    autocomplete="off" />
+                </div>
+
+                <!-- Campo: Estado -->
+                <div class="col-md-4">
+                  <label class="form-label">Estado</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="state_text" 
+                    name="state_text"
+                    (keypress)="onLocationKeyPress($event)"
+                    placeholder="Escriba el estado"
+                    autocomplete="off" />
                 </div>
 
                 <!-- Campo: Fecha de admisión -->
@@ -142,7 +175,7 @@
               <!-- Alerta de éxito -->
               <div class="mt-4" *ngIf="text_success">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong>✅ ¡Éxito!</strong> {{ text_success }}
+                  <strong>¡Éxito!</strong> {{ text_success }}
                   <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
                 </div>
               </div>
@@ -156,8 +189,8 @@
               </div>
 
               <!-- Botones de acción: guardar y ver lista -->
-              <div class="text-end mt-4 d-flex gap-2 justify-content-end">
-                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'ARCHIVE.ADD_PATIENT.SAVE' | translate }}</button>
+              <div class="text-end mt-4 d-flex gap-2 justify-content-end form-actions">
+                <button type="button" class="btn btn-primary px-4 btn-save" (click)="save()">{{ 'ARCHIVE.ADD_PATIENT.SAVE' | translate }}</button>
                 <button type="button" class="btn btn-outline-secondary px-4" (click)="goToList()">
                   <i class="fa fa-list"></i> {{ 'ARCHIVE.ADD_PATIENT.LIST' | translate }}
                 </button>
@@ -168,4 +201,12 @@
       </div>
     </div>
   </div>
+
+  <!-- Botón flotante de ayuda para iniciar el tour del formulario -->
+  <button class="tour-help-button" 
+          (click)="startArchiveFormTour()" 
+          title="Ayuda y Tour Guiado"
+          type="button">
+    <i class="fa fa-question"></i>
+  </button>
 </div>

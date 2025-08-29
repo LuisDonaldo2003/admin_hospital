@@ -91,9 +91,14 @@ export interface ArchiveFormData {
   last_name_father: string;
   last_name_mother: string;
   age: number | null;
+  age_unit: string;
   gender_id: string;
   address: string;
   admission_date: string;
-  location_id?: number;
-  location_name?: string;
+  location_text: string;
+  municipality_text: string;
+  state_text: string;
+  contact_last_name_father?: string;
+  contact_last_name_mother?: string;
+  contact_name?: string;
 }

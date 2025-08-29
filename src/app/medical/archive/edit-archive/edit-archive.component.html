@@ -72,9 +72,20 @@
                 </div>
 
                 <!-- Edad -->
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.AGE' | translate }}</label>
-                  <input type="number" [(ngModel)]="age" name="age" class="form-control" />
+                  <input type="number" [(ngModel)]="age" name="age" class="form-control" 
+                         min="0" max="120" placeholder="Edad" />
+                </div>
+
+                <!-- Unidad de edad -->
+                <div class="col-md-2">
+                  <label class="form-label">Unidad</label>
+                  <select [(ngModel)]="age_unit" name="age_unit" class="form-control">
+                    <option value="años">Años</option>
+                    <option value="meses">Meses</option>
+                    <option value="días">Días</option>
+                  </select>
                 </div>
 
                 <!-- Género -->
@@ -86,37 +97,25 @@
                   </select>
                 </div>
 
-                <!-- Dirección -->
-                <div class="col-md-12">
-                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.ADDRESS' | translate }}</label>
-                  <input type="text" [(ngModel)]="address" name="address" class="form-control" />
-                </div>
-
                 <!-- Estado -->
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.STATE' | translate }}</label>
-                  <select [(ngModel)]="state_id" name="state_id" class="form-control" (change)="onStateChange()">
-                    <option value="">{{ 'ARCHIVE.EDIT_PATIENT.SELECT_STATE' | translate }}</option>
-                    <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
-                  </select>
+                  <input type="text" [(ngModel)]="state_text" name="state_text" class="form-control" 
+                         placeholder="Escriba el estado" />
                 </div>
 
                 <!-- Municipio -->
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.MUNICIPALITY' | translate }}</label>
-                  <select [(ngModel)]="municipality_id" name="municipality_id" class="form-control" (change)="onMunicipalityChange()">
-                    <option value="">{{ 'ARCHIVE.EDIT_PATIENT.SELECT_MUNICIPALITY' | translate }}</option>
-                    <option *ngFor="let m of municipalities" [value]="m.id">{{ m.name }}</option>
-                  </select>
+                  <input type="text" [(ngModel)]="municipality_text" name="municipality_text" class="form-control"
+                         placeholder="Escriba el municipio" />
                 </div>
 
                 <!-- Localidad -->
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.LOCATION' | translate }}</label>
-                  <select [(ngModel)]="location_id" name="location_id" class="form-control">
-                    <option value="">{{ 'ARCHIVE.EDIT_PATIENT.SELECT_LOCATION' | translate }}</option>
-                    <option *ngFor="let l of locations" [value]="l.id">{{ l.name }}</option>
-                  </select>
+                  <input type="text" [(ngModel)]="location_text" name="location_text" class="form-control"
+                         placeholder="Escriba la localidad" />
                 </div>
 
                 <!-- Fecha de admisión -->
@@ -137,3 +136,11 @@
     </div>
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startEditArchiveTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

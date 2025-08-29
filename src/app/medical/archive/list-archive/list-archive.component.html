@@ -115,7 +115,6 @@
                     <th>{{ 'ARCHIVE.LIST_PATIENT.FULL_NAME' | translate }}</th>
                     <th>{{ 'ARCHIVE.LIST_PATIENT.AGE' | translate }}</th>
                     <th>{{ 'ARCHIVE.LIST_PATIENT.GENDER' | translate }}</th>
-                    <th>{{ 'ARCHIVE.LIST_PATIENT.ADDRESS' | translate }}</th>
                     <th>{{ 'ARCHIVE.LIST_PATIENT.LOCATION' | translate }}</th>
                     <th>{{ 'ARCHIVE.LIST_PATIENT.MUNICIPALITY' | translate }}</th>
                     <th>{{ 'ARCHIVE.LIST_PATIENT.STATE' | translate }}</th>
@@ -128,12 +127,11 @@
                   <tr *ngFor="let a of displayedArchives; trackBy: trackByArchiveNumber; let i = index">
                     <td><strong class="text-primary">{{ a.archive_number }}</strong></td>
                     <td>{{ a.name }} {{ a.last_name_father }} {{ a.last_name_mother }}</td>
-                    <td>{{ a.age }}</td>
+                    <td>{{ a.age }} {{ getAgeUnitLabel(a.age_unit) }}</td>
                     <td>{{ a.gender?.name || ('ARCHIVE.LIST_PATIENT.NOT_DEFINED' | translate) }}</td>
-                    <td>{{ a.address || ('ARCHIVE.LIST_PATIENT.NO_ADDRESS' | translate) }}</td>
-                    <td>{{ a.location?.name || a.location_text || ('ARCHIVE.LIST_PATIENT.NO_LOCATION' | translate) }}</td>
-                    <td>{{ a.location?.municipality?.name || 'Sin municipio' }}</td>
-                    <td>{{ a.location?.municipality?.state?.name || 'Sin estado' }}</td>
+                    <td>{{ a.location_text || ('ARCHIVE.LIST_PATIENT.NO_LOCATION' | translate) }}</td>
+                    <td>{{ a.municipality_text || 'Sin municipio' }}</td>
+                    <td>{{ a.state_text || 'Sin estado' }}</td>
                     <td>{{ a.admission_date || ('ARCHIVE.LIST_PATIENT.NO_DATE' | translate) }}</td>
                     <!-- Columna de acciones (editar/eliminar) -->
                     <td class="text-end">
@@ -242,3 +240,11 @@
     </div>
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startArchiveListTour()" 
+        title="Ayuda y Tour Guiado"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

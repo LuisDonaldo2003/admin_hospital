@@ -146,7 +146,7 @@
     </div>
 
   <!-- Listado de respaldos con tarjetas y acciones -->
-  <div class="row" *ngIf="!loading">
+  <div class="row backups-table" *ngIf="!loading">
   <div class="col-sm-12">
   <div class="card card-list border-colored shadow border-0">
           <div class="card-body">
@@ -212,7 +212,7 @@
 
                   <!-- Acciones de la tarjeta: botón para descargar respaldo -->
                   <div class="backup-card-actions">
-                    <button class="btn backup-btn-download" 
+                    <button class="btn btn-download backup-btn-download" 
                             (click)="downloadBackup(backup.filename)">
                       <i class="fa fa-download"></i>
                       {{ 'ARCHIVE.BACKUPS.DOWNLOAD' | translate }}
@@ -229,3 +229,11 @@
 
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startBackupsArchiveTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

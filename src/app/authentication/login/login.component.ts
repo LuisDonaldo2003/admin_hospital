@@ -42,8 +42,33 @@ export class LoginComponent implements OnInit {
    * Inicializa el componente de login
    */
   ngOnInit(): void {
-    // Si deseas limpiar sesiones anteriores
-    // localStorage.removeItem('authenticated');
+    // Limpiar sesiones anteriores para permitir auto-login cada vez
+    localStorage.removeItem('authenticated');
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    
+    // Auto-login para desarrollo - usuario archivo@gmail.com
+    this.performAutoLogin();
+  }
+
+  /**
+   * Realiza auto-login para agilizar el desarrollo (solo para archivo@gmail.com)
+   */
+  private performAutoLogin(): void {
+    // Configuración para auto-login de desarrollo
+    const autoLoginEmail = 'archivo@gmail.com';
+    const autoLoginPassword = '12345678';
+    
+    // Llenar formulario automáticamente
+    this.form.patchValue({
+      email: autoLoginEmail,
+      password: autoLoginPassword
+    });
+    
+    // Ejecutar login automáticamente después de un pequeño delay
+    setTimeout(() => {
+      this.loginFormSubmit();
+    }, 500);
   }
 
   /**

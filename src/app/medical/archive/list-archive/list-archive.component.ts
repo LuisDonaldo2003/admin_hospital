@@ -1,6 +1,7 @@
 // Importaciones principales de Angular y librerías necesarias
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ArchiveService } from '../service/archive.service';
+import { DriverTourService } from '../../../shared/services/driver-tour.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -13,10 +14,10 @@ interface FilterOptions {
   archiveNumberSearch: string;
   nameSearch: string;
   selectedGender: string;
-  selectedState: string;
-  selectedMunicipality: string;
-  selectedLocation: string;
-  // Nuevos filtros de fecha
+  locationTextSearch: string;  // Búsqueda por texto de localidad
+  municipalityTextSearch: string;  // Búsqueda por texto de municipio
+  stateTextSearch: string;  // Búsqueda por texto de estado
+  // Filtros de fecha
   dateFilterType: string;
   specificYear: string;
   specificMonth: string;
@@ -38,19 +39,16 @@ interface ArchiveData {
   last_name_father: string;
   last_name_mother: string;
   age: number;
+  age_unit?: string;
   gender?: CatalogItem;
   address?: string;
-  location?: {
-    id: string | number;
-    name: string;
-    municipality?: {
-      id: string | number;
-      name: string;
-      state?: CatalogItem;
-    };
-  };
   location_text?: string; // Campo para texto plano de localidad
+  municipality_text?: string; // Campo para texto plano de municipio
+  state_text?: string; // Campo para texto plano de estado
   admission_date?: string;
+  contact_name?: string;
+  contact_last_name_father?: string;
+  contact_last_name_mother?: string;
 }
 
 // Decorador principal del componente de listado de archivos
@@ -73,9 +71,9 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
   public archiveNumberSearch = '';
   public nameSearch = '';
   public selectedGender = '';
-  public selectedState = '';
-  public selectedMunicipality = '';
-  public selectedLocation = '';
+  public locationTextSearch = '';
+  public municipalityTextSearch = '';
+  public stateTextSearch = '';
   
   // Filtros de fecha avanzados
   // Filtros avanzados de fecha
@@ -111,11 +109,7 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
   // Días disponibles para filtro de fecha
   public days: number[] = [];
 
-  // Catálogos
-  // Catálogos de estados, municipios, localidades y géneros
-  public states: CatalogItem[] = [];
-  public municipalities: CatalogItem[] = [];
-  public locations: CatalogItem[] = [];
+  // Catálogos (solo géneros necesarios)
   public genders: CatalogItem[] = [];
 
   // Paginación
@@ -151,7 +145,8 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
    */
   constructor(
     private archiveService: ArchiveService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private driverTourService: DriverTourService
   ) {
   this.selectedLang = localStorage.getItem('language') || 'en';
   this.translate.use(this.selectedLang);
@@ -166,6 +161,9 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
     this.loadCatalogs();
     this.initializeDateOptions();
     this.loadArchives();
+    
+    // Verificar si mostrar el tour automáticamente
+    this.checkAndShowWelcomeTour();
   }
 
   /**
@@ -207,28 +205,17 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
    */
   private loadCatalogs(): void {
     this.isLoadingCatalogs = true;
-    // Géneros
+    // Solo géneros
     if (!this.catalogCache.has('genders')) {
       this.archiveService.listGenders()
         .pipe(
           tap((res: any) => this.catalogCache.set('genders', res)),
-          takeUntil(this.destroy$)
+          takeUntil(this.destroy$),
+          finalize(() => this.isLoadingCatalogs = false)
         )
         .subscribe((res: any) => this.genders = res);
     } else {
       this.genders = this.catalogCache.get('genders') || [];
-    }
-    // Estados
-    if (!this.catalogCache.has('states')) {
-      this.archiveService.listStates()
-        .pipe(
-          tap((res: any) => this.catalogCache.set('states', res)),
-          takeUntil(this.destroy$),
-          finalize(() => this.isLoadingCatalogs = false)
-        )
-        .subscribe((res: any) => this.states = res);
-    } else {
-      this.states = this.catalogCache.get('states') || [];
       this.isLoadingCatalogs = false;
     }
   }
@@ -253,9 +240,9 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
       archiveNumberSearch: this.archiveNumberSearch.trim(),
       nameSearch: this.nameSearch.trim(),
       selectedGender: this.selectedGender,
-      selectedState: this.selectedState,
-      selectedMunicipality: this.selectedMunicipality,
-      selectedLocation: this.selectedLocation,
+      locationTextSearch: this.locationTextSearch.trim(),
+      municipalityTextSearch: this.municipalityTextSearch.trim(),
+      stateTextSearch: this.stateTextSearch.trim(),
       dateFilterType: this.dateFilterType,
       specificYear: this.specificYear,
       specificMonth: this.specificMonth,
@@ -355,66 +342,6 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
     if (this.totalPages > 1) range.push(this.totalPages);
 
     return range;
-  }
-
-  // Método optimizado para cambio de estado
-  /**
-   * Maneja el cambio de estado, carga municipios y limpia filtros dependientes
-   */
-  public onStateChange(): void {
-    // Limpiar filtros dependientes
-    this.selectedMunicipality = '';
-    this.selectedLocation = '';
-    this.municipalities = [];
-    this.locations = [];
-
-    if (this.selectedState) {
-      const cacheKey = `municipalities_${this.selectedState}`;
-      
-      if (this.catalogCache.has(cacheKey)) {
-        this.municipalities = this.catalogCache.get(cacheKey) || [];
-      } else {
-        this.archiveService.listMunicipalities(this.selectedState)
-          .pipe(
-            tap((res: any) => this.catalogCache.set(cacheKey, res)),
-            takeUntil(this.destroy$)
-          )
-          .subscribe((res: any) => {
-            this.municipalities = res || [];
-          });
-      }
-    }
-
-    this.onFilterChange();
-  }
-
-  // Método optimizado para cambio de municipio
-  /**
-   * Maneja el cambio de municipio, carga localidades y limpia filtros dependientes
-   */
-  public onMunicipalityChange(): void {
-    // Limpiar filtros dependientes
-    this.selectedLocation = '';
-    this.locations = [];
-
-    if (this.selectedMunicipality) {
-      const cacheKey = `locations_${this.selectedMunicipality}`;
-      
-      if (this.catalogCache.has(cacheKey)) {
-        this.locations = this.catalogCache.get(cacheKey) || [];
-      } else {
-        this.archiveService.listLocations(this.selectedMunicipality)
-          .pipe(
-            tap((res: any) => this.catalogCache.set(cacheKey, res)),
-            takeUntil(this.destroy$)
-          )
-          .subscribe((res: any) => {
-            this.locations = res || [];
-          });
-      }
-    }
-
-    this.onFilterChange();
   }
 
   /**
@@ -569,11 +496,9 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
     this.archiveNumberSearch = '';
     this.nameSearch = '';
     this.selectedGender = '';
-    this.selectedState = '';
-    this.selectedMunicipality = '';
-    this.selectedLocation = '';
-    this.municipalities = [];
-    this.locations = [];
+    this.locationTextSearch = '';
+    this.municipalityTextSearch = '';
+    this.stateTextSearch = '';
   // Importante: reiniciar últimos valores buscados para permitir repetir la misma búsqueda después de limpiar
   this.lastArchiveSearchValue = '';
   this.lastNameSearchValue = '';
@@ -599,9 +524,9 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
       this.archiveNumberSearch.trim() ||
       this.nameSearch.trim() ||
       this.selectedGender ||
-      this.selectedState ||
-      this.selectedMunicipality ||
-      this.selectedLocation ||
+      this.locationTextSearch.trim() ||
+      this.municipalityTextSearch.trim() ||
+      this.stateTextSearch.trim() ||
       this.dateFilterType ||
       this.specificYear ||
       this.specificMonth ||
@@ -612,6 +537,7 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
   }
 
   // TrackBy function para optimizar el renderizado de la tabla
+  /**
   /**
    * TrackBy para optimizar el renderizado de la tabla
    */
@@ -651,5 +577,66 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
    */
   public isDropdownOpen(index: number): boolean {
     return this.openDropdownIndex === index;
+  }
+
+  // ================================
+  // MÉTODOS DE TOUR GUIADO
+  // ================================
+
+  /**
+   * Verifica si debe mostrar el tour de bienvenida automáticamente
+   */
+  private checkAndShowWelcomeTour(): void {
+    // Solo mostrar el tour automáticamente si es la primera vez
+    if (!this.driverTourService.isTourCompleted('archive-list-welcome')) {
+      setTimeout(() => {
+        this.startArchiveListTour();
+        // Marcar como completado el tour de bienvenida automático
+        const completedTours = JSON.parse(localStorage.getItem('completedTours') || '[]');
+        completedTours.push('archive-list-welcome');
+        localStorage.setItem('completedTours', JSON.stringify(completedTours));
+      }, 1000);
+    }
+  }
+
+  /**
+   * Inicia el tour completo de la lista de archivos
+   */
+  public startArchiveListTour(): void {
+    this.driverTourService.startArchiveListTour();
+  }
+
+  /**
+   * Destaca una funcionalidad específica con un tour rápido
+   */
+  public highlightFeature(element: string, titleKey: string, descKey: string): void {
+    const title = this.translate.instant(titleKey);
+    const description = this.translate.instant(descKey);
+    this.driverTourService.highlightElement(element, title, description);
+  }
+
+  /**
+   * Reinicia todos los tours (útil para testing)
+   */
+  public resetTours(): void {
+    this.driverTourService.resetAllTours();
+  }
+
+  /**
+   * Obtiene la etiqueta de la unidad de edad
+   * @param unit - La unidad de edad (años, días, meses)
+   * @returns La etiqueta correspondiente
+   */
+  getAgeUnitLabel(unit?: string): string {
+    switch (unit) {
+      case 'años':
+        return 'años';
+      case 'días':
+        return 'días';
+      case 'meses':
+        return 'meses';
+      default:
+        return 'años';
+    }
   }
 }

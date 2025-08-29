@@ -49,14 +49,15 @@ export class ArchiveService {
     if (filters.selectedGender) {
       queryParams.append('gender_id', filters.selectedGender);
     }
-    if (filters.selectedState) {
-      queryParams.append('state_id', filters.selectedState);
+    // Filtros de ubicación usando campos de texto
+    if (filters.stateTextFilter?.trim()) {
+      queryParams.append('state_text', filters.stateTextFilter.trim());
     }
-    if (filters.selectedMunicipality) {
-      queryParams.append('municipality_id', filters.selectedMunicipality);
+    if (filters.municipalityTextFilter?.trim()) {
+      queryParams.append('municipality_text', filters.municipalityTextFilter.trim());
     }
-    if (filters.selectedLocation) {
-      queryParams.append('location_id', filters.selectedLocation);
+    if (filters.locationTextFilter?.trim()) {
+      queryParams.append('location_text', filters.locationTextFilter.trim());
     }
     // Filtros de fecha avanzados
     if (filters.dateFilterType) {
@@ -191,32 +192,22 @@ export class ArchiveService {
   /**
    * Obtiene el catálogo de municipios filtrado por estado
    */
-  listMunicipalities(stateId: string | number) {
-    const URL = `${URL_SERVICIOS}/municipalities?state_id=${stateId}`;
+  listMunicipalities(stateId?: string | number) {
+    let URL = `${URL_SERVICIOS}/municipalities`;
+    if (stateId) {
+      URL += `?state_id=${stateId}`;
+    }
     return this.http.get(URL, { headers: this.getHeaders() });
   }
 
   /**
    * Obtiene el catálogo de localidades filtrado por municipio
    */
-  listLocations(municipalityId: string | number) {
-    const URL = `${URL_SERVICIOS}/locations?municipality_id=${municipalityId}`;
-    return this.http.get(URL, { headers: this.getHeaders() });
-  }
-
-  /**
-   * Busca localidades por nombre
-   */
-  searchLocationsByName(searchTerm: string) {
-    const URL = `${URL_SERVICIOS}/locations/search?search=${encodeURIComponent(searchTerm)}`;
-    return this.http.get(URL, { headers: this.getHeaders() });
-  }
-
-  /**
-   * Detecta automáticamente la localidad por nombre
-   */
-  autoDetectLocation(searchTerm: string) {
-    const URL = `${URL_SERVICIOS}/locations/auto-detect?search=${encodeURIComponent(searchTerm)}`;
+  listLocations(municipalityId?: string | number) {
+    let URL = `${URL_SERVICIOS}/locations`;
+    if (municipalityId) {
+      URL += `?municipality_id=${municipalityId}`;
+    }
     return this.http.get(URL, { headers: this.getHeaders() });
   }
 

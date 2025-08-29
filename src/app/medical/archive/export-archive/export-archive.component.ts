@@ -9,6 +9,7 @@ import * as FileSaver from 'file-saver';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { ArchiveService } from '../service/archive.service';
+import { DriverTourService } from '../../../shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-export-archive',
@@ -37,22 +38,14 @@ export class ExportArchiveComponent implements OnInit {
   totalFilteredRecords: number = 0;
 
   /** Listas para selects de filtros. */
-  states: any[] = [];
-  municipalities: any[] = [];
-  locations: any[] = [];
   genders: any[] = [];
 
   /** Filtros seleccionados por el usuario. */
-  selectedState: string = '';
-  selectedMunicipality: string = '';
-  selectedLocation: string = '';
   selectedGender: string = '';
   selectedYear: string = '';
   selectedMonth: string = '';
 
   /** Índices optimizados para búsqueda rápida por filtro. */
-  private stateIndex: Map<string, any[]> = new Map();
-  private municipalityIndex: Map<string, any[]> = new Map();
   private genderIndex: Map<string, any[]> = new Map();
   private yearIndex: Map<string, any[]> = new Map();
   private monthIndex: Map<string, any[]> = new Map();
@@ -83,7 +76,8 @@ export class ExportArchiveComponent implements OnInit {
    */
   constructor(
     private archiveService: ArchiveService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private driverTourService: DriverTourService
   ) {
     const lang = localStorage.getItem('language') || 'en';
     this.translate.use(lang);
@@ -95,6 +89,25 @@ export class ExportArchiveComponent implements OnInit {
     this.loadBackups();
     this.loadGenders();
     this.initializeYears();
+    this.checkAndShowExportTour();
+  }
+
+  /**
+   * Verifica si debe mostrar el tour de bienvenida
+   */
+  checkAndShowExportTour(): void {
+    if (!this.driverTourService.isTourCompleted('export-archive')) {
+      setTimeout(() => {
+        this.startExportArchiveTour();
+      }, 1000);
+    }
+  }
+
+  /**
+   * Inicia el tour guiado para exportación de archivos
+   */
+  startExportArchiveTour(): void {
+    this.driverTourService.startExportArchiveTour();
   }
 
   /**
@@ -182,38 +195,16 @@ export class ExportArchiveComponent implements OnInit {
    * Esto permite filtrar en O(1) en lugar de O(n)
    */
   /**
-   * Construye los índices para filtrado rápido por estado, municipio, género, año y mes.
+   * Construye los índices para filtrado rápido por género, año y mes únicamente.
    */
   private buildSearchIndexes(): void {
     // LIMPIAR ÍNDICES EXISTENTES
-    this.stateIndex.clear();
-    this.municipalityIndex.clear();
     this.genderIndex.clear();
     this.yearIndex.clear();
     this.monthIndex.clear();
 
     // CONSTRUIR ÍNDICES POR CADA CRITERIO
     this.allArchives.forEach((archive: any) => {
-      // ÍNDICE POR ESTADO - CONVERTIR A STRING PARA COMPATIBILIDAD
-      const stateId = archive.location?.municipality?.state?.id;
-      if (stateId) {
-        const stateKey = String(stateId);
-        if (!this.stateIndex.has(stateKey)) {
-          this.stateIndex.set(stateKey, []);
-        }
-        this.stateIndex.get(stateKey)!.push(archive);
-      }
-
-      // ÍNDICE POR MUNICIPIO - CONVERTIR A STRING PARA COMPATIBILIDAD
-      const municipalityId = archive.location?.municipality?.id;
-      if (municipalityId) {
-        const municipalityKey = String(municipalityId);
-        if (!this.municipalityIndex.has(municipalityKey)) {
-          this.municipalityIndex.set(municipalityKey, []);
-        }
-        this.municipalityIndex.get(municipalityKey)!.push(archive);
-      }
-
       // ÍNDICE POR GÉNERO - CONVERTIR A STRING PARA COMPATIBILIDAD
       const genderId = archive.gender?.id;
       if (genderId) {
@@ -245,25 +236,14 @@ export class ExportArchiveComponent implements OnInit {
         }
       }
     });
-
-  // Se elimina el log de índices construidos
   }
 
   /**
-   * EXTRAE FILTROS ÚNICOS DE MANERA OPTIMIZADA
-   */
-  /**
-   * Extrae los filtros únicos para los selects de estado.
+   * Extrae los filtros únicos para los selects (solo géneros ahora).
    */
   private extractUniqueFilters(): void {
-    // Estados únicos - usando Set para deduplicación rápida
-    const statesSet = new Set();
-    this.allArchives.forEach((a: any) => {
-      if (a.location?.municipality?.state?.id) {
-        statesSet.add(JSON.stringify(a.location.municipality.state));
-      }
-    });
-    this.states = Array.from(statesSet).map((s: any) => JSON.parse(s));
+    // Ya no necesitamos extraer estados únicos
+    // Los géneros se cargan por separado
   }
 
   /** Carga la lista de respaldos desde el backend. */
@@ -276,63 +256,11 @@ export class ExportArchiveComponent implements OnInit {
     });
   }
 
-  /** Maneja el cambio de estado y actualiza municipios y filtros. */
-  onStateChange(): void {
-    this.selectedMunicipality = '';
-    this.selectedLocation = '';
-    
-    // USAR ÍNDICE OPTIMIZADO PARA MUNICIPIOS CON STRING KEY
-    if (this.selectedState) {
-      const stateKey = String(this.selectedState);
-      const stateArchives = this.stateIndex.get(stateKey) || [];
-      const municipalitiesSet = new Set();
-      stateArchives.forEach((a: any) => {
-        if (a.location?.municipality?.id) {
-          municipalitiesSet.add(JSON.stringify(a.location.municipality));
-        }
-      });
-      this.municipalities = Array.from(municipalitiesSet).map((m: any) => JSON.parse(m));
-  // Se elimina el log de municipios encontrados
-    } else {
-      this.municipalities = [];
-    }
-    
-    this.applyFiltersOptimized();
-  }
-
-  /** Maneja el cambio de municipio y actualiza localidades y filtros. */
-  onMunicipalityChange(): void {
-    this.selectedLocation = '';
-    
-    // USAR ÍNDICE OPTIMIZADO PARA LOCALIDADES CON STRING KEY
-    if (this.selectedMunicipality) {
-      const municipalityKey = String(this.selectedMunicipality);
-      const municipalityArchives = this.municipalityIndex.get(municipalityKey) || [];
-      const locationsSet = new Set();
-      municipalityArchives.forEach((a: any) => {
-        if (a.location?.id) {
-          locationsSet.add(JSON.stringify(a.location));
-        }
-      });
-      this.locations = Array.from(locationsSet).map((l: any) => JSON.parse(l));
-  // Se elimina el log de localidades encontradas
-    } else {
-      this.locations = [];
-    }
-    
-    this.applyFiltersOptimized();
-  }
-
   /** Limpia todos los filtros y resetea la paginación. */
   clearAllFilters(): void {
-    this.selectedState = '';
-    this.selectedMunicipality = '';
-    this.selectedLocation = '';
     this.selectedGender = '';
     this.selectedYear = '';
     this.selectedMonth = '';
-    this.municipalities = [];
-    this.locations = [];
     this.currentPage = 1;
     
     this.applyFiltersOptimized();
@@ -343,66 +271,24 @@ export class ExportArchiveComponent implements OnInit {
    */
   /**
    * Aplica los filtros seleccionados usando índices y cache para optimizar el filtrado.
-   * Elimina todos los logs.
+   * Solo filtra por género, año y mes.
    */
   applyFiltersOptimized(): void {
     const filterHash = this.generateFilterHash();
     
-    // SI EL HASH ES EL MISMO, USAR CACHE (INCLUSO SI EL RESULTADO ES 0)
+    // SI EL HASH ES EL MISMO, USAR CACHE
     if (filterHash === this.lastFilterHash && this.lastFilterHash !== '') {
       this.updatePagination();
       return;
     }
-
-  // Se elimina el log de tiempo de filtrado
     
     let candidateSet: Set<any> = new Set();
     let firstFilter = true;
-
-    // FILTRO POR ESTADO - USAR ÍNDICE CON STRING
-    if (this.selectedState) {
-      const stateKey = String(this.selectedState);
-      const stateResults = this.stateIndex.get(stateKey) || [];
-  // Se elimina el log de filtro estado
-      if (firstFilter) {
-        candidateSet = new Set(stateResults);
-        firstFilter = false;
-      } else {
-        candidateSet = new Set([...candidateSet].filter(x => stateResults.includes(x)));
-      }
-    }
-
-    // FILTRO POR MUNICIPIO - USAR ÍNDICE CON STRING
-    if (this.selectedMunicipality) {
-      const municipalityKey = String(this.selectedMunicipality);
-      const municipalityResults = this.municipalityIndex.get(municipalityKey) || [];
-  // Se elimina el log de filtro municipio
-      if (firstFilter) {
-        candidateSet = new Set(municipalityResults);
-        firstFilter = false;
-      } else {
-        candidateSet = new Set([...candidateSet].filter(x => municipalityResults.includes(x)));
-      }
-    }
-
-    // FILTRO POR LOCALIDAD - FILTRO DIRECTO CON STRING
-    if (this.selectedLocation) {
-      const locationKey = String(this.selectedLocation);
-      const locationResults = this.allArchives.filter((a: any) => String(a.location?.id) === locationKey);
-  // Se elimina el log de filtro localidad
-      if (firstFilter) {
-        candidateSet = new Set(locationResults);
-        firstFilter = false;
-      } else {
-        candidateSet = new Set([...candidateSet].filter(x => locationResults.includes(x)));
-      }
-    }
 
     // FILTRO POR GÉNERO - USAR ÍNDICE CON STRING
     if (this.selectedGender) {
       const genderKey = String(this.selectedGender);
       const genderResults = this.genderIndex.get(genderKey) || [];
-  // Se elimina el log de filtro género
       if (firstFilter) {
         candidateSet = new Set(genderResults);
         firstFilter = false;
@@ -415,7 +301,6 @@ export class ExportArchiveComponent implements OnInit {
     if (this.selectedYear) {
       const yearKey = String(this.selectedYear);
       const yearResults = this.yearIndex.get(yearKey) || [];
-  // Se elimina el log de filtro año
       if (firstFilter) {
         candidateSet = new Set(yearResults);
         firstFilter = false;
@@ -428,7 +313,6 @@ export class ExportArchiveComponent implements OnInit {
     if (this.selectedMonth) {
       const monthKey = String(this.selectedMonth);
       const monthResults = this.monthIndex.get(monthKey) || [];
-  // Se elimina el log de filtro mes
       if (firstFilter) {
         candidateSet = new Set(monthResults);
         firstFilter = false;
@@ -447,11 +331,9 @@ export class ExportArchiveComponent implements OnInit {
     this.lastFilterHash = filterHash;
     this.totalFilteredRecords = this.filteredCache.length;
     
-  // Se elimina el log de tiempo y resultado de filtrado
-    
     // RESETEAR PAGINACIÓN Y ACTUALIZAR VISTA
-  this.currentPage = 1;
-  this.updatePagination();
+    this.currentPage = 1;
+    this.updatePagination();
   }
 
   /**
@@ -459,7 +341,7 @@ export class ExportArchiveComponent implements OnInit {
    */
   /** Genera un hash único para los filtros actuales. */
   private generateFilterHash(): string {
-    return `${this.selectedState}-${this.selectedMunicipality}-${this.selectedLocation}-${this.selectedGender}-${this.selectedYear}-${this.selectedMonth}`;
+    return `${this.selectedGender}-${this.selectedYear}-${this.selectedMonth}`;
   }
 
   /**
@@ -547,12 +429,11 @@ export class ExportArchiveComponent implements OnInit {
     const exportData = filteredData.map((a: any) => ({
       'No. Archivo': a.archive_number,
       'Nombre': `${a.name} ${a.last_name_father ?? ''} ${a.last_name_mother ?? ''}`,
-      'Edad': a.age,
+      'Edad': `${a.age} ${this.getAgeUnitLabel(a.age_unit)}`,
       'Género': a.gender?.name ?? 'N/A',
-      'Dirección': a.address ?? 'N/A',
-      'Localidad': a.location?.name ?? a.location_text ?? 'N/A',
-      'Municipio': a.location?.municipality?.name ?? 'N/A',
-      'Estado': a.location?.municipality?.state?.name ?? 'N/A',
+      'Localidad': a.location_text ?? 'N/A',
+      'Municipio': a.municipality_text ?? 'N/A',
+      'Estado': a.state_text ?? 'N/A',
       'Fecha de ingreso': a.admission_date ?? 'N/A'
     }));
 
@@ -617,10 +498,6 @@ export class ExportArchiveComponent implements OnInit {
         const month = this.months.find(m => m.value === this.selectedMonth);
         filters.push(`Mes: ${month?.name || this.selectedMonth}`);
       }
-      if (this.selectedState) {
-        const state = this.states.find(s => s.id == this.selectedState);
-        filters.push(`Estado: ${state?.name || this.selectedState}`);
-      }
       
       doc.text(filterInfo + filters.join(', '), 14, 30);
     }
@@ -628,18 +505,17 @@ export class ExportArchiveComponent implements OnInit {
     const exportData = filteredData.map((a: any) => [
       a.archive_number,
       `${a.name ?? ''} ${a.last_name_father ?? ''} ${a.last_name_mother ?? ''}`,
-      a.age ?? 'N/A',
+      `${a.age ?? 'N/A'} ${this.getAgeUnitLabel(a.age_unit)}`,
       a.gender?.name ?? 'N/A',
-      a.address ?? 'N/A',
-      a.location?.name ?? a.location_text ?? 'N/A',
-      a.location?.municipality?.name ?? 'N/A',
-      a.location?.municipality?.state?.name ?? 'N/A',
+      a.location_text ?? 'N/A',
+      a.municipality_text ?? 'N/A',
+      a.state_text ?? 'N/A',
       a.admission_date ?? 'N/A'
     ]);
 
     autoTable(doc, {
       startY: this.hasActiveFilters() ? 35 : 25,
-      head: [['No. Archivo', 'Nombre', 'Edad', 'Género', 'Dirección', 'Localidad', 'Municipio', 'Estado', 'Fecha de ingreso']],
+      head: [['No. Archivo', 'Nombre', 'Edad', 'Género', 'Localidad', 'Municipio', 'Estado', 'Fecha de ingreso']],
       body: exportData,
       styles: { fontSize: 8 },
       headStyles: { fillColor: [59, 130, 246] }
@@ -666,15 +542,10 @@ export class ExportArchiveComponent implements OnInit {
 
   /** Retorna true si hay algún filtro activo. */
   hasActiveFilters(): boolean {
-    return !!(this.selectedState || 
-              this.selectedMunicipality || 
-              this.selectedLocation || 
-              this.selectedGender || 
-              this.selectedYear || 
+    return !!(this.selectedGender ||
+              this.selectedYear ||
               this.selectedMonth);
-  }
-
-  /** Descarga un respaldo por nombre de archivo. */
+  }  /** Descarga un respaldo por nombre de archivo. */
   downloadBackup(filename: string): void {
     this.archiveService.downloadBackup(filename).subscribe(blob => {
       FileSaver.saveAs(blob, filename);
@@ -690,28 +561,6 @@ export class ExportArchiveComponent implements OnInit {
     // Construir el nombre base según los filtros aplicados
     let baseName = 'Pacientes';
     const filterParts: string[] = [];
-
-    // Agregar filtros geográficos si están aplicados
-    if (this.selectedState) {
-      const state = this.states.find(s => s.id == this.selectedState);
-      if (state) {
-        filterParts.push(state.name.replace(/\s+/g, '_'));
-      }
-    }
-
-    if (this.selectedMunicipality) {
-      const municipality = this.municipalities.find(m => m.id == this.selectedMunicipality);
-      if (municipality) {
-        filterParts.push(municipality.name.replace(/\s+/g, '_'));
-      }
-    }
-
-    if (this.selectedLocation) {
-      const location = this.locations.find(l => l.id == this.selectedLocation);
-      if (location) {
-        filterParts.push(location.name.replace(/\s+/g, '_'));
-      }
-    }
 
     // Agregar filtro de género
     if (this.selectedGender) {
@@ -773,22 +622,6 @@ export class ExportArchiveComponent implements OnInit {
     }
 
     const filters: string[] = [];
-
-    // Filtros geográficos
-    if (this.selectedState) {
-      const state = this.states.find(s => s.id == this.selectedState);
-      filters.push(`Estado: ${state?.name || 'Desconocido'}`);
-    }
-
-    if (this.selectedMunicipality) {
-      const municipality = this.municipalities.find(m => m.id == this.selectedMunicipality);
-      filters.push(`Municipio: ${municipality?.name || 'Desconocido'}`);
-    }
-
-    if (this.selectedLocation) {
-      const location = this.locations.find(l => l.id == this.selectedLocation);
-      filters.push(`Localidad: ${location?.name || 'Desconocida'}`);
-    }
 
     // Filtro de género
     if (this.selectedGender) {
@@ -853,23 +686,26 @@ export class ExportArchiveComponent implements OnInit {
   }
 
   /**
+   * Obtiene la etiqueta de la unidad de edad
+   * @param unit - La unidad de edad (años, días, meses)
+   * @returns La etiqueta correspondiente
+   */
+  getAgeUnitLabel(unit?: string): string {
+    switch (unit) {
+      case 'años':
+        return 'años';
+      case 'días':
+        return 'días';
+      case 'meses':
+        return 'meses';
+      default:
+        return 'años';
+    }
+  }
+
+  /**
    * MÉTODOS TRACKBY PARA OPTIMIZAR RENDERIZADO DE LISTAS
    */
-  /** TrackBy para optimizar renderizado de lista de estados. */
-  trackByStateId(index: number, item: any): any {
-    return item.id;
-  }
-
-  /** TrackBy para optimizar renderizado de lista de municipios. */
-  trackByMunicipalityId(index: number, item: any): any {
-    return item.id;
-  }
-
-  /** TrackBy para optimizar renderizado de lista de localidades. */
-  trackByLocationId(index: number, item: any): any {
-    return item.id;
-  }
-
   /** TrackBy para optimizar renderizado de lista de géneros. */
   trackByGenderId(index: number, item: any): any {
     return item.id;

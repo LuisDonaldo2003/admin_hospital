@@ -23,40 +23,6 @@
   <!-- Filtros principales para exportar expedientes -->
   <div class="filters-container mb-4">
   <div class="row g-3">
-  <!-- Primera fila: Filtros geográficos -->
-  <!-- Select de estado -->
-  <div class="col-lg-3 col-md-6">
-          <select class="form-select filter-select" 
-                  [(ngModel)]="selectedState" 
-                  (change)="onStateChange()"
-                  [disabled]="loading">
-            <option value="">{{ 'ARCHIVE.EXPORT_ARCHIVE.ALL_STATES' | translate }}</option>
-            <option *ngFor="let s of states; trackBy: trackByStateId" [value]="s.id">{{ s.name }}</option>
-          </select>
-        </div>
-
-  <!-- Select de municipio -->
-  <div class="col-lg-3 col-md-6">
-          <select class="form-select filter-select" 
-                  [(ngModel)]="selectedMunicipality" 
-                  (change)="onMunicipalityChange()"
-                  [disabled]="loading || !selectedState">
-            <option value="">{{ 'ARCHIVE.EXPORT_ARCHIVE.ALL_MUNICIPALITIES' | translate }}</option>
-            <option *ngFor="let m of municipalities; trackBy: trackByMunicipalityId" [value]="m.id">{{ m.name }}</option>
-          </select>
-        </div>
-
-  <!-- Select de localidad -->
-  <div class="col-lg-3 col-md-6">
-          <select class="form-select filter-select" 
-                  [(ngModel)]="selectedLocation"
-                  (change)="onFilterChange('location')"
-                  [disabled]="loading || !selectedMunicipality">
-            <option value="">{{ 'ARCHIVE.EXPORT_ARCHIVE.ALL_LOCATIONS' | translate }}</option>
-            <option *ngFor="let l of locations; trackBy: trackByLocationId" [value]="l.id">{{ l.name }}</option>
-          </select>
-        </div>
-
   <!-- Select de género -->
   <div class="col-lg-3 col-md-6">
           <select class="form-select filter-select" 
@@ -68,7 +34,6 @@
           </select>
         </div>
 
-  <!-- Segunda fila: Filtros de fecha -->
   <!-- Select de año -->
   <div class="col-lg-3 col-md-6">
           <select class="form-select filter-select" 
@@ -105,25 +70,29 @@
   <div class="col-lg-3 col-md-6"></div>
 
   <!-- Tercera fila: Botones de exportación -->
-  <!-- Botón para exportar a Excel -->
-  <div class="col-lg-6 col-md-6">
-          <button class="btn export-btn-excel w-100" 
-                  (click)="exportToExcel()"
-                  [disabled]="loading">
-            <i class="fa fa-file-excel me-2"></i> 
-            {{ 'ARCHIVE.EXPORT_ARCHIVE.EXPORT_EXCEL' | translate }}
-          </button>
-        </div>
+  <div class="export-buttons col-12 mb-3">
+    <div class="row">
+      <!-- Botón para exportar a Excel -->
+      <div class="col-lg-6 col-md-6">
+        <button class="btn btn-success export-btn-excel w-100" 
+                (click)="exportToExcel()"
+                [disabled]="loading">
+          <i class="fa fa-file-excel me-2"></i> 
+          {{ 'ARCHIVE.EXPORT_ARCHIVE.EXPORT_EXCEL' | translate }}
+        </button>
+      </div>
 
-  <!-- Botón para exportar a PDF -->
-  <div class="col-lg-6 col-md-6">
-          <button class="btn export-btn-pdf w-100" 
-                  (click)="exportToPDF()"
-                  [disabled]="loading">
-            <i class="fa fa-file-pdf me-2"></i> 
-            {{ 'ARCHIVE.EXPORT_ARCHIVE.EXPORT_PDF' | translate }}
-          </button>
-        </div>
+      <!-- Botón para exportar a PDF -->
+      <div class="col-lg-6 col-md-6">
+        <button class="btn btn-danger export-btn-pdf w-100" 
+                (click)="exportToPDF()"
+                [disabled]="loading">
+          <i class="fa fa-file-pdf me-2"></i> 
+          {{ 'ARCHIVE.EXPORT_ARCHIVE.EXPORT_PDF' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
       </div>
     </div>
 
@@ -136,7 +105,7 @@
     </div>
 
   <!-- Tabla previa de expedientes filtrados -->
-  <div class="row" *ngIf="!loading">
+  <div class="row preview-table" *ngIf="!loading">
   <div class="col-sm-12">
   <div class="card card-list shadow border-0">
           <div class="card-body">
@@ -195,7 +164,6 @@
                     <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.NAME' | translate }}</th>
                     <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.AGE' | translate }}</th>
                     <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.GENDER' | translate }}</th>
-                    <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.ADDRESS' | translate }}</th>
                     <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.LOCATION' | translate }}</th>
                     <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.MUNICIPALITY' | translate }}</th>
                     <th>{{ 'ARCHIVE.EXPORT_ARCHIVE.STATE' | translate }}</th>
@@ -206,12 +174,11 @@
                   <tr *ngFor="let a of getDisplayedArchives(); trackBy: trackByArchiveId">
                     <td><strong class="text-primary">{{ a.archive_number }}</strong></td>
                     <td>{{ a.name }} {{ a.last_name_father }} {{ a.last_name_mother }}</td>
-                    <td>{{ a.age }}</td>
+                    <td>{{ a.age }} {{ getAgeUnitLabel(a.age_unit) }}</td>
                     <td>{{ a.gender?.name || 'N/A' }}</td>
-                    <td>{{ a.address || 'N/A' }}</td>
-                    <td>{{ a.location?.name || a.location_text || 'N/A' }}</td>
-                    <td>{{ a.location?.municipality?.name || 'N/A' }}</td>
-                    <td>{{ a.location?.municipality?.state?.name || 'N/A' }}</td>
+                    <td>{{ a.location_text || 'N/A' }}</td>
+                    <td>{{ a.municipality_text || 'N/A' }}</td>
+                    <td>{{ a.state_text || 'N/A' }}</td>
                     <td>{{ a.admission_date || 'N/A' }}</td>
                   </tr>
                 </tbody>
@@ -289,3 +256,11 @@
 
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startExportArchiveTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

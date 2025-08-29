@@ -1,16 +1,17 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ArchiveService } from '../service/archive.service';
+import { DriverTourService } from '../../../shared/services/driver-tour.service';
 import { ArchiveFormData } from '../models/location.interface';
 
 @Component({
   selector: 'app-add-archive',
   standalone: true,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './add-archive.component.html',
   styleUrls: ['./add-archive.component.scss']
 })
@@ -22,11 +23,6 @@ export class AddArchiveComponent implements OnInit {
     this.router.navigate(['/archives/list_archive']);
   }
   /**
-   * Formulario reactivo para registro de expediente.
-   */
-  archiveForm!: FormGroup;
-
-  /**
    * Propiedades para almacenar los datos del formulario.
    */
   archive_number = '';
@@ -34,10 +30,16 @@ export class AddArchiveComponent implements OnInit {
   last_name_father = '';
   last_name_mother = '';
   age: number | null = null;
+  age_unit = 'años'; // Valor por defecto: años
   gender_id = '';
   address = '';
-  location = '';  // Campo simple de texto para localidad
+  location_text = '';  // Localidad en texto plano
+  municipality_text = '';  // Municipio en texto plano
+  state_text = '';  // Estado en texto plano
   admission_date = '';
+  contact_last_name_father = '';
+  contact_last_name_mother = '';
+  contact_name = '';
 
   /**
    * Lista de géneros disponibles para el select.
@@ -52,20 +54,17 @@ export class AddArchiveComponent implements OnInit {
   text_success = '';
 
   /**
-   * Inyección de dependencias y creación del formulario reactivo.
+   * Inyección de dependencias.
    * @param archiveService Servicio para operaciones de archivo
    * @param router Servicio de navegación
    * @param translate Servicio de traducción
-   * @param fb FormBuilder para formularios reactivos
    */
   constructor(
     private archiveService: ArchiveService,
     private router: Router,
     private translate: TranslateService,
-    private fb: FormBuilder
-  ) {
-    this.initializeForm();
-  }
+    private driverTourService: DriverTourService
+  ) {}
 
   /**
    * Inicializa la fecha de admisión y carga los géneros al iniciar el componente.
@@ -73,23 +72,9 @@ export class AddArchiveComponent implements OnInit {
   ngOnInit(): void {
     this.admission_date = new Date().toISOString().split('T')[0];
     this.loadGenders();
-  }
-
-  /**
-   * Inicializa el formulario reactivo con validaciones para cada campo.
-   */
-  private initializeForm(): void {
-    this.archiveForm = this.fb.group({
-      archive_number: ['', [Validators.required, Validators.minLength(1), Validators.pattern(/^[A-Za-z0-9\-_]+$/)]],
-      name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÀ-ÿ\u00f1\u00d1\s]+$/)]],
-      last_name_father: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÀ-ÿ\u00f1\u00d1\s]+$/)]],
-      last_name_mother: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÀ-ÿ\u00f1\u00d1\s]+$/)]],
-      age: [null, [Validators.required, Validators.min(1), Validators.max(120), Validators.pattern(/^\d+$/)]],
-      gender_id: ['', Validators.required],
-      address: [''],
-      admission_date: ['', Validators.required],
-      location: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÿ\u00f1\u00d1\s,.\-]+$/)]]
-    });
+    
+    // Verificar si mostrar el tour del formulario automáticamente
+    this.checkAndShowFormTour();
   }
 
   /**
@@ -117,7 +102,7 @@ export class AddArchiveComponent implements OnInit {
     if (!this.age || this.age <= 0) missingFields.push(this.translate.instant('AGE'));
     if (!this.gender_id) missingFields.push(this.translate.instant('GENDER'));
     if (!this.admission_date) missingFields.push(this.translate.instant('ADMISSION_DATE'));
-    if (!this.location.trim()) missingFields.push(this.translate.instant('LOCATION'));
+    if (!this.location_text.trim()) missingFields.push(this.translate.instant('LOCATION'));
 
     return missingFields;
   }
@@ -199,10 +184,16 @@ export class AddArchiveComponent implements OnInit {
       last_name_father: this.last_name_father.trim(),
       last_name_mother: this.last_name_mother.trim(),
       age: this.age,
+      age_unit: this.age_unit,
       gender_id: this.gender_id,
       address: this.address.trim(),
       admission_date: this.admission_date,
-      location_name: this.location.trim()  // Enviar como texto plano
+      location_text: this.location_text.trim(),
+      municipality_text: this.municipality_text.trim(),
+      state_text: this.state_text.trim(),
+      contact_last_name_father: this.contact_last_name_father.trim(),
+      contact_last_name_mother: this.contact_last_name_mother.trim(),
+      contact_name: this.contact_name.trim()
     };
 
     this.archiveService.registerArchive(formData).subscribe({
@@ -244,16 +235,54 @@ export class AddArchiveComponent implements OnInit {
     this.last_name_father = '';
     this.last_name_mother = '';
     this.age = null;
+    this.age_unit = 'years'; // Volver al valor por defecto
     this.gender_id = '';
     this.address = '';
-    this.location = '';
+    this.location_text = '';
+    this.municipality_text = '';
+    this.state_text = '';
+    this.contact_last_name_father = '';
+    this.contact_last_name_mother = '';
+    this.contact_name = '';
     this.admission_date = new Date().toISOString().split('T')[0];
     this.submitted = false;
     this.text_validation = '';
     // No limpiar text_success aquí para que se vea el mensaje
+  }
 
-    // Resetear el formulario reactivo también
-    this.archiveForm.reset();
-    this.initializeForm();
+  // ================================
+  // MÉTODOS DE TOUR GUIADO
+  // ================================
+
+  /**
+   * Verifica si debe mostrar el tour del formulario automáticamente
+   */
+  private checkAndShowFormTour(): void {
+    // Solo mostrar el tour automáticamente si es la primera vez
+    if (!this.driverTourService.isTourCompleted('archive-form-welcome')) {
+      setTimeout(() => {
+        this.startArchiveFormTour();
+        // Marcar como completado el tour de bienvenida automático
+        const completedTours = JSON.parse(localStorage.getItem('completedTours') || '[]');
+        completedTours.push('archive-form-welcome');
+        localStorage.setItem('completedTours', JSON.stringify(completedTours));
+      }, 1500);
+    }
+  }
+
+  /**
+   * Inicia el tour completo del formulario de archivos
+   */
+  public startArchiveFormTour(): void {
+    this.driverTourService.startArchiveFormTour();
+  }
+
+  /**
+   * Destaca una funcionalidad específica con un tour rápido
+   */
+  public highlightFeature(element: string, titleKey: string, descKey: string): void {
+    const title = this.translate.instant(titleKey);
+    const description = this.translate.instant(descKey);
+    this.driverTourService.highlightElement(element, title, description);
   }
 }
