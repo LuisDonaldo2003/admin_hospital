@@ -424,4 +424,9 @@ export class routes {
       return this.baseUrl + '/pharmacy/list_antibiotics';
     }
 
+    //Credits
+    public static get credits(): string {
+      return this.baseUrl + '/credits';
+    }
+
 }

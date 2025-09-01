@@ -85,6 +85,13 @@
       "ARCHIVO": "Tablero de Archivo"
       
     }
+  },
+
+  "SISTEMA": {
+    "TITLE": "Créditos",
+    "CREDITS": {
+      "TITLE": "Créditos"
+    }
   }
 },
 
@@ -793,6 +800,37 @@
     "RECORDS": "registros",
     "PREVIOUS": "Anterior",
     "NEXT": "Siguiente"
+  },
+
+  "CREDITS": {
+    "BREADCRUMB": {
+      "HOME": "Inicio",
+      "CREDITS": "Créditos"
+    },
+    "SYSTEM_INFO": {
+      "TITLE": "Información del Sistema",
+      "VERSION": "Versión",
+      "RELEASE_DATE": "Fecha de Lanzamiento"
+    },
+    "TEAM": {
+      "TITLE": "Equipo de Desarrollo"
+    },
+    "TECHNOLOGIES": {
+      "TITLE": "Tecnologías Utilizadas",
+      "VERSION": "Versión"
+    },
+    "ACKNOWLEDGMENTS": {
+      "TITLE": "Agradecimientos",
+      "MESSAGE": "Agradecemos a todas las personas que han contribuido al desarrollo y mejora continua de este sistema.",
+      "SPECIAL_THANKS": "Agradecimientos especiales a:",
+      "MEDICAL_STAFF": "Personal médico por sus valiosas aportaciones",
+      "ADMINISTRATIVE_STAFF": "Personal administrativo por su colaboración",
+      "IT_TEAM": "Equipo de TI por el soporte técnico",
+      "BETA_TESTERS": "Usuarios beta por sus pruebas y comentarios"
+    },
+    "COPYRIGHT": {
+      "MESSAGE": "Todos los derechos reservados. Este sistema ha sido desarrollado específicamente para mejorar la gestión hospitalaria."
+    }
   }
 }
 }

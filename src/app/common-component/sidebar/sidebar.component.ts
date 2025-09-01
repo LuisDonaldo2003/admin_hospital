@@ -34,7 +34,8 @@ export class SidebarComponent implements OnDestroy {
     'GRUPO_RH': 'RH',
     'GRUPO_ARCHIVO': 'ARCHIVO',
     'GRUPO_PHARMACY': 'PHARMACY',
-    'GRUPO_TABLERO': 'TABLERO'
+    'GRUPO_TABLERO': 'TABLERO',
+    'GRUPO_SISTEMA': 'SISTEMA'
   };
 
   private userSubscription: Subscription;

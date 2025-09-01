@@ -627,6 +627,19 @@ export class DataService {
             },
           ],
         },
+        {
+          menuValue: 'CREDITS',
+          group: 'GRUPO_SISTEMA',
+          hasSubRoute: false,
+          showSubRoute: false,
+          route: routes.credits,
+          base: 'credits',
+          icon: 'fas fa-info-circle',
+          faIcon: true,
+          permision: 'view_credits',
+          show_nav: true,
+          subMenus: [],
+        },
         
         // {
         //   menuValue: 'Doctors',

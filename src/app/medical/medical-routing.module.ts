@@ -54,6 +54,11 @@ const routes: Routes = [
         loadChildren: () => 
           import('./dashboard/dashboard.module').then(m => m.DashboardModule)
       },
+      {
+        path: 'credits',
+        loadChildren: () => 
+          import('./credits/credits.module').then(m => m.CreditsModule)
+      },
 
     ]
   }

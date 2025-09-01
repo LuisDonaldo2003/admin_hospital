@@ -96,6 +96,10 @@ export class ArchiveService {
     // Parámetros de paginación
     queryParams.append('skip', skip.toString());
     queryParams.append('limit', limit.toString());
+    
+    // Parámetro para búsqueda case-insensitive
+    queryParams.append('case_insensitive', 'true');
+    
     const URL = `${URL_SERVICIOS}/archives?${queryParams.toString()}`;
     return this.http.get(URL, { headers: this.getHeaders() });
   }

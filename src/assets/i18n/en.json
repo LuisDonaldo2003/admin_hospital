@@ -85,6 +85,13 @@
       "PATIENT": "Patient Dashboard",
       "ARCHIVO": "Archive Dashboard"
     }
+  },
+
+  "SISTEMA": {
+    "TITLE": "System",
+    "CREDITS": {
+      "TITLE": "Credits"
+    }
   }
 },
 
@@ -793,6 +800,37 @@
     "RECORDS": "records",
     "PREVIOUS": "Previous",
     "NEXT": "Next"
+  },
+
+  "CREDITS": {
+    "BREADCRUMB": {
+      "HOME": "Home",
+      "CREDITS": "Credits"
+    },
+    "SYSTEM_INFO": {
+      "TITLE": "System Information",
+      "VERSION": "Version",
+      "RELEASE_DATE": "Release Date"
+    },
+    "TEAM": {
+      "TITLE": "Development Team"
+    },
+    "TECHNOLOGIES": {
+      "TITLE": "Technologies Used",
+      "VERSION": "Version"
+    },
+    "ACKNOWLEDGMENTS": {
+      "TITLE": "Acknowledgments",
+      "MESSAGE": "We thank all the people who have contributed to the development and continuous improvement of this system.",
+      "SPECIAL_THANKS": "Special thanks to:",
+      "MEDICAL_STAFF": "Medical staff for their valuable contributions",
+      "ADMINISTRATIVE_STAFF": "Administrative staff for their collaboration",
+      "IT_TEAM": "IT team for technical support",
+      "BETA_TESTERS": "Beta users for their testing and feedback"
+    },
+    "COPYRIGHT": {
+      "MESSAGE": "All rights reserved. This system has been specifically developed to improve hospital management."
+    }
   }
 }
 }
