@@ -1,0 +1,449 @@
+<!-- Contenedor principal de la página para editar personal -->
+<div class="page-wrapper">
+  <div class="content add-staff-form">
+    <!-- Encabezado y breadcrumb de navegación -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item"><a href="#">Personal ></a></li>
+            <li class="breadcrumb-item active">Editar Personal</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading spinner mientras se cargan los datos -->
+    <div class="row justify-content-center" *ngIf="loadingPersonal">
+      <div class="col-12 text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3 text-muted">Cargando datos del personal...</p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center" *ngIf="!loadingPersonal">
+      <div class="col-lg-10 col-xl-8">
+        <!-- Tarjeta principal del formulario -->
+        <div class="card card-form shadow border-0">
+          <div class="card-body px-5 py-4">
+            <!-- Título del formulario -->
+            <h3 class="text-center mb-4 fw-bold">Editar Personal</h3>
+
+            <!-- Formulario para editar personal -->
+            <form (keydown.enter)="save()" class="form-section">
+              <div class="row g-3">
+                
+                <!-- Campo: Nombre -->
+                <div class="col-md-6">
+                  <label class="form-label">Nombre(s) *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="nombre"
+                    name="nombre"
+                    placeholder="Ingrese el nombre"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !nombre.trim() }" />
+                  <div *ngIf="submitted && !nombre.trim()" class="invalid-feedback">
+                    El nombre es requerido
+                  </div>
+                </div>
+
+                <!-- Campo: Apellidos -->
+                <div class="col-md-6">
+                  <label class="form-label">Apellidos *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="apellidos"
+                    name="apellidos"
+                    placeholder="Ingrese los apellidos"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !apellidos.trim() }" />
+                  <div *ngIf="submitted && !apellidos.trim()" class="invalid-feedback">
+                    Los apellidos son requeridos
+                  </div>
+                </div>
+
+                <!-- Campo: Tipo de Personal -->
+                <div class="col-md-6">
+                  <label class="form-label">Tipo de Personal *</label>
+                  <select 
+                    class="form-select" 
+                    [(ngModel)]="tipo"
+                    name="tipo"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !tipo }">
+                    <option value="">Seleccionar tipo</option>
+                    <option value="Clínico">Clínico</option>
+                    <option value="No Clínico">No Clínico</option>
+                  </select>
+                  <div *ngIf="submitted && !tipo" class="invalid-feedback">
+                    El tipo de personal es requerido
+                  </div>
+                </div>
+
+                <!-- Fecha de Ingreso (solo lectura) -->
+                <div class="col-md-6">
+                  <label class="form-label">Fecha de Ingreso</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [value]="fechaIngreso"
+                    readonly
+                    placeholder="Fecha de ingreso" />
+                  <small class="form-text text-muted">Solo lectura</small>
+                </div>
+
+              </div>
+
+              <!-- Sección de Documentos -->
+              <div class="form-section mt-4">
+                <h5 class="form-section-title mb-3">
+                  <i class="fa fa-file-pdf-o text-danger me-2"></i>
+                  Documentos (PDF) - Opcionales
+                </h5>
+                <p class="text-muted mb-3">
+                  Gestiona los documentos en formato PDF (máximo 10MB cada uno). 
+                  <strong>Los documentos son opcionales. Si no están todos, el personal se marcará como "documentos incompletos".</strong>
+                </p>
+
+                <div class="row g-3">
+                  
+                  <!-- Acta de Nacimiento -->
+                  <div class="col-md-6">
+                    <label class="form-label">Acta de Nacimiento</label>
+                    <div class="file-upload-wrapper">
+                      <!-- Documento existente -->
+                      <div *ngIf="documentExists('Acta de nacimiento')" class="existing-document mb-2">
+                        <div class="document-item d-flex align-items-center p-2 bg-light rounded">
+                          <i class="fa fa-file-pdf-o text-success me-2"></i>
+                          <div class="flex-grow-1">
+                            <small class="fw-bold d-block text-success">Documento existente</small>
+                            <small class="text-muted">{{ getDocumentDisplayName('Acta de nacimiento') }}</small>
+                          </div>
+                          <div class="btn-group-sm">
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-primary me-1"
+                                    (click)="downloadDocument(getExistingDocument('Acta de nacimiento')?.id!)"
+                                    title="Descargar">
+                              <i class="fa fa-download"></i>
+                            </button>
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-danger"
+                                    (click)="removeExistingDocument(getExistingDocument('Acta de nacimiento')!)"
+                                    title="Eliminar">
+                              <i class="fa fa-trash"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Input para nuevo documento -->
+                      <input 
+                        type="file" 
+                        class="form-control" 
+                        accept=".pdf"
+                        (change)="onFileSelected($event, 'Acta de nacimiento')" />
+                      <small class="form-text text-muted">
+                        {{ documentExists('Acta de nacimiento') ? 'Subir archivo para reemplazar el existente' : 'Solo archivos PDF' }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <!-- Comprobante de Domicilio -->
+                  <div class="col-md-6">
+                    <label class="form-label">Comprobante de Domicilio</label>
+                    <div class="file-upload-wrapper">
+                      <!-- Documento existente -->
+                      <div *ngIf="documentExists('Comprobante de domicilio')" class="existing-document mb-2">
+                        <div class="document-item d-flex align-items-center p-2 bg-light rounded">
+                          <i class="fa fa-file-pdf-o text-success me-2"></i>
+                          <div class="flex-grow-1">
+                            <small class="fw-bold d-block text-success">Documento existente</small>
+                            <small class="text-muted">{{ getDocumentDisplayName('Comprobante de domicilio') }}</small>
+                          </div>
+                          <div class="btn-group-sm">
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-primary me-1"
+                                    (click)="downloadDocument(getExistingDocument('Comprobante de domicilio')?.id!)"
+                                    title="Descargar">
+                              <i class="fa fa-download"></i>
+                            </button>
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-danger"
+                                    (click)="removeExistingDocument(getExistingDocument('Comprobante de domicilio')!)"
+                                    title="Eliminar">
+                              <i class="fa fa-trash"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Input para nuevo documento -->
+                      <input 
+                        type="file" 
+                        class="form-control" 
+                        accept=".pdf"
+                        (change)="onFileSelected($event, 'Comprobante de domicilio')" />
+                      <small class="form-text text-muted">
+                        {{ documentExists('Comprobante de domicilio') ? 'Subir archivo para reemplazar el existente' : 'Solo archivos PDF' }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <!-- CURP -->
+                  <div class="col-md-6">
+                    <label class="form-label">CURP</label>
+                    <div class="file-upload-wrapper">
+                      <!-- Documento existente -->
+                      <div *ngIf="documentExists('CURP')" class="existing-document mb-2">
+                        <div class="document-item d-flex align-items-center p-2 bg-light rounded">
+                          <i class="fa fa-file-pdf-o text-success me-2"></i>
+                          <div class="flex-grow-1">
+                            <small class="fw-bold d-block text-success">Documento existente</small>
+                            <small class="text-muted">{{ getDocumentDisplayName('CURP') }}</small>
+                          </div>
+                          <div class="btn-group-sm">
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-primary me-1"
+                                    (click)="downloadDocument(getExistingDocument('CURP')?.id!)"
+                                    title="Descargar">
+                              <i class="fa fa-download"></i>
+                            </button>
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-danger"
+                                    (click)="removeExistingDocument(getExistingDocument('CURP')!)"
+                                    title="Eliminar">
+                              <i class="fa fa-trash"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Input para nuevo documento -->
+                      <input 
+                        type="file" 
+                        class="form-control" 
+                        accept=".pdf"
+                        (change)="onFileSelected($event, 'CURP')" />
+                      <small class="form-text text-muted">
+                        {{ documentExists('CURP') ? 'Subir archivo para reemplazar el existente' : 'Solo archivos PDF' }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <!-- INE -->
+                  <div class="col-md-6">
+                    <label class="form-label">INE</label>
+                    <div class="file-upload-wrapper">
+                      <!-- Documento existente -->
+                      <div *ngIf="documentExists('INE')" class="existing-document mb-2">
+                        <div class="document-item d-flex align-items-center p-2 bg-light rounded">
+                          <i class="fa fa-file-pdf-o text-success me-2"></i>
+                          <div class="flex-grow-1">
+                            <small class="fw-bold d-block text-success">Documento existente</small>
+                            <small class="text-muted">{{ getDocumentDisplayName('INE') }}</small>
+                          </div>
+                          <div class="btn-group-sm">
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-primary me-1"
+                                    (click)="downloadDocument(getExistingDocument('INE')?.id!)"
+                                    title="Descargar">
+                              <i class="fa fa-download"></i>
+                            </button>
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-danger"
+                                    (click)="removeExistingDocument(getExistingDocument('INE')!)"
+                                    title="Eliminar">
+                              <i class="fa fa-trash"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Input para nuevo documento -->
+                      <input 
+                        type="file" 
+                        class="form-control" 
+                        accept=".pdf"
+                        (change)="onFileSelected($event, 'INE')" />
+                      <small class="form-text text-muted">
+                        {{ documentExists('INE') ? 'Subir archivo para reemplazar el existente' : 'Solo archivos PDF' }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <!-- RFC -->
+                  <div class="col-md-6">
+                    <label class="form-label">RFC</label>
+                    <div class="file-upload-wrapper">
+                      <!-- Documento existente -->
+                      <div *ngIf="documentExists('RFC')" class="existing-document mb-2">
+                        <div class="document-item d-flex align-items-center p-2 bg-light rounded">
+                          <i class="fa fa-file-pdf-o text-success me-2"></i>
+                          <div class="flex-grow-1">
+                            <small class="fw-bold d-block text-success">Documento existente</small>
+                            <small class="text-muted">{{ getDocumentDisplayName('RFC') }}</small>
+                          </div>
+                          <div class="btn-group-sm">
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-primary me-1"
+                                    (click)="downloadDocument(getExistingDocument('RFC')?.id!)"
+                                    title="Descargar">
+                              <i class="fa fa-download"></i>
+                            </button>
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-danger"
+                                    (click)="removeExistingDocument(getExistingDocument('RFC')!)"
+                                    title="Eliminar">
+                              <i class="fa fa-trash"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Input para nuevo documento -->
+                      <input 
+                        type="file" 
+                        class="form-control" 
+                        accept=".pdf"
+                        (change)="onFileSelected($event, 'RFC')" />
+                      <small class="form-text text-muted">
+                        {{ documentExists('RFC') ? 'Subir archivo para reemplazar el existente' : 'Solo archivos PDF' }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <!-- Título Profesional -->
+                  <div class="col-md-6">
+                    <label class="form-label">Título Profesional</label>
+                    <div class="file-upload-wrapper">
+                      <!-- Documento existente -->
+                      <div *ngIf="documentExists('Título profesional')" class="existing-document mb-2">
+                        <div class="document-item d-flex align-items-center p-2 bg-light rounded">
+                          <i class="fa fa-file-pdf-o text-success me-2"></i>
+                          <div class="flex-grow-1">
+                            <small class="fw-bold d-block text-success">Documento existente</small>
+                            <small class="text-muted">{{ getDocumentDisplayName('Título profesional') }}</small>
+                          </div>
+                          <div class="btn-group-sm">
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-primary me-1"
+                                    (click)="downloadDocument(getExistingDocument('Título profesional')?.id!)"
+                                    title="Descargar">
+                              <i class="fa fa-download"></i>
+                            </button>
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-danger"
+                                    (click)="removeExistingDocument(getExistingDocument('Título profesional')!)"
+                                    title="Eliminar">
+                              <i class="fa fa-trash"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Input para nuevo documento -->
+                      <input 
+                        type="file" 
+                        class="form-control" 
+                        accept=".pdf"
+                        (change)="onFileSelected($event, 'Título profesional')" />
+                      <small class="form-text text-muted">
+                        {{ documentExists('Título profesional') ? 'Subir archivo para reemplazar el existente' : 'Solo archivos PDF' }}
+                      </small>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Estado de documentos nuevos -->
+              <div class="form-section mt-4" *ngIf="documentosNuevos.size > 0">
+                <h6 class="mb-3">
+                  <i class="fa fa-plus-circle text-primary me-2"></i>
+                  Documentos Nuevos a Subir ({{ documentosNuevos.size }})
+                </h6>
+                <div class="documents-status">
+                  <div class="row g-2">
+                    <div class="col-md-4" *ngFor="let doc of documentosNuevos | keyvalue">
+                      <div class="document-item d-flex align-items-center p-2 bg-light rounded">
+                        <i class="fa fa-file-pdf-o text-danger me-2"></i>
+                        <div class="flex-grow-1">
+                          <small class="fw-bold d-block">{{ doc.key }}</small>
+                          <small class="text-muted">{{ doc.value.name }}</small>
+                        </div>
+                        <button type="button" 
+                                class="btn btn-sm btn-outline-danger"
+                                (click)="removeNewDocument(doc.key)"
+                                title="Eliminar">
+                          <i class="fa fa-times"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Estado general de documentos -->
+              <div class="form-section mt-4">
+                <h6 class="mb-3">
+                  <i class="fa fa-info-circle text-info me-2"></i>
+                  Estado de Documentos
+                </h6>
+                
+                <!-- Documentos completos -->
+                <div *ngIf="getMissingDocuments().length === 0" class="alert alert-success">
+                  <i class="fa fa-check-circle me-2"></i>
+                  <strong>¡Todos los documentos están completos!</strong>
+                  <br><small>El personal está marcado como "documentos completos".</small>
+                </div>
+
+                <!-- Documentos faltantes -->
+                <div *ngIf="getMissingDocuments().length > 0" class="alert alert-warning">
+                  <i class="fa fa-exclamation-triangle me-2"></i>
+                  <strong>Documentos faltantes: {{ getMissingDocuments().length }}/6</strong>
+                  <div class="mt-2">
+                    <small>Documentos pendientes: 
+                      <span *ngFor="let tipo of getMissingDocuments(); let last = last">
+                        {{ tipo }}<span *ngIf="!last">, </span>
+                      </span>
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Alerta de éxito -->
+              <div class="mt-4" *ngIf="text_success">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>¡Éxito!</strong> {{ text_success }}
+                  <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
+                </div>
+              </div>
+
+              <!-- Alerta de validación/error -->
+              <div class="mt-4" *ngIf="text_validation">
+                <div class="alert alert-warning alert-dismissible fade show">
+                  <strong>Advertencia:</strong> {{ text_validation }}
+                  <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+                </div>
+              </div>
+
+              <!-- Botones de acción: guardar y ver lista -->
+              <div class="text-end mt-4 d-flex gap-2 justify-content-end form-actions">
+                <button type="button" 
+                        class="btn btn-primary px-4 btn-save" 
+                        (click)="save()"
+                        [disabled]="loading">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                  {{ loading ? 'Guardando...' : 'Actualizar Personal' }}
+                </button>
+                <button type="button" class="btn btn-outline-secondary px-4" (click)="goToList()">
+                  <i class="fa fa-list"></i> Ver Lista
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,456 @@
+<!-- Contenedor principal de la página para agregar nuevo personal -->
+<div class="page-wrapper">
+  <div class="content add-staff-form" [class.dark-mode-container]="isDarkMode()">
+    <!-- Encabezado y breadcrumb de navegación -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item"><a href="#">Personal ></a></li>
+            <li class="breadcrumb-item active">Registrar Personal</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-xl-8">
+        <!-- Tarjeta principal del formulario -->
+        <div class="card card-form shadow border-0">
+          <div class="card-body px-5 py-4">
+            <!-- Título del formulario -->
+            <h3 class="text-center mb-4 fw-bold">Agregar Personal</h3>
+
+            <!-- Formulario para agregar personal -->
+            <form (keydown.enter)="save()" class="form-section">
+              <div class="row g-3">
+                
+                <!-- Campo: Nombre -->
+                <div class="col-md-6">
+                  <label class="form-label">Nombre(s) *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="nombre"
+                    name="nombre"
+                    placeholder="Ingrese el nombre"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !nombre.trim() }" />
+                  <div *ngIf="submitted && !nombre.trim()" class="invalid-feedback">
+                    El nombre es requerido
+                  </div>
+                </div>
+
+                <!-- Campo: Apellidos -->
+                <div class="col-md-6">
+                  <label class="form-label">Apellidos *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="apellidos"
+                    name="apellidos"
+                    placeholder="Ingrese los apellidos"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !apellidos.trim() }" />
+                  <div *ngIf="submitted && !apellidos.trim()" class="invalid-feedback">
+                    Los apellidos son requeridos
+                  </div>
+                </div>
+
+                <!-- Campo: Tipo de Personal -->
+                <div class="col-md-6">
+                  <label class="form-label">Tipo de Personal *</label>
+                  <select 
+                    class="form-select" 
+                    [(ngModel)]="tipo"
+                    name="tipo"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !tipo }">
+                    <option value="">Seleccionar tipo</option>
+                    <option value="Clínico">Clínico</option>
+                    <option value="No Clínico">No Clínico</option>
+                  </select>
+                  <div *ngIf="submitted && !tipo" class="invalid-feedback">
+                    El tipo de personal es requerido
+                  </div>
+                </div>
+
+                <!-- Fecha de Ingreso (automática, solo informativa) -->
+                <div class="col-md-6">
+                  <label class="form-label">Fecha de Ingreso</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [value]="fechaIngreso"
+                    readonly
+                    placeholder="Se asigna automáticamente" />
+                  <small class="form-text text-muted">Se asigna automáticamente al guardar</small>
+                </div>
+
+              </div>
+
+              <!-- Sección de Documentos -->
+              <div class="form-section mt-4">
+                <h5 class="form-section-title mb-3">
+                  <i class="fa fa-cloud-upload text-primary me-2"></i>
+                  Documentos (PDF) - Opcionales
+                </h5>
+                <div class="upload-info-card mb-4">
+                  <div class="row align-items-center">
+                    <div class="col-md-8">
+                      <p class="mb-1"><strong>Sube los documentos disponibles</strong></p>
+                      <small class="text-muted">
+                        Formato PDF únicamente • Máximo 10MB por archivo • 
+                        Los documentos son opcionales pero recomendados
+                      </small>
+                    </div>
+                    <div class="col-md-4 text-end">
+                      <span class="badge bg-info fs-6">{{ documentos.size }}/6 documentos</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row g-4">
+                  
+                  <!-- Acta de Nacimiento -->
+                  <div class="col-md-6">
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-id-card text-primary me-2"></i>
+                        <label class="form-label mb-0">Acta de Nacimiento</label>
+                      </div>
+                      <div class="upload-area" 
+                           [class.has-file]="documentos.has('Acta de nacimiento')"
+                           (dragover)="onDragOver($event)" 
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)" 
+                           (drop)="onDrop($event, 'Acta de nacimiento', $event.currentTarget)">>
+                        <div *ngIf="!documentos.has('Acta de nacimiento')" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input 
+                              type="file" 
+                              class="file-input" 
+                              id="acta-nacimiento"
+                              accept=".pdf"
+                              (change)="onFileSelected($event, 'Acta de nacimiento')" />
+                            <label for="acta-nacimiento" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
+                          </div>
+                        </div>
+                        <div *ngIf="documentos.has('Acta de nacimiento')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo cargado</p>
+                          <small class="text-muted d-block">{{ documentos.get('Acta de nacimiento')?.name }}</small>
+                          <button type="button" 
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeDocument('Acta de nacimiento')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Comprobante de Domicilio -->
+                  <div class="col-md-6">
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-home text-primary me-2"></i>
+                        <label class="form-label mb-0">Comprobante de Domicilio</label>
+                      </div>
+                      <div class="upload-area" 
+                           [class.has-file]="documentos.has('Comprobante de domicilio')"
+                           (dragover)="onDragOver($event)" 
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)" 
+                           (drop)="onDrop($event, 'Comprobante de domicilio', $event.currentTarget)">>
+                        <div *ngIf="!documentos.has('Comprobante de domicilio')" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input 
+                              type="file" 
+                              class="file-input" 
+                              id="comprobante-domicilio"
+                              accept=".pdf"
+                              (change)="onFileSelected($event, 'Comprobante de domicilio')" />
+                            <label for="comprobante-domicilio" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
+                          </div>
+                        </div>
+                        <div *ngIf="documentos.has('Comprobante de domicilio')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo cargado</p>
+                          <small class="text-muted d-block">{{ documentos.get('Comprobante de domicilio')?.name }}</small>
+                          <button type="button" 
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeDocument('Comprobante de domicilio')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- CURP -->
+                  <div class="col-md-6">
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-address-card text-primary me-2"></i>
+                        <label class="form-label mb-0">CURP</label>
+                      </div>
+                      <div class="upload-area" 
+                           [class.has-file]="documentos.has('CURP')"
+                           (dragover)="onDragOver($event)" 
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)" 
+                           (drop)="onDrop($event, 'CURP', $event.currentTarget)">>
+                        <div *ngIf="!documentos.has('CURP')" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input 
+                              type="file" 
+                              class="file-input" 
+                              id="curp"
+                              accept=".pdf"
+                              (change)="onFileSelected($event, 'CURP')" />
+                            <label for="curp" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
+                          </div>
+                        </div>
+                        <div *ngIf="documentos.has('CURP')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo cargado</p>
+                          <small class="text-muted d-block">{{ documentos.get('CURP')?.name }}</small>
+                          <button type="button" 
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeDocument('CURP')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- INE -->
+                  <div class="col-md-6">
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-credit-card text-primary me-2"></i>
+                        <label class="form-label mb-0">INE</label>
+                      </div>
+                      <div class="upload-area" 
+                           [class.has-file]="documentos.has('INE')"
+                           (dragover)="onDragOver($event)" 
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)" 
+                           (drop)="onDrop($event, 'INE', $event.currentTarget)">>
+                        <div *ngIf="!documentos.has('INE')" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input 
+                              type="file" 
+                              class="file-input" 
+                              id="ine"
+                              accept=".pdf"
+                              (change)="onFileSelected($event, 'INE')" />
+                            <label for="ine" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
+                          </div>
+                        </div>
+                        <div *ngIf="documentos.has('INE')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo cargado</p>
+                          <small class="text-muted d-block">{{ documentos.get('INE')?.name }}</small>
+                          <button type="button" 
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeDocument('INE')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- RFC -->
+                  <div class="col-md-6">
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-file-text text-primary me-2"></i>
+                        <label class="form-label mb-0">RFC</label>
+                      </div>
+                      <div class="upload-area" 
+                           [class.has-file]="documentos.has('RFC')"
+                           (dragover)="onDragOver($event)" 
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)" 
+                           (drop)="onDrop($event, 'RFC', $event.currentTarget)">>
+                        <div *ngIf="!documentos.has('RFC')" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input 
+                              type="file" 
+                              class="file-input" 
+                              id="rfc"
+                              accept=".pdf"
+                              (change)="onFileSelected($event, 'RFC')" />
+                            <label for="rfc" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
+                          </div>
+                        </div>
+                        <div *ngIf="documentos.has('RFC')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo cargado</p>
+                          <small class="text-muted d-block">{{ documentos.get('RFC')?.name }}</small>
+                          <button type="button" 
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeDocument('RFC')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Título Profesional -->
+                  <div class="col-md-6">
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-graduation-cap text-primary me-2"></i>
+                        <label class="form-label mb-0">Título Profesional</label>
+                      </div>
+                      <div class="upload-area" 
+                           [class.has-file]="documentos.has('Título profesional')"
+                           (dragover)="onDragOver($event)" 
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)" 
+                           (drop)="onDrop($event, 'Título profesional', $event.currentTarget)">>
+                        <div *ngIf="!documentos.has('Título profesional')" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input 
+                              type="file" 
+                              class="file-input" 
+                              id="titulo-profesional"
+                              accept=".pdf"
+                              (change)="onFileSelected($event, 'Título profesional')" />
+                            <label for="titulo-profesional" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
+                          </div>
+                        </div>
+                        <div *ngIf="documentos.has('Título profesional')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo cargado</p>
+                          <small class="text-muted d-block">{{ documentos.get('Título profesional')?.name }}</small>
+                          <button type="button" 
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeDocument('Título profesional')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Estado de documentos -->
+              <div class="form-section mt-4">
+                <h6 class="mb-3">
+                  <i class="fa fa-info-circle text-info me-2"></i>
+                  Estado de Documentos
+                </h6>
+                
+                <!-- Documentos seleccionados -->
+                <div *ngIf="documentos.size > 0" class="documents-status mb-3" style="background-color: #f8f9fa !important; color: #212529 !important;">
+                  <p class="mb-2" style="color: #212529 !important;"><strong>Documentos Subidos ({{ documentos.size }}/6):</strong></p>
+                  <div class="row g-2">
+                    <div class="col-md-4" *ngFor="let doc of documentos | keyvalue">
+                      <div class="document-item d-flex align-items-center p-2 rounded">
+                        <i class="fa fa-file-pdf-o text-danger me-2"></i>
+                        <div class="flex-grow-1">
+                          <small class="fw-bold d-block">{{ doc.key }}</small>
+                          <small class="text-muted">{{ doc.value.name }}</small>
+                        </div>
+                        <button type="button" 
+                                class="btn btn-sm btn-outline-danger"
+                                (click)="removeDocument(doc.key)"
+                                title="Eliminar">
+                          <i class="fa fa-times"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Advertencia si faltan documentos -->
+                <div *ngIf="documentos.size < 6" class="alert alert-warning" style="background-color: #fff3cd !important; color: #856404 !important;">
+                  <i class="fa fa-exclamation-triangle me-2"></i>
+                  <strong style="color: #856404 !important;">Debe subir los 6 documentos requeridos</strong>
+                  <div class="mt-2">
+                    <small style="color: #664d03 !important;">Documentos faltantes: 
+                      <span *ngFor="let tipo of getMissingDocuments(); let last = last">
+                        <span style="color: #212529 !important;">{{ tipo }}</span><span *ngIf="!last">, </span>
+                      </span>
+                    </small>
+                  </div>
+                </div>
+
+                <!-- Mensaje de confirmación si todos están completos -->
+                <div *ngIf="documentos.size === 6" class="alert alert-success" style="background-color: #d4edda !important; color: #155724 !important;">
+                  <i class="fa fa-check-circle me-2"></i>
+                  <strong style="color: #155724 !important;">¡Todos los documentos han sido subidos!</strong>
+                  <br><small style="color: #0f4132 !important;">El personal será marcado como "documentos completos".</small>
+                </div>
+              </div>
+
+              <!-- Alerta de éxito -->
+              <div class="mt-4" *ngIf="text_success">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>¡Éxito!</strong> {{ text_success }}
+                  <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
+                </div>
+              </div>
+
+              <!-- Alerta de validación/error -->
+              <div class="mt-4" *ngIf="text_validation">
+                <div class="alert alert-warning alert-dismissible fade show">
+                  <strong>Advertencia:</strong> {{ text_validation }}
+                  <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+                </div>
+              </div>
+
+              <!-- Botones de acción: guardar y ver lista -->
+              <div class="text-end mt-4 d-flex gap-2 justify-content-end form-actions">
+                <button type="button" class="btn btn-primary px-4 btn-save" (click)="save()">Guardar</button>
+                <button type="button" class="btn btn-outline-secondary px-4" (click)="goToList()">
+                  <i class="fa fa-list"></i> Ver Lista
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

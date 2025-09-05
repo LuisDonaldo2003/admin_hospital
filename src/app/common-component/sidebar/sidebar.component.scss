@@ -24,3 +24,37 @@ body.dark-mode .sidebar-icon {
   object-fit: contain;
   margin-right: 0;
 }
+
+// Estilos para enlaces externos
+.external-link {
+  position: relative;
+  
+  &::after {
+    content: '\f35d'; // FontAwesome external-link-alt icon
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 0.75rem;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.6;
+    color: #6c757d;
+  }
+  
+  &:hover::after {
+    opacity: 1;
+    color: #007bff;
+  }
+}
+
+// Modo oscuro para enlaces externos
+body.dark-mode .external-link {
+  &::after {
+    color: #adb5bd;
+  }
+  
+  &:hover::after {
+    color: #0dcaf0;
+  }
+}

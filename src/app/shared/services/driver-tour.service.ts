@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { driver, DriveStep, Config } from 'driver.js';
+import { driver } from 'driver.js';
+import type { DriveStep, Config } from 'driver.js';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({

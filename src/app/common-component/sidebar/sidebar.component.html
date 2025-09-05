@@ -41,7 +41,18 @@
                 <!-- Itera por cada submenú -->
                 <ng-container *ngFor="let subMenus of menu.subMenus">
                   <li [ngClass]="menu.showSubRoute === true ? 'd-block' : 'd-none'">
-                    <a [routerLink]="subMenus.route" *ngIf="subMenus.show_nav" [class.active]="currentUrl === subMenus.base">
+                    <!-- Enlaces externos -->
+                    <a *ngIf="subMenus.show_nav && subMenus.external" 
+                       [href]="subMenus.route" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       class="external-link">
+                      {{ 'SIDEBAR.' + groupMap[menu.group] + '.' + cleanMenuValue(menu.menuValue) + '.' + cleanMenuValue(subMenus.menuValue) | translate }}
+                    </a>
+                    <!-- Enlaces internos -->
+                    <a *ngIf="subMenus.show_nav && !subMenus.external" 
+                       [routerLink]="subMenus.route" 
+                       [class.active]="currentUrl === subMenus.base">
                       {{ 'SIDEBAR.' + groupMap[menu.group] + '.' + cleanMenuValue(menu.menuValue) + '.' + cleanMenuValue(subMenus.menuValue) | translate }}
                     </a>
                   </li>

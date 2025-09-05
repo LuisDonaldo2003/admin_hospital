@@ -1,0 +1,335 @@
+<!--
+  Contenedor principal de la página de listado de personal
+-->
+<div class="page-wrapper">
+  <div class="content list-personal">
+
+    <!-- Encabezado de la página con breadcrumb de navegación -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <!-- Breadcrumb para mostrar la ruta de navegación -->
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item">Personal ></li>
+            <li class="breadcrumb-item active">Lista de Personal</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección principal del contenido -->
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card card-list shadow border-0">
+          <div class="card-body">
+
+            <!-- Barra de acciones y búsqueda sobre la tabla -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 header-bar">
+              <!-- Título de la tabla -->
+              <h4 class="mb-0 fw-semibold">Gestión del Personal</h4>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <!-- Input de búsqueda -->
+                <div class="input-group search-input">
+                  <input type="text" 
+                         class="form-control" 
+                         placeholder="Buscar por nombre o apellidos..." 
+                         [(ngModel)]="searchDataValue" 
+                         (ngModelChange)="searchData(searchDataValue)">
+                  <span class="input-group-text">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
+                <!-- Botón para agregar nuevo personal -->
+                <a routerLink="/personal/add_personal" class="btn btn-options d-flex align-items-center gap-1">
+                  <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">Nuevo Personal</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Filtros adicionales -->
+            <div class="row g-3 mb-4">
+              <div class="col-lg-4">
+                <label class="form-label">Filtrar por Tipo</label>
+                <select class="form-select" 
+                        [(ngModel)]="filtroTipo"
+                        (change)="filterData()">
+                  <option value="">Todos los tipos</option>
+                  <option value="Clínico">Clínico</option>
+                  <option value="No Clínico">No Clínico</option>
+                </select>
+              </div>
+              <div class="col-lg-4">
+                <label class="form-label">Estado de Documentos</label>
+                <select class="form-select" 
+                        [(ngModel)]="filtroDocumentos"
+                        (change)="filterData()">
+                  <option value="">Todos</option>
+                  <option value="completos">Documentos Completos</option>
+                  <option value="incompletos">Documentos Incompletos</option>
+                </select>
+              </div>
+              <div class="col-lg-4">
+                <label class="form-label">Estado</label>
+                <select class="form-select" 
+                        [(ngModel)]="filtroActivo"
+                        (change)="filterData()">
+                  <option value="true">Solo Activos</option>
+                  <option value="">Todos</option>
+                  <option value="false">Solo Inactivos</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Tabla de personal -->
+            <div class="table-responsive">
+              <table class="table table-striped table-hover align-middle text-nowrap">
+                <thead class="table-light text-center">
+                  <tr>
+                    <th>Nombre Completo</th>
+                    <th>Tipo de Personal</th>
+                    <th>Fecha de Ingreso</th>
+                    <th>Estado de Documentos</th>
+                    <th>Estado</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Filas de la tabla generadas dinámicamente -->
+                  <tr *ngFor="let personal of personalList">
+                    <!-- Nombre completo -->
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <div class="me-3">
+                          <i class="fa fa-user-circle fa-2x" 
+                             [ngClass]="{
+                               'text-success': personal.tipo === 'Clínico',
+                               'text-info': personal.tipo === 'No Clínico'
+                             }"></i>
+                        </div>
+                        <div>
+                          <h6 class="mb-0 fw-bold">{{ personal.nombre }} {{ personal.apellidos }}</h6>
+                        </div>
+                      </div>
+                    </td>
+
+                    <!-- Tipo de personal -->
+                    <td class="text-center">
+                      <span class="badge" 
+                            [ngClass]="{
+                              'bg-success': personal.tipo === 'Clínico',
+                              'bg-info': personal.tipo === 'No Clínico'
+                            }">
+                        {{ personal.tipo }}
+                      </span>
+                    </td>
+
+                    <!-- Fecha de ingreso -->
+                    <td class="text-center">
+                      {{ personal.fecha_ingreso | date:'dd/MM/yyyy' }}
+                    </td>
+
+                    <!-- Estado de documentos -->
+                    <td class="text-center">
+                      <span class="badge" 
+                            [ngClass]="{
+                              'bg-success': personal.documentos_completos,
+                              'bg-warning text-dark': !personal.documentos_completos
+                            }">
+                        <i class="fa" [ngClass]="{
+                          'fa-check-circle': personal.documentos_completos,
+                          'fa-exclamation-triangle': !personal.documentos_completos
+                        }"></i>
+                        {{ personal.documentos_completos ? 'Completos' : 'Incompletos' }}
+                      </span>
+                    </td>
+
+                    <!-- Estado activo/inactivo -->
+                    <td class="text-center">
+                      <span class="badge" 
+                            [ngClass]="{
+                              'bg-success': personal.activo,
+                              'bg-secondary': !personal.activo
+                            }">
+                        {{ personal.activo ? 'Activo' : 'Inactivo' }}
+                      </span>
+                    </td>
+
+                    <!-- Acciones -->
+                    <td class="text-center">
+                      <div class="dropdown d-flex justify-content-center align-items-center">
+                        <!-- Botón de opciones -->
+                        <button class="btn btn-options dropdown-toggle" data-bs-toggle="dropdown">
+                          <i class="fa fa-cogs me-1"></i> Opciones
+                        </button>
+                        <!-- Menú de opciones -->
+                        <div class="dropdown-menu dropdown-menu-end">
+                          <!-- Opción para ver documentos -->
+                          <a class="dropdown-item" (click)="verDocumentos(personal.id)" *ngIf="personal.id">
+                            <i class="fa fa-file-pdf me-2"></i> Ver Documentos
+                          </a>
+                          <!-- Opción para editar personal -->
+                          <a class="dropdown-item" [routerLink]="['/personal/edit_personal', personal.id]" *ngIf="personal.id">
+                            <i class="fa fa-pen me-2"></i> Editar
+                          </a>
+                          <!-- Opción para cambiar estado -->
+                          <a class="dropdown-item" (click)="toggleEstado(personal)">
+                            <i class="fa me-2" [ngClass]="{
+                              'fa-eye-slash': personal.activo,
+                              'fa-eye': !personal.activo
+                            }"></i>
+                            {{ personal.activo ? 'Desactivar' : 'Activar' }}
+                          </a>
+                          <!-- Opción para eliminar personal -->
+                          <a class="dropdown-item text-danger"
+                             href="javascript:void(0);"
+                             (click)="selectPersonal(personal)"
+                             data-bs-toggle="modal"
+                             data-bs-target="#deleteModal">
+                            <i class="fa fa-trash me-2"></i> Eliminar
+                          </a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Mensaje cuando no hay registros -->
+                  <tr *ngIf="personalList.length === 0">
+                    <td colspan="6" class="text-center py-5">
+                      <div class="no-data-found">
+                        <i class="fa fa-users fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No se encontraron registros</h5>
+                        <p class="text-muted">No hay personal que coincida con los criterios de búsqueda.</p>
+                        <a routerLink="/personal/add" class="btn btn-primary">
+                          <i class="fa fa-plus me-2"></i>Agregar Primer Personal
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Sección de paginación -->
+            <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+              <div class="pagination-info small">
+                <!-- Información de registros mostrados -->
+                Mostrando {{ serialNumberArray[0] }} a {{ serialNumberArray[serialNumberArray.length - 1] }} de {{ totalData }} registros
+              </div>
+              <nav>
+                <ul class="pagination mb-0">
+                  <!-- Botón para página anterior -->
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('previous')">Anterior</a>
+                  </li>
+                  <!-- Botones para cada página -->
+                  <ng-container *ngFor="let item of pageNumberArray">
+                    <li class="page-item" [class.active]="item === currentPage">
+                      <a class="page-link" href="javascript:void(0);" (click)="moveToPage(item)">{{ item }}</a>
+                    </li>
+                  </ng-container>
+                  <!-- Botón para página siguiente -->
+                  <li class="page-item" [class.disabled]="currentPage === pageNumberArray[pageNumberArray.length - 1]">
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('next')">Siguiente</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+            <!-- Estadísticas resumen -->
+            <div class="row mt-4">
+              <div class="col-12">
+                <div class="alert alert-info border-0">
+                  <div class="row text-center">
+                    <div class="col-md-3">
+                      <div class="stat-item">
+                        <h5 class="text-primary mb-0">{{ totalData }}</h5>
+                        <small>Total Personal</small>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="stat-item">
+                        <h5 class="text-success mb-0">{{ stats.clinico || 0 }}</h5>
+                        <small>Personal Clínico</small>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="stat-item">
+                        <h5 class="text-info mb-0">{{ stats.no_clinico || 0 }}</h5>
+                        <small>Personal No Clínico</small>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="stat-item">
+                        <h5 class="text-warning mb-0">{{ stats.documentos_completos || 0 }}</h5>
+                        <small>Documentos Completos</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmación para eliminar personal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center p-4">
+        <!-- Imagen de advertencia -->
+        <img src="assets/img/sent.png" alt="" width="50" height="46" />
+        <!-- Mensaje de confirmación para eliminar personal -->
+        <h5 class="mt-3" *ngIf="personal_selected">
+          ¿Está seguro de eliminar al personal <strong>{{ personal_selected.nombre }} {{ personal_selected.apellidos }}</strong>?
+        </h5>
+        <p class="text-muted mt-2">Esta acción no se puede deshacer. Se eliminarán también todos los documentos asociados.</p>
+        <div class="mt-4 d-flex justify-content-center gap-3">
+          <!-- Botón para cancelar la eliminación -->
+          <button class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+          <!-- Botón para confirmar la eliminación -->
+          <button class="btn btn-danger" (click)="deletePersonal()" data-bs-dismiss="modal">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para mostrar documentos -->
+<div class="modal fade" id="documentsModal" tabindex="-1" aria-labelledby="documentsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="documentsModalLabel">Documentos del Personal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedPersonalDocuments">
+        <h6 class="mb-3">{{ selectedPersonalName }}</h6>
+        <div class="row g-3">
+          <div class="col-md-6" *ngFor="let doc of selectedPersonalDocuments">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fa fa-file-pdf fa-2x text-danger mb-2"></i>
+                <h6 class="card-title">{{ doc.tipo_documento }}</h6>
+                <p class="card-text small">{{ doc.nombre_archivo }}</p>
+                <button class="btn btn-sm btn-outline-primary" (click)="downloadDocument(doc.id)">
+                  <i class="fa fa-download me-1"></i> Descargar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-12" *ngIf="selectedPersonalDocuments.length === 0">
+            <div class="text-center text-muted py-4">
+              <i class="fa fa-file-o fa-3x mb-3"></i>
+              <p>No hay documentos disponibles para este personal</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

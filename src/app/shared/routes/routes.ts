@@ -429,4 +429,20 @@ export class routes {
       return this.baseUrl + '/credits';
     }
 
+    //Pulse Access Management
+    public static get pulseAccessManagement(): string {
+      return this.baseUrl + '/pulse-access/management';
+    }
+
+    //Personal
+    public static get personalList(): string {
+      return this.baseUrl + '/personal/list_personal';
+    }
+    public static get addPersonal(): string {
+      return this.baseUrl + '/personal/add_personal';
+    }
+    public static get editPersonal(): string {
+      return this.baseUrl + '/personal/edit_personal';
+    }
+
 }

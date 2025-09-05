@@ -19,6 +19,11 @@
     "ORGANIZATION_CHART": {
       "TITLE": "Organigrama",
       "LIST": "Lista de Organigrama"
+    },
+    "PULSE_ACCESS": {
+      "TITLE": "Acceso a Pulse",
+      "MANAGEMENT": "Gestión de Acceso",
+      "DASHBOARD": "Dashboard de Pulse"
     }
   },
   "RH": {
@@ -43,6 +48,14 @@
       "ADD": "Agregar Departamento",
       "EDIT": "Editar Departamento",
       "DELETE": "Eliminar Departamento"
+    },
+    "PERSONAL": {
+      "TITLE": "Personal",
+      "LIST": "Lista de Personal",
+      "ADD": "Agregar Personal",
+      "EDIT": "Editar Personal",
+      "DELETE": "Eliminar Personal",
+      "DOCUMENTS": "Documentos de Personal"
     }
   },
   "ARCHIVO": {

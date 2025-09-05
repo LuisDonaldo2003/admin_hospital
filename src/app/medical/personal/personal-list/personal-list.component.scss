@@ -1,0 +1,579 @@
+.card.card-list {
+  border-radius: 1rem;
+  padding: 2rem; // Aumentado de 1.5rem a 2rem
+  border: 4px solid var(--user-border-color, #0B7285) !important;
+  background-color: var(--user-card-bg, #ffffff) !important;
+  color: var(--user-card-text-color, #111827) !important;
+  position: relative;
+  z-index: 1;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  margin-bottom: 2rem; // Espacio adicional en la parte inferior
+
+  .card-body {
+    border-radius: 1rem;
+    background-color: transparent !important;
+    color: var(--user-card-text-color, #111827) !important;
+    padding: 0; // Eliminar padding por defecto del card-body
+
+    h4, h5, h6, p, span, small, th, td, .pagination-info {
+      color: var(--user-card-text-color, #111827) !important;
+    }
+
+    // Título principal con mejor espaciado
+    .header-bar {
+      margin-bottom: 2rem !important; // Aumentado de mb-3
+      padding-bottom: 1rem;
+      border-bottom: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
+      
+      h4 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  // Tabla: usar alta especificidad y variables para colores
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    background-color: transparent !important;
+    border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent) !important;
+    border-radius: 12px;
+    margin-bottom: 2rem; // Espacio después de la tabla
+
+    th, td {
+      border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent) !important;
+      padding: 1rem 0.75rem; // Aumentado el padding vertical de 0.75rem a 1rem
+      text-align: center;
+      vertical-align: middle;
+      color: var(--user-card-text-color, #111827) !important;
+      background: transparent !important;
+    }
+
+    thead th {
+      background: color-mix(in srgb, var(--user-border-color, #0B7285) 18%, transparent) !important;
+      color: var(--user-card-text-color, #111827) !important;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 1.25rem 0.75rem; // Más padding en el header
+      border-bottom: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+    }
+
+    tbody td {
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    thead th:first-child {
+      border-top-left-radius: 12px;
+    }
+
+    thead th:last-child {
+      border-top-right-radius: 12px;
+    }
+
+    tbody tr:last-child td:first-child {
+      border-bottom-left-radius: 12px;
+    }
+
+    tbody tr:last-child td:last-child {
+      border-bottom-right-radius: 12px;
+    }
+
+    // Mejorar el espaciado para columnas específicas
+    td:first-child, th:first-child {
+      text-align: left;
+      max-width: 280px; // Aumentado de 250px
+      padding-left: 1.25rem; // Más padding izquierdo
+    }
+
+    td:nth-child(2), th:nth-child(2) {
+      max-width: 160px; // Aumentado de 150px
+    }
+
+    // Espaciado entre filas
+    tbody tr {
+      &:not(:last-child) td {
+        border-bottom: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent) !important;
+      }
+    }
+  }
+
+  // Anulación explícita para .table-light (bootstrap)
+  .page-wrapper .card.card-list thead.table-light,
+  .page-wrapper .card.card-list thead.table-light th {
+    background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 18%, transparent) !important;
+    color: var(--user-card-text-color, #111827) !important;
+    border-bottom: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+  }
+
+  // Asegurar que la primera fila no herede fondo claro
+  .page-wrapper .card.card-list tbody tr:first-child td {
+    background: transparent !important;
+    color: var(--user-card-text-color, #111827) !important;
+  }
+
+  // Botón "Options" y "Nuevo Personal" profesional
+  .btn-options {
+    background-color: var(--user-border-color, #0B7285);
+    border: none;
+    padding: 10px 20px; // Aumentado de 6px 14px
+    font-weight: 500;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 1rem; // Espacio entre elementos
+
+    i {
+      margin-right: 8px; // Aumentado de 6px
+    }
+
+    &:hover {
+      filter: brightness(0.95);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      transform: translateY(-1px);
+    }
+  }
+
+  // Estilos para los badges de estado con mejor espaciado
+  .badge {
+    font-size: 0.8rem; // Aumentado de 0.75rem
+    padding: 0.4em 0.8em; // Aumentado el padding
+    border-radius: 6px;
+    font-weight: 500;
+    
+    &.bg-success {
+      background-color: #198754 !important;
+    }
+    
+    &.bg-info {
+      background-color: #0dcaf0 !important;
+    }
+    
+    &.bg-warning {
+      background-color: #ffc107 !important;
+      color: #000 !important;
+    }
+    
+    &.bg-secondary {
+      background-color: #6c757d !important;
+    }
+
+    i {
+      margin-right: 0.5rem;
+    }
+  }
+
+  // Estilos para los iconos de usuario con mejor espaciado
+  .fa-user-circle {
+    font-size: 2.2rem; // Ligeramente más grande
+    
+    &.text-success {
+      color: #198754 !important;
+    }
+    
+    &.text-info {
+      color: #0dcaf0 !important;
+    }
+  }
+
+  // Información del usuario con mejor tipografía
+  .user-info {
+    h6 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      line-height: 1.3;
+    }
+
+    small {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+  }
+
+  // Sección de estadísticas con mejor espaciado
+  .alert-info {
+    background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 8%, transparent) !important;
+    border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+    color: var(--user-card-text-color, #111827) !important;
+    border-radius: 12px;
+    padding: 1.5rem; // Aumentado el padding
+    margin-top: 2rem; // Más espacio arriba
+    
+    .stat-item {
+      padding: 0.5rem; // Padding adicional en cada estadística
+      
+      h5 {
+        font-weight: 700;
+        font-size: 1.75rem; // Números más grandes
+        margin-bottom: 0.5rem; // Más espacio debajo
+        line-height: 1;
+      }
+      
+      small {
+        font-weight: 500;
+        font-size: 0.875rem;
+        opacity: 0.8;
+        display: block;
+        margin-top: 0.25rem;
+      }
+    }
+  }
+
+  // Mensaje de no datos encontrados con mejor espaciado
+  .no-data-found {
+    padding: 3rem 2rem; // Aumentado el padding
+    
+    .fa-users {
+      opacity: 0.5;
+      margin-bottom: 1.5rem; // Más espacio debajo del icono
+    }
+    
+    h5 {
+      color: var(--user-card-text-color, #111827) !important;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    
+    p {
+      color: var(--user-card-text-color, #111827) !important;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.8;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+    }
+  }
+
+  // Mejores filtros con espaciado
+  .filter-section {
+    background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 5%, transparent);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
+
+    .form-label {
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+      color: var(--user-card-text-color, #111827) !important;
+    }
+
+    .form-select {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+      
+      &:focus {
+        border-color: var(--user-border-color, #0B7285) !important;
+        box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent) !important;
+      }
+    }
+  }
+}
+
+// Reglas específicas para asegurar que las celdas y labels dentro de la tabla
+// usen el color calculado por GeneralSettings
+.page-wrapper .card.card-list .table,
+.page-wrapper .card.card-list .table thead,
+.page-wrapper .card.card-list .table tbody,
+.page-wrapper .card.card-list .table thead th,
+.page-wrapper .card.card-list .table tbody td,
+.page-wrapper .card.card-list .table th label,
+.page-wrapper .card.card-list .table td label,
+.page-wrapper .card.card-list .table .form-check-label {
+  color: var(--user-card-text-color, #111827) !important;
+  background: transparent !important;
+}
+
+// Forzar la eliminación de fondos claros conflictivos
+.page-wrapper .card.card-list .table .bg-light,
+.page-wrapper .card.card-list .table .table-light,
+.page-wrapper .card.card-list thead.table-light,
+.page-wrapper .card.card-list .table .bg-white,
+.page-wrapper .card.card-list .table-striped tbody tr:nth-of-type(odd),
+.page-wrapper .card.card-list .table tbody tr,
+.page-wrapper .card.card-list .table tbody tr td {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: var(--user-card-text-color, #111827) !important;
+}
+
+// Modo oscuro: respetar variables y forzar color dentro de la card
+:host-context(.dark-mode) {
+  .card.card-list {
+    background-color: var(--user-card-bg, #23221c) !important;
+    border-color: var(--user-border-color, #0B7285) !important;
+    color: var(--user-card-text-color, #ffffff) !important;
+  }
+
+  .page-wrapper .card.card-list .card-body,
+  .page-wrapper .card.card-list .card-body h4,
+  .page-wrapper .card.card-list .card-body h5,
+  .page-wrapper .card.card-list .card-body h6,
+  .page-wrapper .card.card-list .card-body p,
+  .page-wrapper .card.card-list .card-body .pagination-info {
+    color: var(--user-card-text-color, #ffffff) !important;
+  }
+
+  // Forzar color de labels y celdas dentro de la tabla en modo oscuro
+  .page-wrapper .card.card-list .table thead th,
+  .page-wrapper .card.card-list .table tbody td,
+  .page-wrapper .card.card-list .table th label,
+  .page-wrapper .card.card-list .table td label,
+  .page-wrapper .card.card-list .table .form-check-label {
+    color: var(--user-card-text-color, #ffffff) !important;
+    border-color: rgba(255,255,255,0.06) !important;
+    background: transparent !important;
+  }
+
+  .page-wrapper .card.card-list table {
+    border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent) !important;
+    
+    th, td {
+      border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent) !important;
+    }
+    
+    thead th {
+      border-bottom: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+    }
+  }
+
+  .btn-options {
+    filter: none;
+  }
+
+  // Alertas en modo oscuro
+  .alert-info {
+    background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 8%, #23221c) !important;
+    border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+  }
+}
+
+/* Mejora: asegurar que el placeholder del input de búsqueda sea siempre legible */
+.search-input {
+  .form-control {
+    color: var(--user-card-text-color, #111827) !important;
+    border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+    padding: 0.75rem 1rem;
+    padding-right: 0.75rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    caret-color: var(--user-card-text-color, #111827) !important;
+    transition: border-color 0.2s ease;
+    
+    &:focus {
+      border-color: var(--user-border-color, #0B7285) !important;
+      box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent) !important;
+    }
+  }
+
+  .input-group-text {
+    background: transparent !important;
+    border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+    border-left: none !important;
+    color: var(--user-card-text-color, #111827) !important;
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* Placeholder: reglas cross-browser y forzado de opacidad */
+  .form-control::placeholder {
+    color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent) !important;
+    opacity: 1 !important;
+  }
+  .form-control::-webkit-input-placeholder {
+    color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent) !important;
+    opacity: 1 !important;
+  }
+  .form-control:-ms-input-placeholder {
+    color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent) !important;
+    opacity: 1 !important;
+  }
+  .form-control::-ms-input-placeholder {
+    color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent) !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Estilos para los filtros */
+.form-select {
+  color: var(--user-card-text-color, #111827) !important;
+  border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+  background-color: transparent !important;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease;
+  
+  &:focus {
+    border-color: var(--user-border-color, #0B7285) !important;
+    box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent) !important;
+  }
+  
+  option {
+    color: #000;
+    background-color: #fff;
+    padding: 0.5rem;
+  }
+}
+
+/* Placeholder para modo oscuro */
+:host-context(.dark-mode) {
+  .search-input {
+    .form-control {
+      border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+      
+      &:focus {
+        border-color: var(--user-border-color, #0B7285) !important;
+        box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent) !important;
+      }
+    }
+    
+    .input-group-text {
+      border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+      border-left: none !important;
+    }
+    
+    .form-control::placeholder {
+      color: rgba(255,255,255,0.65) !important;
+    }
+  }
+  
+  .form-select {
+    color: var(--user-card-text-color, #ffffff) !important;
+    border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+    
+    &:focus {
+      border-color: var(--user-border-color, #0B7285) !important;
+      box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent) !important;
+    }
+    
+    option {
+      color: #fff;
+      background-color: #343a40;
+    }
+  }
+}
+
+/* Estilos para paginación con mejor espaciado */
+.pagination {
+  margin-top: 1.5rem;
+  
+  .page-item {
+    margin: 0 0.25rem; // Espacio entre elementos de paginación
+    
+    .page-link {
+      color: var(--user-border-color, #0B7285) !important;
+      border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+      background-color: transparent !important;
+      padding: 0.75rem 1rem; // Mejor padding
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent) !important;
+        border-color: var(--user-border-color, #0B7285) !important;
+        transform: translateY(-1px);
+      }
+    }
+    
+    &.active .page-link {
+      background-color: var(--user-border-color, #0B7285) !important;
+      border-color: var(--user-border-color, #0B7285) !important;
+      color: #fff !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    &.disabled .page-link {
+      color: color-mix(in srgb, var(--user-card-text-color, #111827) 40%, transparent) !important;
+      background-color: transparent !important;
+      border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent) !important;
+    }
+  }
+}
+
+// Información de paginación con mejor espaciado
+.pagination-info {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--user-card-text-color, #111827) !important;
+  margin-bottom: 1rem;
+}
+
+/* Responsivo con mejor espaciado */
+@media (max-width: 768px) {
+  .card.card-list {
+    padding: 1.5rem; // Menos padding en móvil pero aún espacioso
+    margin-bottom: 1rem;
+    
+    .header-bar {
+      flex-direction: column;
+      align-items: stretch !important;
+      gap: 1.5rem; // Más espacio entre elementos
+      margin-bottom: 2rem !important;
+      
+      .search-input {
+        order: 2;
+      }
+      
+      .btn-options {
+        order: 1;
+        align-self: flex-start;
+        padding: 12px 24px; // Botones más grandes en móvil
+      }
+    }
+    
+    .filter-section {
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .table-responsive {
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+      
+      table {
+        th, td {
+          padding: 0.75rem 0.5rem; // Padding adaptado para móvil
+        }
+      }
+    }
+    
+    .pagination {
+      justify-content: center;
+      
+      .page-item .page-link {
+        padding: 0.5rem 0.75rem; // Padding menor en móvil
+      }
+    }
+    
+    .pagination-info {
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .alert-info {
+      padding: 1.25rem;
+      
+      .stat-item {
+        margin-bottom: 1rem;
+        
+        h5 {
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
+}

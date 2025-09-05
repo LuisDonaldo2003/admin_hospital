@@ -1,0 +1,811 @@
+// Aumentar especificidad para evitar sobrescritura de styles.scss
+:host {
+  .add-staff-form {
+    .card-form {
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-sizing: border-box;
+      border: 4px solid var(--user-border-color, #000) !important; // Borde SIEMPRE dinámico y visible
+      background-color: var(--user-card-bg, #fff) !important;
+      color: var(--user-card-text-color, #000);
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+      /* Estilos para la nueva interfaz de documentos */
+      .upload-info-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+        border: 1px solid #dee2e6 !important;
+        border-radius: 10px !important;
+        padding: 15px !important;
+        color: #333 !important;
+
+        h6 {
+          color: #333 !important;
+          font-weight: 600 !important;
+        }
+
+        p {
+          color: #666 !important;
+          margin-bottom: 0 !important;
+        }
+
+        .badge {
+          background-color: #007bff !important;
+          color: white !important;
+        }
+      }
+
+      .document-upload-card {
+        background: #fff !important;
+        border: 2px solid #e9ecef !important;
+        border-radius: 12px !important;
+        padding: 15px !important;
+        transition: all 0.3s ease !important;
+        height: 100% !important;
+
+        &:hover {
+          border-color: #007bff !important;
+          box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1) !important;
+        }
+
+        .upload-header {
+          display: flex !important;
+          align-items: center !important;
+          margin-bottom: 15px !important;
+          padding-bottom: 10px !important;
+          border-bottom: 1px solid #f0f0f0 !important;
+
+          .form-label {
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            color: #495057 !important;
+            margin-bottom: 0 !important;
+          }
+        }
+
+        .upload-area {
+          border: 2px dashed #cbd5e0 !important;
+          border-radius: 8px !important;
+          padding: 20px !important;
+          text-align: center !important;
+          min-height: 140px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          transition: all 0.3s ease !important;
+          position: relative !important;
+          background: #fafbfc !important;
+
+          &:hover:not(.has-file) {
+            border-color: #007bff !important;
+            background: #f0f8ff !important;
+          }
+
+          &.drag-over {
+            border-color: #007bff !important;
+            background: #e6f3ff !important;
+            transform: scale(1.02) !important;
+          }
+
+          &.has-file {
+            border-color: #28a745 !important;
+            border-style: solid !important;
+            background: #f8fff9 !important;
+          }
+
+          .upload-placeholder {
+            width: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+
+            .select-row {
+              display: inline-flex !important;
+              align-items: center !important;
+              gap: 10px !important;
+              margin-top: 8px !important;
+            }
+
+            .fa-cloud-upload {
+              opacity: 0.6 !important;
+              margin-bottom: 10px !important;
+              color: #6c757d !important;
+            }
+
+            p {
+              margin-bottom: 5px !important;
+              font-weight: 500 !important;
+              color: #495057 !important;
+            }
+
+            .file-input {
+              position: absolute !important;
+              opacity: 0 !important;
+              width: 0 !important;
+              height: 0 !important;
+              overflow: hidden !important;
+            }
+
+            .btn {
+              cursor: pointer !important;
+              font-size: 12px !important;
+              padding: 6px 12px !important;
+              background-color: #007bff !important;
+              border-color: #007bff !important;
+              color: white !important;
+            }
+
+            small {
+              color: #6c757d !important;
+            }
+          }
+
+          .upload-success {
+            width: 100% !important;
+
+            .fa-check-circle {
+              color: #28a745 !important;
+              margin-bottom: 10px !important;
+            }
+
+            p {
+              margin-bottom: 5px !important;
+              color: #495057 !important;
+              font-weight: 500 !important;
+            }
+
+            small {
+              font-size: 11px !important;
+              word-break: break-all !important;
+              max-width: 200px !important;
+              margin: 0 auto !important;
+              color: #6c757d !important;
+              display: block !important;
+            }
+
+            .btn {
+              font-size: 11px !important;
+              padding: 4px 8px !important;
+              background-color: #dc3545 !important;
+              border-color: #dc3545 !important;
+              color: white !important;
+            }
+          }
+        }
+      }
+
+      /* Estilos para la sección Estado de Documentos */
+      .form-section {
+        margin-top: 1.5rem !important;
+
+        h6 {
+          color: var(--user-card-text-color, #000) !important;
+          font-weight: 600 !important;
+          margin-bottom: 1rem !important;
+          font-size: 1.1rem !important;
+
+          .fa-info-circle {
+            color: #17a2b8 !important;
+          }
+        }
+
+        .documents-status {
+          background-color: #f8f9fa !important;
+          border-radius: 10px !important;
+          padding: 20px !important;
+          border: 1px solid #e9ecef !important;
+
+          p {
+            color: var(--user-card-text-color, #000) !important;
+            margin-bottom: 10px !important;
+            font-weight: 500 !important;
+
+            strong {
+              color: var(--user-card-text-color, #000) !important;
+            }
+          }
+
+          .document-item {
+            background-color: white !important;
+            border: 1px solid #e9ecef !important;
+            transition: all 0.3s ease !important;
+            border-radius: 8px !important;
+            padding: 10px !important;
+
+            &:hover {
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+              border-color: #007bff !important;
+            }
+
+            .fa-file-pdf-o {
+              color: #dc3545 !important;
+              font-size: 1.2rem !important;
+            }
+
+            small {
+              color: #495057 !important;
+
+              &.fw-bold {
+                color: #212529 !important;
+                font-weight: 600 !important;
+              }
+
+              &.text-muted {
+                color: #6c757d !important;
+              }
+            }
+
+            .btn-outline-danger {
+              border-color: #dc3545 !important;
+              color: #dc3545 !important;
+              background-color: transparent !important;
+
+              &:hover {
+                background-color: #dc3545 !important;
+                color: white !important;
+              }
+            }
+          }
+        }
+
+        // Alertas específicas para esta sección
+        .alert-warning {
+          background-color: #fff3cd !important;
+          border-color: #ffeaa7 !important;
+          color: #856404 !important;
+          border-left: 4px solid #ffc107 !important;
+
+          .fa-exclamation-triangle {
+            color: #ffc107 !important;
+          }
+
+          strong {
+            color: #856404 !important;
+          }
+
+          small {
+            color: #664d03 !important;
+          }
+        }
+
+        .alert-success {
+          background-color: #d4edda !important;
+          border-color: #c3e6cb !important;
+          color: #155724 !important;
+          border-left: 4px solid #28a745 !important;
+
+          .fa-check-circle {
+            color: #28a745 !important;
+          }
+
+          strong {
+            color: #155724 !important;
+          }
+
+          small {
+            color: #0f4132 !important;
+          }
+        }
+      }
+
+      /* Mejorar la apariencia del alert de éxito */
+      .alert-success {
+        border-left: 4px solid #28a745 !important;
+        background-color: #d4edda !important;
+        border-color: #c3e6cb !important;
+        color: #155724 !important;
+        animation: slideInDown 0.5s ease-out !important;
+        
+        .fas {
+          color: #28a745 !important;
+        }
+      }
+
+      .alert-info {
+        border-left: 4px solid #17a2b8 !important;
+      }
+
+      .alert-warning {
+        background-color: #fff3cd !important;
+        border-color: #ffeaa7 !important;
+        color: #856404 !important;
+      }
+
+      /* Animación para la alerta de éxito */
+      @keyframes slideInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      // Títulos y labels con mayor especificidad para evitar sobrescritura
+      h3, h4, h5, h6 {
+        color: var(--user-card-text-color, #000) !important;
+        font-weight: 600 !important;
+        margin-bottom: 1rem !important;
+
+        .fas, .fa {
+          color: inherit !important;
+        }
+      }
+
+      // Título principal
+      h3 {
+        font-size: 1.5rem !important;
+        border-bottom: 2px solid #e9ecef !important;
+        padding-bottom: 0.5rem !important;
+        margin-bottom: 1.5rem !important;
+
+        .fas.fa-user-plus {
+          color: #007bff !important;
+        }
+      }
+
+      .form-label {
+        font-weight: 600 !important;
+        color: var(--user-card-text-color, #000) !important;
+        margin-bottom: 8px !important;
+        font-size: 0.95rem !important;
+      }
+
+      // Párrafos y textos
+      p {
+        color: var(--user-card-text-color, #000) !important;
+        margin-bottom: 1rem !important;
+      }
+
+      // Breadcrumb específico
+      .breadcrumb {
+        background-color: #f8f9fa !important;
+        border-radius: 8px !important;
+        padding: 0.75rem 1rem !important;
+        margin-bottom: 0 !important;
+
+        .breadcrumb-item {
+          color: #6c757d !important;
+
+          a {
+            color: #007bff !important;
+            text-decoration: none !important;
+
+            &:hover {
+              text-decoration: underline !important;
+            }
+          }
+
+          &.active {
+            color: #495057 !important;
+            font-weight: 500 !important;
+          }
+        }
+      }
+
+      // Inputs y selects con mayor especificidad
+      .form-control,
+      .form-select {
+        border-radius: 0.5rem !important;
+        padding: 0.6rem 1rem !important;
+        border: 1px solid #ccc !important;
+        background-color: #fff !important;
+        color: #000 !important;
+        font-size: 1rem !important;
+        box-shadow: none !important;
+        transition: all 0.2s ease !important;
+
+        &:focus {
+          border-color: #0d6efd !important;
+          box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25) !important;
+          outline: none !important;
+        }
+
+        &.is-invalid {
+          border-color: #dc3545 !important;
+          background-color: #ffe6e6 !important;
+        }
+      }
+
+      .form-select option {
+        color: #000 !important;
+        background-color: #fff !important;
+      }
+    }
+
+    .hover-item {
+      transition: all 0.2s ease !important;
+    }
+
+    .btn {
+      font-weight: 500 !important;
+      padding: 0.5rem 1.5rem !important;
+    }
+
+    .alert {
+      border-radius: 0.375rem !important;
+      font-size: 0.875rem !important;
+    }
+
+    // 🌞 MODO CLARO
+    &:not(.dark-mode-container) {
+      .card-form {
+        background-color: var(--user-card-bg, #fff) !important;
+        color: var(--user-card-text-color, #000) !important;
+        border: 4px solid var(--user-border-color, #000) !important; // Borde dinámico
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+      }
+
+      .form-control,
+      .form-select {
+        border-radius: 0.5rem !important;
+        padding: 0.6rem 1rem !important;
+        border: 1px solid #ccc !important;
+        background-color: #fff !important;
+        color: #000 !important;
+        font-size: 1.1rem !important;
+        box-shadow: none !important;
+        transition: background 0.2s, color 0.2s, border 0.2s !important;
+
+        &:focus {
+          border: 1px solid #0d6efd !important;
+          box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25) !important;
+          outline: none !important;
+        }
+      }
+
+      .form-select option {
+        color: #000 !important;
+        background-color: #fff !important;
+      }
+
+      // Breadcrumb en modo claro
+      .breadcrumb {
+        background-color: #f8f9fa !important;
+
+        .breadcrumb-item {
+          color: #6c757d !important;
+
+          a {
+            color: #007bff !important;
+          }
+
+          &.active {
+            color: #495057 !important;
+          }
+        }
+      }
+
+      .document-upload-card {
+        background: #fff !important;
+        border-color: #e9ecef !important;
+
+        .upload-area {
+          background: #fafbfc !important;
+          border-color: #cbd5e0 !important;
+
+          &:hover:not(.has-file) {
+            border-color: #007bff !important;
+            background: #f0f8ff !important;
+          }
+
+          &.has-file {
+            border-color: #28a745 !important;
+            background: #f8fff9 !important;
+          }
+        }
+      }
+    }
+
+    // 🌚 MODO OSCURO
+    &.dark-mode-container {
+      .card-form {
+        background-color: var(--user-card-bg, #2a2a3a) !important;
+        color: var(--user-card-text-color, #fff) !important;
+        border: 4px solid var(--user-border-color, #fff) !important; // Borde dinámico
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+        
+        h3, h4, h5, h6,
+        .form-label {
+          color: var(--user-card-text-color, #fff) !important;
+        }
+
+        // Títulos en modo oscuro
+        h3 {
+          border-bottom-color: #444 !important;
+
+          .fas.fa-user-plus {
+            color: #007bff !important;
+          }
+        }
+
+        // Párrafos en modo oscuro
+        p {
+          color: #ccc !important;
+        }
+
+        // Breadcrumb en modo oscuro
+        .breadcrumb {
+          background-color: #2a2a3a !important;
+
+          .breadcrumb-item {
+            color: #999 !important;
+
+            a {
+              color: #007bff !important;
+            }
+
+            &.active {
+              color: #fff !important;
+            }
+          }
+        }
+      }
+
+      .upload-info-card {
+        background: linear-gradient(135deg, #2a2a3a 0%, #3a3a4a 100%) !important;
+        border-color: #444 !important;
+        color: #fff !important;
+
+        h6, p {
+          color: #fff !important;
+        }
+      }
+
+      .document-upload-card {
+        background: #2a2a3a !important;
+        border-color: #444 !important;
+
+        .upload-header .form-label {
+          color: #fff !important;
+        }
+
+        .upload-area {
+          background: #1a1a2a !important;
+          border-color: #555 !important;
+
+          &:hover:not(.has-file) {
+            border-color: #0d6efd !important;
+            background: #1a2a3a !important;
+          }
+
+          &.has-file {
+            border-color: #28a745 !important;
+            background: #1a2a1a !important;
+          }
+
+          .upload-placeholder {
+            p, small {
+              color: #ccc !important;
+            }
+          }
+
+          .upload-success {
+            small {
+              color: #ccc !important;
+            }
+          }
+        }
+      }
+
+      .form-control,
+      .form-select {
+        background-color: #fff !important;
+        color: #222 !important;
+        border: 1px solid #444 !important;
+        font-size: 1.1rem !important;
+        border-radius: 0.5rem !important;
+        padding: 0.6rem 1rem !important;
+        box-shadow: none !important;
+        transition: background 0.2s, color 0.2s, border 0.2s !important;
+      }
+
+      .form-select:focus {
+        border: 1px solid #444 !important;
+        box-shadow: none !important;
+        outline: none !important;
+      }
+
+      .form-select option {
+        color: #222 !important;
+        background-color: #fff !important;
+      }
+
+      .form-control::placeholder {
+        color: #888 !important;
+      }
+
+      .form-control.is-invalid,
+      select.form-control.is-invalid {
+        border-color: #f87171 !important;
+        background-color: #442626 !important;
+      }
+
+      .btn-primary {
+        background-color: #3b82f6 !important;
+        border-color: #3b82f6 !important;
+
+        &:hover {
+          background-color: #2563eb !important;
+        }
+      }
+
+      .alert-warning {
+        background-color: #5c3d03 !important;
+        color: #f6e58d !important;
+      }
+
+      .alert-success {
+        background-color: #024d36 !important;
+        color: #c7f9cc !important;
+        border-color: #28a745 !important;
+        
+        .fas {
+          color: #28a745 !important;
+        }
+      }
+
+      // MODO OSCURO: selects con letra blanca y fondo Bootstrap
+      .form-select {
+        background-color: #2a2a3a !important; // Fondo oscuro Bootstrap
+        color: #fff !important; // Letra blanca en el select
+        border: 1px solid #444 !important; // Solo borde estándar oscuro
+        box-shadow: none !important; // Sin contorno ni glow
+
+        &:focus {
+          border: 1px solid #444 !important; // Sin color especial al enfocar
+          box-shadow: none !important;
+        }
+      }
+
+      .form-select option {
+        color: #222 !important;
+        background-color: #fff !important;
+      }
+
+      // Documentos seleccionados - Modo oscuro
+      .bg-light {
+        background-color: #2a2a3a !important;
+        border: 1px solid #444 !important;
+        
+        small {
+          color: #28a745 !important;
+          
+          strong {
+            color: #f8f9fa !important;
+          }
+        }
+      }
+
+      // Estado de documentos - Modo oscuro
+      .form-section {
+        h6 {
+          color: var(--user-card-text-color, #fff) !important;
+
+          .fa-info-circle {
+            color: #17a2b8 !important;
+          }
+        }
+
+        .documents-status {
+          background-color: #2a2a3a !important;
+          border-color: #444 !important;
+
+          p {
+            color: #fff !important;
+
+            strong {
+              color: #fff !important;
+            }
+          }
+
+          .document-item {
+            background-color: #1a1a2a !important;
+            border-color: #555 !important;
+
+            &:hover {
+              border-color: #007bff !important;
+              box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3) !important;
+            }
+
+            small {
+              color: #ccc !important;
+
+              &.fw-bold {
+                color: #fff !important;
+              }
+
+              &.text-muted {
+                color: #999 !important;
+              }
+            }
+          }
+        }
+
+        .alert-warning {
+          background-color: #5c3d03 !important;
+          border-color: #d39e00 !important;
+          color: #f6e58d !important;
+
+          strong {
+            color: #f6e58d !important;
+          }
+
+          small {
+            color: #e6d16a !important;
+          }
+        }
+
+        .alert-success {
+          background-color: #024d36 !important;
+          border-color: #28a745 !important;
+          color: #c7f9cc !important;
+
+          strong {
+            color: #c7f9cc !important;
+          }
+
+          small {
+            color: #a8f5ae !important;
+          }
+        }
+      }
+    }
+
+    ::selection {
+      background-color: #3b82f6 !important;
+      color: #fff !important;
+    }
+  }
+}
+
+// Clase especial para el contenedor de modo oscuro
+.dark-mode-container {
+  .add-staff-form {
+    .form-control,
+    .form-select {
+      background-color: #fff !important;
+      color: #222 !important;
+      border: 1px solid #444 !important;
+      font-size: 1.1rem !important;
+      border-radius: 0.5rem !important;
+      padding: 0.6rem 1rem !important;
+      box-shadow: none !important;
+      transition: background 0.2s, color 0.2s, border 0.2s !important;
+    }
+
+    .form-select:focus {
+      border: 1px solid #444 !important;
+      box-shadow: none !important;
+      outline: none !important;
+    }
+
+    .form-select option {
+      color: #222 !important;
+      background-color: #fff !important;
+    }
+  }
+}
+
+// Animaciones específicas para drag & drop
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40%, 43% {
+    transform: translateY(-30px);
+  }
+  70% {
+    transform: translateY(-15px);
+  }
+  90% {
+    transform: translateY(-4px);
+  }
+}
+
+:host .upload-area.drag-over {
+  animation: bounce 0.6s ease-in-out !important;
+}

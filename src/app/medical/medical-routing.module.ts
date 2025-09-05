@@ -44,11 +44,6 @@ const routes: Routes = [
         loadChildren: () => 
           import('./organization-chart/organization-chart.module').then(m => m.OrganizationChartModule)
       },
-       {
-        path: 'pharmacy',
-        loadChildren: () => 
-          import('./pharmacy/pharmacy.module').then(m => m.PharmacyModule)
-      },
       {
         path: 'dashboard',
         loadChildren: () => 
@@ -58,6 +53,33 @@ const routes: Routes = [
         path: 'credits',
         loadChildren: () => 
           import('./credits/credits.module').then(m => m.CreditsModule)
+      },
+      {
+        path: 'personal',
+        loadComponent: () => 
+          import('./personal/personal.component').then(m => m.PersonalComponent),
+        children: [
+          {
+            path: 'list_personal',
+            loadComponent: () => 
+              import('./personal/personal-list/personal-list.component').then(m => m.PersonalListComponent)
+          },
+          {
+            path: 'add_personal',
+            loadComponent: () => 
+              import('./personal/add-personal/add-personal.component').then(m => m.AddPersonalComponent)
+          },
+          {
+            path: 'edit_personal/:id',
+            loadComponent: () => 
+              import('./personal/edit-personal/edit-personal.component').then(m => m.EditPersonalComponent)
+          },
+          {
+            path: '',
+            redirectTo: 'list',
+            pathMatch: 'full'
+          }
+        ]
       },
 
     ]
