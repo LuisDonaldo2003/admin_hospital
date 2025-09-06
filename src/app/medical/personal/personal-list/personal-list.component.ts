@@ -131,7 +131,8 @@ export class PersonalListComponent implements OnInit {
         this.loading = false;
         if (response.success) {
           this.personalList = response.data;
-          this.totalData = this.personalList.length; // Ajustar si la API devuelve total separado
+          // Usar el total del backend en lugar del length local
+          this.totalData = response.total || response.data.length;
           this.calculateTotalPages(this.totalData, this.pageSize);
         } else {
           console.error('Error al obtener personal:', response.message);
@@ -186,14 +187,14 @@ export class PersonalListComponent implements OnInit {
     if (event === 'next') {
       this.currentPage++;
       this.pageIndex = this.currentPage - 1;
-      this.limit += this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
+      this.skip = (this.currentPage - 1) * this.pageSize;
+      this.limit = this.pageSize;
       this.getTableData();
     } else if (event === 'previous') {
       this.currentPage--;
       this.pageIndex = this.currentPage - 1;
-      this.limit -= this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
+      this.skip = (this.currentPage - 1) * this.pageSize;
+      this.limit = this.pageSize;
       this.getTableData();
     }
   }
@@ -203,6 +204,7 @@ export class PersonalListComponent implements OnInit {
    */
   public moveToPage(pageNumber: number): void {
     this.currentPage = pageNumber;
+    this.pageIndex = pageNumber - 1;
     this.skip = (pageNumber - 1) * this.pageSize;
     this.limit = this.pageSize;
     this.getTableData();
@@ -251,8 +253,29 @@ export class PersonalListComponent implements OnInit {
       this.personalService.deletePersonal(this.personal_selected.id).subscribe({
         next: (response: ApiResponse<any>) => {
           if (response.success) {
-            this.getTableData();
+            // Optimización: actualizar localmente en lugar de recargar todo
+            this.personalList = this.personalList.filter(p => p.id !== this.personal_selected?.id);
+            this.totalData--;
+            this.personal_selected = null;
+            
+            // Verificar si necesitamos ajustar la página actual
+            const totalPages = Math.ceil(this.totalData / this.pageSize);
+            if (this.currentPage > totalPages && totalPages > 0) {
+              this.currentPage = totalPages;
+              this.pageIndex = this.currentPage - 1;
+              this.skip = (this.currentPage - 1) * this.pageSize;
+              this.getTableData();
+            } else if (this.personalList.length === 0 && this.totalData > 0) {
+              // Si la página actual queda vacía pero hay más datos
+              this.getTableData();
+            } else {
+              // Recalcular la paginación con los nuevos datos
+              this.calculateTotalPages(this.totalData, this.pageSize);
+            }
+            
+            // Solo recargar estadísticas
             this.getEstadisticas();
+            
             console.log('Personal eliminado exitosamente');
           } else {
             console.error('Error al eliminar personal:', response.message);

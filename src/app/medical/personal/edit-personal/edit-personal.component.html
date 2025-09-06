@@ -1,6 +1,6 @@
 <!-- Contenedor principal de la página para editar personal -->
 <div class="page-wrapper">
-  <div class="content add-staff-form">
+  <div class="content add-staff-form" [class.dark-mode-container]="isDarkMode()">
     <!-- Encabezado y breadcrumb de navegación -->
     <div class="page-header mb-4">
       <div class="row">
@@ -32,7 +32,7 @@
             <h3 class="text-center mb-4 fw-bold">Editar Personal</h3>
 
             <!-- Formulario para editar personal -->
-            <form (keydown.enter)="save()" class="form-section">
+            <form (keydown.enter)="save()" class="form-section" novalidate>
               <div class="row g-3">
                 
                 <!-- Campo: Nombre -->
@@ -110,248 +110,379 @@
                   <strong>Los documentos son opcionales. Si no están todos, el personal se marcará como "documentos incompletos".</strong>
                 </p>
 
-                <div class="row g-3">
-                  
+                <div class="row g-4">
                   <!-- Acta de Nacimiento -->
                   <div class="col-md-6">
-                    <label class="form-label">Acta de Nacimiento</label>
-                    <div class="file-upload-wrapper">
-                      <!-- Documento existente -->
-                      <div *ngIf="documentExists('Acta de nacimiento')" class="existing-document mb-2">
-                        <div class="document-item d-flex align-items-center p-2 bg-light rounded">
-                          <i class="fa fa-file-pdf-o text-success me-2"></i>
-                          <div class="flex-grow-1">
-                            <small class="fw-bold d-block text-success">Documento existente</small>
-                            <small class="text-muted">{{ getDocumentDisplayName('Acta de nacimiento') }}</small>
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-id-card text-primary me-2"></i>
+                        <label class="form-label mb-0">Acta de Nacimiento</label>
+                      </div>
+                      <div class="upload-area"
+                           [class.has-file]="documentExists('Acta de nacimiento') || documentosNuevos.has('Acta de nacimiento')"
+                           (dragover)="onDragOver($event)"
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)"
+                           (drop)="onDrop($event, 'Acta de nacimiento', $event.currentTarget)">
+                        <div *ngIf="!(documentExists('Acta de nacimiento') || documentosNuevos.has('Acta de nacimiento'))" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input
+                              type="file"
+                              class="file-input"
+                              id="acta-nacimiento-edit"
+                              accept=".pdf"
+                              aria-label="Seleccionar Acta de Nacimiento"
+                              (change)="onFileSelected($event, 'Acta de nacimiento')" />
+                            <label for="acta-nacimiento-edit" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
                           </div>
-                          <div class="btn-group-sm">
-                            <button type="button" 
-                                    class="btn btn-sm btn-outline-primary me-1"
+                        </div>
+                        <div *ngIf="documentExists('Acta de nacimiento') && !documentosNuevos.has('Acta de nacimiento')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Documento existente</p>
+                          <small class="text-muted d-block">{{ getDocumentDisplayName('Acta de nacimiento') }}</small>
+                          <div class="btn-group-sm mt-2">
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-sm me-1"
                                     (click)="downloadDocument(getExistingDocument('Acta de nacimiento')?.id!)"
                                     title="Descargar">
                               <i class="fa fa-download"></i>
                             </button>
-                            <button type="button" 
-                                    class="btn btn-sm btn-outline-danger"
+                            <button type="button"
+                                    class="btn btn-outline-danger btn-sm"
                                     (click)="removeExistingDocument(getExistingDocument('Acta de nacimiento')!)"
                                     title="Eliminar">
                               <i class="fa fa-trash"></i>
                             </button>
                           </div>
                         </div>
+                        <div *ngIf="documentosNuevos.has('Acta de nacimiento')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <small class="text-muted d-block">{{ documentosNuevos.get('Acta de nacimiento')?.name }}</small>
+                          <button type="button"
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeNewDocument('Acta de nacimiento')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
                       </div>
-                      <!-- Input para nuevo documento -->
-                      <input 
-                        type="file" 
-                        class="form-control" 
-                        accept=".pdf"
-                        (change)="onFileSelected($event, 'Acta de nacimiento')" />
-                      <small class="form-text text-muted">
-                        {{ documentExists('Acta de nacimiento') ? 'Subir archivo para reemplazar el existente' : 'Solo archivos PDF' }}
-                      </small>
                     </div>
                   </div>
-
                   <!-- Comprobante de Domicilio -->
                   <div class="col-md-6">
-                    <label class="form-label">Comprobante de Domicilio</label>
-                    <div class="file-upload-wrapper">
-                      <!-- Documento existente -->
-                      <div *ngIf="documentExists('Comprobante de domicilio')" class="existing-document mb-2">
-                        <div class="document-item d-flex align-items-center p-2 bg-light rounded">
-                          <i class="fa fa-file-pdf-o text-success me-2"></i>
-                          <div class="flex-grow-1">
-                            <small class="fw-bold d-block text-success">Documento existente</small>
-                            <small class="text-muted">{{ getDocumentDisplayName('Comprobante de domicilio') }}</small>
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-home text-primary me-2"></i>
+                        <label class="form-label mb-0">Comprobante de Domicilio</label>
+                      </div>
+                      <div class="upload-area"
+                           [class.has-file]="documentExists('Comprobante de domicilio') || documentosNuevos.has('Comprobante de domicilio')"
+                           (dragover)="onDragOver($event)"
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)"
+                           (drop)="onDrop($event, 'Comprobante de domicilio', $event.currentTarget)">
+                        <div *ngIf="!(documentExists('Comprobante de domicilio') || documentosNuevos.has('Comprobante de domicilio'))" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input
+                              type="file"
+                              class="file-input"
+                              id="comprobante-domicilio-edit"
+                              accept=".pdf"
+                              aria-label="Seleccionar Comprobante de Domicilio"
+                              (change)="onFileSelected($event, 'Comprobante de domicilio')" />
+                            <label for="comprobante-domicilio-edit" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
                           </div>
-                          <div class="btn-group-sm">
-                            <button type="button" 
-                                    class="btn btn-sm btn-outline-primary me-1"
+                        </div>
+                        <div *ngIf="documentExists('Comprobante de domicilio') && !documentosNuevos.has('Comprobante de domicilio')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Documento existente</p>
+                          <small class="text-muted d-block">{{ getDocumentDisplayName('Comprobante de domicilio') }}</small>
+                          <div class="btn-group-sm mt-2">
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-sm me-1"
                                     (click)="downloadDocument(getExistingDocument('Comprobante de domicilio')?.id!)"
                                     title="Descargar">
                               <i class="fa fa-download"></i>
                             </button>
-                            <button type="button" 
-                                    class="btn btn-sm btn-outline-danger"
+                            <button type="button"
+                                    class="btn btn-outline-danger btn-sm"
                                     (click)="removeExistingDocument(getExistingDocument('Comprobante de domicilio')!)"
                                     title="Eliminar">
                               <i class="fa fa-trash"></i>
                             </button>
                           </div>
                         </div>
+                        <div *ngIf="documentosNuevos.has('Comprobante de domicilio')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <small class="text-muted d-block">{{ documentosNuevos.get('Comprobante de domicilio')?.name }}</small>
+                          <button type="button"
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeNewDocument('Comprobante de domicilio')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
                       </div>
-                      <!-- Input para nuevo documento -->
-                      <input 
-                        type="file" 
-                        class="form-control" 
-                        accept=".pdf"
-                        (change)="onFileSelected($event, 'Comprobante de domicilio')" />
-                      <small class="form-text text-muted">
-                        {{ documentExists('Comprobante de domicilio') ? 'Subir archivo para reemplazar el existente' : 'Solo archivos PDF' }}
-                      </small>
                     </div>
                   </div>
-
                   <!-- CURP -->
                   <div class="col-md-6">
-                    <label class="form-label">CURP</label>
-                    <div class="file-upload-wrapper">
-                      <!-- Documento existente -->
-                      <div *ngIf="documentExists('CURP')" class="existing-document mb-2">
-                        <div class="document-item d-flex align-items-center p-2 bg-light rounded">
-                          <i class="fa fa-file-pdf-o text-success me-2"></i>
-                          <div class="flex-grow-1">
-                            <small class="fw-bold d-block text-success">Documento existente</small>
-                            <small class="text-muted">{{ getDocumentDisplayName('CURP') }}</small>
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-address-card text-primary me-2"></i>
+                        <label class="form-label mb-0">CURP</label>
+                      </div>
+                      <div class="upload-area"
+                           [class.has-file]="documentExists('CURP') || documentosNuevos.has('CURP')"
+                           (dragover)="onDragOver($event)"
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)"
+                           (drop)="onDrop($event, 'CURP', $event.currentTarget)">
+                        <div *ngIf="!(documentExists('CURP') || documentosNuevos.has('CURP'))" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input
+                              type="file"
+                              class="file-input"
+                              id="curp-edit"
+                              accept=".pdf"
+                              aria-label="Seleccionar CURP"
+                              (change)="onFileSelected($event, 'CURP')" />
+                            <label for="curp-edit" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
                           </div>
-                          <div class="btn-group-sm">
-                            <button type="button" 
-                                    class="btn btn-sm btn-outline-primary me-1"
+                        </div>
+                        <div *ngIf="documentExists('CURP') && !documentosNuevos.has('CURP')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Documento existente</p>
+                          <small class="text-muted d-block">{{ getDocumentDisplayName('CURP') }}</small>
+                          <div class="btn-group-sm mt-2">
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-sm me-1"
                                     (click)="downloadDocument(getExistingDocument('CURP')?.id!)"
                                     title="Descargar">
                               <i class="fa fa-download"></i>
                             </button>
-                            <button type="button" 
-                                    class="btn btn-sm btn-outline-danger"
+                            <button type="button"
+                                    class="btn btn-outline-danger btn-sm"
                                     (click)="removeExistingDocument(getExistingDocument('CURP')!)"
                                     title="Eliminar">
                               <i class="fa fa-trash"></i>
                             </button>
                           </div>
                         </div>
+                        <div *ngIf="documentosNuevos.has('CURP')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <small class="text-muted d-block">{{ documentosNuevos.get('CURP')?.name }}</small>
+                          <button type="button"
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeNewDocument('CURP')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
                       </div>
-                      <!-- Input para nuevo documento -->
-                      <input 
-                        type="file" 
-                        class="form-control" 
-                        accept=".pdf"
-                        (change)="onFileSelected($event, 'CURP')" />
-                      <small class="form-text text-muted">
-                        {{ documentExists('CURP') ? 'Subir archivo para reemplazar el existente' : 'Solo archivos PDF' }}
-                      </small>
                     </div>
                   </div>
-
                   <!-- INE -->
                   <div class="col-md-6">
-                    <label class="form-label">INE</label>
-                    <div class="file-upload-wrapper">
-                      <!-- Documento existente -->
-                      <div *ngIf="documentExists('INE')" class="existing-document mb-2">
-                        <div class="document-item d-flex align-items-center p-2 bg-light rounded">
-                          <i class="fa fa-file-pdf-o text-success me-2"></i>
-                          <div class="flex-grow-1">
-                            <small class="fw-bold d-block text-success">Documento existente</small>
-                            <small class="text-muted">{{ getDocumentDisplayName('INE') }}</small>
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-credit-card text-primary me-2"></i>
+                        <label class="form-label mb-0">INE</label>
+                      </div>
+                      <div class="upload-area"
+                           [class.has-file]="documentExists('INE') || documentosNuevos.has('INE')"
+                           (dragover)="onDragOver($event)"
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)"
+                           (drop)="onDrop($event, 'INE', $event.currentTarget)">
+                        <div *ngIf="!(documentExists('INE') || documentosNuevos.has('INE'))" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input
+                              type="file"
+                              class="file-input"
+                              id="ine-edit"
+                              accept=".pdf"
+                              aria-label="Seleccionar INE"
+                              (change)="onFileSelected($event, 'INE')" />
+                            <label for="ine-edit" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
                           </div>
-                          <div class="btn-group-sm">
-                            <button type="button" 
-                                    class="btn btn-sm btn-outline-primary me-1"
+                        </div>
+                        <div *ngIf="documentExists('INE') && !documentosNuevos.has('INE')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Documento existente</p>
+                          <small class="text-muted d-block">{{ getDocumentDisplayName('INE') }}</small>
+                          <div class="btn-group-sm mt-2">
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-sm me-1"
                                     (click)="downloadDocument(getExistingDocument('INE')?.id!)"
                                     title="Descargar">
                               <i class="fa fa-download"></i>
                             </button>
-                            <button type="button" 
-                                    class="btn btn-sm btn-outline-danger"
+                            <button type="button"
+                                    class="btn btn-outline-danger btn-sm"
                                     (click)="removeExistingDocument(getExistingDocument('INE')!)"
                                     title="Eliminar">
                               <i class="fa fa-trash"></i>
                             </button>
                           </div>
                         </div>
+                        <div *ngIf="documentosNuevos.has('INE')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <small class="text-muted d-block">{{ documentosNuevos.get('INE')?.name }}</small>
+                          <button type="button"
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeNewDocument('INE')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
                       </div>
-                      <!-- Input para nuevo documento -->
-                      <input 
-                        type="file" 
-                        class="form-control" 
-                        accept=".pdf"
-                        (change)="onFileSelected($event, 'INE')" />
-                      <small class="form-text text-muted">
-                        {{ documentExists('INE') ? 'Subir archivo para reemplazar el existente' : 'Solo archivos PDF' }}
-                      </small>
                     </div>
                   </div>
-
                   <!-- RFC -->
                   <div class="col-md-6">
-                    <label class="form-label">RFC</label>
-                    <div class="file-upload-wrapper">
-                      <!-- Documento existente -->
-                      <div *ngIf="documentExists('RFC')" class="existing-document mb-2">
-                        <div class="document-item d-flex align-items-center p-2 bg-light rounded">
-                          <i class="fa fa-file-pdf-o text-success me-2"></i>
-                          <div class="flex-grow-1">
-                            <small class="fw-bold d-block text-success">Documento existente</small>
-                            <small class="text-muted">{{ getDocumentDisplayName('RFC') }}</small>
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-file-text text-primary me-2"></i>
+                        <label class="form-label mb-0">RFC</label>
+                      </div>
+                      <div class="upload-area"
+                           [class.has-file]="documentExists('RFC') || documentosNuevos.has('RFC')"
+                           (dragover)="onDragOver($event)"
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)"
+                           (drop)="onDrop($event, 'RFC', $event.currentTarget)">
+                        <div *ngIf="!(documentExists('RFC') || documentosNuevos.has('RFC'))" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input
+                              type="file"
+                              class="file-input"
+                              id="rfc-edit"
+                              accept=".pdf"
+                              aria-label="Seleccionar RFC"
+                              (change)="onFileSelected($event, 'RFC')" />
+                            <label for="rfc-edit" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
                           </div>
-                          <div class="btn-group-sm">
-                            <button type="button" 
-                                    class="btn btn-sm btn-outline-primary me-1"
+                        </div>
+                        <div *ngIf="documentExists('RFC') && !documentosNuevos.has('RFC')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Documento existente</p>
+                          <small class="text-muted d-block">{{ getDocumentDisplayName('RFC') }}</small>
+                          <div class="btn-group-sm mt-2">
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-sm me-1"
                                     (click)="downloadDocument(getExistingDocument('RFC')?.id!)"
                                     title="Descargar">
                               <i class="fa fa-download"></i>
                             </button>
-                            <button type="button" 
-                                    class="btn btn-sm btn-outline-danger"
+                            <button type="button"
+                                    class="btn btn-outline-danger btn-sm"
                                     (click)="removeExistingDocument(getExistingDocument('RFC')!)"
                                     title="Eliminar">
                               <i class="fa fa-trash"></i>
                             </button>
                           </div>
                         </div>
+                        <div *ngIf="documentosNuevos.has('RFC')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <small class="text-muted d-block">{{ documentosNuevos.get('RFC')?.name }}</small>
+                          <button type="button"
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeNewDocument('RFC')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
                       </div>
-                      <!-- Input para nuevo documento -->
-                      <input 
-                        type="file" 
-                        class="form-control" 
-                        accept=".pdf"
-                        (change)="onFileSelected($event, 'RFC')" />
-                      <small class="form-text text-muted">
-                        {{ documentExists('RFC') ? 'Subir archivo para reemplazar el existente' : 'Solo archivos PDF' }}
-                      </small>
                     </div>
                   </div>
-
                   <!-- Título Profesional -->
                   <div class="col-md-6">
-                    <label class="form-label">Título Profesional</label>
-                    <div class="file-upload-wrapper">
-                      <!-- Documento existente -->
-                      <div *ngIf="documentExists('Título profesional')" class="existing-document mb-2">
-                        <div class="document-item d-flex align-items-center p-2 bg-light rounded">
-                          <i class="fa fa-file-pdf-o text-success me-2"></i>
-                          <div class="flex-grow-1">
-                            <small class="fw-bold d-block text-success">Documento existente</small>
-                            <small class="text-muted">{{ getDocumentDisplayName('Título profesional') }}</small>
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-graduation-cap text-primary me-2"></i>
+                        <label class="form-label mb-0">Título Profesional</label>
+                      </div>
+                      <div class="upload-area"
+                           [class.has-file]="documentExists('Título profesional') || documentosNuevos.has('Título profesional')"
+                           (dragover)="onDragOver($event)"
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)"
+                           (drop)="onDrop($event, 'Título profesional', $event.currentTarget)">
+                        <div *ngIf="!(documentExists('Título profesional') || documentosNuevos.has('Título profesional'))" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input
+                              type="file"
+                              class="file-input"
+                              id="titulo-profesional-edit"
+                              accept=".pdf"
+                              aria-label="Seleccionar Título Profesional"
+                              (change)="onFileSelected($event, 'Título profesional')" />
+                            <label for="titulo-profesional-edit" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
                           </div>
-                          <div class="btn-group-sm">
-                            <button type="button" 
-                                    class="btn btn-sm btn-outline-primary me-1"
+                        </div>
+                        <div *ngIf="documentExists('Título profesional') && !documentosNuevos.has('Título profesional')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Documento existente</p>
+                          <small class="text-muted d-block">{{ getDocumentDisplayName('Título profesional') }}</small>
+                          <div class="btn-group-sm mt-2">
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-sm me-1"
                                     (click)="downloadDocument(getExistingDocument('Título profesional')?.id!)"
                                     title="Descargar">
                               <i class="fa fa-download"></i>
                             </button>
-                            <button type="button" 
-                                    class="btn btn-sm btn-outline-danger"
+                            <button type="button"
+                                    class="btn btn-outline-danger btn-sm"
                                     (click)="removeExistingDocument(getExistingDocument('Título profesional')!)"
                                     title="Eliminar">
                               <i class="fa fa-trash"></i>
                             </button>
                           </div>
                         </div>
+                        <div *ngIf="documentosNuevos.has('Título profesional')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <small class="text-muted d-block">{{ documentosNuevos.get('Título profesional')?.name }}</small>
+                          <button type="button"
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeNewDocument('Título profesional')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
                       </div>
-                      <!-- Input para nuevo documento -->
-                      <input 
-                        type="file" 
-                        class="form-control" 
-                        accept=".pdf"
-                        (change)="onFileSelected($event, 'Título profesional')" />
-                      <small class="form-text text-muted">
-                        {{ documentExists('Título profesional') ? 'Subir archivo para reemplazar el existente' : 'Solo archivos PDF' }}
-                      </small>
                     </div>
                   </div>
-
                 </div>
               </div>
 
@@ -361,7 +492,7 @@
                   <i class="fa fa-plus-circle text-primary me-2"></i>
                   Documentos Nuevos a Subir ({{ documentosNuevos.size }})
                 </h6>
-                <div class="documents-status">
+                <div class="documents-status" style="background-color: #f8f9fa !important; color: #212529 !important;">
                   <div class="row g-2">
                     <div class="col-md-4" *ngFor="let doc of documentosNuevos | keyvalue">
                       <div class="document-item d-flex align-items-center p-2 bg-light rounded">
@@ -390,20 +521,20 @@
                 </h6>
                 
                 <!-- Documentos completos -->
-                <div *ngIf="getMissingDocuments().length === 0" class="alert alert-success">
+                <div *ngIf="getMissingDocuments().length === 0" class="alert alert-success" style="background-color: #d4edda !important; color: #155724 !important;">
                   <i class="fa fa-check-circle me-2"></i>
-                  <strong>¡Todos los documentos están completos!</strong>
-                  <br><small>El personal está marcado como "documentos completos".</small>
+                  <strong style="color: #155724 !important;">¡Todos los documentos están completos!</strong>
+                  <br><small style="color: #0f4132 !important;">El personal está marcado como "documentos completos".</small>
                 </div>
 
                 <!-- Documentos faltantes -->
-                <div *ngIf="getMissingDocuments().length > 0" class="alert alert-warning">
+                <div *ngIf="getMissingDocuments().length > 0" class="alert alert-warning" style="background-color: #fff3cd !important; color: #856404 !important;">
                   <i class="fa fa-exclamation-triangle me-2"></i>
-                  <strong>Documentos faltantes: {{ getMissingDocuments().length }}/6</strong>
+                  <strong style="color: #856404 !important;">Documentos faltantes: {{ getMissingDocuments().length }}/6</strong>
                   <div class="mt-2">
-                    <small>Documentos pendientes: 
+                    <small style="color: #664d03 !important;">Documentos pendientes: 
                       <span *ngFor="let tipo of getMissingDocuments(); let last = last">
-                        {{ tipo }}<span *ngIf="!last">, </span>
+                        <span style="color: #212529 !important;">{{ tipo }}</span><span *ngIf="!last">, </span>
                       </span>
                     </small>
                   </div>

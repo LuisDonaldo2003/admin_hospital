@@ -79,7 +79,7 @@ export class EditPersonalComponent implements OnInit {
    */
   cargarDatosPersonal(): void {
     this.loadingPersonal = true;
-    
+
     this.personalService.showPersonal(this.personalId).subscribe({
       next: (response) => {
         this.loadingPersonal = false;
@@ -90,7 +90,7 @@ export class EditPersonalComponent implements OnInit {
           this.tipo = personal.tipo;
           this.fechaIngreso = personal.fecha_ingreso || '';
           this.activo = personal.activo !== false;
-          
+
           // Cargar documentos existentes
           this.cargarDocumentos();
         } else {
@@ -103,6 +103,72 @@ export class EditPersonalComponent implements OnInit {
         this.text_validation = 'Error al cargar los datos del personal';
       }
     });
+  }
+
+  /**
+   * Añadir archivo nuevo (validación reutilizable)
+   */
+  private addNewFile(file: File, tipoDocumento: string): void {
+    // Validar que sea PDF
+    if (file.type !== 'application/pdf') {
+      this.text_validation = 'Solo se permiten archivos PDF';
+      return;
+    }
+
+    // Validar tamaño máximo (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      this.text_validation = 'El archivo no puede superar los 10MB';
+      return;
+    }
+
+    // Agregar archivo nuevo (reemplazará el existente)
+    this.documentosNuevos.set(tipoDocumento, file);
+    this.text_validation = ''; // Limpiar mensaje de error
+  }
+
+  /**
+   * Detectar si el modo oscuro está activo (para binding en template)
+   */
+  isDarkMode(): boolean {
+    return document.body.classList.contains('dark-mode');
+  }
+
+  /**
+   * Eventos de drag & drop (para soportar arrastrar archivos a la nueva UI)
+   */
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  onDragEnter(event: DragEvent, element?: EventTarget | null): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (element && element instanceof HTMLElement) {
+      element.classList.add('drag-over');
+    }
+  }
+
+  onDragLeave(event: DragEvent, element?: EventTarget | null): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (element && element instanceof HTMLElement) {
+      element.classList.remove('drag-over');
+    }
+  }
+
+  onDrop(event: DragEvent, tipoDocumento: string, element?: EventTarget | null): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (element && element instanceof HTMLElement) {
+      element.classList.remove('drag-over');
+    }
+
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      this.addNewFile(file, tipoDocumento);
+    }
   }
 
   /**

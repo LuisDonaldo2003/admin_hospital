@@ -31,6 +31,7 @@ export interface ApiResponse<T> {
   success: boolean;
   data: T;
   message: string;
+  total?: number; // Para paginación
   errors?: any;
 }
 

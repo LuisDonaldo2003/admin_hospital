@@ -1,3 +1,172 @@
+// Aumentar especificidad para evitar sobrescritura de styles.scss
+:host {
+  .add-staff-form {
+    .card-form {
+      // ...existing code...
+
+      /* Estilos para la nueva interfaz de documentos */
+      .document-upload-card {
+        background: #fff !important;
+        border: 2px solid #e9ecef !important;
+        border-radius: 12px !important;
+        padding: 15px !important;
+        transition: all 0.3s ease !important;
+        height: 100% !important;
+
+        &:hover {
+          border-color: #007bff !important;
+          box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1) !important;
+        }
+
+        .upload-header {
+          display: flex !important;
+          align-items: center !important;
+          margin-bottom: 15px !important;
+          padding-bottom: 10px !important;
+          border-bottom: 1px solid #f0f0f0 !important;
+
+          .form-label {
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            color: #495057 !important;
+            margin-bottom: 0 !important;
+          }
+        }
+
+        .upload-area {
+          border: 2px dashed #cbd5e0 !important;
+          border-radius: 8px !important;
+          padding: 20px !important;
+          text-align: center !important;
+          min-height: 140px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          transition: all 0.3s ease !important;
+          position: relative !important;
+          background: #fafbfc !important;
+
+          &:hover:not(.has-file) {
+            border-color: #007bff !important;
+            background: #f0f8ff !important;
+          }
+
+          &.drag-over {
+            border-color: #007bff !important;
+            background: #e6f3ff !important;
+            transform: scale(1.02) !important;
+          }
+
+          &.has-file {
+            border-color: #28a745 !important;
+            border-style: solid !important;
+            background: #f8fff9 !important;
+          }
+
+          .upload-placeholder {
+            width: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+
+            .select-row {
+              display: inline-flex !important;
+              align-items: center !important;
+              gap: 10px !important;
+              margin-top: 8px !important;
+            }
+
+            .fa-cloud-upload {
+              opacity: 0.6 !important;
+              margin-bottom: 10px !important;
+              color: #6c757d !important;
+            }
+
+            p {
+              margin-bottom: 5px !important;
+              font-weight: 500 !important;
+              color: #495057 !important;
+            }
+
+            .file-input {
+              position: absolute !important;
+              opacity: 0 !important;
+              width: 0 !important;
+              height: 0 !important;
+              overflow: hidden !important;
+            }
+
+            .btn {
+              cursor: pointer !important;
+              font-size: 12px !important;
+              padding: 6px 12px !important;
+              background-color: #007bff !important;
+              border-color: #007bff !important;
+              color: white !important;
+            }
+
+            small {
+              color: #6c757d !important;
+            }
+          }
+
+          .upload-success {
+            width: 100% !important;
+
+            .fa-check-circle {
+              color: #28a745 !important;
+              margin-bottom: 10px !important;
+            }
+
+            p {
+              margin-bottom: 5px !important;
+              color: #495057 !important;
+              font-weight: 500 !important;
+            }
+
+            small {
+              font-size: 11px !important;
+              word-break: break-all !important;
+              max-width: 200px !important;
+              margin: 0 auto !important;
+              color: #6c757d !important;
+              display: block !important;
+            }
+
+            .btn {
+              font-size: 11px !important;
+              padding: 4px 8px !important;
+              background-color: #dc3545 !important;
+              border-color: #dc3545 !important;
+              color: white !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animación específica para drag & drop
+:host .upload-area.drag-over {
+  animation: bounce 0.6s ease-in-out !important;
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40%, 43% {
+    transform: translateY(-30px);
+  }
+  70% {
+    transform: translateY(-15px);
+  }
+  90% {
+    transform: translateY(-4px);
+  }
+}
 .add-staff-form {
   .card-form {
     border-radius: 1rem;

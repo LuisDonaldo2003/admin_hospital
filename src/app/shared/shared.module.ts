@@ -17,6 +17,7 @@ import { HeaderComponent } from '../common-component/header/header.component';
 import { SidebarComponent } from '../common-component/sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { TranslateModule } from '@ngx-translate/core';
     ReactiveFormsModule,
     NgxMaterialTimepickerModule,
     RouterModule,
-    TranslateModule
+    TranslateModule,
+    NgScrollbarModule
   ],
   exports: [
     CommonModule,
@@ -72,7 +74,8 @@ import { TranslateModule } from '@ngx-translate/core';
     NgxMaterialTimepickerModule,
     HeaderComponent,
     SidebarComponent,
-    TranslateModule
+    TranslateModule,
+    NgScrollbarModule
   ],
   providers: [
     DataService,
