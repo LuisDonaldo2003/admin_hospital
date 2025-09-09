@@ -81,19 +81,7 @@ export class UserActivityDashboardComponent implements OnInit {
   get hourlyStats() {
     const hourlyData = this.calculateHourlyActivities();
     
-    // Debug: Mostrar los datos calculados en la consola
-    console.log('Hourly Stats Debug:', {
-      actividades_totales: this.recentActivities.length,
-      actividades_hoy: hourlyData.dawn + hourlyData.morning + hourlyData.afternoon + hourlyData.night,
-      detalle: hourlyData,
-      fecha_hoy: new Date().toDateString(),
-      primeras_5_actividades: this.recentActivities.slice(0, 5).map(a => ({
-        fecha: a.created_at,
-        fecha_parseada: new Date(a.created_at).toLocaleString(),
-        hora: new Date(a.created_at).getHours(),
-        descripcion: a.description
-      }))
-    });
+
     
     return [
       {h: '00-06', label: 'Madrugada', count: hourlyData.dawn, icon: 'fa-moon'},
