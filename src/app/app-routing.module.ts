@@ -8,7 +8,6 @@ const routes: Routes = [
     pathMatch: 'full',
     redirectTo: 'login',
   },
-
   {
     path: '',
     loadChildren: () => import('./core/core.module').then((m) => m.CoreModule),

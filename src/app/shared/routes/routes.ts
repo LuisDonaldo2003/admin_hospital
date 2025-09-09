@@ -134,6 +134,9 @@ export class routes {
   public static get archiveDashboard(): string {
     return this.baseUrl + '/dashboard/archive';
   }
+  public static get userActivitiesDashboard(): string {
+    return this.baseUrl + '/dashboard/user-activities';
+  }
   
   public static get editDepartment(): string {
     return this.baseUrl + '/department/edit';

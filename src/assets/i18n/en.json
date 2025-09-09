@@ -83,7 +83,8 @@
       "ADMIN": "Administrator Dashboard",
       "DOCTOR": "Doctor Dashboard",
       "PATIENT": "Patient Dashboard",
-      "ARCHIVO": "Archive Dashboard"
+      "ARCHIVO": "Archive Dashboard",
+      "DIRECTOR_GENERAL": "Director General Dashboard"
     }
   },
 

@@ -95,7 +95,9 @@
       "ADMIN": "Tablero de Administrador",
       "DOCTOR": "Tablero de Doctor",
       "PATIENT": "Tablero de Paciente",
-      "ARCHIVO": "Tablero de Archivo"
+      "ARCHIVO": "Tablero de Archivo",
+      "ACTIVIDADES_USUARIOS": "Actividades de Usuarios",
+      "DIRECTOR_GENERAL": "Dashboard Director General"
       
     }
   },
@@ -134,6 +136,50 @@
     "BACKUP": "Respaldos",
     "RECENT_REGISTERS": "Registros realizados en los últimos 7 días",
     "STATISTICS_LOADING": "Cargando estadísticas..."
+  },
+  "DASHBOARD_USER_ACTIVITIES": {
+    "TITLE": "Dashboard de Actividades",
+    "SUBTITLE": "Monitoreo del historial de actividades de usuarios",
+    "TODAY_ACTIVITIES": "Actividades Hoy",
+    "WEEK_ACTIVITIES": "Actividades Semana",
+    "MONTH_ACTIVITIES": "Actividades Mes",
+    "TOTAL_ACTIVITIES": "Total Actividades",
+    "ACTIVE_USERS": "Usuarios Activos",
+    "MOST_ACTIVE_USER": "Usuario Más Activo",
+    "ACTIVITIES_BY_TYPE": "Actividades por Tipo",
+    "MOST_ACTIVE_USERS": "Usuarios Más Activos",
+    "ACTIVITY_BY_MODULE": "Actividad por Módulo",
+    "RECENT_ACTIVITIES": "Actividades Recientes",
+    "DAILY_ACTIVITIES": "Actividades Últimos 7 Días",
+    "MODULE_DISTRIBUTION": "Distribución por Módulo",
+    "CLEAR_FILTERS": "Limpiar Filtros",
+    "ALL_TYPES": "Todos los tipos",
+    "ALL_MODULES": "Todos los módulos",
+    "SEARCH_DESCRIPTIONS": "Buscar en descripciones...",
+    "FROM_DATE": "Desde",
+    "TO_DATE": "Hasta",
+    "NO_ACTIVITIES": "No se encontraron actividades con los filtros aplicados",
+    "NO_DATA": "Sin datos de actividades",
+    "NO_USERS": "Sin usuarios activos",
+    "NO_MODULES": "Sin datos de módulos",
+    "LOADING": "Cargando estadísticas de actividades...",
+    "ACTION_TYPES": {
+      "CREATE": "Crear",
+      "READ": "Ver",
+      "UPDATE": "Editar",
+      "DELETE": "Eliminar",
+      "LOGIN": "Iniciar sesión",
+      "LOGOUT": "Cerrar sesión",
+      "EXPORT": "Exportar",
+      "IMPORT": "Importar"
+    },
+    "MODULES": {
+      "ARCHIVE": "Archivo",
+      "USERS": "Usuarios",
+      "REPORTS": "Reportes",
+      "CONFIG": "Configuración",
+      "BACKUP": "Respaldos"
+    }
   }
 },
 

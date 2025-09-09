@@ -1,0 +1,343 @@
+<div class="page-wrapper" *ngIf="!loading; else loadingTpl">
+  <div class="content activity-dash-new">
+    <!-- Breadcrumb -->
+    <ul class="breadcrumb mb-3">
+      <li class="breadcrumb-item"><a>Dashboard ></a></li>
+      <li class="breadcrumb-item active">Actividades de Usuarios</li>
+    </ul>
+
+    <!-- Hero -->
+    <section class="hero mb-4">
+      <div class="hero-inner">
+        <div class="hero-text">
+          <h1><span>Actividades</span> | Historial de Usuarios</h1>
+          <p>Monitoreo completo de todas las actividades realizadas en la plataforma</p>
+        </div>
+        <div class="hero-meta">
+          <button class="btn btn-refresh" (click)="loadStats()"><i class="fa fa-rotate"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- KPIs -->
+    <section class="kpi-grid mb-4">
+      <div class="kpi-card" *ngFor="let k of [
+        {t:'Hoy', s:'Actividades', v: stats.todayActivities, ic:'fa-calendar-day'},
+        {t:'Esta Semana', s:'Acumuladas', v: stats.weekActivities, ic:'fa-layer-group'},
+        {t:'Este Mes', s:'Acumuladas', v: stats.monthActivities, ic:'fa-chart-column'},
+        {t:'Total', s:'Histórico', v: stats.totalActivities, ic:'fa-database'},
+        {t:'Usuarios', s:'Activos', v: stats.activeUsers, ic:'fa-users'}
+      ]">
+        <div class="kpi-icon"><i class="fa" [ngClass]="k.ic"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-label">{{k.t}} <small>{{k.s}}</small></div>
+          <div class="kpi-value">{{k.v}}</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid-panels mb-4">
+      <!-- Estadísticas de Tipos de Actividad -->
+      <div class="panel panel-activity-stats">
+        <header class="panel-hd"><h3>Resumen de Actividades por Tipo</h3></header>
+        <div class="activity-types-grid">
+          <div class="activity-type-card create-card">
+            <div class="activity-type-icon">
+              <i class="fa fa-plus"></i>
+            </div>
+            <div class="activity-type-body">
+              <div class="activity-type-label">Crear</div>
+              <div class="activity-type-count">{{activityTypeStats.CREATE.count}}</div>
+              <div class="activity-type-percentage">{{activityTypeStats.CREATE.percentage}}%</div>
+            </div>
+          </div>
+          <div class="activity-type-card read-card">
+            <div class="activity-type-icon">
+              <i class="fa fa-eye"></i>
+            </div>
+            <div class="activity-type-body">
+              <div class="activity-type-label">Ver</div>
+              <div class="activity-type-count">{{activityTypeStats.READ.count}}</div>
+              <div class="activity-type-percentage">{{activityTypeStats.READ.percentage}}%</div>
+            </div>
+          </div>
+          <div class="activity-type-card update-card">
+            <div class="activity-type-icon">
+              <i class="fa fa-edit"></i>
+            </div>
+            <div class="activity-type-body">
+              <div class="activity-type-label">Editar</div>
+              <div class="activity-type-count">{{activityTypeStats.UPDATE.count}}</div>
+              <div class="activity-type-percentage">{{activityTypeStats.UPDATE.percentage}}%</div>
+            </div>
+          </div>
+          <div class="activity-type-card delete-card">
+            <div class="activity-type-icon">
+              <i class="fa fa-trash"></i>
+            </div>
+            <div class="activity-type-body">
+              <div class="activity-type-label">Eliminar</div>
+              <div class="activity-type-count">{{activityTypeStats.DELETE.count}}</div>
+              <div class="activity-type-percentage">{{activityTypeStats.DELETE.percentage}}%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Módulos -->
+      <div class="panel panel-modules">
+        <header class="panel-hd"><h3>Actividad por Módulo</h3></header>
+        <div *ngIf="activitiesByModule.length; else noModules" class="modules-list">
+          <div *ngFor="let module of activitiesByModule; let i = index" class="module-item">
+            <div class="module-rank">{{i+1}}</div>
+            <div class="module-body">
+              <div class="module-name" [title]="module.module">{{getModuleLabel(module.module)}}</div>
+              <div class="module-meter">
+                <span class="meter-fill" [style.width]="(module.count / activitiesByModule[0].count)*100 + '%'"></span>
+              </div>
+            </div>
+            <div class="module-count">{{module.count}}</div>
+          </div>
+        </div>
+        <ng-template #noModules><div class="empty">Sin datos de módulos</div></ng-template>
+      </div>
+
+      <!-- Usuarios Más Activos -->
+      <div class="panel panel-top-users">
+        <header class="panel-hd"><h3>Usuarios Más Activos</h3></header>
+        <div *ngIf="mostActiveUsers && mostActiveUsers.length; else noUsers" class="users-list">
+          <div *ngFor="let user of mostActiveUsers; let i = index" class="user-item">
+            <div class="user-rank">{{i+1}}</div>
+            <div class="user-body">
+              <div class="user-name" [title]="user.user_name">{{user.user_name}}</div>
+              <div class="user-meter">
+                <span class="meter-fill user-fill" [style.width]="(user.count / mostActiveUsers[0].count)*100 + '%'"></span>
+              </div>
+            </div>
+            <div class="user-count">{{user.count}}</div>
+          </div>
+        </div>
+        <ng-template #noUsers><div class="empty">Sin datos de usuarios</div></ng-template>
+      </div>
+
+      <!-- Actividades por Hora del Día -->
+      <div class="panel panel-hourly-stats">
+        <header class="panel-hd"><h3>Actividad por Hora</h3></header>
+        <div class="hourly-stats">
+          <div class="hour-item" *ngFor="let hour of hourlyStats">
+            <div class="hour-icon">
+              <i class="fa" [ngClass]="hour.icon"></i>
+            </div>
+            <div class="hour-body">
+              <div class="hour-label">{{hour.label}}</div>
+              <div class="hour-range">{{hour.h}}h</div>
+            </div>
+            <div class="hour-count">{{hour.count}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actividades Separadas por Tipo -->
+    <section class="separated-activities mb-4">
+      <div class="row">
+        <!-- Actividades de Creación -->
+        <div class="col-lg-6 col-xl-3 mb-4">
+          <div class="panel panel-create">
+            <header class="panel-hd create-header">
+              <h4><i class="fa fa-plus me-2"></i>Creaciones</h4>
+              <span class="activity-count-badge">{{separatedActivities.CREATE.length}}</span>
+            </header>
+            <div class="activities-list-compact">
+              <div *ngFor="let activity of separatedActivities.CREATE.slice(0, 5)" class="activity-item-compact">
+                <div class="activity-user">{{activity.user_name}}</div>
+                <div class="activity-desc">{{activity.description}}</div>
+                <div class="activity-time">{{formatDateTime(activity.created_at)}}</div>
+              </div>
+              <div *ngIf="separatedActivities.CREATE.length === 0" class="empty-compact">
+                Sin actividades de creación
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actividades de Visualización -->
+        <div class="col-lg-6 col-xl-3 mb-4">
+          <div class="panel panel-read">
+            <header class="panel-hd read-header">
+              <h4><i class="fa fa-eye me-2"></i>Visualizaciones</h4>
+              <span class="activity-count-badge">{{separatedActivities.READ.length}}</span>
+            </header>
+            <div class="activities-list-compact">
+              <div *ngFor="let activity of separatedActivities.READ.slice(0, 5)" class="activity-item-compact">
+                <div class="activity-user">{{activity.user_name}}</div>
+                <div class="activity-desc">{{activity.description}}</div>
+                <div class="activity-time">{{formatDateTime(activity.created_at)}}</div>
+              </div>
+              <div *ngIf="separatedActivities.READ.length === 0" class="empty-compact">
+                Sin actividades de visualización
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actividades de Edición -->
+        <div class="col-lg-6 col-xl-3 mb-4">
+          <div class="panel panel-update">
+            <header class="panel-hd update-header">
+              <h4><i class="fa fa-edit me-2"></i>Ediciones</h4>
+              <span class="activity-count-badge">{{separatedActivities.UPDATE.length}}</span>
+            </header>
+            <div class="activities-list-compact">
+              <div *ngFor="let activity of separatedActivities.UPDATE.slice(0, 5)" class="activity-item-compact">
+                <div class="activity-user">{{activity.user_name}}</div>
+                <div class="activity-desc">{{activity.description}}</div>
+                <div class="activity-time">{{formatDateTime(activity.created_at)}}</div>
+              </div>
+              <div *ngIf="separatedActivities.UPDATE.length === 0" class="empty-compact">
+                Sin actividades de edición
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actividades de Eliminación -->
+        <div class="col-lg-6 col-xl-3 mb-4">
+          <div class="panel panel-delete">
+            <header class="panel-hd delete-header">
+              <h4><i class="fa fa-trash me-2"></i>Eliminaciones</h4>
+              <span class="activity-count-badge">{{separatedActivities.DELETE.length}}</span>
+            </header>
+            <div class="activities-list-compact">
+              <div *ngFor="let activity of separatedActivities.DELETE.slice(0, 5)" class="activity-item-compact">
+                <div class="activity-user">{{activity.user_name}}</div>
+                <div class="activity-desc">{{activity.description}}</div>
+                <div class="activity-time">{{formatDateTime(activity.created_at)}}</div>
+              </div>
+              <div *ngIf="separatedActivities.DELETE.length === 0" class="empty-compact">
+                Sin actividades de eliminación
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gráfico de actividades diarias -->
+    <section class="daily-chart" *ngIf="dailyChart">
+      <div class="panel panel-chart">
+        <header class="panel-hd"><h3>Actividades Últimos 7 Días</h3></header>
+        <div class="chart-wrapper">
+          <apx-chart
+            *ngIf="dailyChart"
+            [series]="dailyChart.series"
+            [chart]="dailyChart.chart"
+            [xaxis]="dailyChart.xaxis"
+            [yaxis]="dailyChart.yaxis"
+            [dataLabels]="dailyChart.dataLabels"
+            [stroke]="dailyChart.stroke"
+            [grid]="dailyChart.grid"
+            [tooltip]="dailyChart.tooltip"
+            [fill]="dailyChart.fill"
+          ></apx-chart>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gráfico por módulo -->
+    <section class="module-chart" *ngIf="moduleChart">
+      <div class="panel panel-chart">
+        <header class="panel-hd"><h3>Distribución por Módulo</h3></header>
+        <div class="chart-wrapper" style="height: 320px !important;">
+          <apx-chart
+            *ngIf="moduleChart"
+            [series]="moduleChart.series"
+            [chart]="moduleChart.chart"
+            [xaxis]="moduleChart.xaxis"
+            [yaxis]="moduleChart.yaxis"
+            [dataLabels]="moduleChart.dataLabels"
+            [plotOptions]="moduleChart.plotOptions"
+            [stroke]="moduleChart.stroke"
+            [grid]="moduleChart.grid"
+            [tooltip]="moduleChart.tooltip"
+            [fill]="moduleChart.fill"
+          ></apx-chart>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filtros y Actividades Recientes -->
+    <section class="recent-activities">
+      <div class="panel">
+        <header class="panel-hd">
+          <h3>Actividades Recientes</h3>
+          <div class="panel-actions">
+            <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
+              <i class="fa fa-times"></i> Limpiar Filtros
+            </button>
+          </div>
+        </header>
+        
+        <!-- Filtros -->
+        <div class="filters-row mb-3">
+          <div class="row">
+            <div class="col-md-2">
+              <select class="form-control form-control-sm" [(ngModel)]="filters.action_type" (change)="applyFilters()">
+                <option *ngFor="let action of actionTypes" [value]="action.value">{{action.label}}</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select class="form-control form-control-sm" [(ngModel)]="filters.module" (change)="applyFilters()">
+                <option *ngFor="let module of moduleOptions" [value]="module.value">{{module.label}}</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <input type="date" class="form-control form-control-sm" [(ngModel)]="filters.date_from" (change)="applyFilters()" placeholder="Desde">
+            </div>
+            <div class="col-md-2">
+              <input type="date" class="form-control form-control-sm" [(ngModel)]="filters.date_to" (change)="applyFilters()" placeholder="Hasta">
+            </div>
+            <div class="col-md-4">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="filters.search" (keyup.enter)="applyFilters()" placeholder="Buscar en descripciones...">
+            </div>
+          </div>
+        </div>
+
+        <!-- Lista de actividades -->
+        <div *ngIf="recentActivities.length; else noActivities" class="activities-list">
+          <div class="activity-item" *ngFor="let activity of recentActivities">
+            <div class="activity-icon">
+              <i class="fa" [ngClass]="getActionIcon(activity.action_type)"></i>
+            </div>
+            <div class="activity-content">
+              <div class="activity-header">
+                <span class="activity-user">{{activity.user_name}}</span>
+                <span class="badge" [ngClass]="getActionClass(activity.action_type)">
+                  {{getActionTypeLabel(activity.action_type)}}
+                </span>
+                <span class="activity-module">{{getModuleLabel(activity.module)}}</span>
+              </div>
+              <div class="activity-description">{{activity.description}}</div>
+              <div class="activity-meta">
+                <span class="activity-time">{{formatDateTime(activity.created_at)}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #noActivities>
+          <div class="empty">No se encontraron actividades con los filtros aplicados</div>
+        </ng-template>
+      </div>
+    </section>
+
+    <div *ngIf="error" class="alert alert-danger py-2 px-3 small mb-0">{{error}}</div>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="page-wrapper">
+    <div class="content">
+      <div class="text-center py-5 text-muted">Cargando estadísticas de actividades...</div>
+    </div>
+  </div>
+</ng-template>

@@ -275,6 +275,13 @@ export class DataService {
               permision: 'archive_dashboard',
               show_nav: true,
             },
+            {
+              menuValue: 'ACTIVIDADES_USUARIOS',
+              route: routes.userActivitiesDashboard,
+              base: routes.userActivitiesDashboard,
+              permision: 'user_activities_dashboard',
+              show_nav: true,
+            },
           ],
         },
         {
