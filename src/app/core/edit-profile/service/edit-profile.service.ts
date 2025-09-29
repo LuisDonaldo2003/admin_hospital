@@ -61,6 +61,9 @@ export class EditProfileService {
    * @param formData FormData con la imagen del avatar
    */
   updateAvatar(userId: string, formData: FormData) {
-    return this.http.post(`/api/profile/avatar/${userId}`, formData);
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + this.authService.token
+    });
+    return this.http.post(`${URL_SERVICIOS}/profile/avatar/${userId}`, formData, { headers });
   }
 }

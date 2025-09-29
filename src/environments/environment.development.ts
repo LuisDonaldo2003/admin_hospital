@@ -1,5 +1,5 @@
 export const environment = {
-  URL_BACKEND: 'http://sismeg.com',
-  URL_SERVICIOS: 'http://sismeg.com/api',
-  URL_FRONTED: 'http://localhost:4200/'
+  URL_BACKEND: 'http://api.sismeg.com/api',
+  URL_SERVICIOS: 'http://api.sismeg.com/api',
+  URL_FRONTED: 'http://sismeg.com/'
 };

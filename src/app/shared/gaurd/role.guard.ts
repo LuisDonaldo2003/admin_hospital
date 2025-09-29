@@ -1,36 +1,29 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 import { routes } from '../routes/routes';
+import { RoleConfigService } from '../services/role-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class RoleGuard implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private roleConfigService: RoleConfigService
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
     const user = JSON.parse(localStorage.getItem('user') || 'null');
     if (!user) return this.router.parseUrl(routes.login);
 
-    const rawRoles: any[] = user.roles || [];
-    const norm = rawRoles
-      .map(r => (typeof r === 'string' ? r : (r?.name || '')))
-      .filter(Boolean)
-      .map(r => r.trim().toLowerCase());
+    const userRoles: any[] = user.roles || [];
+    const allowedRoles: string[] = route.data?.['allowedRoles'] || [];
 
-    // Roles privilegiados con acceso a todo
-  const superRoles = ['director general', 'subdirector general', 'developer'];
-    const isSuper = norm.some(r => superRoles.includes(r));
-    if (isSuper) return true;
+    // Usar el servicio dinámico para verificar acceso
+    if (this.roleConfigService.canAccessRoute(userRoles, allowedRoles)) {
+      return true;
+    }
 
-    const allowed: string[] = (route.data?.['allowedRoles'] || []).map((r: string) => r.toLowerCase());
-    if (!allowed.length) return true; // si no se especifica, permitir
-
-    const match = norm.some(r => allowed.includes(r));
-    if (match) return true;
-
-    // Redirigir al dashboard correcto según su rol
-    if (norm.includes('archivo') || norm.includes('archive')) return this.router.parseUrl(routes.archiveDashboard);
-    if (norm.includes('doctor')) return this.router.parseUrl(routes.doctorDashboard);
-    if (norm.includes('patient') || norm.includes('paciente')) return this.router.parseUrl(routes.patientDashboard);
-    return this.router.parseUrl(routes.adminDashboard);
+    // Si no tiene acceso, redirigir al perfil donde puede ver sus opciones disponibles
+    console.log('🚫 Acceso denegado. Redirigiendo al perfil para ver opciones disponibles');
+    return this.router.parseUrl(routes.profile);
   }
 }

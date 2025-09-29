@@ -19,6 +19,11 @@
     "ORGANIZATION_CHART": {
       "TITLE": "Organization Chart",
       "LIST": "Organization Chart List"
+    },
+    "PULSE_ACCESS": {
+      "TITLE": "Pulse Access",
+      "MANAGEMENT": "Access Management", 
+      "DASHBOARD": "Pulse Dashboard"
     }
   },
   "RH": {
@@ -43,6 +48,14 @@
       "ADD": "Add Department",
       "EDIT": "Edit Department",
       "DELETE": "Delete Department"
+    },
+    "PERSONAL": {
+      "TITLE": "Personnel",
+      "LIST": "Personnel List", 
+      "ADD": "Add Personnel",
+      "EDIT": "Edit Personnel",
+      "DELETE": "Delete Personnel",
+      "DOCUMENTS": "Personnel Documents"
     }
   },
   "ARCHIVO": {
@@ -84,6 +97,7 @@
       "DOCTOR": "Doctor Dashboard",
       "PATIENT": "Patient Dashboard",
       "ARCHIVO": "Archive Dashboard",
+      "ACTIVIDADES_USUARIOS": "User Activities",
       "DIRECTOR_GENERAL": "Director General Dashboard"
     }
   },
@@ -122,6 +136,50 @@
     "BACKUP": "Backups",
     "RECENT_REGISTERS": "Records registered in the last 7 days",
     "STATISTICS_LOADING": "Loading statistics..."
+  },
+  "DASHBOARD_USER_ACTIVITIES": {
+    "TITLE": "Activity Dashboard",
+    "SUBTITLE": "User activity history monitoring",
+    "TODAY_ACTIVITIES": "Today's Activities",
+    "WEEK_ACTIVITIES": "Week Activities",
+    "MONTH_ACTIVITIES": "Month Activities",
+    "TOTAL_ACTIVITIES": "Total Activities",
+    "ACTIVE_USERS": "Active Users",
+    "MOST_ACTIVE_USER": "Most Active User",
+    "ACTIVITIES_BY_TYPE": "Activities by Type",
+    "MOST_ACTIVE_USERS": "Most Active Users",
+    "ACTIVITY_BY_MODULE": "Activity by Module",
+    "RECENT_ACTIVITIES": "Recent Activities",
+    "DAILY_ACTIVITIES": "Last 7 Days Activities",
+    "MODULE_DISTRIBUTION": "Distribution by Module",
+    "CLEAR_FILTERS": "Clear Filters",
+    "ALL_TYPES": "All types",
+    "ALL_MODULES": "All modules",
+    "SEARCH_DESCRIPTIONS": "Search descriptions...",
+    "FROM_DATE": "From",
+    "TO_DATE": "To",
+    "NO_ACTIVITIES": "No activities found with applied filters",
+    "NO_DATA": "No activity data",
+    "NO_USERS": "No active users",
+    "NO_MODULES": "No module data",
+    "LOADING": "Loading activity statistics...",
+    "ACTION_TYPES": {
+      "CREATE": "Create",
+      "READ": "View",
+      "UPDATE": "Edit",
+      "DELETE": "Delete",
+      "LOGIN": "Login",
+      "LOGOUT": "Logout",
+      "EXPORT": "Export",
+      "IMPORT": "Import"
+    },
+    "MODULES": {
+      "ARCHIVE": "Archive",
+      "USERS": "Users",
+      "REPORTS": "Reports",
+      "CONFIG": "Configuration",
+      "BACKUP": "Backups"
+    }
   }
 },
 
@@ -208,6 +266,21 @@
 },
 
 "ARCHIVE": {
+  "COMMON": {
+    "UNIT": "Unit",
+    "UNIT_REQUIRED": "Unit *",
+    "YEARS": "Years",
+    "MONTHS": "Months",
+    "DAYS": "Days", 
+    "MUNICIPALITY": "Municipality",
+    "STATE": "State",
+    "LOCATION": "Location",
+    "PLACEHOLDER_LOCATION": "Enter the location",
+    "PLACEHOLDER_MUNICIPALITY": "Enter the municipality",
+    "PLACEHOLDER_STATE": "Enter the state",
+    "SUCCESS_MESSAGE": "Success!",
+    "CLOSE": "Close"
+  },
   "ADD_PATIENT": {
     "PATIENT": "Patients",
     "BREADCRUMB_REGISTER": "Register Patient",
@@ -236,6 +309,10 @@
     "MUNICIPALITY": "Municipality",
     "SELECT_MUNICIPALITY": "Select municipality",
     "LOCATION": "Location",
+    "LOCATION_PLACEHOLDER": "Enter location",
+    "MUNICIPALITY_PLACEHOLDER": "Enter municipality",
+    "STATE_PLACEHOLDER": "Enter state", 
+    "CLOSE": "Close",
     "SELECT_LOCATION": "Select location",
     "ADMISSION_DATE": "Admission date",
     "WARNING": "Warning",
@@ -748,6 +825,113 @@
     "RECORDS": "records",
     "PREVIOUS": "Previous",
     "NEXT": "Next"
+  }
+},
+
+"PERSONAL": {
+  "ADD_PERSONAL": {
+    "PERSONAL": "Personnel",
+    "BREADCRUMB_REGISTER": "Register Personnel",
+    "BREADCRUMB_PERSONAL": "Personnel",
+    "BREADCRUMB_ADD": "Add Personnel",
+    "TITLE": "Add Personnel",
+    "FIRST_NAME": "First Name(s)",
+    "FIRST_NAME_PLACEHOLDER": "Enter the first name",
+    "FIRST_NAME_REQUIRED": "First name is required",
+    "SURNAME": "Surnames",
+    "SURNAME_PLACEHOLDER": "Enter the surnames",
+    "SURNAME_REQUIRED": "Surnames are required",
+    "TYPE": "Personnel Type",
+    "SELECT_TYPE": "Select type",
+    "CLINICAL": "Clinical",
+    "NON_CLINICAL": "Non-Clinical",
+    "ADMISSION_DATE": "Admission Date",
+    "AUTO_ASSIGNED": "Automatically assigned",
+    "AUTO_ASSIGNED_HELP": "Automatically assigned when saving",
+    "DOCUMENTS_SECTION": "Documents (PDF) - Optional",
+    "UPLOAD_AVAILABLE_DOCS": "Upload available documents",
+    "FORMAT_INFO": "PDF format only • Maximum 10MB per file • Documents are optional but recommended",
+    "DOCUMENTS_COUNT": "documents",
+    "BIRTH_CERTIFICATE": "Birth Certificate",
+    "ADDRESS_PROOF": "Address Proof",
+    "CURP": "CURP",
+    "PROFESSIONAL_LICENSE": "Professional License",
+    "RFC": "RFC",
+    "PROFESSIONAL_TITLE": "Professional Title",
+    "INE": "INE",
+    "DRAG_FILE_HERE": "Drag your file here",
+    "OR": "or",
+    "SELECT_FILE": "Select file",
+    "FILE_LOADED": "File loaded",
+    "DELETE": "Delete",
+    "DOCUMENTS_REQUIRED": "Personnel type is required",
+    "DOCUMENTS_UPLOADED": "Documents Uploaded",
+    "UPLOAD_ALL_DOCUMENTS": "You must upload the 6 required documents",
+    "MISSING_DOCUMENTS": "Missing documents",
+    "ALL_DOCUMENTS_UPLOADED": "All documents have been uploaded!",
+    "DOCUMENTS_COMPLETE_STATUS": "Personnel will be marked as 'documents complete'.",
+    "SUCCESS_TITLE": "Success!",
+    "CLOSE": "Close",
+    "VIEW_LIST": "View List",
+    "SUCCESS": "Success",
+    "WARNING": "Warning",
+    "SAVE": "Save"
+  },
+  "EDIT_PERSONAL": {
+    "BREADCRUMB_PERSONAL": "Personnel",
+    "BREADCRUMB_EDIT": "Edit Personnel",
+    "TITLE": "Edit Personnel"
+  },
+  "LIST_PERSONAL": {
+    "BREADCRUMB_PERSONAL": "Personnel",
+    "BREADCRUMB_LIST": "Personnel List",
+    "TITLE": "Personnel Management",
+    "SEARCH_PLACEHOLDER": "Search by name or surname...",
+    "NEW_PERSONAL": "New Personnel",
+    "FILTER_TYPE": "Filter by Type",
+    "ALL_TYPES": "All types",
+    "CLINICAL": "Clinical",
+    "NON_CLINICAL": "Non-Clinical",
+    "DOCUMENT_STATUS": "Document Status",
+    "ALL_STATUS": "All",
+    "COMPLETE_DOCUMENTS": "Complete Documents",
+    "INCOMPLETE_DOCUMENTS": "Incomplete Documents",
+    "STATUS": "Status",
+    "ONLY_ACTIVE": "Active Only",
+    "ONLY_INACTIVE": "Inactive Only",
+    "FULL_NAME": "Full Name",
+    "PERSONNEL_TYPE": "Personnel Type",
+    "ADMISSION_DATE": "Admission Date",
+    "ACTIONS": "Actions",
+    "COMPLETE": "Complete",
+    "INCOMPLETE": "Incomplete",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "OPTIONS": "Options",
+    "VIEW_DOCUMENTS": "View Documents",
+    "EDIT": "Edit",
+    "DEACTIVATE": "Deactivate",
+    "ACTIVATE": "Activate",
+    "DELETE": "Delete",
+    "NO_RECORDS_FOUND": "No records found",
+    "NO_MATCHING_CRITERIA": "No personnel matches the search criteria.",
+    "ADD_FIRST_PERSONNEL": "Add First Personnel",
+    "SHOWING": "Showing",
+    "TO": "to",
+    "OF": "of",
+    "RECORDS": "records",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next",
+    "TOTAL_PERSONNEL": "Total Personnel",
+    "CLINICAL_PERSONNEL": "Clinical Personnel",
+    "NON_CLINICAL_PERSONNEL": "Non-Clinical Personnel",
+    "COMPLETE_DOCUMENTS_COUNT": "Complete Documents",
+    "DELETE_CONFIRMATION": "Are you sure you want to delete personnel",
+    "DELETE_WARNING": "This action cannot be undone. All associated documents will also be deleted.",
+    "CANCEL": "Cancel",
+    "PERSONNEL_DOCUMENTS": "Personnel Documents",
+    "DOWNLOAD": "Download",
+    "NO_DOCUMENTS_AVAILABLE": "No documents available for this personnel"
   }
 },
 

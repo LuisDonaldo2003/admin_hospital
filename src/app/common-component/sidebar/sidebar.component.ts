@@ -163,15 +163,9 @@ export class SidebarComponent implements OnDestroy {
 
   // Limpia el valor del menú para traducción
   public cleanMenuValue(value: string): string {
-    return value.replace(/^SIDEBAR_/, '').replace(/_LIST|_ADD|_EDIT|_DELETE/g, match => {
-      switch (match) {
-        case '_LIST': return '.LIST';
-        case '_ADD': return '.ADD';
-        case '_EDIT': return '.EDIT';
-        case '_DELETE': return '.DELETE';
-        default: return '';
-      }
-    });
+    // Los valores del data service ya vienen limpios (PERSONAL, ROL, etc.)
+    // Solo necesitamos devolverlos tal como están
+    return value;
   }
 
   // Libera la suscripción al destruir el componente

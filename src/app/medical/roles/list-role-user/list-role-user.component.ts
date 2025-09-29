@@ -178,12 +178,36 @@ export class ListRoleUserComponent {
       if (INDEX != -1) {
         this.rolesList.splice(INDEX, 1);
 
-        // Oculta y elimina el modal de confirmación (uso de jQuery)
-        $('#delete_patient').hide();
-        $("#delete_patient").removeClass("show");
-        $(".modal-backdrop").remove();
-        $("body").removeClass();
-        $("body").removeAttr("style");
+        // Cierra el modal de forma completamente controlada
+        const modalId = `delete_role-${this.role_selected.id}`;
+        const modalElement = document.getElementById(modalId);
+        
+        if (modalElement) {
+          // Método 1: Usar Bootstrap API si está disponible
+          const bootstrapModal = (window as any).bootstrap?.Modal?.getInstance(modalElement);
+          if (bootstrapModal) {
+            bootstrapModal.hide();
+          } else {
+            // Método 2: Cierre manual seguro
+            modalElement.classList.remove('show');
+            modalElement.style.display = 'none';
+            modalElement.setAttribute('aria-hidden', 'true');
+          }
+        }
+        
+        // Limpieza del DOM sin afectar las clases de tema
+        setTimeout(() => {
+          // Elimina solo la clase específica del modal
+          document.body.classList.remove('modal-open');
+          
+          // Elimina backdrops específicos
+          const backdrops = document.querySelectorAll('.modal-backdrop');
+          backdrops.forEach(backdrop => backdrop.remove());
+          
+          // Restaura overflow del body sin afectar otras clases
+          document.body.style.removeProperty('overflow');
+          document.body.style.removeProperty('padding-right');
+        }, 150);
 
         this.role_selected = null;
       }

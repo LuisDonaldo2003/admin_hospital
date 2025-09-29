@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/shared/auth/auth.service';
 import { routes } from 'src/app/shared/routes/routes';
 import { SideBarService } from 'src/app/shared/side-bar/side-bar.service';
 import { TranslateService } from '@ngx-translate/core';
+import { RoleConfigService } from 'src/app/shared/services/role-config.service';
 
 @Component({
   selector: 'app-header',
@@ -29,7 +30,8 @@ export class HeaderComponent {
     private sideBar: SideBarService,
     public auth: AuthService,
     public profileService: ProfileService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private roleConfigService: RoleConfigService
   ) {
     // Suscribe al evento de cambio de menú lateral
     this.sideBar.toggleSideBar.subscribe((res: string) => {
@@ -82,20 +84,10 @@ export class HeaderComponent {
     return roleName;
   }
 
-  // Devuelve la ruta principal (home) según el rol del usuario conectado
+  // Devuelve la ruta principal (home) según el rol del usuario conectado usando configuración dinámica
   getHomeRoute(): string {
     const rawRoles: any[] = (this.user?.roles) || [];
-    const norm = rawRoles
-      .map(r => (typeof r === 'string' ? r : (r?.name || '')))
-      .filter(Boolean)
-      .map(r => r.trim().toLowerCase());
-
-    if (norm.includes('archivo') || norm.includes('archive')) return routes.archiveDashboard;
-    if (norm.includes('doctor')) return routes.doctorDashboard;
-    if (norm.includes('patient') || norm.includes('paciente')) return routes.patientDashboard;
-    if (norm.includes('director general')) return routes.adminDashboard;
-    if (norm.includes('subdirector general')) return routes.adminDashboard;    
-    return routes.adminDashboard; // fallback
+    return this.roleConfigService.getHomeRouteForRoles(rawRoles);
   }
 
   // Cambia el idioma de la interfaz y lo guarda en localStorage

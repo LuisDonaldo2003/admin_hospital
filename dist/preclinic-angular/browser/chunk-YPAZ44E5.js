@@ -1,1 +1,0 @@
-import{Cc as r,Fc as i,Ma as o,eb as n}from"./chunk-VPSRVESD.js";import"./chunk-EQDQRRRY.js";var c=(()=>{class e{static{this.\u0275fac=function(t){return new(t||e)}}static{this.\u0275cmp=o({type:e,selectors:[["app-personal"]],decls:1,vars:0,template:function(t,s){t&1&&n(0,"router-outlet")},dependencies:[i,r],encapsulation:2})}}return e})();export{c as PersonalComponent};

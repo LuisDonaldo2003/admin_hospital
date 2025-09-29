@@ -18,7 +18,7 @@ const routes: Routes = [
       {
         path: 'admin-dashboard',
         canActivate: [RoleGuard], // Protege la ruta por roles
-        data: { allowedRoles: ['director general', 'subdirector general'] },
+        data: { allowedRoles: ['director general', 'subdirector general', 'recursos humanos', 'pruebas'] },
         loadChildren: () => import('./admin-dashboard/admin-dashboard.module').then(
           (m) => m.AdminDashboardModule
         ), // Lazy loading del módulo de admin

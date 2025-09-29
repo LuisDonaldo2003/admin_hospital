@@ -6,8 +6,8 @@
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item"><a href="#">Personal ></a></li>
-            <li class="breadcrumb-item active">Registrar Personal</li>
+            <li class="breadcrumb-item"><a href="#">{{ 'PERSONAL.ADD_PERSONAL.PERSONAL' | translate }} ></a></li>
+            <li class="breadcrumb-item active">{{ 'PERSONAL.ADD_PERSONAL.BREADCRUMB_REGISTER' | translate }}</li>
           </ol>
         </div>
       </div>
@@ -19,7 +19,7 @@
         <div class="card card-form shadow border-0">
           <div class="card-body px-5 py-4">
             <!-- Título del formulario -->
-            <h3 class="text-center mb-4 fw-bold">Agregar Personal</h3>
+            <h3 class="text-center mb-4 fw-bold">{{ 'PERSONAL.ADD_PERSONAL.TITLE' | translate }}</h3>
 
             <!-- Formulario para agregar personal -->
             <form (keydown.enter)="save()" class="form-section">
@@ -27,64 +27,64 @@
                 
                 <!-- Campo: Nombre -->
                 <div class="col-md-6">
-                  <label class="form-label">Nombre(s) *</label>
+                  <label class="form-label">{{ 'PERSONAL.ADD_PERSONAL.FIRST_NAME' | translate }} *</label>
                   <input 
                     type="text" 
                     class="form-control" 
                     [(ngModel)]="nombre"
                     name="nombre"
-                    placeholder="Ingrese el nombre"
+                    placeholder="{{ 'PERSONAL.ADD_PERSONAL.FIRST_NAME_PLACEHOLDER' | translate }}"
                     required 
                     [ngClass]="{ 'is-invalid': submitted && !nombre.trim() }" />
                   <div *ngIf="submitted && !nombre.trim()" class="invalid-feedback">
-                    El nombre es requerido
+                    {{ 'PERSONAL.ADD_PERSONAL.FIRST_NAME_REQUIRED' | translate }}
                   </div>
                 </div>
 
                 <!-- Campo: Apellidos -->
                 <div class="col-md-6">
-                  <label class="form-label">Apellidos *</label>
+                  <label class="form-label">{{ 'PERSONAL.ADD_PERSONAL.SURNAME' | translate }} *</label>
                   <input 
                     type="text" 
                     class="form-control" 
                     [(ngModel)]="apellidos"
                     name="apellidos"
-                    placeholder="Ingrese los apellidos"
+                    placeholder="{{ 'PERSONAL.ADD_PERSONAL.SURNAME_PLACEHOLDER' | translate }}"
                     required 
                     [ngClass]="{ 'is-invalid': submitted && !apellidos.trim() }" />
                   <div *ngIf="submitted && !apellidos.trim()" class="invalid-feedback">
-                    Los apellidos son requeridos
+                    {{ 'PERSONAL.ADD_PERSONAL.SURNAME_REQUIRED' | translate }}
                   </div>
                 </div>
 
                 <!-- Campo: Tipo de Personal -->
                 <div class="col-md-6">
-                  <label class="form-label">Tipo de Personal *</label>
+                  <label class="form-label">{{ 'PERSONAL.ADD_PERSONAL.TYPE' | translate }} *</label>
                   <select 
                     class="form-select" 
                     [(ngModel)]="tipo"
                     name="tipo"
                     required 
                     [ngClass]="{ 'is-invalid': submitted && !tipo }">
-                    <option value="">Seleccionar tipo</option>
-                    <option value="Clínico">Clínico</option>
-                    <option value="No Clínico">No Clínico</option>
+                    <option value="">{{ 'PERSONAL.ADD_PERSONAL.SELECT_TYPE' | translate }}</option>
+                    <option value="Clínico">{{ 'PERSONAL.ADD_PERSONAL.CLINICAL' | translate }}</option>
+                    <option value="No Clínico">{{ 'PERSONAL.ADD_PERSONAL.NON_CLINICAL' | translate }}</option>
                   </select>
                   <div *ngIf="submitted && !tipo" class="invalid-feedback">
-                    El tipo de personal es requerido
+                    {{ 'PERSONAL.ADD_PERSONAL.DOCUMENTS_REQUIRED' | translate }}
                   </div>
                 </div>
 
                 <!-- Fecha de Ingreso (automática, solo informativa) -->
                 <div class="col-md-6">
-                  <label class="form-label">Fecha de Ingreso</label>
+                  <label class="form-label">{{ 'PERSONAL.ADD_PERSONAL.ADMISSION_DATE' | translate }}</label>
                   <input 
                     type="text" 
                     class="form-control" 
                     [value]="fechaIngreso"
                     readonly
-                    placeholder="Se asigna automáticamente" />
-                  <small class="form-text text-muted">Se asigna automáticamente al guardar</small>
+                    placeholder="{{ 'PERSONAL.ADD_PERSONAL.AUTO_ASSIGNED' | translate }}" />
+                  <small class="form-text text-muted">{{ 'PERSONAL.ADD_PERSONAL.AUTO_ASSIGNED_HELP' | translate }}</small>
                 </div>
 
               </div>
@@ -93,19 +93,18 @@
               <div class="form-section mt-4">
                 <h5 class="form-section-title mb-3">
                   <i class="fa fa-cloud-upload text-primary me-2"></i>
-                  Documentos (PDF) - Opcionales
+                  {{ 'PERSONAL.ADD_PERSONAL.DOCUMENTS_SECTION' | translate }}
                 </h5>
                 <div class="upload-info-card mb-4">
                   <div class="row align-items-center">
                     <div class="col-md-8">
-                      <p class="mb-1"><strong>Sube los documentos disponibles</strong></p>
+                      <p class="mb-1"><strong>{{ 'PERSONAL.ADD_PERSONAL.UPLOAD_AVAILABLE_DOCS' | translate }}</strong></p>
                       <small class="text-muted">
-                        Formato PDF únicamente • Máximo 10MB por archivo • 
-                        Los documentos son opcionales pero recomendados
+                        {{ 'PERSONAL.ADD_PERSONAL.FORMAT_INFO' | translate }}
                       </small>
                     </div>
                     <div class="col-md-4 text-end">
-                      <span class="badge bg-info fs-6">{{ documentos.size }}/6 documentos</span>
+                      <span class="badge bg-info fs-6">{{ documentos.size }}/6 {{ 'PERSONAL.ADD_PERSONAL.DOCUMENTS_COUNT' | translate }}</span>
                     </div>
                   </div>
                 </div>
@@ -117,7 +116,7 @@
                     <div class="document-upload-card">
                       <div class="upload-header">
                         <i class="fa fa-id-card text-primary me-2"></i>
-                        <label class="form-label mb-0">Acta de Nacimiento</label>
+                        <label class="form-label mb-0">{{ 'PERSONAL.ADD_PERSONAL.BIRTH_CERTIFICATE' | translate }}</label>
                       </div>
                       <div class="upload-area" 
                            [class.has-file]="documentos.has('Acta de nacimiento')"
@@ -127,9 +126,9 @@
                            (drop)="onDrop($event, 'Acta de nacimiento', $event.currentTarget)">>
                         <div *ngIf="!documentos.has('Acta de nacimiento')" class="upload-placeholder">
                           <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <p class="text-muted mb-1">{{ 'PERSONAL.ADD_PERSONAL.DRAG_FILE_HERE' | translate }}</p>
                           <div class="select-row">
-                            <small class="text-muted mb-0">o</small>
+                            <small class="text-muted mb-0">{{ 'PERSONAL.ADD_PERSONAL.OR' | translate }}</small>
                             <input 
                               type="file" 
                               class="file-input" 
@@ -137,18 +136,18 @@
                               accept=".pdf"
                               (change)="onFileSelected($event, 'Acta de nacimiento')" />
                             <label for="acta-nacimiento" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                              <i class="fa fa-folder-open me-1"></i> {{ 'PERSONAL.ADD_PERSONAL.SELECT_FILE' | translate }}
                             </label>
                           </div>
                         </div>
                         <div *ngIf="documentos.has('Acta de nacimiento')" class="upload-success">
                           <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Archivo cargado</p>
+                          <p class="text-success mb-1 fw-bold">{{ 'PERSONAL.ADD_PERSONAL.FILE_LOADED' | translate }}</p>
                           <small class="text-muted d-block">{{ documentos.get('Acta de nacimiento')?.name }}</small>
                           <button type="button" 
                                   class="btn btn-outline-danger btn-sm mt-2"
                                   (click)="removeDocument('Acta de nacimiento')">
-                            <i class="fa fa-trash me-1"></i>Eliminar
+                            <i class="fa fa-trash me-1"></i>{{ 'PERSONAL.ADD_PERSONAL.DELETE' | translate }}
                           </button>
                         </div>
                       </div>
@@ -160,7 +159,7 @@
                     <div class="document-upload-card">
                       <div class="upload-header">
                         <i class="fa fa-home text-primary me-2"></i>
-                        <label class="form-label mb-0">Comprobante de Domicilio</label>
+                        <label class="form-label mb-0">{{ 'PERSONAL.ADD_PERSONAL.ADDRESS_PROOF' | translate }}</label>
                       </div>
                       <div class="upload-area" 
                            [class.has-file]="documentos.has('Comprobante de domicilio')"
@@ -382,7 +381,7 @@
                 
                 <!-- Documentos seleccionados -->
                 <div *ngIf="documentos.size > 0" class="documents-status mb-3" style="background-color: #f8f9fa !important; color: #212529 !important;">
-                  <p class="mb-2" style="color: #212529 !important;"><strong>Documentos Subidos ({{ documentos.size }}/6):</strong></p>
+                  <p class="mb-2" style="color: #212529 !important;"><strong>{{ 'PERSONAL.ADD_PERSONAL.DOCUMENTS_UPLOADED' | translate }} ({{ documentos.size }}/6):</strong></p>
                   <div class="row g-2">
                     <div class="col-md-4" *ngFor="let doc of documentos | keyvalue">
                       <div class="document-item d-flex align-items-center p-2 rounded">
@@ -394,7 +393,7 @@
                         <button type="button" 
                                 class="btn btn-sm btn-outline-danger"
                                 (click)="removeDocument(doc.key)"
-                                title="Eliminar">
+                                title="{{ 'PERSONAL.ADD_PERSONAL.DELETE' | translate }}">
                           <i class="fa fa-times"></i>
                         </button>
                       </div>
@@ -405,9 +404,9 @@
                 <!-- Advertencia si faltan documentos -->
                 <div *ngIf="documentos.size < 6" class="alert alert-warning" style="background-color: #fff3cd !important; color: #856404 !important;">
                   <i class="fa fa-exclamation-triangle me-2"></i>
-                  <strong style="color: #856404 !important;">Debe subir los 6 documentos requeridos</strong>
+                  <strong style="color: #856404 !important;">{{ 'PERSONAL.ADD_PERSONAL.UPLOAD_ALL_DOCUMENTS' | translate }}</strong>
                   <div class="mt-2">
-                    <small style="color: #664d03 !important;">Documentos faltantes: 
+                    <small style="color: #664d03 !important;">{{ 'PERSONAL.ADD_PERSONAL.MISSING_DOCUMENTS' | translate }}: 
                       <span *ngFor="let tipo of getMissingDocuments(); let last = last">
                         <span style="color: #212529 !important;">{{ tipo }}</span><span *ngIf="!last">, </span>
                       </span>
@@ -418,32 +417,32 @@
                 <!-- Mensaje de confirmación si todos están completos -->
                 <div *ngIf="documentos.size === 6" class="alert alert-success" style="background-color: #d4edda !important; color: #155724 !important;">
                   <i class="fa fa-check-circle me-2"></i>
-                  <strong style="color: #155724 !important;">¡Todos los documentos han sido subidos!</strong>
-                  <br><small style="color: #0f4132 !important;">El personal será marcado como "documentos completos".</small>
+                  <strong style="color: #155724 !important;">{{ 'PERSONAL.ADD_PERSONAL.ALL_DOCUMENTS_UPLOADED' | translate }}</strong>
+                  <br><small style="color: #0f4132 !important;">{{ 'PERSONAL.ADD_PERSONAL.DOCUMENTS_COMPLETE_STATUS' | translate }}</small>
                 </div>
               </div>
 
               <!-- Alerta de éxito -->
               <div class="mt-4" *ngIf="text_success">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong>¡Éxito!</strong> {{ text_success }}
-                  <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
+                  <strong>{{ 'PERSONAL.ADD_PERSONAL.SUCCESS_TITLE' | translate }}</strong> {{ text_success }}
+                  <button type="button" class="btn-close" (click)="text_success = ''" [attr.aria-label]="'PERSONAL.ADD_PERSONAL.CLOSE' | translate"></button>
                 </div>
               </div>
 
               <!-- Alerta de validación/error -->
               <div class="mt-4" *ngIf="text_validation">
                 <div class="alert alert-warning alert-dismissible fade show">
-                  <strong>Advertencia:</strong> {{ text_validation }}
-                  <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+                  <strong>{{ 'PERSONAL.ADD_PERSONAL.WARNING' | translate }}:</strong> {{ text_validation }}
+                  <button type="button" class="btn-close" (click)="text_validation = ''" [attr.aria-label]="'PERSONAL.ADD_PERSONAL.CLOSE' | translate"></button>
                 </div>
               </div>
 
               <!-- Botones de acción: guardar y ver lista -->
               <div class="text-end mt-4 d-flex gap-2 justify-content-end form-actions">
-                <button type="button" class="btn btn-primary px-4 btn-save" (click)="save()">Guardar</button>
+                <button type="button" class="btn btn-primary px-4 btn-save" (click)="save()">{{ 'PERSONAL.ADD_PERSONAL.SAVE' | translate }}</button>
                 <button type="button" class="btn btn-outline-secondary px-4" (click)="goToList()">
-                  <i class="fa fa-list"></i> Ver Lista
+                  <i class="fa fa-list"></i> {{ 'PERSONAL.ADD_PERSONAL.VIEW_LIST' | translate }}
                 </button>
               </div>
 

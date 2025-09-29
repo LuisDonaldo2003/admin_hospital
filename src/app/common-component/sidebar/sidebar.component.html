@@ -8,7 +8,7 @@
         <ng-container *ngFor="let group of groupedSidebarData">
           <!-- Título del grupo de menú -->
           <li class="menu-title">
-            <span>{{ 'SIDEBAR.' + groupMap[group.menus[0]?.group] + '.TITLE' | translate }}</span>
+            <span>{{ 'SIDEBAR.' + group.group + '.TITLE' | translate }}</span>
           </li>
           <!-- Itera por cada menú dentro del grupo -->
           <ng-container *ngFor="let menu of group.menus">
@@ -20,7 +20,7 @@
                   <i *ngIf="menu.faIcon && menu.icon" [ngClass]="menu.icon + ' sidebar-icon'"></i>
                 </span>
                 <span>
-                  {{ 'SIDEBAR.' + groupMap[menu.group] + '.' + cleanMenuValue(menu.menuValue) + '.TITLE' | translate }}
+                  {{ 'SIDEBAR.' + group.group + '.' + cleanMenuValue(menu.menuValue) + '.TITLE' | translate }}
                 </span>
               </a>
             </li>
@@ -33,7 +33,7 @@
                   <i *ngIf="menu.faIcon && menu.icon" [ngClass]="menu.icon + ' sidebar-icon'"></i>
                 </span>
                 <span>
-                  {{ 'SIDEBAR.' + groupMap[menu.group] + '.' + cleanMenuValue(menu.menuValue) + '.TITLE' | translate }}
+                  {{ 'SIDEBAR.' + group.group + '.' + cleanMenuValue(menu.menuValue) + '.TITLE' | translate }}
                 </span>
                 <span class="menu-arrow"></span>
               </a>
@@ -47,13 +47,13 @@
                        target="_blank" 
                        rel="noopener noreferrer"
                        class="external-link">
-                      {{ 'SIDEBAR.' + groupMap[menu.group] + '.' + cleanMenuValue(menu.menuValue) + '.' + cleanMenuValue(subMenus.menuValue) | translate }}
+                      {{ 'SIDEBAR.' + group.group + '.' + cleanMenuValue(menu.menuValue) + '.' + cleanMenuValue(subMenus.menuValue) | translate }}
                     </a>
                     <!-- Enlaces internos -->
                     <a *ngIf="subMenus.show_nav && !subMenus.external" 
                        [routerLink]="subMenus.route" 
                        [class.active]="currentUrl === subMenus.base">
-                      {{ 'SIDEBAR.' + groupMap[menu.group] + '.' + cleanMenuValue(menu.menuValue) + '.' + cleanMenuValue(subMenus.menuValue) | translate }}
+                      {{ 'SIDEBAR.' + group.group + '.' + cleanMenuValue(menu.menuValue) + '.' + cleanMenuValue(subMenus.menuValue) | translate }}
                     </a>
                   </li>
                 </ng-container>

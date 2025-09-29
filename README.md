@@ -45,7 +45,7 @@ En dicho archivo modificarás el contenido con lo siguiente
 ```javascript
 {
   "/api": {
-    "target": "http://127.0.0.1:8000",
+    "target": "http://api.sismeg.com",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
@@ -59,9 +59,9 @@ Dirígete a la siguiente dirección `admin_clinica\src\environments`, al archivo
 
 ```javascript
 export const environment = {
-  URL_BACKEND: 'http://127.0.0.1:8000',
-  URL_SERVICIOS: 'http://127.0.0.1:8000/api',
-  URL_FRONTED: 'http://localhost:4200/'
+  URL_BACKEND: 'http://api.sismeg.com/api',
+  URL_SERVICIOS: 'http://api.sismeg.com/api',
+  URL_FRONTED: 'http://sismeg.com/'
 };
 ```
 

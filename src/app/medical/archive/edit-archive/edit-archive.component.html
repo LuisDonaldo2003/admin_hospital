@@ -82,9 +82,9 @@
                 <div class="col-md-2">
                   <label class="form-label">Unidad</label>
                   <select [(ngModel)]="age_unit" name="age_unit" class="form-control">
-                    <option value="años">Años</option>
-                    <option value="meses">Meses</option>
-                    <option value="días">Días</option>
+                    <option value="años">{{ 'ARCHIVE.COMMON.YEARS' | translate }}</option>
+                    <option value="meses">{{ 'ARCHIVE.COMMON.MONTHS' | translate }}</option>
+                    <option value="días">{{ 'ARCHIVE.COMMON.DAYS' | translate }}</option>
                   </select>
                 </div>
 
@@ -101,21 +101,21 @@
                 <div class="col-md-4">
                   <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.STATE' | translate }}</label>
                   <input type="text" [(ngModel)]="state_text" name="state_text" class="form-control" 
-                         placeholder="Escriba el estado" />
+                         placeholder="{{ 'ARCHIVE.COMMON.PLACEHOLDER_STATE' | translate }}" />
                 </div>
 
                 <!-- Municipio -->
                 <div class="col-md-4">
                   <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.MUNICIPALITY' | translate }}</label>
                   <input type="text" [(ngModel)]="municipality_text" name="municipality_text" class="form-control"
-                         placeholder="Escriba el municipio" />
+                         placeholder="{{ 'ARCHIVE.COMMON.PLACEHOLDER_MUNICIPALITY' | translate }}" />
                 </div>
 
                 <!-- Localidad -->
                 <div class="col-md-4">
                   <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.LOCATION' | translate }}</label>
                   <input type="text" [(ngModel)]="location_text" name="location_text" class="form-control"
-                         placeholder="Escriba la localidad" />
+                         placeholder="{{ 'ARCHIVE.COMMON.PLACEHOLDER_LOCATION' | translate }}" />
                 </div>
 
                 <!-- Fecha de admisión -->

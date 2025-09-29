@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://sismeg.com",
+    "target": "http://api.sismeg.com",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

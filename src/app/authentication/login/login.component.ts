@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 import { ProfileService } from 'src/app/core/profile/service/profile.service';
 import { routes } from 'src/app/shared/routes/routes';
+import { RoleConfigService } from 'src/app/shared/services/role-config.service';
 
 @Component({
   selector: 'app-login',
@@ -30,12 +31,13 @@ export class LoginComponent implements OnInit {
   });
 
   /**
-   * Inyecta los servicios de autenticación, navegación y perfil
+   * Inyecta los servicios de autenticación, navegación, perfil y configuración de roles
    */
   constructor(
     public auth: AuthService,
     public router: Router,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private roleConfigService: RoleConfigService
   ) {}
 
   /**
@@ -116,29 +118,12 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * Procesa los roles y navega al dashboard correspondiente
+   * Procesa los roles y navega al perfil (destino fijo después del login)
+   * Todos los usuarios son redirigidos al perfil independientemente de su rol
    */
   private processRolesAndNavigate(raw: any[]): void {
-    // Normaliza roles: acepta string u objeto { name }, recorta espacios y convierte a minúsculas
-    const roles = raw
-      .map(r => (typeof r === 'string' ? r : (r?.name || '')))
-      .filter(Boolean)
-      .map(r => r.trim());
-    const rolesLower = roles.map(r => r.toLowerCase());
-    if (rolesLower.includes('archivo') || rolesLower.includes('archive')) {
-      this.router.navigate([routes.archiveDashboard]);
-    } else if (rolesLower.includes('doctor')) {
-      this.router.navigate([routes.doctorDashboard]);
-    } else if (rolesLower.includes('patient') || rolesLower.includes('paciente')) {
-      this.router.navigate([routes.patientDashboard]);
-    } else if (rolesLower.includes('director general')) {
-      this.router.navigate([routes.adminDashboard]);
-    } else if (rolesLower.includes('subdirector general')) {
-      this.router.navigate([routes.adminDashboard]);
-    } else if (rolesLower.includes('developer')) {
-      this.router.navigate([routes.adminDashboard]);
-    } else {
-      this.router.navigate([routes.adminDashboard]);
-    }
+    // CAMBIO: Todos los usuarios van al perfil después del login
+    const profileRoute = this.roleConfigService.getPostLoginDestination();
+    this.router.navigate([profileRoute]);
   }
 }
