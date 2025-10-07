@@ -7,13 +7,14 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 import { SessionTimeoutWarningComponent } from './shared/components/session-timeout-warning.component';
+import { MaintenanceComponent } from './shared/components/maintenance/maintenance.component';
 
 // ngx-translate imports
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthInterceptor } from './medical/interceptor/auth.interceptor';
+import { MaintenanceInterceptor } from './shared/interceptors/maintenance.interceptor';
 
-// ⬅️ Esto es necesario para cargar los archivos JSON
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -27,10 +28,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
-    HttpClientModule, // ⬅️ Necesario para ngx-translate
-    SessionTimeoutWarningComponent, // ⬅️ Componente standalone
+    HttpClientModule, 
+    SessionTimeoutWarningComponent, 
+    MaintenanceComponent, 
     TranslateModule.forRoot({
-      defaultLanguage: 'en', // puedes poner 'es' si querés español por defecto
+      defaultLanguage: 'en', 
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
@@ -42,6 +44,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MaintenanceInterceptor,
       multi: true
     }
   ],

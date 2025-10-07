@@ -289,4 +289,42 @@ export class AuthService {
       }
     });
   }
+
+  /**
+   * Verifica si el usuario está actualmente logueado
+   */
+  isLoggedIn(): boolean {
+    return !!(this.token && this.user && !this.isTokenExpired());
+  }
+
+  /**
+   * Obtiene el rol del usuario actual
+   */
+  getUserRole(): string | null {
+    const user = this.user;
+    return user?.role_name || user?.role?.name || null;
+  }
+
+  /**
+   * Obtiene la ruta por defecto basada en el rol del usuario
+   */
+  getDefaultRouteForUser(): string {
+    const role = this.getUserRole();
+    
+    switch (role) {
+      case 'Director General':
+        return '/dashboard';
+      case 'Administrador':
+        return '/dashboard';
+      case 'Doctor':
+        return '/medical/archives/list';
+      case 'Enfermera':
+      case 'Enfermero':
+        return '/medical/archives/list';
+      case 'Recursos Humanos':
+        return '/medical/personal';
+      default:
+        return '/dashboard';
+    }
+  }
 }

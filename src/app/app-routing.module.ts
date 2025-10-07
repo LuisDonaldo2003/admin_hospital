@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MaintenanceComponent } from './shared/components/maintenance/maintenance.component';
 // import { AuthGuard } from './shared/gaurd/auth.guard';
 
 const routes: Routes = [
@@ -7,6 +8,10 @@ const routes: Routes = [
     path: '',
     pathMatch: 'full',
     redirectTo: 'login',
+  },
+  {
+    path: 'maintenance',
+    component: MaintenanceComponent,
   },
   {
     path: '',
@@ -36,7 +41,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    enableTracing: false, // Cambia a true para debug de rutas
+    useHash: false, // Asegurar que use HTML5 pushState
+    onSameUrlNavigation: 'reload' // Recargar si se navega a la misma URL
+  })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
