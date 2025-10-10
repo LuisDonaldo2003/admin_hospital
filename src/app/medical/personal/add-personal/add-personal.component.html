@@ -97,14 +97,17 @@
                 </h5>
                 <div class="upload-info-card mb-4">
                   <div class="row align-items-center">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                       <p class="mb-1"><strong>{{ 'PERSONAL.ADD_PERSONAL.UPLOAD_AVAILABLE_DOCS' | translate }}</strong></p>
                       <small class="text-muted">
-                        {{ 'PERSONAL.ADD_PERSONAL.FORMAT_INFO' | translate }}
+                        Solo archivos PDF • Máximo: 500KB cada uno (documentos escaneados simples)
                       </small>
                     </div>
-                    <div class="col-md-4 text-end">
+                    <div class="col-md-3 text-center">
                       <span class="badge bg-info fs-6">{{ documentos.size }}/6 {{ 'PERSONAL.ADD_PERSONAL.DOCUMENTS_COUNT' | translate }}</span>
+                    </div>
+                    <div class="col-md-3 text-end">
+                      <small class="text-muted">Total: {{ getTotalDocumentsSize() }}</small>
                     </div>
                   </div>
                 </div>
@@ -143,7 +146,11 @@
                         <div *ngIf="documentos.has('Acta de nacimiento')" class="upload-success">
                           <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
                           <p class="text-success mb-1 fw-bold">{{ 'PERSONAL.ADD_PERSONAL.FILE_LOADED' | translate }}</p>
-                          <small class="text-muted d-block">{{ documentos.get('Acta de nacimiento')?.name }}</small>
+                          <small class="text-muted d-block">{{ getDocumentInfo('Acta de nacimiento')?.name }}</small>
+                          <small class="text-info d-block">{{ getDocumentInfo('Acta de nacimiento')?.size }}</small>
+                          <small *ngIf="getDocumentInfo('Acta de nacimiento')?.sizeWarning" class="text-warning d-block">
+                            <i class="fa fa-exclamation-triangle"></i> Archivo grande - considere comprimir
+                          </small>
                           <button type="button" 
                                   class="btn btn-outline-danger btn-sm mt-2"
                                   (click)="removeDocument('Acta de nacimiento')">
@@ -412,6 +419,17 @@
                       </span>
                     </small>
                   </div>
+                </div>
+
+                <!-- Información sobre límites de archivos -->
+                <div class="alert alert-info" style="background-color: #cce6ff !important; color: #0056b3 !important;">
+                  <i class="fa fa-info-circle me-2"></i>
+                  <strong style="color: #0056b3 !important;">Límites de archivos PDF:</strong>
+                  <ul class="mb-0 mt-2" style="color: #004085 !important;">
+                    <li>Tamaño máximo por archivo: <strong>500KB</strong></li>
+                    <li>Solo archivos PDF son permitidos</li>
+                    <li>Total acumulado actual: <strong>{{ getTotalDocumentsSize() }}</strong></li>
+                  </ul>
                 </div>
 
                 <!-- Mensaje de confirmación si todos están completos -->

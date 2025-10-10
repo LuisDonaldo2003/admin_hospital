@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subscription, timer } from 'rxjs';
 import { AuthService } from 'src/app/shared/auth/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-maintenance',
@@ -359,13 +360,15 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
   isChecking: boolean = false;
   estimatedTime: string = '';
   private isSystemReactivated: boolean = false;
+  redirectCountdown: number = 3;
   
   private subscription: Subscription = new Subscription();
   private countdownTimer: Subscription = new Subscription();
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -373,6 +376,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
     this.isSystemReactivated = false;
     this.loadMaintenanceData();
     this.startCountdown();
+    this.startMaintenanceCheck();
   }
 
   ngOnDestroy(): void {
@@ -394,17 +398,50 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
     });
   }
 
+  startMaintenanceCheck(): void {
+    // Verificar cada 5 segundos si el sistema sigue en mantenimiento
+    this.subscription.add(
+      timer(5000, 5000).subscribe(() => {
+        // Hacer una petición simple al backend para verificar si sigue en mantenimiento
+        this.http.get('/api/health-check').subscribe({
+          next: () => {
+            // Si la petición es exitosa, el sistema ya no está en mantenimiento
+            if (!this.isSystemReactivated) {
+              this.showSystemActiveMessage();
+            }
+          },
+          error: (error) => {
+            // Si es 503, sigue en mantenimiento, no hacer nada
+            // Si es otro error, también mostrar que está activo
+            if (error.status !== 503 && !this.isSystemReactivated) {
+              this.showSystemActiveMessage();
+            }
+          }
+        });
+      })
+    );
+  }
+
   showSystemActiveMessage(): void {
-    console.log('Mostrando mensaje de sistema activo');
+    console.log('Sistema detectado como activo - mostrando mensaje de reactivación');
     // Mostrar mensaje de que el sistema está activo
-    this.maintenanceMessage = '¡Sistema reactivado! Redirigiendo al login...';
+    this.maintenanceMessage = '¡Sistema reactivado! El sistema está listo para usar.';
     this.isSystemReactivated = true;
+    this.redirectCountdown = 3;
     
-    // Detener el countdown
+    // Detener el countdown y verificación
     this.countdownTimer.unsubscribe();
+    this.subscription.unsubscribe();
     
-    // El servicio de mantenimiento se encargará de la redirección automática
-    // NO hacer logout ni redirección aquí, el servicio lo maneja
+    // Contador visual para la redirección
+    const redirectTimer = timer(0, 1000).subscribe(() => {
+      this.redirectCountdown--;
+      if (this.redirectCountdown <= 0) {
+        console.log('Redirigiendo automáticamente al login...');
+        redirectTimer.unsubscribe();
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   isSystemActive(): boolean {
@@ -441,7 +478,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
 
   getMessageText(): string {
     if (this.isSystemActive()) {
-      return this.maintenanceMessage || 'El sistema ha sido reactivado y estará disponible en breve.';
+      return `El sistema ha sido reactivado exitosamente. Redirigiendo al login en ${this.redirectCountdown} segundos...`;
     }
     return this.maintenanceMessage || 'Estamos realizando mejoras en el sistema para brindarle un mejor servicio.';
   }

@@ -48,6 +48,11 @@ export class AddPersonalComponent implements OnInit {
     'Título profesional'
   ];
 
+  // Configuración de archivos
+  readonly MAX_FILE_SIZE = 500 * 1024; // 500KB máximo para PDFs de documentos
+  readonly ALLOWED_FILE_TYPE = 'application/pdf';
+  readonly ALLOWED_FILE_EXTENSIONS = ['.pdf'];
+
   constructor(
     private router: Router,
     private translate: TranslateService,
@@ -84,21 +89,55 @@ export class AddPersonalComponent implements OnInit {
    * Procesar archivo (común para input y drag & drop)
    */
   processFile(file: File, tipoDocumento: string): void {
-    // Validar que sea PDF
-    if (file.type !== 'application/pdf') {
-      this.text_validation = 'Solo se permiten archivos PDF';
+    // Limpiar mensajes previos
+    this.text_validation = '';
+    
+    // Validar extensión del archivo
+    const fileName = file.name.toLowerCase();
+    const hasValidExtension = this.ALLOWED_FILE_EXTENSIONS.some(ext => fileName.endsWith(ext));
+    
+    if (!hasValidExtension) {
+      this.text_validation = `Solo se permiten archivos PDF. Archivo seleccionado: ${file.name}`;
       return;
     }
     
-    // Validar tamaño máximo (10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      this.text_validation = 'El archivo no puede superar los 10MB';
+    // Validar tipo MIME
+    if (file.type !== this.ALLOWED_FILE_TYPE) {
+      this.text_validation = `Tipo de archivo no válido. Solo se permiten archivos PDF.`;
       return;
+    }
+    
+    // Validar tamaño del archivo
+    if (file.size > this.MAX_FILE_SIZE) {
+      const sizeInKB = (file.size / 1024).toFixed(0);
+      const maxSizeInKB = (this.MAX_FILE_SIZE / 1024).toFixed(0);
+      this.text_validation = `El archivo es demasiado grande (${sizeInKB}KB). Tamaño máximo permitido: ${maxSizeInKB}KB para documentos PDF.`;
+      return;
+    }
+    
+    // Validar tamaño mínimo (evitar archivos corruptos o vacíos)
+    if (file.size < 1024) { // 1KB mínimo
+      this.text_validation = `El archivo parece estar dañado o vacío. Tamaño mínimo: 1KB.`;
+      return;
+    }
+    
+    // Validar que no se exceda el límite total de archivos
+    if (this.documentos.size >= this.documentosRequeridos.length && !this.documentos.has(tipoDocumento)) {
+      this.text_validation = `Ya has subido el máximo de ${this.documentosRequeridos.length} documentos permitidos.`;
+      return;
+    }
+    
+    // Si ya existe un documento de este tipo, mostramos mensaje de reemplazo
+    if (this.documentos.has(tipoDocumento)) {
+      console.log(`Reemplazando documento existente: ${tipoDocumento}`);
     }
     
     // Agregar archivo al mapa
     this.documentos.set(tipoDocumento, file);
-    this.text_validation = ''; // Limpiar mensaje de error
+    
+    // Mostrar mensaje de éxito temporal
+    const sizeInKB = (file.size / 1024).toFixed(1);
+    console.log(`Documento "${tipoDocumento}" cargado exitosamente (${sizeInKB}KB)`);
   }
 
   /**
@@ -144,6 +183,31 @@ export class AddPersonalComponent implements OnInit {
    */
   removeDocument(tipoDocumento: string): void {
     this.documentos.delete(tipoDocumento);
+    this.text_validation = ''; // Limpiar mensajes de error al eliminar
+  }
+
+  /**
+   * Formatear tamaño de archivo para mostrar al usuario
+   */
+  formatFileSize(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+    
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+  }
+
+  /**
+   * Verificar si el archivo es de tamaño apropiado (para mostrar advertencias visuales)
+   */
+  isFileSizeAppropriate(file: File): boolean {
+    // Para documentos PDF, consideramos apropiado entre 50KB y 1MB
+    const minAppropriateSize = 50 * 1024; // 50KB
+    const maxAppropriateSize = 1024 * 1024; // 1MB
+    
+    return file.size >= minAppropriateSize && file.size <= maxAppropriateSize;
   }
 
   /**
@@ -151,6 +215,31 @@ export class AddPersonalComponent implements OnInit {
    */
   getMissingDocuments(): string[] {
     return this.documentosRequeridos.filter(tipo => !this.documentos.has(tipo));
+  }
+
+  /**
+   * Obtener el tamaño total de todos los documentos cargados
+   */
+  getTotalDocumentsSize(): string {
+    let totalSize = 0;
+    for (const [_, file] of this.documentos) {
+      totalSize += file.size;
+    }
+    return this.formatFileSize(totalSize);
+  }
+
+  /**
+   * Obtener información de un documento específico
+   */
+  getDocumentInfo(tipoDocumento: string): { name: string, size: string, sizeWarning: boolean } | null {
+    const file = this.documentos.get(tipoDocumento);
+    if (!file) return null;
+    
+    return {
+      name: file.name,
+      size: this.formatFileSize(file.size),
+      sizeWarning: !this.isFileSizeAppropriate(file)
+    };
   }
 
   /**
@@ -183,6 +272,30 @@ export class AddPersonalComponent implements OnInit {
     if (!this.tipo) {
       this.text_validation = 'El tipo de personal es requerido';
       return false;
+    }
+
+    // Validar archivos cargados
+    if (this.documentos.size > 0) {
+      for (const [tipoDoc, file] of this.documentos) {
+        // Re-validar cada archivo por seguridad
+        if (file.size > this.MAX_FILE_SIZE) {
+          const sizeInKB = (file.size / 1024).toFixed(0);
+          const maxSizeInKB = (this.MAX_FILE_SIZE / 1024).toFixed(0);
+          this.text_validation = `El archivo "${tipoDoc}" es demasiado grande (${sizeInKB}KB). Máximo permitido: ${maxSizeInKB}KB`;
+          return false;
+        }
+        
+        if (file.type !== this.ALLOWED_FILE_TYPE) {
+          this.text_validation = `El archivo "${tipoDoc}" no es un PDF válido`;
+          return false;
+        }
+
+        // Advertencia para archivos muy pequeños (posible corrupción)
+        if (file.size < 1024) {
+          this.text_validation = `El archivo "${tipoDoc}" parece estar dañado o vacío (tamaño: ${file.size} bytes)`;
+          return false;
+        }
+      }
     }
 
     // Los documentos son opcionales - no se requiere validación obligatoria
