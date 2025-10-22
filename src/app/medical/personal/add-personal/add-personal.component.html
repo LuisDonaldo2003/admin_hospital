@@ -87,6 +87,43 @@
                   <small class="form-text text-muted">{{ 'PERSONAL.ADD_PERSONAL.AUTO_ASSIGNED_HELP' | translate }}</small>
                 </div>
 
+                <!-- Campo: RFC -->
+                <div class="col-md-6">
+                  <label class="form-label">RFC *</label>
+                  <input 
+                    type="text" 
+                    class="form-control text-uppercase" 
+                    [(ngModel)]="rfc"
+                    name="rfc"
+                    placeholder="Ej: PEPE900101AB2"
+                    maxlength="13"
+                    required 
+                    style="text-transform: uppercase;"
+                    [ngClass]="{ 'is-invalid': submitted && (!rfc || !rfc.trim()) }" />
+                  <div *ngIf="submitted && (!rfc || !rfc.trim())" class="invalid-feedback">
+                    El RFC es requerido
+                  </div>
+                  <small class="form-text text-muted">Solo letras y números, máximo 13 caracteres. Ej: PEPE900101AB2</small>
+                </div>
+
+                <!-- Campo: Número de Checador -->
+                <div class="col-md-6">
+                  <label class="form-label">Número de Checador *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="numeroChecador"
+                    name="numeroChecador"
+                    placeholder="Ej: 43 (1-4 dígitos)"
+                    pattern="[0-9]*"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && (!numeroChecador || !numeroChecador.trim()) }" />
+                  <div *ngIf="submitted && (!numeroChecador || !numeroChecador.trim())" class="invalid-feedback">
+                    El número de checador es requerido
+                  </div>
+                  <small class="form-text text-muted">Solo números, de 1 a 4 dígitos. Debe ser único.</small>
+                </div>
+
               </div>
 
               <!-- Sección de Documentos -->
@@ -104,7 +141,7 @@
                       </small>
                     </div>
                     <div class="col-md-3 text-center">
-                      <span class="badge bg-info fs-6">{{ documentos.size }}/6 {{ 'PERSONAL.ADD_PERSONAL.DOCUMENTS_COUNT' | translate }}</span>
+                      <span class="badge bg-info fs-6">{{ documentos.size }}/7 {{ 'PERSONAL.ADD_PERSONAL.DOCUMENTS_COUNT' | translate }}</span>
                     </div>
                     <div class="col-md-3 text-end">
                       <small class="text-muted">Total: {{ getTotalDocumentsSize() }}</small>
@@ -126,7 +163,7 @@
                            (dragover)="onDragOver($event)" 
                            (dragenter)="onDragEnter($event, $event.currentTarget)"
                            (dragleave)="onDragLeave($event, $event.currentTarget)" 
-                           (drop)="onDrop($event, 'Acta de nacimiento', $event.currentTarget)">>
+                           (drop)="onDrop($event, 'Acta de nacimiento', $event.currentTarget)">
                         <div *ngIf="!documentos.has('Acta de nacimiento')" class="upload-placeholder">
                           <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
                           <p class="text-muted mb-1">{{ 'PERSONAL.ADD_PERSONAL.DRAG_FILE_HERE' | translate }}</p>
@@ -290,48 +327,7 @@
                     </div>
                   </div>
 
-                  <!-- RFC -->
-                  <div class="col-md-6">
-                    <div class="document-upload-card">
-                      <div class="upload-header">
-                        <i class="fa fa-file-text text-primary me-2"></i>
-                        <label class="form-label mb-0">RFC</label>
-                      </div>
-                      <div class="upload-area" 
-                           [class.has-file]="documentos.has('RFC')"
-                           (dragover)="onDragOver($event)" 
-                           (dragenter)="onDragEnter($event, $event.currentTarget)"
-                           (dragleave)="onDragLeave($event, $event.currentTarget)" 
-                           (drop)="onDrop($event, 'RFC', $event.currentTarget)">>
-                        <div *ngIf="!documentos.has('RFC')" class="upload-placeholder">
-                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
-                          <div class="select-row">
-                            <small class="text-muted mb-0">o</small>
-                            <input 
-                              type="file" 
-                              class="file-input" 
-                              id="rfc"
-                              accept=".pdf"
-                              (change)="onFileSelected($event, 'RFC')" />
-                            <label for="rfc" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
-                            </label>
-                          </div>
-                        </div>
-                        <div *ngIf="documentos.has('RFC')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Archivo cargado</p>
-                          <small class="text-muted d-block">{{ documentos.get('RFC')?.name }}</small>
-                          <button type="button" 
-                                  class="btn btn-outline-danger btn-sm mt-2"
-                                  (click)="removeDocument('RFC')">
-                            <i class="fa fa-trash me-1"></i>Eliminar
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+
 
                   <!-- Título Profesional -->
                   <div class="col-md-6">
@@ -345,7 +341,7 @@
                            (dragover)="onDragOver($event)" 
                            (dragenter)="onDragEnter($event, $event.currentTarget)"
                            (dragleave)="onDragLeave($event, $event.currentTarget)" 
-                           (drop)="onDrop($event, 'Título profesional', $event.currentTarget)">>
+                           (drop)="onDrop($event, 'Título profesional', $event.currentTarget)">
                         <div *ngIf="!documentos.has('Título profesional')" class="upload-placeholder">
                           <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
                           <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
@@ -376,6 +372,92 @@
                     </div>
                   </div>
 
+                  <!-- Constancias de Cursos -->
+                  <div class="col-md-6">
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-certificate text-primary me-2"></i>
+                        <label class="form-label mb-0">Constancias de Cursos</label>
+                      </div>
+                      <div class="upload-area" 
+                           [class.has-file]="documentos.has('Constancias de cursos')"
+                           (dragover)="onDragOver($event)" 
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)" 
+                           (drop)="onDrop($event, 'Constancias de cursos', $event.currentTarget)">>
+                        <div *ngIf="!documentos.has('Constancias de cursos')" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input 
+                              type="file" 
+                              class="file-input" 
+                              id="constancias-cursos"
+                              accept=".pdf"
+                              (change)="onFileSelected($event, 'Constancias de cursos')" />
+                            <label for="constancias-cursos" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
+                          </div>
+                        </div>
+                        <div *ngIf="documentos.has('Constancias de cursos')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo cargado</p>
+                          <small class="text-muted d-block">{{ documentos.get('Constancias de cursos')?.name }}</small>
+                          <button type="button" 
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeDocument('Constancias de cursos')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Cédula Profesional -->
+                  <div class="col-md-6">
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-id-badge text-primary me-2"></i>
+                        <label class="form-label mb-0">Cédula Profesional</label>
+                      </div>
+                      <div class="upload-area" 
+                           [class.has-file]="documentos.has('Cédula profesional')"
+                           (dragover)="onDragOver($event)" 
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)" 
+                           (drop)="onDrop($event, 'Cédula profesional', $event.currentTarget)">>
+                        <div *ngIf="!documentos.has('Cédula profesional')" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input 
+                              type="file" 
+                              class="file-input" 
+                              id="cedula-profesional"
+                              accept=".pdf"
+                              (change)="onFileSelected($event, 'Cédula profesional')" />
+                            <label for="cedula-profesional" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
+                          </div>
+                        </div>
+                        <div *ngIf="documentos.has('Cédula profesional')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo cargado</p>
+                          <small class="text-muted d-block">{{ documentos.get('Cédula profesional')?.name }}</small>
+                          <button type="button" 
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeDocument('Cédula profesional')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
 
@@ -388,7 +470,7 @@
                 
                 <!-- Documentos seleccionados -->
                 <div *ngIf="documentos.size > 0" class="documents-status mb-3" style="background-color: #f8f9fa !important; color: #212529 !important;">
-                  <p class="mb-2" style="color: #212529 !important;"><strong>{{ 'PERSONAL.ADD_PERSONAL.DOCUMENTS_UPLOADED' | translate }} ({{ documentos.size }}/6):</strong></p>
+                  <p class="mb-2" style="color: #212529 !important;"><strong>{{ 'PERSONAL.ADD_PERSONAL.DOCUMENTS_UPLOADED' | translate }} ({{ documentos.size }}/7):</strong></p>
                   <div class="row g-2">
                     <div class="col-md-4" *ngFor="let doc of documentos | keyvalue">
                       <div class="document-item d-flex align-items-center p-2 rounded">
@@ -409,7 +491,7 @@
                 </div>
 
                 <!-- Advertencia si faltan documentos -->
-                <div *ngIf="documentos.size < 6" class="alert alert-warning" style="background-color: #fff3cd !important; color: #856404 !important;">
+                <div *ngIf="documentos.size < 7" class="alert alert-warning" style="background-color: #fff3cd !important; color: #856404 !important;">
                   <i class="fa fa-exclamation-triangle me-2"></i>
                   <strong style="color: #856404 !important;">{{ 'PERSONAL.ADD_PERSONAL.UPLOAD_ALL_DOCUMENTS' | translate }}</strong>
                   <div class="mt-2">
@@ -433,7 +515,7 @@
                 </div>
 
                 <!-- Mensaje de confirmación si todos están completos -->
-                <div *ngIf="documentos.size === 6" class="alert alert-success" style="background-color: #d4edda !important; color: #155724 !important;">
+                <div *ngIf="documentos.size === 7" class="alert alert-success" style="background-color: #d4edda !important; color: #155724 !important;">
                   <i class="fa fa-check-circle me-2"></i>
                   <strong style="color: #155724 !important;">{{ 'PERSONAL.ADD_PERSONAL.ALL_DOCUMENTS_UPLOADED' | translate }}</strong>
                   <br><small style="color: #0f4132 !important;">{{ 'PERSONAL.ADD_PERSONAL.DOCUMENTS_COMPLETE_STATUS' | translate }}</small>

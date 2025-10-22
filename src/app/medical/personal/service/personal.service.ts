@@ -9,6 +9,8 @@ export interface Personal {
   nombre: string;
   apellidos: string;
   tipo: 'Clínico' | 'No Clínico';
+  rfc?: string;
+  numero_checador?: string;
   fecha_ingreso?: string;
   activo?: boolean;
   documentos_completos?: boolean;
@@ -87,6 +89,14 @@ export class PersonalService {
     formData.append('nombre', personalData.nombre);
     formData.append('apellidos', personalData.apellidos);
     formData.append('tipo', personalData.tipo);
+    
+    // Agregar RFC y número de checador (campos que faltaban)
+    if (personalData.rfc) {
+      formData.append('rfc', personalData.rfc);
+    }
+    if (personalData.numero_checador) {
+      formData.append('numero_checador', personalData.numero_checador);
+    }
 
     // Agregar documentos
     documentos.forEach((file, tipoDocumento) => {

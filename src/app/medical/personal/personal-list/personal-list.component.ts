@@ -123,6 +123,7 @@ export class PersonalListComponent implements OnInit {
       limit: this.limit,
       search: this.searchDataValue || '',
       tipo: this.filtroTipo || '',
+      documentos: this.filtroDocumentos || '',
       activo: this.filtroActivo !== '' ? this.filtroActivo : undefined
     };
 

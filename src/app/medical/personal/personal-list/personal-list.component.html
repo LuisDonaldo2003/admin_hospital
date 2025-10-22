@@ -32,7 +32,7 @@
                 <div class="input-group search-input">
                   <input type="text" 
                          class="form-control" 
-                         [placeholder]="'PERSONAL.LIST_PERSONAL.SEARCH_PLACEHOLDER' | translate" 
+                         placeholder="Buscar por nombre, RFC o número de checador..."
                          [(ngModel)]="searchDataValue" 
                          (ngModelChange)="searchData(searchDataValue)">
                   <span class="input-group-text">
@@ -86,6 +86,8 @@
                 <thead class="table-light text-center">
                   <tr>
                     <th>{{ 'PERSONAL.LIST_PERSONAL.FULL_NAME' | translate }}</th>
+                    <th>RFC</th>
+                    <th>No. Checador</th>
                     <th>{{ 'PERSONAL.LIST_PERSONAL.PERSONNEL_TYPE' | translate }}</th>
                     <th>{{ 'PERSONAL.LIST_PERSONAL.ADMISSION_DATE' | translate }}</th>
                     <th>{{ 'PERSONAL.LIST_PERSONAL.DOCUMENT_STATUS' | translate }}</th>
@@ -110,6 +112,16 @@
                           <h6 class="mb-0 fw-bold">{{ personal.nombre }} {{ personal.apellidos }}</h6>
                         </div>
                       </div>
+                    </td>
+
+                    <!-- RFC -->
+                    <td class="text-center">
+                      <span class="badge bg-light text-dark">{{ personal.rfc || 'N/A' }}</span>
+                    </td>
+
+                    <!-- Número de Checador -->
+                    <td class="text-center">
+                      <span class="badge bg-secondary">{{ personal.numero_checador || 'N/A' }}</span>
                     </td>
 
                     <!-- Tipo de personal -->
@@ -194,7 +206,7 @@
 
                   <!-- Mensaje cuando no hay registros -->
                   <tr *ngIf="personalList.length === 0">
-                    <td colspan="6" class="text-center py-5">
+                    <td colspan="8" class="text-center py-5">
                       <div class="no-data-found">
                         <i class="fa fa-users fa-3x text-muted mb-3"></i>
                         <h5 class="text-muted">{{ 'PERSONAL.LIST_PERSONAL.NO_RECORDS_FOUND' | translate }}</h5>

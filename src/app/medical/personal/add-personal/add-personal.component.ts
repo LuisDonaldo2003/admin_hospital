@@ -26,6 +26,8 @@ export class AddPersonalComponent implements OnInit {
   apellidos: string = '';
   tipo: 'Clínico' | 'No Clínico' | '' = '';
   fechaIngreso: string;
+  rfc: string = '';
+  numeroChecador: string = '';
   
   // Control del formulario
   submitted = false;
@@ -44,8 +46,9 @@ export class AddPersonalComponent implements OnInit {
     'Comprobante de domicilio',
     'CURP',
     'INE',
-    'RFC',
-    'Título profesional'
+    'Título profesional',
+    'Constancias de cursos',
+    'Cédula profesional'
   ];
 
   // Configuración de archivos
@@ -249,7 +252,7 @@ export class AddPersonalComponent implements OnInit {
     this.text_validation = '';
 
     // Validar campos básicos
-    if (!this.nombre.trim()) {
+    if (!this.nombre?.trim()) {
       this.text_validation = 'El nombre es requerido';
       return false;
     }
@@ -259,7 +262,7 @@ export class AddPersonalComponent implements OnInit {
       return false;
     }
 
-    if (!this.apellidos.trim()) {
+    if (!this.apellidos?.trim()) {
       this.text_validation = 'Los apellidos son requeridos';
       return false;
     }
@@ -274,7 +277,38 @@ export class AddPersonalComponent implements OnInit {
       return false;
     }
 
-    // Validar archivos cargados
+  // Validar RFC
+  console.log('Validando RFC:', this.rfc, 'Longitud:', this.rfc?.length);
+  if (!this.rfc || !this.rfc.trim()) {
+    this.text_validation = 'El RFC es requerido';
+    return false;
+  }
+
+  const rfcTrimmed = this.rfc.trim();
+  console.log('RFC trimmed:', rfcTrimmed, 'Longitud:', rfcTrimmed.length);
+  if (rfcTrimmed.length < 10 || rfcTrimmed.length > 13) {
+    this.text_validation = 'El RFC debe tener entre 10 y 13 caracteres';
+    return false;
+  }
+
+  // Validar RFC formato básico (letras/números)
+  const rfcPattern = /^[A-Z0-9]+$/;
+  if (!rfcPattern.test(rfcTrimmed.toUpperCase()) || rfcTrimmed.length > 13) {
+    this.text_validation = 'El RFC solo puede contener letras y números (máximo 13 caracteres)';
+    return false;
+  }
+
+  // Validar número de checador
+  console.log('Validando número de checador:', this.numeroChecador, 'Longitud:', this.numeroChecador?.length);
+  if (!this.numeroChecador || !this.numeroChecador.trim()) {
+    this.text_validation = 'El número de checador es requerido';
+    return false;
+  }
+
+  if (!/^[0-9]{1,4}$/.test(this.numeroChecador.trim())) {
+    this.text_validation = 'El número de checador debe tener entre 1 y 4 dígitos';
+    return false;
+  }    // Validar archivos cargados
     if (this.documentos.size > 0) {
       for (const [tipoDoc, file] of this.documentos) {
         // Re-validar cada archivo por seguridad
@@ -323,7 +357,9 @@ export class AddPersonalComponent implements OnInit {
     const personalData: Personal = {
       nombre: this.nombre.trim(),
       apellidos: this.apellidos.trim(),
-      tipo: this.tipo as 'Clínico' | 'No Clínico'
+      tipo: this.tipo as 'Clínico' | 'No Clínico',
+      rfc: this.rfc.trim().toUpperCase(),
+      numero_checador: this.numeroChecador.trim()
     };
 
     // Enviar datos a la API
@@ -333,10 +369,10 @@ export class AddPersonalComponent implements OnInit {
           this.loading = false;
           if (response.success) {
             // Mensaje personalizado según el estado de documentos
-            if (this.documentos.size === 6) {
+            if (this.documentos.size === 7) {
               this.text_success = 'Personal guardado exitosamente con todos los documentos completos.';
             } else {
-              this.text_success = `Personal guardado exitosamente. Documentos subidos: ${this.documentos.size}/6. Se marcará como "documentos incompletos".`;
+              this.text_success = `Personal guardado exitosamente. Documentos subidos: ${this.documentos.size}/7. Se marcará como "documentos incompletos".`;
             }
             
             // Opcional: redirigir después de unos segundos

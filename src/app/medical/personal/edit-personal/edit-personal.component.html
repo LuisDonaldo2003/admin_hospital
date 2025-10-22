@@ -97,6 +97,43 @@
                   <small class="form-text text-muted">Solo lectura</small>
                 </div>
 
+                <!-- Campo: RFC -->
+                <div class="col-md-6">
+                  <label class="form-label">RFC *</label>
+                  <input 
+                    type="text" 
+                    class="form-control text-uppercase" 
+                    [(ngModel)]="rfc"
+                    name="rfc"
+                    placeholder="Ej: PEPE900101AB2"
+                    maxlength="13"
+                    required 
+                    style="text-transform: uppercase;"
+                    [ngClass]="{ 'is-invalid': submitted && !rfc.trim() }" />
+                  <div *ngIf="submitted && !rfc.trim()" class="invalid-feedback">
+                    El RFC es requerido
+                  </div>
+                  <small class="form-text text-muted">Solo letras y números, máximo 13 caracteres. Ej: PEPE900101AB2</small>
+                </div>
+
+                <!-- Campo: Número de Checador -->
+                <div class="col-md-6">
+                  <label class="form-label">Número de Checador *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="numeroChecador"
+                    name="numeroChecador"
+                    placeholder="Ej: 12345"
+                    pattern="[0-9]*"
+                    required 
+                    [ngClass]="{ 'is-invalid': submitted && !numeroChecador.trim() }" />
+                  <div *ngIf="submitted && !numeroChecador.trim()" class="invalid-feedback">
+                    El número de checador es requerido
+                  </div>
+                  <small class="form-text text-muted">Solo números. Se usa para control de asistencia</small>
+                </div>
+
               </div>
 
               <!-- Sección de Documentos -->
@@ -359,68 +396,7 @@
                       </div>
                     </div>
                   </div>
-                  <!-- RFC -->
-                  <div class="col-md-6">
-                    <div class="document-upload-card">
-                      <div class="upload-header">
-                        <i class="fa fa-file-text text-primary me-2"></i>
-                        <label class="form-label mb-0">RFC</label>
-                      </div>
-                      <div class="upload-area"
-                           [class.has-file]="documentExists('RFC') || documentosNuevos.has('RFC')"
-                           (dragover)="onDragOver($event)"
-                           (dragenter)="onDragEnter($event, $event.currentTarget)"
-                           (dragleave)="onDragLeave($event, $event.currentTarget)"
-                           (drop)="onDrop($event, 'RFC', $event.currentTarget)">
-                        <div *ngIf="!(documentExists('RFC') || documentosNuevos.has('RFC'))" class="upload-placeholder">
-                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
-                          <div class="select-row">
-                            <small class="text-muted mb-0">o</small>
-                            <input
-                              type="file"
-                              class="file-input"
-                              id="rfc-edit"
-                              accept=".pdf"
-                              aria-label="Seleccionar RFC"
-                              (change)="onFileSelected($event, 'RFC')" />
-                            <label for="rfc-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
-                            </label>
-                          </div>
-                        </div>
-                        <div *ngIf="documentExists('RFC') && !documentosNuevos.has('RFC')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Documento existente</p>
-                          <small class="text-muted d-block">{{ getDocumentDisplayName('RFC') }}</small>
-                          <div class="btn-group-sm mt-2">
-                            <button type="button"
-                                    class="btn btn-outline-primary btn-sm me-1"
-                                    (click)="downloadDocument(getExistingDocument('RFC')?.id!)"
-                                    title="Descargar">
-                              <i class="fa fa-download"></i>
-                            </button>
-                            <button type="button"
-                                    class="btn btn-outline-danger btn-sm"
-                                    (click)="removeExistingDocument(getExistingDocument('RFC')!)"
-                                    title="Eliminar">
-                              <i class="fa fa-trash"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div *ngIf="documentosNuevos.has('RFC')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
-                          <small class="text-muted d-block">{{ documentosNuevos.get('RFC')?.name }}</small>
-                          <button type="button"
-                                  class="btn btn-outline-danger btn-sm mt-2"
-                                  (click)="removeNewDocument('RFC')">
-                            <i class="fa fa-trash me-1"></i>Eliminar
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+
                   <!-- Título Profesional -->
                   <div class="col-md-6">
                     <div class="document-upload-card">
@@ -483,6 +459,137 @@
                       </div>
                     </div>
                   </div>
+
+                  <!-- Constancias de Cursos -->
+                  <div class="col-md-6">
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-certificate text-primary me-2"></i>
+                        <label class="form-label mb-0">Constancias de Cursos</label>
+                      </div>
+                      <div class="upload-area"
+                           [class.has-file]="documentExists('Constancias de cursos') || documentosNuevos.has('Constancias de cursos')"
+                           (dragover)="onDragOver($event)"
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)"
+                           (drop)="onDrop($event, 'Constancias de cursos', $event.currentTarget)">
+                        <div *ngIf="!(documentExists('Constancias de cursos') || documentosNuevos.has('Constancias de cursos'))" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input
+                              type="file"
+                              class="file-input"
+                              id="constancias-cursos-edit"
+                              accept=".pdf"
+                              aria-label="Seleccionar Constancias de Cursos"
+                              (change)="onFileSelected($event, 'Constancias de cursos')" />
+                            <label for="constancias-cursos-edit" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
+                          </div>
+                        </div>
+                        <!-- Documento existente -->
+                        <div *ngIf="documentExists('Constancias de cursos') && !documentosNuevos.has('Constancias de cursos')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Documento existente</p>
+                          <small class="text-muted d-block">{{ getDocumentDisplayName('Constancias de cursos') }}</small>
+                          <div class="mt-2">
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-sm me-2"
+                                    (click)="downloadDocument(getExistingDocument('Constancias de cursos')?.id!)"
+                                    *ngIf="getExistingDocument('Constancias de cursos')?.id">
+                              <i class="fa fa-download me-1"></i>Descargar
+                            </button>
+                            <button type="button"
+                                    class="btn btn-outline-danger btn-sm"
+                                    (click)="removeExistingDocument(getExistingDocument('Constancias de cursos')!)"
+                                    *ngIf="getExistingDocument('Constancias de cursos')">
+                              <i class="fa fa-trash me-1"></i>Eliminar
+                            </button>
+                          </div>
+                        </div>
+                        <!-- Documento nuevo -->
+                        <div *ngIf="documentosNuevos.has('Constancias de cursos')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <small class="text-muted d-block">{{ documentosNuevos.get('Constancias de cursos')?.name }}</small>
+                          <button type="button"
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeNewDocument('Constancias de cursos')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Cédula Profesional -->
+                  <div class="col-md-6">
+                    <div class="document-upload-card">
+                      <div class="upload-header">
+                        <i class="fa fa-id-badge text-primary me-2"></i>
+                        <label class="form-label mb-0">Cédula Profesional</label>
+                      </div>
+                      <div class="upload-area"
+                           [class.has-file]="documentExists('Cédula profesional') || documentosNuevos.has('Cédula profesional')"
+                           (dragover)="onDragOver($event)"
+                           (dragenter)="onDragEnter($event, $event.currentTarget)"
+                           (dragleave)="onDragLeave($event, $event.currentTarget)"
+                           (drop)="onDrop($event, 'Cédula profesional', $event.currentTarget)">
+                        <div *ngIf="!(documentExists('Cédula profesional') || documentosNuevos.has('Cédula profesional'))" class="upload-placeholder">
+                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <div class="select-row">
+                            <small class="text-muted mb-0">o</small>
+                            <input
+                              type="file"
+                              class="file-input"
+                              id="cedula-profesional-edit"
+                              accept=".pdf"
+                              aria-label="Seleccionar Cédula Profesional"
+                              (change)="onFileSelected($event, 'Cédula profesional')" />
+                            <label for="cedula-profesional-edit" class="btn btn-primary btn-sm">
+                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                            </label>
+                          </div>
+                        </div>
+                        <!-- Documento existente -->
+                        <div *ngIf="documentExists('Cédula profesional') && !documentosNuevos.has('Cédula profesional')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Documento existente</p>
+                          <small class="text-muted d-block">{{ getDocumentDisplayName('Cédula profesional') }}</small>
+                          <div class="mt-2">
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-sm me-2"
+                                    (click)="downloadDocument(getExistingDocument('Cédula profesional')?.id!)"
+                                    *ngIf="getExistingDocument('Cédula profesional')?.id">
+                              <i class="fa fa-download me-1"></i>Descargar
+                            </button>
+                            <button type="button"
+                                    class="btn btn-outline-danger btn-sm"
+                                    (click)="removeExistingDocument(getExistingDocument('Cédula profesional')!)"
+                                    *ngIf="getExistingDocument('Cédula profesional')">
+                              <i class="fa fa-trash me-1"></i>Eliminar
+                            </button>
+                          </div>
+                        </div>
+                        <!-- Documento nuevo -->
+                        <div *ngIf="documentosNuevos.has('Cédula profesional')" class="upload-success">
+                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <small class="text-muted d-block">{{ documentosNuevos.get('Cédula profesional')?.name }}</small>
+                          <button type="button"
+                                  class="btn btn-outline-danger btn-sm mt-2"
+                                  (click)="removeNewDocument('Cédula profesional')">
+                            <i class="fa fa-trash me-1"></i>Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
 

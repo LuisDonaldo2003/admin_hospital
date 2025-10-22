@@ -27,6 +27,8 @@ export class EditPersonalComponent implements OnInit {
   tipo: 'Clínico' | 'No Clínico' | '' = '';
   fechaIngreso: string = '';
   activo: boolean = true;
+  rfc: string = '';
+  numeroChecador: string = '';
   
   // Control del formulario
   submitted = false;
@@ -50,8 +52,9 @@ export class EditPersonalComponent implements OnInit {
     'Comprobante de domicilio',
     'CURP',
     'INE',
-    'RFC',
-    'Título profesional'
+    'Título profesional',
+    'Constancias de cursos',
+    'Cédula profesional'
   ];
 
   constructor(
@@ -90,6 +93,8 @@ export class EditPersonalComponent implements OnInit {
           this.tipo = personal.tipo;
           this.fechaIngreso = personal.fecha_ingreso || '';
           this.activo = personal.activo !== false;
+          this.rfc = personal.rfc || '';
+          this.numeroChecador = personal.numero_checador || '';
 
           // Cargar documentos existentes
           this.cargarDocumentos();
@@ -343,6 +348,35 @@ export class EditPersonalComponent implements OnInit {
       return false;
     }
 
+    // Validar RFC
+    if (!this.rfc.trim()) {
+      this.text_validation = 'El RFC es requerido';
+      return false;
+    }
+
+    if (this.rfc.trim().length < 10 || this.rfc.trim().length > 13) {
+      this.text_validation = 'El RFC debe tener entre 10 y 13 caracteres';
+      return false;
+    }
+
+    // Validar RFC formato básico (letras/números)
+    const rfcPattern = /^[A-Z0-9]+$/;
+    if (!rfcPattern.test(this.rfc.trim().toUpperCase()) || this.rfc.trim().length > 13) {
+      this.text_validation = 'El RFC solo puede contener letras y números (máximo 13 caracteres)';
+      return false;
+    }
+
+    // Validar número de checador
+    if (!this.numeroChecador.trim()) {
+      this.text_validation = 'El número de checador es requerido';
+      return false;
+    }
+
+    if (!/^[0-9]{1,4}$/.test(this.numeroChecador.trim())) {
+      this.text_validation = 'El número de checador debe tener entre 1 y 4 dígitos';
+      return false;
+    }
+
     return true;
   }
 
@@ -366,7 +400,9 @@ export class EditPersonalComponent implements OnInit {
       nombre: this.nombre.trim(),
       apellidos: this.apellidos.trim(),
       tipo: this.tipo as 'Clínico' | 'No Clínico',
-      activo: this.activo
+      activo: this.activo,
+      rfc: this.rfc.trim().toUpperCase(),
+      numero_checador: this.numeroChecador.trim()
     };
 
     // Actualizar datos básicos del personal
