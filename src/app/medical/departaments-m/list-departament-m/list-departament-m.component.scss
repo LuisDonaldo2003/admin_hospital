@@ -227,3 +227,52 @@
 .card.card-list table tbody tr td:last-child .btn-options {
 	cursor: pointer;
 }
+
+// Botones de acción (editar, eliminar)
+.btn-edit, .btn-delete {
+	border: none;
+	padding: 6px 12px;
+	font-size: 13px;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+	color: white;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.btn-edit {
+	background: linear-gradient(135deg, #3b82f6, #2563eb);
+	&:hover {
+		transform: scale(1.05);
+		box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+	}
+}
+
+.btn-delete {
+	background: linear-gradient(135deg, #ef4444, #dc2626);
+	&:hover {
+		transform: scale(1.05);
+		box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+	}
+}
+
+// Badge de sin permisos
+.badge-no-permission {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.4rem 0.7rem;
+	font-size: 0.75rem;
+	font-weight: 500;
+	color: #6b7280;
+	background-color: #f3f4f6;
+	border-radius: 6px;
+	border: 1px solid #e5e7eb;
+}
+
+:host-context(.dark-mode) .badge-no-permission {
+	background-color: #374151;
+	color: #9ca3af;
+	border-color: #4b5563;
+}

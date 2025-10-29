@@ -63,24 +63,33 @@
                     </td>
                     <td>{{ data.created_at }}</td>
                     <td class="text-center">
-                      <!-- Menú de acciones para cada perfil -->
-                      <div class="dropdown d-flex justify-content-center align-items-center">
-                        <button class="btn btn-options dropdown-toggle" data-bs-toggle="dropdown">
-                          <i class="fa fa-cogs me-1"></i> {{ 'PROFILE_M.LIST_PROFILE.OPTIONS' | translate }}
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end">
-                          <a class="dropdown-item" [routerLink]="['/profile-m/list_profile-m/edit_profile-m/', data.id]">
-                            <i class="fa fa-pen me-2"></i> {{ 'PROFILE_M.LIST_PROFILE.EDIT' | translate }}
-                          </a>
-                          <a class="dropdown-item text-danger"
-                             href="javascript:void(0);"
-                             (click)="selectProfile(data)"
-                             data-bs-toggle="modal"
-                             [attr.data-bs-target]="'#delete_profile-' + data.id">
-                            <i class="fa fa-trash me-2"></i> {{ 'PROFILE_M.LIST_PROFILE.DELETE' | translate }}
-                          </a>
+                      <!-- Botones de acción con permisos -->
+                      <ng-container *ngIf="canEditProfile() || canDeleteProfile()">
+                        <div class="d-flex justify-content-center gap-2">
+                          <!-- Botón Editar - solo si tiene permiso -->
+                          <button 
+                            *ngIf="canEditProfile()"
+                            class="btn btn-sm btn-edit" 
+                            [routerLink]="['/profile-m/list_profile-m/edit_profile-m/', data.id]"
+                            title="Editar perfil">
+                            <i class="fa fa-pen"></i>
+                          </button>
+                          <!-- Botón Eliminar - solo si tiene permiso -->
+                          <button 
+                            *ngIf="canDeleteProfile()"
+                            class="btn btn-sm btn-delete" 
+                            (click)="selectProfile(data)"
+                            data-bs-toggle="modal"
+                            [attr.data-bs-target]="'#delete_profile-' + data.id"
+                            title="Eliminar perfil">
+                            <i class="fa fa-trash"></i>
+                          </button>
                         </div>
-                      </div>
+                      </ng-container>
+                      <!-- Si no tiene ningún permiso -->
+                      <span class="badge badge-no-permission" *ngIf="!canEditProfile() && !canDeleteProfile()">
+                        <i class="fa fa-ban me-1"></i>Sin permisos
+                      </span>
                     </td>
                   </tr>
                 </tbody>

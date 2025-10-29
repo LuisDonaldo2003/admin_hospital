@@ -5,6 +5,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { DepartamentMService } from '../service/departament-m.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 
 @Component({
   selector: 'app-list-departament-m',
@@ -62,7 +63,8 @@ export class ListDepartamentMComponent {
    */
   constructor(
     public departamentsService: DepartamentMService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public permissionService: PermissionService
   ) {}
 
   /**
@@ -220,5 +222,19 @@ export class ListDepartamentMComponent {
       this.pageNumberArray.push(i);
       this.pageSelection.push({ skip: skip, limit: limit });
     }
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para editar departamentos
+   */
+  canEditDepartament(): boolean {
+    return this.permissionService.hasPermission('edit_departament');
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para eliminar departamentos
+   */
+  canDeleteDepartament(): boolean {
+    return this.permissionService.hasPermission('delete_departament');
   }
 }

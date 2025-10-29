@@ -59,26 +59,33 @@
                     <td>{{ data.state === 1 ? ('CONTRACT.LIST_CONTRACT.ACTIVE' | translate) : ('CONTRACT.LIST_CONTRACT.INACTIVE' | translate) }}</td>
                     <td>{{ data.created_at }}</td>
                     <td class="text-center">
-                      <!-- Menú de acciones para cada contrato -->
-                      <div class="dropdown d-flex justify-content-center align-items-center">
-                        <button class="btn btn-options dropdown-toggle" data-bs-toggle="dropdown">
-                          <i class="fa fa-cogs me-1"></i> {{ 'CONTRACT.LIST_CONTRACT.OPTIONS' | translate }}
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end">
-                          <!-- Opción para editar contrato -->
-                          <a class="dropdown-item" [routerLink]="['/contract-types/list_contract/edit_contract/', data.id]">
-                            <i class="fa fa-pen me-2"></i> {{ 'CONTRACT.LIST_CONTRACT.EDIT' | translate }}
-                          </a>
-                          <!-- Opción para eliminar contrato (abre modal) -->
-                          <a class="dropdown-item text-danger"
-                             href="javascript:void(0);"
-                             (click)="selectDepartament(data)"
-                             data-bs-toggle="modal"
-                             data-bs-target="#deleteModalContract">
-                            <i class="fa fa-trash me-2"></i> {{ 'CONTRACT.LIST_CONTRACT.DELETE' | translate }}
-                          </a>
+                      <!-- Botones de acción con permisos -->
+                      <ng-container *ngIf="canEditContract() || canDeleteContract()">
+                        <div class="d-flex justify-content-center gap-2">
+                          <!-- Botón Editar - solo si tiene permiso -->
+                          <button 
+                            *ngIf="canEditContract()"
+                            class="btn btn-sm btn-edit" 
+                            [routerLink]="['/contract-types/list_contract/edit_contract/', data.id]"
+                            title="Editar contrato">
+                            <i class="fa fa-pen"></i>
+                          </button>
+                          <!-- Botón Eliminar - solo si tiene permiso -->
+                          <button 
+                            *ngIf="canDeleteContract()"
+                            class="btn btn-sm btn-delete" 
+                            (click)="selectDepartament(data)"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModalContract"
+                            title="Eliminar contrato">
+                            <i class="fa fa-trash"></i>
+                          </button>
                         </div>
-                      </div>
+                      </ng-container>
+                      <!-- Si no tiene ningún permiso -->
+                      <span class="badge badge-no-permission" *ngIf="!canEditContract() && !canDeleteContract()">
+                        <i class="fa fa-ban me-1"></i>Sin permisos
+                      </span>
                     </td>
                   </tr>
                 </tbody>

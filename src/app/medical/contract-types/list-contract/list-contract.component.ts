@@ -5,6 +5,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { ContractTypesService } from '../service/contract-types.service';
 import { TranslateModule } from '@ngx-translate/core'; // <-- IMPORTA ESTO
+import { PermissionService } from 'src/app/shared/services/permission.service';
 
 @Component({
   selector: 'app-list-contract',
@@ -62,6 +63,7 @@ export class ListContractComponent {
    */
   constructor(
     public contractService: ContractTypesService,
+    public permissionService: PermissionService
   ) {}
 
   /**
@@ -219,5 +221,19 @@ export class ListContractComponent {
       this.pageNumberArray.push(i);
       this.pageSelection.push({ skip: skip, limit: limit });
     }
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para editar contratos
+   */
+  canEditContract(): boolean {
+    return this.permissionService.hasPermission('edit_contract');
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para eliminar contratos
+   */
+  canDeleteContract(): boolean {
+    return this.permissionService.hasPermission('delete_contract');
   }
 }

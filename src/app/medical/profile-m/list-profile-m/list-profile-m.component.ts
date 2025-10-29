@@ -6,6 +6,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { ProfileMService } from '../service/profile-m.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 
 /**
  * Componente para listar perfiles médicos con paginación, búsqueda y acciones.
@@ -99,7 +100,8 @@ export class ListProfileMComponent {
    */
   constructor(
     public profileService: ProfileMService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public permissionService: PermissionService
   ) {}
 
   /**
@@ -259,5 +261,19 @@ export class ListProfileMComponent {
       this.pageNumberArray.push(i);
       this.pageSelection.push({ skip: skip, limit: limit });
     }
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para editar perfiles
+   */
+  canEditProfile(): boolean {
+    return this.permissionService.hasPermission('edit_profile-m');
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para eliminar perfiles
+   */
+  canDeleteProfile(): boolean {
+    return this.permissionService.hasPermission('delete_profile-m');
   }
 }
