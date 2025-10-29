@@ -55,7 +55,9 @@
       "ADD": "Add Personnel",
       "EDIT": "Edit Personnel",
       "DELETE": "Delete Personnel",
-      "DOCUMENTS": "Personnel Documents"
+      "DOCUMENTS": "Personnel Documents",
+      "VIEW_DOCUMENTS": "View Documents",
+      "TOGGLE_STATUS": "Activate/Deactivate"
     }
   },
   "ARCHIVO": {

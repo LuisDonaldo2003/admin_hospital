@@ -97,12 +97,14 @@
                     <span class="personnel-name">{{ personal.nombre }} {{ personal.apellidos }}</span>
                   </div>
                   
-                  <!-- Si tiene al menos un permiso (ver docs, editar o eliminar) -->
-                  <div class="action-buttons-compact" *ngIf="canEditPersonal() || canDeletePersonal()">
-                    <button class="btn-icon btn-docs" 
-                            (click)="verDocumentos(personal.id)" 
-                            *ngIf="personal.id"
-                            title="Ver documentos">
+                  <!-- Si tiene al menos un permiso (ver docs, editar, eliminar o toggle) -->
+                  <div class="action-buttons-compact" *ngIf="canEditPersonal() || canDeletePersonal() || canViewDocuments() || canToggleStatus()">
+                    <!-- Botón Ver Documentos - solo si tiene permiso -->
+                    <button 
+                      *ngIf="canViewDocuments() && personal.id"
+                      class="btn-icon btn-docs" 
+                      (click)="verDocumentos(personal.id)" 
+                      title="Ver documentos">
                       <i class="fa fa-file-pdf"></i>
                     </button>
                     <!-- Botón Editar - solo si tiene permiso -->
@@ -113,10 +115,13 @@
                       title="Editar">
                       <i class="fa fa-pen"></i>
                     </button>
-                    <button class="btn-icon btn-toggle" 
-                            [ngClass]="{'inactive': !personal.activo}"
-                            (click)="toggleEstado(personal)"
-                            [title]="personal.activo ? 'Desactivar' : 'Activar'">
+                    <!-- Botón Toggle Estado - solo si tiene permiso -->
+                    <button 
+                      *ngIf="canToggleStatus()"
+                      class="btn-icon btn-toggle" 
+                      [ngClass]="{'inactive': !personal.activo}"
+                      (click)="toggleEstado(personal)"
+                      [title]="personal.activo ? 'Desactivar' : 'Activar'">
                       <i class="fa" [ngClass]="{'fa-eye-slash': personal.activo, 'fa-eye': !personal.activo}"></i>
                     </button>
                     <!-- Botón Eliminar - solo si tiene permiso -->
@@ -132,7 +137,7 @@
                   </div>
                   
                   <!-- Si no tiene ningún permiso -->
-                  <span class="badge badge-no-permission" *ngIf="!canEditPersonal() && !canDeletePersonal()">
+                  <span class="badge badge-no-permission" *ngIf="!canEditPersonal() && !canDeletePersonal() && !canViewDocuments() && !canToggleStatus()">
                     <i class="fa fa-ban me-1"></i>Sin permisos
                   </span>
                 </div>

@@ -421,13 +421,27 @@ export class PersonalListComponent implements OnInit {
    * Verifica si el usuario tiene permiso para editar personal
    */
   canEditPersonal(): boolean {
-    return this.permissionService.hasPermission('edit_profile-m');
+    return this.permissionService.hasPermission('edit_personal');
   }
 
   /**
    * Verifica si el usuario tiene permiso para eliminar personal
    */
   canDeletePersonal(): boolean {
-    return this.permissionService.hasPermission('delete_profile-m');
+    return this.permissionService.hasPermission('delete_personal');
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para ver documentos del personal
+   */
+  canViewDocuments(): boolean {
+    return this.permissionService.hasPermission('view_documents_personal');
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para activar/desactivar personal
+   */
+  canToggleStatus(): boolean {
+    return this.permissionService.hasPermission('toggle_status_personal');
   }
 }

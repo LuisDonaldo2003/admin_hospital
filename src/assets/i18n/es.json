@@ -55,7 +55,9 @@
       "ADD": "Agregar Personal",
       "EDIT": "Editar Personal",
       "DELETE": "Eliminar Personal",
-      "DOCUMENTS": "Documentos de Personal"
+      "DOCUMENTS": "Documentos de Personal",
+      "VIEW_DOCUMENTS": "Ver Documentos",
+      "TOGGLE_STATUS": "Activar/Desactivar"
     }
   },
   "ARCHIVO": {

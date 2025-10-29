@@ -559,6 +559,20 @@ export class DataService {
               permision: 'delete_personal',
               show_nav: false,
             },
+            {
+              menuValue: 'VIEW_DOCUMENTS',
+              route: '',
+              base: '',
+              permision: 'view_documents_personal',
+              show_nav: false,
+            },
+            {
+              menuValue: 'TOGGLE_STATUS',
+              route: '',
+              base: '',
+              permision: 'toggle_status_personal',
+              show_nav: false,
+            },
           ],
         },
         {
