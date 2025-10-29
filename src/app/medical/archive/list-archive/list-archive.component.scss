@@ -1,590 +1,1084 @@
-// ===============================
-// ESTILO DEL MENÚ DE ACCIONES FLOTANTE
-// ===============================
-.dropdown-menu {
-  min-width: 140px;
-  padding: 0.5rem 0.25rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-  background: #fff !important;
-  border: 2px solid #dee2e6 !important;
-  z-index: 1050 !important;
-  position: absolute !important;
-  display: none;
-  color: #222 !important;
-}
-
-// Mostrar solo cuando esté marcado como show
-.dropdown-menu.show {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-.dropdown-menu .dropdown-item {
-  padding: 0.65rem 1.2rem;
-  font-size: 0.98rem;
-  color: #222 !important;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  transition: background 0.18s, color 0.18s;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  svg, i {
-    color: #222 !important;
-    filter: none !important;
-  }
-}
-
-// For dropdowns inside the archive card list we want white text (the dropdown
-// uses a dark background in this layout), make rule more specific so it wins
-// over the generic .dropdown-menu .dropdown-item color.
-.card.card-list .dropdown-menu .dropdown-item {
-  color: #ffffff !important;
-}
-.card.card-list .dropdown-menu .dropdown-item svg,
-.card.card-list .dropdown-menu .dropdown-item i {
-  color: #ffffff !important;
-  filter: none !important;
-}
-
-.dropdown-menu .dropdown-item:hover:not(:disabled) {
-  background: linear-gradient(90deg, #007bff22 0%, #e9ecef 100%) !important;
-  color: #007bff !important;
-  svg, i {
-    color: #007bff !important;
-  }
-}
-
-.dropdown-menu .dropdown-item.text-danger {
-  color: #dc3545 !important;
-  svg, i {
-    color: #dc3545 !important;
-  }
-}
-
-.dropdown-menu .dropdown-item.text-danger:hover {
-  background: linear-gradient(90deg, #dc354522 0%, #e9ecef 100%) !important;
-  color: #dc3545 !important;
-  svg, i {
-    color: #dc3545 !important;
-  }
-}
-
-// Modo oscuro
-body.dark-mode .dropdown-menu {
-  background: #0d1a2f !important;
-  border-color: #007bff !important;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.38);
-  color: #fff !important;
-}
-
-body.dark-mode .dropdown-menu .dropdown-item {
-  color: #fff !important;
-  font-weight: 600;
-}
-body.dark-mode .dropdown-menu .dropdown-item * {
-  color: #fff !important;
-}
-body.dark-mode .dropdown-menu .dropdown-item svg,
-body.dark-mode .dropdown-menu .dropdown-item i {
-  color: #fff !important;
-  filter: none !important;
-}
-
-body.dark-mode .dropdown-menu .dropdown-item:hover:not(:disabled) {
-  background: linear-gradient(90deg, #007bff 0%, #0d1a2f 100%) !important;
-  color: #fff !important;
-  svg, i {
-    color: #fff !important;
-  }
-}
-
-body.dark-mode .dropdown-menu .dropdown-item.text-danger {
-  color: #ff4f4f !important;
-  font-weight: 700;
-  svg, i {
-    color: #ff4f4f !important;
-  }
-}
-
-body.dark-mode .dropdown-menu .dropdown-item.text-danger:hover {
-  background: linear-gradient(90deg, #ff4f4f 0%, #0d1a2f 100%) !important;
-  color: #fff !important;
-  svg, i {
-    color: #fff !important;
-  }
-}
-
-// Evitar sobreposición en tabla
-.table-responsive {
-  overflow: visible !important;
-  position: relative !important;
-}
-
-.dropdown {
-  position: relative !important;
-}
-
-// ========================================
-// ESTILOS SIMPLIFICADOS Y UNIFICADOS PARA LIST-ARCHIVE
-// ========================================
-
-.page-wrapper {
-  .content.list-staff {
-    padding: 1.5rem;
-
-    // .page-header {
-    //   margin-bottom: 2rem;
-    //   .breadcrumb {
-    //     background: transparent !important;
-    //     color: var(--user-card-text-color, #6b7280) !important;
-    //     border: none !important;
-    //     border-radius: 0;
-    //     padding: 0;
-    //     margin: 0;
-    //     font-size: 0.9rem;
-    //     box-shadow: none;
-    //     .breadcrumb-item {
-    //       color: var(--user-card-text-color, #6b7280) !important;
-    //       font-weight: 600;
-    //       &.active {
-    //         color: var(--user-border-color, #fff) !important;
-    //         font-weight: 700;
-    //       }
-    //       span {
-    //         color: var(--user-card-text-color, #9ca3af) !important;
-    //         margin: 0 0.25rem;
-    //       }
-    //     }
-    //     a {
-    //       color: var(--user-card-text-color, #6b7280) !important;
-    //       text-decoration: none;
-    //       &:hover {
-    //         color: var(--user-border-color, #fff) !important;
-    //       }
-    //     }
-    //   }
-    // }
-
-    .filters-container {
-      background: var(--user-card-bg, #fff) !important;
-      border: 3px solid var(--user-border-color, #dee2e6) !important;
-      border-radius: 1rem;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      color: var(--user-card-text-color, #000) !important;
-      label, p, span, h1, h2, h3, h4, h5, h6 {
-        color: var(--user-card-text-color, #000) !important;
-      }
-      input,
-      input.form-control,
-      input.filter-input,
-      input.custom-input {
-        background-color: #fff !important;
-        color: #000 !important;
-        border: 3px solid var(--user-border-color, #000) !important;
-        border-radius: 0.75rem;
-        padding: 0.75rem 1rem;
-        font-size: 0.95rem;
-        outline: none !important;
-        box-shadow: none !important;
-      }
-      input::placeholder {
-        color: #222 !important;
-        opacity: 1 !important;
-        font-weight: 500 !important;
-        font-size: 0.95rem !important;
-      }
-      select,
-      .filter-select {
-        background: #fff !important;
-        color: #000 !important;
-        border: 3px solid var(--user-border-color, #dee2e6) !important;
-        border-radius: 0.75rem;
-        padding: 0.75rem 1rem;
-        font-size: 0.95rem;
-        outline: none !important;
-        box-shadow: none !important;
-      }
-      .add-patient-btn {
-        background: linear-gradient(135deg, #007bff, #0056b3);
-        border: 3px solid var(--user-border-color, #007bff) !important;
-        border-radius: 0.75rem;
-        padding: 0.75rem 1rem;
-        font-weight: 600;
-        font-size: 0.95rem;
-        color: #fff !important;
-        box-shadow: 0 2px 8px rgba(0,123,255,0.2);
-        &:hover:not(:disabled) {
-          background: linear-gradient(135deg, #0056b3, #004085);
-        }
-        &:disabled {
-          opacity: 0.65;
-        }
-        i {
-          font-size: 1rem;
-        }
-      }
-      /* Clear filters button: match dimensions & weight of add-patient-btn */
-      .clear-filters-btn {
-        border: 3px solid var(--user-border-color, #6c757d) !important;
-        border-radius: 0.75rem;
-        padding: 0.75rem 1rem;
-        height: 54px;
-        color: #495057 !important;
-        background: #fff !important;
-        font-size: 0.95rem;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        transition: background 0.18s, color 0.18s;
-        &:hover:not(:disabled) {
-          background: var(--user-border-color, #6c757d) !important;
-          color: #fff !important;
-        }
-        &:disabled { opacity: 0.65; }
-      }
-    }
-  }
-}
-
-// Ajustes específicos en modo oscuro para que el texto sea visible sin necesidad de hover
-body.dark-mode .filters-container .clear-filters-btn {
-  background: #2f3746 !important; // Fondo oscuro consistente con el contenedor
-  color: #ffffff !important; // Texto blanco siempre visible
-  border-color: var(--user-border-color, #ff4f4f) !important;
-}
-body.dark-mode .filters-container .clear-filters-btn:hover:not(:disabled) {
-  background: var(--user-border-color, #ff4f4f) !important;
-  color: #ffffff !important;
-}
-
-// PLACEHOLDER EN MODO OSCURO
-body.dark-mode .filters-container input,
-body.dark-mode .filters-container input.form-control,
-body.dark-mode .filters-container input.filter-input,
-body.dark-mode .filters-container input.custom-input {
-  background-color: transparent !important;
-  color: #fff !important;
-}
-body.dark-mode .filters-container input::placeholder {
-  color: rgba(255,255,255,0.7) !important;
-  opacity: 1 !important;
-}
-
-// TEXTOS DE TOTALES Y RESULTADOS EN TABLA - COLORES FIJOS PARA MEJOR CONTRASTE
-.card.card-list .card-body .d-flex.justify-content-between p,
-.card.card-list .card-body .d-flex.justify-content-between span,
-.card.card-list .card-body .d-flex.justify-content-between strong {
-  color: #495057 !important; // Color fijo oscuro para buen contraste
-  opacity: 1 !important;
-}
-body.dark-mode .card.card-list .card-body .d-flex.justify-content-between p,
-body.dark-mode .card.card-list .card-body .d-flex.justify-content-between span,
-body.dark-mode .card.card-list .card-body .d-flex.justify-content-between strong {
-  color: #ffffff !important; // Blanco en modo oscuro
-  opacity: 1 !important;
-}
-
-// CLASES ESPECÍFICAS PARA INFORMACIÓN DE TOTALES
-.text-info-totals {
-  color: #495057 !important;
-  font-weight: 600 !important;
-  margin-bottom: 0 !important;
-}
-
-.text-info-numbers {
-  color: #495057 !important;
-  font-weight: 700 !important;
-  font-size: 1.2em !important;
-}
-
-// MODO OSCURO PARA CLASES ESPECÍFICAS
-body.dark-mode .text-info-totals {
-  color: #ffffff !important;
-}
-
-body.dark-mode .text-info-numbers {
-  color: #ffffff !important;
-}
-
-// ========================================
-// ESTILOS DE LA TABLA Y CONTENIDO PRINCIPAL
-// ========================================
 .card.card-list {
   border-radius: 1rem;
   padding: 1.5rem;
-  border: 3px solid var(--user-border-color, #dee2e6) !important;
-  background-color: var(--user-card-bg, #fff) !important;
-  color: var(--user-card-text-color, #000) !important;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 4px solid var(--user-border-color, #0B7285) !important;
+  background-color: var(--user-card-bg, #ffffff) !important;
+  color: var(--user-card-text-color, #111827) !important;
+  position: relative;
+  z-index: 1;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 
   .card-body {
     border-radius: 1rem;
     background-color: transparent !important;
-    color: var(--user-card-text-color, #000) !important;
+    color: var(--user-card-text-color, #111827) !important;
 
-    .d-flex.justify-content-between {
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      border-radius: 0.75rem;
-      padding: 1rem 1.5rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid var(--user-border-color, #dee2e6);
-
-      p {
-        margin: 0;
-        font-size: 1rem;
-        font-weight: 600;
-        color: #495057 !important; // Color fijo para mejor contraste
-        span {
-          font-weight: 700;
-          font-size: 1.2rem;
-          color: #495057 !important; // Color fijo para spans también
-        }
-      }
-      .spinner-border-sm {
-        width: 1.2rem;
-        height: 1.2rem;
-      }
-    }
-
-    .text-center.py-5 {
-      padding: 4rem 2rem !important;
-      .fa-search {
-        color: #dee2e6;
-        margin-bottom: 1.5rem;
-      }
-      h5 {
-        color: var(--user-card-text-color, #6c757d) !important;
-        font-weight: 600;
-        margin-bottom: 1rem;
-      }
-      p {
-        color: var(--user-card-text-color, #8e959b) !important;
-        font-size: 1rem;
-        margin-bottom: 1.5rem;
-      }
-      .btn-outline-primary {
-        border-radius: 0.75rem;
-        padding: 0.75rem 2rem;
-        font-weight: 600;
-      }
+    h4, p, span, small, th, td, .pagination-info {
+      color: var(--user-card-text-color, #111827) !important;
     }
   }
 
-  table {
+  // ===== TABLA MODERNA =====
+  .modern-table {
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
-    background-color: #fff !important;
-    border: 2px solid var(--user-border-color, #dee2e6);
-    border-radius: 1rem;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 12px;
     overflow: hidden;
 
-    th, td {
-      border-bottom: 1px solid #f1f3f4;
-      padding: 1rem 0.75rem;
-      text-align: center;
-      vertical-align: middle;
-      color: #000000 !important;
-      background-color: #fff !important;
-    }
-    thead th {
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
-      color: #000000 !important;
-      font-weight: 700;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border-bottom: 2px solid var(--user-border-color, #dee2e6);
-    }
-    tbody tr {
-      transition: all 0.3s ease;
-      background-color: #fff !important;
-      &:hover {
-        background-color: rgba(0, 123, 255, 0.05) !important;
-        transform: scale(1.01);
-      }
-      &:last-child td {
-        border-bottom: none;
-      }
-      td {
-        background-color: #fff !important;
-        color: #000000 !important;
-      }
-    }
-    td:first-child {
-      font-weight: 700;
-      color: #007bff !important;
-      font-size: 1.1rem;
-      background-color: #fff !important;
-    }
-    .dropdown-toggle {
-      color: #000000 !important;
-      background: transparent !important;
-      border: none !important;
-      &::after {
-        border-top-color: #000000 !important;
-      }
-    }
-    .fa-cog,
-    .fa-settings,
-    .fa-gear,
-    i[class*="fa-"] {
-      color: #000000 !important;
-    }
-    .btn {
-      color: #000000 !important;
-    }
-    a:not(.dropdown-item) {
-      color: #000000 !important;
-    }
-  }
-}
+    thead {
+      th {
+        background: linear-gradient(135deg, 
+          color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent),
+          color-mix(in srgb, var(--user-border-color, #0B7285) 8%, transparent)) !important;
+        color: var(--user-card-text-color, #111827) !important;
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 1rem 0.75rem;
+        border: none !important;
+        vertical-align: middle;
 
-// ========================================
-// PAGINACIÓN MEJORADA
-// ========================================
-.pagination {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: center;
-  .page-item {
-    .page-link {
-      border-radius: 0.75rem;
-      padding: 0.75rem 1rem;
-      border: 2px solid #dee2e6 !important;
-      color: #495057 !important; // Color fijo para buena visibilidad
-      background-color: #fff !important;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      min-width: 45px;
-      text-align: center;
-      &:hover:not([aria-disabled="true"]) {
-        background: linear-gradient(135deg, #007bff, #0056b3) !important;
-        color: #fff !important;
-        border-color: #007bff !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
-      }
-      &[aria-disabled="true"] {
-        opacity: 0.5;
-        pointer-events: none;
-      }
-    }
-    &.active .page-link {
-      background: linear-gradient(135deg, #007bff, #0056b3) !important;
-      color: #fff !important;
-      border-color: #007bff !important;
-      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
-    }
-    &.disabled .page-link {
-      background-color: #f8f9fa !important;
-      color: #6c757d !important;
-      border-color: #dee2e6 !important;
-      cursor: not-allowed;
-    }
-  }
-}
-.pagination-info {
-  color: #495057 !important; // Color más oscuro para mejor contraste
-  font-size: 0.95rem;
-  font-weight: 600;
-}
+        i {
+          opacity: 0.7;
+          font-size: 0.85rem;
+        }
 
-// PAGINACIÓN EN MODO OSCURO
-body.dark-mode .pagination-info {
-  color: #ffffff !important;
-}
+        &:first-child {
+          border-top-left-radius: 12px;
+        }
 
-// ========================================
-// RESPONSIVE DESIGN
-// ========================================
-@media (max-width: 768px) {
-  .page-wrapper .content.list-staff {
-    padding: 1rem;
-      .filters-container {
-        padding: 1rem;
-        .filter-input {
-          font-size: 0.9rem;
-          padding: 0.55rem 0.75rem;
-        }
-        .clear-filters-btn,
-        .add-patient-btn {
-          font-size: 0.9rem;
-          padding: 0.6rem 0.6rem;
-        }
-        .w-100.d-flex.gap-2 {
-          flex-direction: column;
+        &:last-child {
+          border-top-right-radius: 12px;
         }
       }
-    .card.card-list {
-      padding: 1rem;
-      .card-body {
-        .d-flex.justify-content-between {
-          flex-direction: column;
-          gap: 1rem;
-          text-align: center;
+    }
+
+    tbody {
+      tr {
+        transition: all 0.2s ease;
+        background: transparent !important;
+
+        &:hover {
+          background: color-mix(in srgb, var(--user-border-color, #0B7285) 4%, transparent) !important;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        table {
-          font-size: 0.875rem;
-          th, td {
-            padding: 0.75rem 0.5rem;
+
+        td {
+          padding: 1rem 0.75rem;
+          border: none !important;
+          border-bottom: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 6%, transparent) !important;
+          color: var(--user-card-text-color, #111827) !important;
+          vertical-align: middle;
+          background: transparent !important;
+        }
+
+        &:last-child td {
+          border-bottom: none !important;
+
+          &:first-child {
+            border-bottom-left-radius: 12px;
+          }
+
+          &:last-child {
+            border-bottom-right-radius: 12px;
           }
         }
       }
     }
-    .pagination {
-      .page-item .page-link {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.875rem;
-        min-width: 35px;
+  }
+
+  // ===== CELDAS PERSONALIZADAS =====
+  .user-name-cell {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+
+    i {
+      font-size: 1.1rem;
+      color: var(--user-border-color, #0B7285);
+    }
+
+    strong {
+      color: var(--user-card-text-color, #111827) !important;
+    }
+  }
+
+  .email-cell {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+
+    span {
+      color: var(--user-card-text-color, #111827) !important;
+    }
+  }
+
+  .role-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .badge-role {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, 
+      color-mix(in srgb, var(--user-border-color, #0B7285) 12%, transparent),
+      color-mix(in srgb, var(--user-border-color, #0B7285) 6%, transparent));
+    color: var(--user-card-text-color, #111827) !important;
+    border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+
+    i {
+      font-size: 0.75rem;
+      color: var(--user-border-color, #0B7285);
+    }
+  }
+
+  .badge-protected {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white !important;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+
+    i {
+      font-size: 0.75rem;
+    }
+  }
+
+  .badge-no-permission {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    color: white !important;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(107, 114, 128, 0.3);
+
+    i {
+      font-size: 0.75rem;
+    }
+  }
+
+  // ===== BOTONES DE ACCIÓN =====
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn-edit {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border: none;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+
+    i {
+      font-size: 0.85rem;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      filter: brightness(1.1);
+    }
+  }
+
+  .btn-delete {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: none;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+
+    i {
+      font-size: 0.85rem;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+      filter: brightness(1.1);
+    }
+  }
+
+  // Botón "New" profesional
+  .btn-options {
+    background-color: var(--user-border-color, #0B7285);
+    border: none;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #fff;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+    i {
+      margin-right: 6px;
+      font-size: 0.85rem;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      filter: brightness(1.1);
+    }
+  }
+}
+
+// ===== REGLAS ESPECÍFICAS PARA TABLA =====
+.page-wrapper .card.card-list .modern-table,
+.page-wrapper .card.card-list .modern-table thead,
+.page-wrapper .card.card-list .modern-table tbody,
+.page-wrapper .card.card-list .modern-table thead th,
+.page-wrapper .card.card-list .modern-table tbody td {
+  color: var(--user-card-text-color, #111827) !important;
+  background: transparent !important;
+}
+
+// Forzar transparencia en clases de Bootstrap
+.page-wrapper .card.card-list .modern-table .bg-light,
+.page-wrapper .card.card-list .modern-table .table-light,
+.page-wrapper .card.card-list .modern-table thead.table-light,
+.page-wrapper .card.card-list .modern-table .bg-white {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: var(--user-card-text-color, #111827) !important;
+}
+
+// ===== MODO OSCURO =====
+:host-context(.dark-mode) {
+  .card.card-list {
+    background-color: var(--user-card-bg, #23221c) !important;
+    border-color: var(--user-border-color, #0B7285) !important;
+    color: var(--user-card-text-color, #ffffff) !important;
+  }
+
+  .page-wrapper .card.card-list .card-body,
+  .page-wrapper .card.card-list .card-body h4,
+  .page-wrapper .card.card-list .card-body p,
+  .page-wrapper .card.card-list .card-body .pagination-info {
+    color: var(--user-card-text-color, #ffffff) !important;
+  }
+
+  .page-wrapper .card.card-list .modern-table thead th,
+  .page-wrapper .card.card-list .modern-table tbody td,
+  .page-wrapper .card.card-list .modern-table th,
+  .page-wrapper .card.card-list .modern-table td {
+    color: var(--user-card-text-color, #ffffff) !important;
+    border-color: rgba(255,255,255,0.08) !important;
+    background: transparent !important;
+  }
+
+  .page-wrapper .card.card-list .modern-table thead th {
+    background: linear-gradient(135deg, 
+      color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent),
+      color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent)) !important;
+  }
+
+  .page-wrapper .card.card-list .modern-table tbody tr:hover {
+    background: color-mix(in srgb, var(--user-border-color, #0B7285) 8%, transparent) !important;
+  }
+
+  .badge-role {
+    background: rgba(255,255,255,0.08) !important;
+    color: var(--user-card-text-color, #ffffff) !important;
+    border-color: rgba(255,255,255,0.15) !important;
+  }
+
+  .user-name-cell strong,
+  .email-cell span {
+    color: var(--user-card-text-color, #ffffff) !important;
+  }
+}
+
+// ===== CAMPO DE BÚSQUEDA =====
+.search-input {
+  .form-control {
+    background: transparent !important;
+    color: var(--user-card-text-color, #111827) !important;
+    border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    caret-color: var(--user-card-text-color, #111827) !important;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--user-border-color, #0B7285) !important;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
+    }
+  }
+
+  .input-group-text {
+    background: transparent !important;
+    border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+    border-left: none !important;
+    color: var(--user-card-text-color, #111827) !important;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .form-control::placeholder {
+    color: color-mix(in srgb, var(--user-card-text-color, #111827) 50%, transparent) !important;
+    opacity: 1 !important;
+  }
+}
+
+:host-context(.dark-mode) .search-input {
+  .form-control,
+  .input-group-text {
+    color: #ffffff !important;
+    border-color: rgba(255,255,255,0.15) !important;
+  }
+
+  .form-control {
+    caret-color: #ffffff !important;
+    
+    &::placeholder {
+      color: rgba(255,255,255,0.5) !important;
+    }
+  }
+}
+
+// ===== ESTILOS PARA FILTROS Y BOTONES =====
+.filters-card {
+  background: transparent;
+  border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 12%, transparent);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  .filters-header h5 {
+    color: var(--user-card-text-color, #111827) !important;
+  }
+
+  // Inputs de búsqueda
+  .search-input-group {
+    .input-group-text {
+      background: transparent !important;
+      border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+      border-right: none !important;
+      color: var(--user-card-text-color, #111827) !important;
+
+      i {
+        color: var(--user-border-color, #0B7285);
+      }
+    }
+
+    .form-control {
+      background: transparent !important;
+      color: var(--user-card-text-color, #111827) !important;
+      border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+      border-left: none !important;
+
+      &::placeholder {
+        color: color-mix(in srgb, var(--user-card-text-color, #111827) 50%, transparent) !important;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: var(--user-border-color, #0B7285) !important;
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  // Botón Limpiar Filtros
+  .btn-clear {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    border: none;
+    color: white !important;
+    font-weight: 600;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      color: white !important;
+    }
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, #4b5563, #374151);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // Botón Agregar Paciente
+  .btn-add-patient {
+    background: linear-gradient(135deg, var(--user-border-color, #0B7285), color-mix(in srgb, var(--user-border-color, #0B7285) 85%, #000));
+    border: none;
+    color: white !important;
+    font-weight: 600;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      color: white !important;
+    }
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, color-mix(in srgb, var(--user-border-color, #0B7285) 90%, #000), color-mix(in srgb, var(--user-border-color, #0B7285) 75%, #000));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(11, 114, 133, 0.4);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Modo oscuro para filtros
+:host-context(.dark-mode) {
+  .filters-card {
+    background: rgba(255,255,255,0.02);
+    border-color: rgba(255,255,255,0.15);
+
+    .filters-header h5 {
+      color: var(--user-card-text-color, #ffffff) !important;
+
+      i {
+        color: var(--user-border-color, #0B7285);
+      }
+    }
+
+    .search-input-group {
+      .input-group-text {
+        background: rgba(255,255,255,0.05) !important;
+        border-color: rgba(255,255,255,0.15) !important;
+        color: #ffffff !important;
+
+        i {
+          color: var(--user-border-color, #0B7285);
+        }
+      }
+
+      .form-control {
+        background: rgba(255,255,255,0.05) !important;
+        color: #ffffff !important;
+        border-color: rgba(255,255,255,0.15) !important;
+        caret-color: #ffffff !important;
+
+        &::placeholder {
+          color: rgba(255,255,255,0.5) !important;
+        }
+
+        &:focus {
+          background: rgba(255,255,255,0.08) !important;
+          border-color: var(--user-border-color, #0B7285) !important;
+          box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent);
+          color: #ffffff !important;
+        }
+      }
+    }
+
+    .btn-clear {
+      background: linear-gradient(135deg, #6b7280, #4b5563);
+      color: white !important;
+
+      i {
+        color: white !important;
+      }
+
+      &:hover:not(:disabled) {
+        background: linear-gradient(135deg, #9ca3af, #6b7280);
+      }
+    }
+
+    .btn-add-patient {
+      background: linear-gradient(135deg, var(--user-border-color, #0B7285), color-mix(in srgb, var(--user-border-color, #0B7285) 85%, #000));
+      color: white !important;
+
+      i {
+        color: white !important;
+      }
+
+      &:hover:not(:disabled) {
+        background: linear-gradient(135deg, color-mix(in srgb, var(--user-border-color, #0B7285) 110%, #fff), var(--user-border-color, #0B7285));
       }
     }
   }
 }
 
-// ========================================
-// MODO OSCURO CON COLORES DINÁMICOS (corregido)
-// ========================================
-body.dark-mode {
-  .filters-container {
-    background: var(--user-card-bg, #2a2a3a) !important;
-    border-color: var(--user-border-color, #ff4f4f) !important;
-    color: var(--user-card-text-color, #fff) !important;
+// ===== ESTILOS ESPECÍFICOS PARA ARCHIVE =====
 
-    .filter-input,
-    .custom-input {
-      background-color: transparent !important;
-      color: #fff !important;
-      border: 3px solid var(--user-border-color, #444) !important;
+// Breadcrumb
+.breadcrumb {
+  background: color-mix(in srgb, var(--user-border-color, #0B7285) 3%, transparent) !important;
+  margin-bottom: 0;
+  padding: 0.75rem 1rem !important;
+  border-radius: 8px !important;
+  border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent);
+
+  .breadcrumb-item {
+    color: var(--user-card-text-color, #111827) !important;
+    font-size: 0.875rem;
+
+    &.active {
+      color: var(--user-border-color, #0B7285) !important;
+      font-weight: 600;
     }
 
-    .filter-input::placeholder {
-      color: rgba(255,255,255,0.7) !important;
+    span {
+      color: color-mix(in srgb, var(--user-card-text-color, #111827) 50%, transparent) !important;
+      margin: 0 0.5rem;
+    }
+  }
+}
+
+// Barra de estadísticas
+.stats-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 0.85rem !important;
+  margin-bottom: 0.75rem !important;
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--user-border-color, #0B7285) 5%, transparent),
+    color-mix(in srgb, var(--user-border-color, #0B7285) 2%, transparent));
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 12%, transparent);
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    i {
+      color: var(--user-border-color, #0B7285);
+      font-size: 0.85rem !important;
     }
 
-    .add-patient-btn {
-      border: 3px solid var(--user-border-color, #ff4f4f) !important;
+    .stat-label {
+      color: var(--user-card-text-color, #111827) !important;
+      font-size: 0.8rem !important;
+      font-weight: 500;
     }
+
+    .stat-value {
+      color: var(--user-border-color, #0B7285) !important;
+      font-size: 1rem !important;
+      font-weight: 700;
+    }
+  }
+
+  .spinner-border {
+    border-color: var(--user-border-color, #0B7285);
+    border-right-color: transparent;
+  }
+}
+
+// Optimizar padding y espacios
+.page-wrapper .content.list-staff {
+  padding: 0.75rem;
+}
+
+.page-header {
+  margin-bottom: 0.75rem !important;
+}
+
+.filters-card {
+  margin-bottom: 0.75rem !important;
+  padding: 0.85rem !important;
+}
+
+.card.card-list {
+  padding: 0.85rem !important;
+}
+
+// ===== DISEÑO DE CARDS COMPACTAS =====
+.patients-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 0;
+
+  .patient-card {
+    background: linear-gradient(135deg, 
+      color-mix(in srgb, var(--user-border-color, #0B7285) 3%, transparent),
+      color-mix(in srgb, var(--user-border-color, #0B7285) 1%, transparent));
+    border: 1.5px solid color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent);
+    }
+
+    // Encabezado de la card
+    .patient-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0.85rem;
+      background: linear-gradient(135deg, 
+        color-mix(in srgb, var(--user-border-color, #0B7285) 12%, transparent),
+        color-mix(in srgb, var(--user-border-color, #0B7285) 6%, transparent));
+      border-bottom: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent);
+
+      .expediente-section {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        i {
+          color: var(--user-border-color, #0B7285);
+          font-size: 1rem;
+        }
+
+        .expediente-number {
+          color: var(--user-card-text-color, #111827) !important;
+          font-weight: 700;
+          font-size: 0.95rem;
+          letter-spacing: 0.3px;
+        }
+      }
+
+      .action-buttons-compact {
+        display: flex;
+        gap: 0.4rem;
+
+        .btn-icon {
+          padding: 0.4rem 0.55rem;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          i {
+            font-size: 0.8rem;
+          }
+
+          &.btn-edit {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+
+            &:hover {
+              transform: scale(1.05);
+              box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+            }
+          }
+
+          &.btn-delete {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+
+            &:hover {
+              transform: scale(1.05);
+              box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+            }
+          }
+        }
+      }
+
+      // Badge de sin permisos en header de card
+      .badge-no-permission {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.4rem 0.7rem;
+        background: linear-gradient(135deg, #6b7280, #4b5563);
+        color: white !important;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(107, 114, 128, 0.3);
+
+        i {
+          font-size: 0.7rem;
+          color: white !important;
+        }
+      }
+    }
+
+    // Cuerpo de la card
+    .patient-card-body {
+      padding: 0.65rem 0.85rem;
+
+      // Layout horizontal con toda la información
+      .patient-horizontal-info {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+
+        .info-block {
+          display: flex;
+          align-items: center;
+          gap: 0.45rem;
+          padding: 0.4rem 0.6rem;
+          background: color-mix(in srgb, var(--user-border-color, #0B7285) 3%, transparent);
+          border-radius: 6px;
+          border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 8%, transparent);
+          transition: all 0.2s ease;
+
+          &:hover {
+            background: color-mix(in srgb, var(--user-border-color, #0B7285) 6%, transparent);
+            border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
+          }
+
+          i {
+            color: var(--user-border-color, #0B7285);
+            font-size: 0.95rem;
+            flex-shrink: 0;
+          }
+
+          .info-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+
+            .info-label-small {
+              color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent) !important;
+              font-size: 0.65rem;
+              font-weight: 500;
+              text-transform: uppercase;
+              letter-spacing: 0.3px;
+              line-height: 1;
+            }
+
+            .info-value-main {
+              color: var(--user-card-text-color, #111827) !important;
+              font-size: 0.82rem;
+              font-weight: 600;
+              line-height: 1.2;
+            }
+          }
+
+          // Nombre - más ancho
+          &.info-name {
+            flex: 1 1 300px;
+            min-width: 250px;
+
+            .info-value-main {
+              font-size: 0.88rem;
+            }
+          }
+
+          // Ubicación - más ancho
+          &.info-location {
+            flex: 1 1 280px;
+            min-width: 220px;
+
+            .info-value-main {
+              font-size: 0.78rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Estado vacío
+.card.card-list .empty-state {
+  padding: 2.5rem 1.5rem !important;
+
+  .empty-icon i {
+    font-size: 3rem !important;
+  }
+
+  h5 {
+    font-size: 1rem !important;
+  }
+
+  p {
+    font-size: 0.85rem !important;
+  }
+}
+
+// Paginación compacta
+.pagination-wrapper {
+  padding-top: 0.75rem !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .pagination-info {
+    font-size: 0.8rem !important;
+    color: var(--user-card-text-color, #111827) !important;
+    font-weight: 500;
+
+    i {
+      color: var(--user-border-color, #0B7285);
+    }
+  }
+
+  .pagination .page-item {
+    .page-link {
+      padding: 0.4rem 0.6rem !important;
+      font-size: 0.8rem !important;
+      min-width: 36px !important;
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
+      color: var(--user-card-text-color, #111827) !important;
+      transition: all 0.2s ease;
+      margin: 0 0.15rem;
+      border-radius: 6px;
+
+      i {
+        font-size: 0.7rem !important;
+        color: var(--user-card-text-color, #111827) !important;
+      }
+
+      &:hover:not([aria-disabled="true"]) {
+        background: color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent);
+        border-color: var(--user-border-color, #0B7285);
+        transform: translateY(-1px);
+      }
+    }
+
+    &.active .page-link {
+      background: var(--user-border-color, #0B7285);
+      color: white !important;
+      border-color: var(--user-border-color, #0B7285);
+      font-weight: 600;
+    }
+
+    &.disabled .page-link {
+      opacity: 0.4;
+      cursor: not-allowed;
+      background: transparent;
+      border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent);
+    }
+  }
+}
+
+// Modo oscuro para cards
+:host-context(.dark-mode) {
+  // Breadcrumb modo oscuro
+
+
+  // Stats bar modo oscuro
+  .stats-bar {
+    background: linear-gradient(135deg, 
+      color-mix(in srgb, var(--user-border-color, #0B7285) 12%, transparent),
+      color-mix(in srgb, var(--user-border-color, #0B7285) 6%, transparent));
+    border-color: rgba(255,255,255,0.12);
+
+    .stat-item {
+      i {
+        color: var(--user-border-color, #0B7285);
+      }
+
+      .stat-label {
+        color: var(--user-card-text-color, #ffffff) !important;
+      }
+
+      .stat-value {
+        color: var(--user-border-color, #0B7285) !important;
+      }
+    }
+
+    .spinner-border {
+      border-color: var(--user-border-color, #0B7285);
+      border-right-color: transparent;
+    }
+  }
+
+  // Cards en modo oscuro
+  .patients-grid .patient-card {
+    background: linear-gradient(135deg, 
+      color-mix(in srgb, var(--user-border-color, #0B7285) 8%, transparent),
+      color-mix(in srgb, var(--user-border-color, #0B7285) 4%, transparent));
+    border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent);
+
+    .patient-card-header {
+      background: linear-gradient(135deg, 
+        color-mix(in srgb, var(--user-border-color, #0B7285) 18%, transparent),
+        color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent));
+      border-bottom-color: rgba(255,255,255,0.1);
+
+      .expediente-section .expediente-number,
+      .expediente-section i {
+        color: var(--user-card-text-color, #ffffff) !important;
+      }
+
+      // Badge de sin permisos en modo oscuro
+      .badge-no-permission {
+        background: linear-gradient(135deg, #4b5563, #374151);
+        color: rgba(255,255,255,0.9) !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+
+        i {
+          color: rgba(255,255,255,0.9) !important;
+        }
+      }
+    }
+
+    .patient-card-body {
+      .patient-horizontal-info .info-block {
+        background: rgba(255,255,255,0.05);
+        border-color: rgba(255,255,255,0.12);
+
+        &:hover {
+          background: rgba(255,255,255,0.08);
+          border-color: rgba(255,255,255,0.2);
+        }
+
+        .info-details {
+          .info-label-small {
+            color: rgba(255,255,255,0.6) !important;
+          }
+
+          .info-value-main {
+            color: var(--user-card-text-color, #ffffff) !important;
+          }
+        }
+      }
+    }
+  }
+
+  // Paginación en modo oscuro
+  .pagination-wrapper {
+    .pagination-info {
+      color: var(--user-card-text-color, #ffffff) !important;
+
+      i {
+        color: var(--user-border-color, #0B7285);
+      }
+    }
+
+    .pagination .page-item {
+      .page-link {
+        background: rgba(255,255,255,0.05);
+        border-color: rgba(255,255,255,0.15);
+        color: var(--user-card-text-color, #ffffff) !important;
+
+        i {
+          color: var(--user-card-text-color, #ffffff) !important;
+        }
+
+        &:hover:not([aria-disabled="true"]) {
+          background: rgba(255,255,255,0.1);
+          border-color: var(--user-border-color, #0B7285);
+        }
+      }
+
+      &.active .page-link {
+        background: var(--user-border-color, #0B7285);
+        color: white !important;
+        border-color: var(--user-border-color, #0B7285);
+      }
+
+      &.disabled .page-link {
+        background: rgba(255,255,255,0.02);
+        border-color: rgba(255,255,255,0.08);
+        color: rgba(255,255,255,0.3) !important;
+
+        i {
+          color: rgba(255,255,255,0.3) !important;
+        }
+      }
+    }
+  }
+}
+
+// Responsividad para cards
+@media (max-width: 768px) {
+  .page-wrapper .content.list-staff {
+    padding: 0.5rem;
+  }
+
+  .filters-card {
+    padding: 0.75rem !important;
   }
 
   .card.card-list {
-    background-color: var(--user-card-bg, #2a2a3a) !important;
-    border-color: var(--user-border-color, #ff4f4f) !important;
+    padding: 0.65rem !important;
 
-    table {
-      background-color: #fff !important;
-      thead th, td { color: #000 !important; }
+    .stats-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
     }
   }
 
-  .pagination-info { color: #fff !important; }
+  .patients-grid {
+    gap: 0.6rem;
+
+    .patient-card {
+      .patient-card-body {
+        .patient-horizontal-info {
+          flex-direction: column;
+          gap: 0.5rem;
+
+          .info-block {
+            width: 100%;
+            min-width: unset !important;
+
+            &.info-name,
+            &.info-location {
+              flex: 1 1 auto;
+
+              .info-value-main {
+                white-space: normal;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .pagination-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .pagination {
+      width: 100%;
+      justify-content: center;
+      margin-top: 0.5rem;
+    }
+  }
 }

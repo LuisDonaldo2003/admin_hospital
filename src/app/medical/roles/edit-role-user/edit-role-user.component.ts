@@ -163,12 +163,30 @@ export class EditRoleUserComponent implements OnInit {
     };
     this.valid_form_success = false;
     this.text_validation = null;
-    this.RoleService.editRoles(data,this.role_id).subscribe((resp:any) => {
-      if(resp.message == 403){
-        this.text_validation = resp.message_text;
-        return ;
+    
+    this.RoleService.editRoles(data,this.role_id).subscribe({
+      next: (resp:any) => {
+        if(resp.message == 403){
+          this.text_validation = resp.message_text;
+          return;
+        }
+        if(resp.message == 200){
+          this.valid_form_success = true;
+          this.text_validation = null;
+        }
+      },
+      error: (error:any) => {
+        console.error('Error al editar rol:', error);
+        if(error.status === 403){
+          this.text_validation = error.error?.message_text || 'No tienes permisos para realizar esta acción';
+        } else if(error.status === 422){
+          this.text_validation = error.error?.message || 'Datos de entrada inválidos';
+        } else if(error.status === 500){
+          this.text_validation = 'Error interno del servidor. Intenta nuevamente.';
+        } else {
+          this.text_validation = 'Error al actualizar el rol. Verifica tu conexión e intenta nuevamente.';
+        }
       }
-      this.valid_form_success = true;
-    })
+    });
   }
 }

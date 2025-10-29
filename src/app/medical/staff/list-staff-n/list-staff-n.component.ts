@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { HasPermissionDirective } from 'src/app/shared/directives/has-permission.directive';
 
 /**
  * Componente para listar los usuarios del staff con paginación, búsqueda y acciones.
@@ -18,7 +19,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     FormsModule,
     RouterModule,
     MatTableModule,
-    TranslateModule
+    TranslateModule,
+    HasPermissionDirective
   ],
   templateUrl: './list-staff-n.component.html',
   styleUrl: './list-staff-n.component.scss'
@@ -250,5 +252,22 @@ export class ListStaffNComponent {
       this.pageNumberArray.push(i);
       this.pageSelection.push({ skip: skip, limit: limit });
     }
+  }
+
+  /**
+   * Verifica si un usuario es protegido (no se puede editar ni eliminar)
+   * Los usuarios protegidos son: Director General (id 1) y Subdirector General (por rol)
+   */
+  isProtectedUser(userId: number, userRole: string): boolean {
+    // ID 1 siempre es Director General
+    if (userId === 1) {
+      return true;
+    }
+    
+    // Verificar por nombre de rol (normalizado)
+    const protectedRoles = ['director general', 'subdirector general'];
+    const normalizedRoleName = userRole?.toLowerCase().trim() || '';
+    
+    return protectedRoles.includes(normalizedRoleName);
   }
 }

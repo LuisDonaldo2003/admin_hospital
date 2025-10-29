@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 
 /**
  * Componente para listar roles de usuario con paginación, búsqueda y acciones.
@@ -100,7 +101,8 @@ export class ListRoleUserComponent {
    */
   constructor(
     public RoleService: RolesService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public permissionService: PermissionService
   ) {
     // Establece el idioma inicial
     this.selectedLang = localStorage.getItem('language') || 'en';
@@ -300,5 +302,36 @@ export class ListRoleUserComponent {
       this.pageNumberArray.push(i);
       this.pageSelection.push({ skip: skip, limit: limit });
     }
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para editar roles
+   */
+  canEditRole(): boolean {
+    return this.permissionService.hasPermission('edit_rol');
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para eliminar roles
+   */
+  canDeleteRole(): boolean {
+    return this.permissionService.hasPermission('delete_rol');
+  }
+
+  /**
+   * Verifica si un rol es protegido (no se puede editar ni eliminar)
+   * Los roles protegidos son: Director General y Subdirector General
+   */
+  isProtectedRole(roleId: number, roleName: string): boolean {
+    // ID 1 siempre es Director General
+    if (roleId === 1) {
+      return true;
+    }
+    
+    // Verificar por nombre de rol (normalizado)
+    const protectedRoles = ['director general', 'subdirector general'];
+    const normalizedRoleName = roleName.toLowerCase().trim();
+    
+    return protectedRoles.includes(normalizedRoleName);
   }
 }

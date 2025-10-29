@@ -817,6 +817,7 @@
     "OPTIONS": "Options",
     "EDIT": "Edit",
     "DELETE": "Delete",
+    "PROTECTED_ROLE": "Protected Role",
     "DELETE_CONFIRMATION2": "Are you sure you want to delete the role",
     "CANCEL": "Cancel",
     "SHOWING": "Showing",

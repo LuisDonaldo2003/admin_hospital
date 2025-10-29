@@ -2,6 +2,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ArchiveService } from '../service/archive.service';
 import { DriverTourService } from '../../../shared/services/driver-tour.service';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -146,7 +147,8 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
   constructor(
     private archiveService: ArchiveService,
     private translate: TranslateService,
-    private driverTourService: DriverTourService
+    private driverTourService: DriverTourService,
+    public permissionService: PermissionService
   ) {
   this.selectedLang = localStorage.getItem('language') || 'en';
   this.translate.use(this.selectedLang);
@@ -638,5 +640,19 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
       default:
         return 'años';
     }
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para editar archivos
+   */
+  canEditArchive(): boolean {
+    return this.permissionService.hasPermission('edit_archive');
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para eliminar archivos
+   */
+  canDeleteArchive(): boolean {
+    return this.permissionService.hasPermission('delete_archive');
   }
 }

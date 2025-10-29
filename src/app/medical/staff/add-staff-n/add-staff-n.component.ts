@@ -2,7 +2,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { StaffService } from '../service/staff.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
@@ -19,6 +19,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   imports: [
     CommonModule,
     FormsModule,
+    RouterModule,
     MatSelectModule,
     MatOptionModule,
     TranslateModule

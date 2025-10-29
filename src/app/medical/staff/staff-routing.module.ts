@@ -4,6 +4,7 @@ import { StaffComponent } from './staff.component';
 import { AddStaffNComponent } from './add-staff-n/add-staff-n.component';
 import { ListStaffNComponent } from './list-staff-n/list-staff-n.component';
 import { EditStaffNComponent } from './edit-staff-n/edit-staff-n.component';
+import { PermissionGuard } from 'src/app/shared/gaurd/permission.guard';
 
 const routes: Routes = [{
   path: '',
@@ -11,15 +12,21 @@ const routes: Routes = [{
   children: [
     {
       path: 'add-staff',
-      component: AddStaffNComponent
+      component: AddStaffNComponent,
+      canActivate: [PermissionGuard],
+      data: { requiredPermissions: ['register_staff'] }
     },
     {
       path: 'list-staff',
-      component: ListStaffNComponent
+      component: ListStaffNComponent,
+      canActivate: [PermissionGuard],
+      data: { requiredPermissions: ['list_staff'] }
     },
     {
       path: 'list-staff/edit-staff/:id',
-      component: EditStaffNComponent
+      component: EditStaffNComponent,
+      canActivate: [PermissionGuard],
+      data: { requiredPermissions: ['edit_staff'] }
     }
   ]
 }];

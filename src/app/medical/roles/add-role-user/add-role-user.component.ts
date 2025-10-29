@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { DataService } from 'src/app/shared/data/data.service';
 import { RolesService } from '../service/roles.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -14,7 +15,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-add-role-user',
   standalone: true,
-  imports: [CommonModule, FormsModule,TranslateModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
   templateUrl: './add-role-user.component.html',
   styleUrls: ['./add-role-user.component.scss']
 })
@@ -53,6 +54,21 @@ export class AddRoleUserComponent implements OnInit {
    * Idioma seleccionado actualmente
    */
   public selectedLang: string;
+  
+  /**
+   * Pestaña activa actualmente
+   */
+  activeTab: string = 'all';
+  
+  /**
+   * Texto de búsqueda/filtro de permisos
+   */
+  searchText: string = '';
+  
+  /**
+   * Permisos agrupados por categoría
+   */
+  groupedPermissions: any = {};
 
   /**
    * Constructor que inyecta los servicios de datos, roles y traducción
@@ -103,7 +119,119 @@ export class AddRoleUserComponent implements OnInit {
   ngOnInit(): void {
     if (this.DataService.sideBar && this.DataService.sideBar.length > 0) {
       this.sideBar = this.DataService.sideBar[0].menu;
+      this.groupPermissionsByCategory();
     }
+  }
+  
+  /**
+   * Agrupa los permisos por categoría/grupo
+   */
+  groupPermissionsByCategory(): void {
+    this.groupedPermissions = {};
+    
+    this.sideBar.forEach((item: any) => {
+      const group = this.cleanGroup(item.group);
+      if (!this.groupedPermissions[group]) {
+        this.groupedPermissions[group] = [];
+      }
+      this.groupedPermissions[group].push(item);
+    });
+  }
+  
+  /**
+   * Obtiene las categorías de permisos
+   */
+  getCategories(): string[] {
+    return Object.keys(this.groupedPermissions);
+  }
+  
+  /**
+   * Filtra los permisos según el texto de búsqueda
+   */
+  getFilteredPermissions(category?: string): any[] {
+    let items = category ? this.groupedPermissions[category] : this.sideBar;
+    
+    if (!this.searchText) {
+      return items;
+    }
+    
+    const search = this.searchText.toLowerCase();
+    return items.filter((item: any) => {
+      const titleKey = `SIDEBAR.${this.cleanGroup(item.group)}.${item.menuValue}.TITLE`;
+      const title = this.translate.instant(titleKey).toLowerCase();
+      return title.includes(search) || item.menuValue.toLowerCase().includes(search);
+    });
+  }
+  
+  /**
+   * Cambia la pestaña activa
+   */
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
+  }
+  
+  /**
+   * Selecciona o deselecciona todos los permisos de una categoría
+   */
+  toggleCategoryPermissions(category: string, event: any): void {
+    const items = this.groupedPermissions[category];
+    const isChecked = event.target.checked;
+    
+    items.forEach((item: any) => {
+      if (item.subMenus && item.subMenus.length > 0) {
+        item.subMenus.forEach((subMenu: any) => {
+          this.setPermission(subMenu, isChecked);
+        });
+      } else {
+        this.setPermission(item, isChecked);
+      }
+    });
+  }
+  
+  /**
+   * Establece un permiso (agregar o quitar)
+   */
+  setPermission(item: any, add: boolean): void {
+    if (!item.permision) return;
+    
+    const index = this.permission.indexOf(item.permision);
+    
+    if (add && index === -1) {
+      this.permission.push(item.permision);
+    } else if (!add && index !== -1) {
+      this.permission.splice(index, 1);
+    }
+  }
+  
+  /**
+   * Verifica si todos los permisos de una categoría están seleccionados
+   */
+  isCategoryFullySelected(category: string): boolean {
+    const items = this.groupedPermissions[category];
+    let allSelected = true;
+    
+    items.forEach((item: any) => {
+      if (item.subMenus && item.subMenus.length > 0) {
+        item.subMenus.forEach((subMenu: any) => {
+          if (!this.permission.includes(subMenu.permision)) {
+            allSelected = false;
+          }
+        });
+      } else {
+        if (!this.permission.includes(item.permision)) {
+          allSelected = false;
+        }
+      }
+    });
+    
+    return allSelected;
+  }
+  
+  /**
+   * Verifica si un permiso está seleccionado
+   */
+  isPermissionSelected(permision: string): boolean {
+    return this.permission.includes(permision);
   }
 
   /**
@@ -165,11 +293,16 @@ export class AddRoleUserComponent implements OnInit {
           }, 50);
         }
       },
-      error: (err: any) => {
-        if (err.status === 403) {
-          this.text_validation = err.error.message_text || "EL NOMBRE DEL ROL YA EXISTE";
+      error: (error: any) => {
+        console.error('Error al crear rol:', error);
+        if (error.status === 403) {
+          this.text_validation = error.error?.message_text || "EL NOMBRE DEL ROL YA EXISTE";
+        } else if (error.status === 422) {
+          this.text_validation = error.error?.message || 'Datos de entrada inválidos';
+        } else if (error.status === 500) {
+          this.text_validation = 'Error interno del servidor. Intenta nuevamente.';
         } else {
-          this.text_validation = "Error desconocido. Intente de nuevo.";
+          this.text_validation = "Error al crear el rol. Verifica tu conexión e intenta nuevamente.";
         }
       }
     });

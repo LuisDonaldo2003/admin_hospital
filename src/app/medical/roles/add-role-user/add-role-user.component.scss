@@ -70,6 +70,7 @@ textarea.form-control {
 input[type="checkbox"],
 input[type="radio"] {
 	accent-color: var(--user-border-color, #0B7285);
+	cursor: pointer;
 }
 
 // Botones
@@ -77,6 +78,7 @@ input[type="radio"] {
 	font-weight: 600;
 	padding: 0.55rem 1.2rem;
 	border-radius: 0.6rem;
+	transition: all 150ms ease;
 }
 
 .btn-primary {
@@ -85,9 +87,12 @@ input[type="radio"] {
 	color: #ffffff;
 	&:hover {
 		filter: brightness(0.95);
+		transform: translateY(-1px);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 	}
 	&:active {
 		filter: brightness(0.9);
+		transform: translateY(0);
 	}
 }
 
@@ -101,11 +106,197 @@ input[type="radio"] {
 	}
 }
 
+.btn-outline-secondary {
+	&:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	}
+}
+
 // Alertas
 .alert {
 	border-radius: 0.5rem;
 	font-size: 0.925rem;
 	border-left: 4px solid var(--user-border-color, #0B7285);
+}
+
+// ===== NUEVO: Estilos para pestañas y categorías =====
+
+// Tabs de categorías
+.category-tabs {
+	gap: 0.5rem;
+	
+	.nav-link {
+		border-radius: 0.5rem;
+		padding: 0.5rem 1rem;
+		color: var(--user-card-text-color, #111827);
+		background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent);
+		border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent);
+		font-weight: 500;
+		transition: all 150ms ease;
+		
+		&:hover {
+			background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
+			transform: translateY(-2px);
+		}
+		
+		&.active {
+			background-color: var(--user-border-color, #0B7285);
+			color: #ffffff;
+			border-color: var(--user-border-color, #0B7285);
+			box-shadow: 0 4px 12px color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent);
+		}
+	}
+}
+
+// Cards de categorías
+.category-card {
+	background: color-mix(in srgb, var(--user-border-color, #0B7285) 5%, transparent);
+	border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
+	border-radius: 0.75rem;
+	padding: 1rem;
+	transition: all 150ms ease;
+	height: 100%;
+	
+	&:hover {
+		border-color: var(--user-border-color, #0B7285);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		transform: translateY(-2px);
+	}
+	
+	&.large {
+		padding: 1.5rem;
+	}
+	
+	.category-header {
+		padding-bottom: 0.75rem;
+		border-bottom: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
+		margin-bottom: 0.75rem;
+		
+		.form-check-label {
+			font-size: 1.1rem;
+			cursor: pointer;
+			user-select: none;
+		}
+	}
+	
+	.category-permissions {
+		max-height: 400px;
+		overflow-y: auto;
+		padding-right: 0.5rem;
+		
+		&::-webkit-scrollbar {
+			width: 6px;
+		}
+		
+		&::-webkit-scrollbar-track {
+			background: rgba(0, 0, 0, 0.05);
+			border-radius: 10px;
+		}
+		
+		&::-webkit-scrollbar-thumb {
+			background: var(--user-border-color, #0B7285);
+			border-radius: 10px;
+		}
+	}
+}
+
+// Grupo de permisos
+.permission-group {
+	.permission-group-title {
+		font-weight: 600;
+		color: var(--user-border-color, #0B7285);
+		margin-bottom: 0.5rem;
+		font-size: 0.9rem;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+	}
+	
+	.permission-items {
+		padding-left: 1rem;
+		border-left: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent);
+	}
+}
+
+// Cards de permisos individuales
+.permission-card {
+	background: #ffffff;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 0.5rem;
+	padding: 1rem;
+	transition: all 150ms ease;
+	height: 100%;
+	
+	&:hover {
+		border-color: var(--user-border-color, #0B7285);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	}
+	
+	.permission-card-title {
+		font-weight: 600;
+		color: var(--user-border-color, #0B7285);
+		margin-bottom: 0.75rem;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	}
+	
+	.permission-card-items {
+		.form-check {
+			margin-bottom: 0.5rem;
+		}
+	}
+}
+
+// Form checks personalizados
+.form-check {
+	padding-left: 1.8rem;
+	
+	.form-check-input {
+		width: 1.2rem;
+		height: 1.2rem;
+		margin-top: 0.15rem;
+		cursor: pointer;
+		
+		&:checked {
+			background-color: var(--user-border-color, #0B7285);
+			border-color: var(--user-border-color, #0B7285);
+		}
+		
+		&:focus {
+			box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent);
+		}
+	}
+	
+	.form-check-label {
+		cursor: pointer;
+		user-select: none;
+		line-height: 1.5;
+	}
+}
+
+// Contador de permisos
+.permissions-counter {
+	.alert-info {
+		background: linear-gradient(135deg, 
+			color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent),
+			color-mix(in srgb, var(--user-border-color, #0B7285) 5%, transparent));
+		border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent);
+		color: var(--user-card-text-color, #111827);
+		
+		.badge {
+			font-size: 1rem;
+			padding: 0.4rem 0.8rem;
+		}
+	}
+}
+
+// Input group de búsqueda
+.input-group {
+	.input-group-text {
+		background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent);
+		border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent);
+		color: var(--user-border-color, #0B7285);
+	}
 }
 
 // Tabla de permisos (selector más específico para sobreescribir reglas globales)
@@ -190,14 +381,58 @@ input[type="radio"] {
 	.btn-outline-primary:hover {
 		color: #0b0e14;
 	}
+	
+	// Cards de categorías en modo oscuro
+	.category-card {
+		background: rgba(255, 255, 255, 0.05);
+		border-color: rgba(255, 255, 255, 0.1);
+		
+		&:hover {
+			background: rgba(255, 255, 255, 0.08);
+		}
+	}
+	
+	.permission-card {
+		background: #2a2f3a;
+		border-color: #3a3f4a;
+		
+		&:hover {
+			background: #323742;
+		}
+	}
+	
+	.input-group-text {
+		background-color: #2a2f3a;
+		border-color: #3a3f4a;
+		color: #f1f5f9;
+	}
 }
 
 // Mejoras de accesibilidad: reducir movimiento si el usuario lo prefiere
 @media (prefers-reduced-motion: reduce) {
 	.page-wrapper .card,
 	.form-control,
-	.btn {
+	.btn,
+	.category-card,
+	.permission-card,
+	.nav-link {
 		transition: none !important;
+		transform: none !important;
+	}
+}
+
+// Responsividad
+@media (max-width: 768px) {
+	.category-tabs {
+		.nav-link {
+			font-size: 0.85rem;
+			padding: 0.4rem 0.8rem;
+		}
+	}
+	
+	.permission-card,
+	.category-card {
+		margin-bottom: 1rem;
 	}
 }
 

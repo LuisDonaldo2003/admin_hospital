@@ -4,6 +4,7 @@ import { BehaviorSubject, catchError, map, of, Observable, throwError, interval,
 import { routes } from '../routes/routes';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { URL_SERVICIOS } from 'src/app/config/config';
+import { PermissionService } from '../services/permission.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +29,11 @@ export class AuthService {
   /**
    * Inyecta el router y el cliente HTTP, inicializa el usuario desde localStorage
    */
-  constructor(private router: Router, public http: HttpClient) {
+  constructor(
+    private router: Router, 
+    public http: HttpClient,
+    private permissionService: PermissionService
+  ) {
     this.getLocalStorage();
   }
 
@@ -89,6 +94,9 @@ export class AuthService {
       localStorage.setItem('authenticated', 'true');
       this.userSubject.next(auth.user);
       this.token = auth.access_token;
+      
+      // Refrescar permisos en el servicio de permisos
+      this.permissionService.refreshUser();
       
       // Iniciar heartbeat para mantener vivo el estado del usuario
       this.startUserActivityTracking();

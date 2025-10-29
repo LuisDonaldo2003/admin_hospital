@@ -27,26 +27,49 @@
   <div class="row justify-content-center">
   <div class="col-lg-10 col-xl-8">
   <div class="card card-form shadow border-0">
-          <div class="card-body px-5 py-4">
-            <!-- Título principal del formulario -->
-            <h3 class="text-center mb-4 fw-bold">
-              {{ 'ARCHIVE.EDIT_PATIENT.TITLE' | translate }}
-            </h3>
-
-            <!-- Alertas de validación y éxito -->
-            <div *ngIf="text_validation" class="alert alert-warning alert-dismissible fade show">
-              <strong>{{ 'ARCHIVE.EDIT_PATIENT.WARNING' | translate }}:</strong> {{ text_validation }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          <div class="card-body p-4">
+            <!-- Encabezado del formulario con icono -->
+            <div class="form-header text-center mb-4">
+              <div class="form-icon mb-3">
+                <i class="fa fa-user-edit"></i>
+              </div>
+              <h3 class="fw-bold mb-2">
+                {{ 'ARCHIVE.EDIT_PATIENT.TITLE' | translate }}
+              </h3>
+              <p class="text-muted small">Actualice los datos del paciente según sea necesario</p>
             </div>
 
-            <div *ngIf="text_success" class="alert alert-success alert-dismissible fade show">
-              <strong>{{ 'ARCHIVE.EDIT_PATIENT.SUCCESS' | translate }}:</strong> {{ text_success }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <!-- Alertas de validación y éxito -->
+            <div *ngIf="text_validation" class="mt-4">
+              <div class="alert alert-modern alert-warning d-flex align-items-center">
+                <i class="fa fa-exclamation-triangle me-3"></i>
+                <div class="flex-grow-1">
+                  <strong>{{ 'ARCHIVE.EDIT_PATIENT.WARNING' | translate }}:</strong> {{ text_validation }}
+                </div>
+                <button type="button" class="btn-close" (click)="text_validation = ''"></button>
+              </div>
+            </div>
+
+            <div *ngIf="text_success" class="mt-4">
+              <div class="alert alert-modern alert-success d-flex align-items-center">
+                <i class="fa fa-check-circle me-3"></i>
+                <div class="flex-grow-1">
+                  <strong>{{ 'ARCHIVE.EDIT_PATIENT.SUCCESS' | translate }}:</strong> {{ text_success }}
+                </div>
+                <button type="button" class="btn-close" (click)="text_success = ''"></button>
+              </div>
             </div>
 
             <!-- Formulario principal para editar los datos del paciente -->
             <form (ngSubmit)="update()">
-              <div class="row g-3">
+              <!-- Sección: Información del Paciente -->
+              <div class="form-section">
+                <div class="section-header mb-3">
+                  <h5 class="section-title">
+                    <i class="fa fa-user me-2"></i>Información del Paciente
+                  </h5>
+                </div>
+                <div class="row g-3">
                 <!-- Número de expediente (solo lectura) -->
                 <div class="col-md-6">
                   <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.ARCHIVE_NUMBER' | translate }}</label>
@@ -96,7 +119,20 @@
                     <option *ngFor="let gender of genders" [value]="gender.id">{{ gender.name }}</option>
                   </select>
                 </div>
+              </div>
+            </div>
 
+            <!-- Separador -->
+            <div class="form-divider my-4"></div>
+
+            <!-- Sección: Ubicación -->
+            <div class="form-section">
+              <div class="section-header mb-3">
+                <h5 class="section-title">
+                  <i class="fa fa-map-marker-alt me-2"></i>Ubicación
+                </h5>
+              </div>
+              <div class="row g-3">
                 <!-- Estado -->
                 <div class="col-md-4">
                   <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.STATE' | translate }}</label>
@@ -117,6 +153,20 @@
                   <input type="text" [(ngModel)]="location_text" name="location_text" class="form-control"
                          placeholder="{{ 'ARCHIVE.COMMON.PLACEHOLDER_LOCATION' | translate }}" />
                 </div>
+              </div>
+            </div>
+
+            <!-- Separador -->
+            <div class="form-divider my-4"></div>
+
+            <!-- Sección: Información de Admisión -->
+            <div class="form-section">
+              <div class="section-header mb-3">
+                <h5 class="section-title">
+                  <i class="fa fa-calendar-check me-2"></i>Información de Admisión
+                </h5>
+              </div>
+              <div class="row g-3">
 
                 <!-- Fecha de admisión -->
                 <div class="col-md-6">
@@ -124,12 +174,18 @@
                   <input type="date" [(ngModel)]="admission_date" name="admission_date" class="form-control" />
                 </div>
               </div>
+            </div>
 
-              <!-- Botón para guardar cambios -->
-              <div class="text-end mt-4">
-                <button type="submit" class="btn btn-primary px-4">{{ 'ARCHIVE.EDIT_PATIENT.SAVE' | translate }}</button>
-              </div>
-            </form>
+            <!-- Botones de acción -->
+            <div class="form-actions d-flex justify-content-end gap-2 mt-4">
+              <button type="button" class="btn btn-cancel" (click)="goToList()">
+                <i class="fa fa-times me-2"></i>Cancelar
+              </button>
+              <button type="submit" class="btn btn-primary px-4">
+                <i class="fa fa-save me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.SAVE' | translate }}
+              </button>
+            </div>
+          </form>
           </div>
         </div>
       </div>

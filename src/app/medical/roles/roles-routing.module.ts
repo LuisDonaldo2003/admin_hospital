@@ -3,7 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { RolesComponent } from './roles.component';
 import { AddRoleUserComponent } from './add-role-user/add-role-user.component';
 import { ListRoleUserComponent } from './list-role-user/list-role-user.component';
-import { EditRoleUserComponent } from './edit-role-user/edit-role-user.component'; // IMPORTA EL COMPONENTE
+import { EditRoleUserComponent } from './edit-role-user/edit-role-user.component';
+import { PermissionGuard } from 'src/app/shared/gaurd/permission.guard';
 
 const routes: Routes = [
   {
@@ -12,15 +13,21 @@ const routes: Routes = [
     children: [
       {
         path: 'register',
-        component: AddRoleUserComponent
+        component: AddRoleUserComponent,
+        canActivate: [PermissionGuard],
+        data: { requiredPermissions: ['register_rol'] }
       },
       {
         path: 'list',
-        component: ListRoleUserComponent
+        component: ListRoleUserComponent,
+        canActivate: [PermissionGuard],
+        data: { requiredPermissions: ['list_rol'] }
       },
       {
         path: 'list/edit/:id',
-        component: EditRoleUserComponent
+        component: EditRoleUserComponent,
+        canActivate: [PermissionGuard],
+        data: { requiredPermissions: ['edit_rol'] }
       }
     ]
   }

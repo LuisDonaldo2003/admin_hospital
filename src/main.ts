@@ -15,18 +15,18 @@ import { AppModule } from './app/app.module';
     return localStorage.getItem(`${key}_${userId}`) || def;
   }
 
-  // Borde
-  const borderColor = getUserSetting('borderColor', '#ff9800');
+  // Borde - usar el mismo color por defecto que general-settings
+  const borderColor = getUserSetting('borderColor', '#0B7285');
   root.style.setProperty('--user-border-color', borderColor);
   body.style.setProperty('--user-border-color', borderColor);
 
   // Fondo card claro
-  const cardBgColorLight = getUserSetting('cardBgColorLight', '#f4f7fa');
+  const cardBgColorLight = getUserSetting('cardBgColorLight', '#F8FFFE');
   root.style.setProperty('--user-card-bg', cardBgColorLight);
   body.style.setProperty('--user-card-bg', cardBgColorLight);
 
   // Fondo card oscuro
-  const cardBgColorDark = getUserSetting('cardBgColorDark', '#232b32');
+  const cardBgColorDark = getUserSetting('cardBgColorDark', '#1A2332');
   // Modo oscuro
   const isDark = localStorage.getItem('darkMode') === 'true';
   

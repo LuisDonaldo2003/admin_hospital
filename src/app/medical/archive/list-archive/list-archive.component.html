@@ -16,51 +16,63 @@
       </div>
     </div>
 
-  <!-- Filtros principales para buscar y filtrar pacientes archivados -->
-  <div class="filters-container border-colored mb-4">
-    <!-- Fila superior: Inputs de búsqueda -->
+  <!-- Sección de filtros y búsqueda mejorada -->
+  <div class="filters-card mb-4">
+    <div class="filters-header mb-3">
+      <h5 class="mb-0 fw-semibold">
+        <i class="fa fa-filter me-2"></i>Filtros de Búsqueda
+      </h5>
+    </div>
+    
+    <!-- Fila de búsqueda -->
     <div class="row g-3 mb-3">
       <!-- Búsqueda por expediente -->
-      <div class="col-lg-6 col-md-6">
-        <input type="text"
-               class="form-control filter-input custom-input"
-               [placeholder]="'ARCHIVE.LIST_PATIENT.SEARCH_RECORD' | translate"
-               [(ngModel)]="archiveNumberSearch"
-               (keyup.enter)="onArchiveNumberSearch()"
-               (input)="archiveNumberSearch === '' && onArchiveNumberSearch()"
-               [disabled]="isLoading"
-               maxlength="10">
+      <div class="col-lg-6">
+        <div class="input-group search-input-group">
+          <span class="input-group-text">
+            <i class="fa fa-folder"></i>
+          </span>
+          <input type="text"
+                 class="form-control"
+                 [placeholder]="'ARCHIVE.LIST_PATIENT.SEARCH_RECORD' | translate"
+                 [(ngModel)]="archiveNumberSearch"
+                 (keyup.enter)="onArchiveNumberSearch()"
+                 (input)="archiveNumberSearch === '' && onArchiveNumberSearch()"
+                 [disabled]="isLoading"
+                 maxlength="10">
+        </div>
       </div>
 
       <!-- Búsqueda por nombre -->
-      <div class="col-lg-6 col-md-6">
-        <input type="text"
-               class="form-control filter-input custom-input"
-               [placeholder]="'ARCHIVE.LIST_PATIENT.SEARCH_NAME' | translate"
-               [(ngModel)]="nameSearch"
-               (keyup.enter)="onNameSearch()"
-               (input)="nameSearch === '' && onNameSearch()"
-               [disabled]="isLoading"
-               minlength="2">
+      <div class="col-lg-6">
+        <div class="input-group search-input-group">
+          <span class="input-group-text">
+            <i class="fa fa-user"></i>
+          </span>
+          <input type="text"
+                 class="form-control"
+                 [placeholder]="'ARCHIVE.LIST_PATIENT.SEARCH_NAME' | translate"
+                 [(ngModel)]="nameSearch"
+                 (keyup.enter)="onNameSearch()"
+                 (input)="nameSearch === '' && onNameSearch()"
+                 [disabled]="isLoading"
+                 minlength="2">
+        </div>
       </div>
     </div>
 
-    <!-- Fila inferior: Botones de acción -->
+    <!-- Botones de acción -->
     <div class="row g-3">
-      <!-- Botón limpiar filtros -->
-      <div class="col-lg-6 col-md-6">
-        <button class="btn btn-outline-secondary clear-filters-btn w-100"
+      <div class="col-lg-6">
+        <button class="btn btn-clear w-100"
                 (click)="clearAllFilters()"
-                [disabled]="isLoading"
-                title="{{ 'ARCHIVE.LIST_PATIENT.CLEAR_FILTERS' | translate }}">
+                [disabled]="isLoading">
           <i class="fa fa-refresh me-2"></i>
           {{ 'ARCHIVE.LIST_PATIENT.CLEAR_FILTERS' | translate }}
         </button>
       </div>
-
-      <!-- Botón agregar paciente -->
-      <div class="col-lg-6 col-md-6">
-        <button class="btn btn-primary add-patient-btn w-100"
+      <div class="col-lg-6">
+        <button class="btn btn-add-patient w-100"
                 [routerLink]="['/archives/add_archive']"
                 [disabled]="isLoading">
           <i class="fa fa-plus me-2"></i>
@@ -72,146 +84,190 @@
 
   <!-- Tabla de resultados de pacientes archivados -->
   <div class="row">
-  <div class="col-sm-12">
-  <div class="card card-list border-colored shadow border-0">
-          <div class="card-body">
+    <div class="col-sm-12">
+      <div class="card card-list shadow border-0">
+        <div class="card-body">
 
-            <!-- Encabezado de la tabla con totales y spinner de carga -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <p class="fw-semibold mb-0 text-info-totals">
-                {{ 'ARCHIVE.LIST_PATIENT.GLOBAL_TOTAL' | translate }} <span class="text-info-numbers">{{ totalRecords }}</span>
-              </p>
-              <div class="d-flex gap-3 align-items-center">
-                <p class="fw-semibold mb-0 text-info-totals">
-                  {{ 'ARCHIVE.LIST_PATIENT.CURRENT_PAGE_RESULTS' | translate }} <span class="text-info-numbers">{{ displayedArchives.length }}</span>
-                </p>
-                <div *ngIf="isLoading" class="spinner-border spinner-border-sm text-primary" role="status">
-                  <span class="visually-hidden">{{ 'ARCHIVE.LIST_PATIENT.LOADING' | translate }}...</span>
+          <!-- Encabezado de la tabla con totales y spinner de carga -->
+          <div class="stats-bar mb-4">
+            <div class="stat-item">
+              <i class="fa fa-database me-2"></i>
+              <span class="stat-label">{{ 'ARCHIVE.LIST_PATIENT.GLOBAL_TOTAL' | translate }}:</span>
+              <span class="stat-value">{{ totalRecords }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+              <div class="stat-item">
+                <i class="fa fa-file-medical me-2"></i>
+                <span class="stat-label">{{ 'ARCHIVE.LIST_PATIENT.CURRENT_PAGE_RESULTS' | translate }}:</span>
+                <span class="stat-value">{{ displayedArchives.length }}</span>
+              </div>
+              <div *ngIf="isLoading" class="spinner-border spinner-border-sm text-primary" role="status">
+                <span class="visually-hidden">{{ 'ARCHIVE.LIST_PATIENT.LOADING' | translate }}...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mensaje cuando no hay resultados en la búsqueda -->
+          <div *ngIf="!isLoading && displayedArchives.length === 0" class="empty-state">
+            <div class="empty-icon">
+              <i class="fa fa-folder-open"></i>
+            </div>
+            <h5>{{ 'ARCHIVE.LIST_PATIENT.NO_RESULTS' | translate }}</h5>
+            <p *ngIf="hasActiveFilters">
+              {{ 'ARCHIVE.LIST_PATIENT.TRY_DIFFERENT_FILTERS' | translate }}
+            </p>
+            <button *ngIf="hasActiveFilters" 
+                    class="btn btn-clear" 
+                    (click)="clearAllFilters()">
+              <i class="fa fa-refresh me-2"></i>
+              {{ 'ARCHIVE.LIST_PATIENT.CLEAR_FILTERS' | translate }}
+            </button>
+          </div>
+
+          <!-- Vista de cards horizontales (solo si hay resultados) -->
+          <div class="patients-grid" *ngIf="!isLoading && displayedArchives.length > 0">
+            <div class="patient-card" 
+                 *ngFor="let a of displayedArchives; trackBy: trackByArchiveNumber; let i = index"
+                 (click)="closeAllDropdowns()">
+              
+              <!-- Encabezado de la card con expediente y acciones -->
+              <div class="patient-card-header">
+                <div class="expediente-section">
+                  <i class="fa fa-folder-open"></i>
+                  <span class="expediente-number">#{{ a.archive_number }}</span>
+                </div>
+                
+                <!-- Si tiene al menos un permiso (editar o eliminar) -->
+                <div class="action-buttons-compact" *ngIf="canEditArchive() || canDeleteArchive()">
+                  <!-- Botón Editar - solo si tiene permiso -->
+                  <button 
+                    *ngIf="canEditArchive()"
+                    class="btn-icon btn-edit" 
+                    [routerLink]="['/archives/list_archive/edit_archive/', a.archive_number]"
+                    title="{{ 'ARCHIVE.LIST_PATIENT.EDIT' | translate }}">
+                    <i class="fa fa-pen"></i>
+                  </button>
+                  <!-- Botón Eliminar - solo si tiene permiso -->
+                  <button 
+                    *ngIf="canDeleteArchive()"
+                    class="btn-icon btn-delete"
+                    (click)="selectArchive(a); closeAllDropdowns()"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteModal"
+                    title="{{ 'ARCHIVE.LIST_PATIENT.DELETE' | translate }}">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </div>
+                
+                <!-- Si no tiene ningún permiso -->
+                <span class="badge badge-no-permission" *ngIf="!canEditArchive() && !canDeleteArchive()">
+                  <i class="fa fa-ban me-1"></i>Sin permisos
+                </span>
+              </div>
+
+              <!-- Cuerpo de la card con información del paciente en layout horizontal -->
+              <div class="patient-card-body">
+                <!-- Grid horizontal con toda la información -->
+                <div class="patient-horizontal-info">
+                  
+                  <!-- Nombre completo -->
+                  <div class="info-block info-name">
+                    <i class="fa fa-user-circle"></i>
+                    <div class="info-details">
+                      <span class="info-label-small">Nombre Completo</span>
+                      <span class="info-value-main">{{ a.name }} {{ a.last_name_father }} {{ a.last_name_mother }}</span>
+                    </div>
+                  </div>
+
+                  <!-- Edad -->
+                  <div class="info-block">
+                    <i class="fa fa-birthday-cake"></i>
+                    <div class="info-details">
+                      <span class="info-label-small">Edad</span>
+                      <span class="info-value-main">{{ a.age }} {{ getAgeUnitLabel(a.age_unit) }}</span>
+                    </div>
+                  </div>
+
+                  <!-- Género -->
+                  <div class="info-block">
+                    <i class="fa fa-venus-mars"></i>
+                    <div class="info-details">
+                      <span class="info-label-small">Género</span>
+                      <span class="info-value-main">{{ a.gender?.name || 'N/D' }}</span>
+                    </div>
+                  </div>
+
+                  <!-- Ubicación -->
+                  <div class="info-block info-location">
+                    <i class="fa fa-map-marker-alt"></i>
+                    <div class="info-details">
+                      <span class="info-label-small">Ubicación</span>
+                      <span class="info-value-main">
+                        {{ a.location_text || 'Sin localidad' }} · {{ a.municipality_text || 'Sin municipio' }} · {{ a.state_text || 'Sin estado' }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Fecha de ingreso -->
+                  <div class="info-block">
+                    <i class="fa fa-calendar-check"></i>
+                    <div class="info-details">
+                      <span class="info-label-small">Ingreso</span>
+                      <span class="info-value-main">{{ a.admission_date || 'N/D' }}</span>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- Mensaje cuando no hay resultados en la búsqueda -->
-            <div *ngIf="!isLoading && displayedArchives.length === 0" class="text-center py-5">
-              <i class="fa fa-search fa-3x text-muted mb-3"></i>
-              <h5 class="text-muted">{{ 'ARCHIVE.LIST_PATIENT.NO_RESULTS' | translate }}</h5>
-              <p class="text-muted" *ngIf="hasActiveFilters">
-                {{ 'ARCHIVE.LIST_PATIENT.TRY_DIFFERENT_FILTERS' | translate }}
-              </p>
-              <button *ngIf="hasActiveFilters" 
-                      class="btn btn-outline-primary" 
-                      (click)="clearAllFilters()">
-                {{ 'ARCHIVE.LIST_PATIENT.CLEAR_FILTERS' | translate }}
-              </button>
+          <!-- Paginación de resultados -->
+          <div class="pagination-wrapper mt-4" 
+               *ngIf="!isLoading && displayedArchives.length > 0">
+            <!-- Información de paginación -->
+            <div class="pagination-info">
+              <i class="fa fa-info-circle me-2"></i>
+              {{ 'ARCHIVE.LIST_PATIENT.SHOWING' | translate }} {{ (currentPage - 1) * pageSize + 1 }}
+              {{ 'ARCHIVE.LIST_PATIENT.TO' | translate }} {{ (currentPage - 1) * pageSize + displayedArchives.length }}
+              {{ 'ARCHIVE.LIST_PATIENT.OF' | translate }} {{ totalRecords }} {{ 'ARCHIVE.LIST_PATIENT.RECORDS' | translate }}
             </div>
-
-            <!-- Tabla de pacientes archivados (solo si hay resultados) -->
-            <div class="table-responsive" *ngIf="!isLoading && displayedArchives.length > 0">
-              <table class="table table-striped table-hover text-center align-middle">
-                <!-- Encabezados de la tabla -->
-                <thead class="table-light">
-                  <tr>
-                    <th>{{ 'ARCHIVE.LIST_PATIENT.NUMBER' | translate }}</th>
-                    <th>{{ 'ARCHIVE.LIST_PATIENT.FULL_NAME' | translate }}</th>
-                    <th>{{ 'ARCHIVE.LIST_PATIENT.AGE' | translate }}</th>
-                    <th>{{ 'ARCHIVE.LIST_PATIENT.GENDER' | translate }}</th>
-                    <th>{{ 'ARCHIVE.LIST_PATIENT.LOCATION' | translate }}</th>
-                    <th>{{ 'ARCHIVE.LIST_PATIENT.MUNICIPALITY' | translate }}</th>
-                    <th>{{ 'ARCHIVE.LIST_PATIENT.STATE' | translate }}</th>
-                    <th>{{ 'ARCHIVE.LIST_PATIENT.ADMISSION' | translate }}</th>
-                    <th class="text-end">{{ 'ARCHIVE.LIST_PATIENT.ACTIONS' | translate }}</th>
-                  </tr>
-                </thead>
-                <!-- Cuerpo de la tabla con los datos de cada paciente archivado -->
-                <tbody (click)="closeAllDropdowns()">
-                  <tr *ngFor="let a of displayedArchives; trackBy: trackByArchiveNumber; let i = index">
-                    <td><strong class="text-primary">{{ a.archive_number }}</strong></td>
-                    <td>{{ a.name }} {{ a.last_name_father }} {{ a.last_name_mother }}</td>
-                    <td>{{ a.age }} {{ getAgeUnitLabel(a.age_unit) }}</td>
-                    <td>{{ a.gender?.name || ('ARCHIVE.LIST_PATIENT.NOT_DEFINED' | translate) }}</td>
-                    <td>{{ a.location_text || ('ARCHIVE.LIST_PATIENT.NO_LOCATION' | translate) }}</td>
-                    <td>{{ a.municipality_text || 'Sin municipio' }}</td>
-                    <td>{{ a.state_text || 'Sin estado' }}</td>
-                    <td>{{ a.admission_date || ('ARCHIVE.LIST_PATIENT.NO_DATE' | translate) }}</td>
-                    <!-- Columna de acciones (editar/eliminar) -->
-                    <td class="text-end">
-          <div class="dropdown d-flex justify-content-end align-items-center" 
-            [class.show]="isDropdownOpen(i)">
-      <!-- Botón para mostrar opciones de edición/eliminación -->
-      <button class="btn btn-options dropdown-toggle" 
-        (click)="onDropdownToggle(i, $event)"
-        [disabled]="isLoading"
-        title="{{ 'ARCHIVE.LIST_PATIENT.OPTIONS' | translate }}">
-                          <i class="fa fa-cogs"></i>
-                        </button>
-            <!-- Menú desplegable de acciones -->
-            <div class="dropdown-menu dropdown-menu-end"
-              [class.show]="isDropdownOpen(i)">
-                          <!-- Opción para editar paciente -->
-                          <a class="dropdown-item" [routerLink]="['/archives/list_archive/edit_archive/', a.archive_number]">
-                            <i class="fa fa-pen me-2"></i> {{ 'ARCHIVE.LIST_PATIENT.EDIT' | translate }}
-                          </a>
-                  <!-- Opción para eliminar paciente (abre modal de confirmación) -->
-                  <a class="dropdown-item text-danger"
-                    href="javascript:void(0);"
-                    (click)="selectArchive(a); closeAllDropdowns()"
-                    data-bs-toggle="modal"
-                    data-bs-target="#deleteModal">
-                            <i class="fa fa-trash me-2"></i> {{ 'ARCHIVE.LIST_PATIENT.DELETE' | translate }}
-                          </a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Paginación de resultados -->
-      <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap" 
-        *ngIf="!isLoading && displayedArchives.length > 0">
-              <!-- Información de paginación -->
-              <div class="pagination-info small">
-                {{ 'ARCHIVE.LIST_PATIENT.SHOWING' | translate }} {{ (currentPage - 1) * pageSize + 1 }}
-                {{ 'ARCHIVE.LIST_PATIENT.TO' | translate }} {{ (currentPage - 1) * pageSize + displayedArchives.length }}
-                {{ 'ARCHIVE.LIST_PATIENT.OF' | translate }} {{ totalRecords }} {{ 'ARCHIVE.LIST_PATIENT.RECORDS' | translate }}
-              </div>
-              <!-- Navegación de paginación (solo si hay más de una página) -->
-              <nav *ngIf="totalPages > 1">
-                <ul class="pagination mb-0">
-                  <!-- Botón para ir a la página anterior -->
-                  <li class="page-item" [class.disabled]="currentPage === 1 || isLoading">
-                    <a class="page-link" 
-                       href="javascript:void(0);" 
-                       (click)="changePage(currentPage - 1)"
-                       [attr.aria-disabled]="currentPage === 1 || isLoading">
-                      <i class="fa fa-chevron-left me-1"></i>{{ 'ARCHIVE.LIST_PATIENT.PREVIOUS' | translate }}
-                    </a>
-                  </li>
-          <!-- Botones de páginas individuales -->
-          <li class="page-item"
-            *ngFor="let page of paginationRange"
-            [class.active]="page === currentPage"
-            [class.disabled]="page === '...' || isLoading">
-                    <a class="page-link" 
-                       href="javascript:void(0);" 
-                       (click)="typeof page === 'number' && changePage(page)"
-                       [attr.aria-disabled]="page === '...' || isLoading">
-                      {{ page }}
-                    </a>
-                  </li>
-                  <!-- Botón para ir a la página siguiente -->
-                  <li class="page-item" [class.disabled]="currentPage === totalPages || isLoading">
-                    <a class="page-link" 
-                       href="javascript:void(0);" 
-                       (click)="changePage(currentPage + 1)"
-                       [attr.aria-disabled]="currentPage === totalPages || isLoading">
-                      {{ 'ARCHIVE.LIST_PATIENT.NEXT' | translate }}<i class="fa fa-chevron-right ms-1"></i>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
+            <!-- Navegación de paginación (solo si hay más de una página) -->
+            <nav *ngIf="totalPages > 1">
+              <ul class="pagination mb-0">
+                <!-- Botón para ir a la página anterior -->
+                <li class="page-item" [class.disabled]="currentPage === 1 || isLoading">
+                  <a class="page-link" 
+                     href="javascript:void(0);" 
+                     (click)="changePage(currentPage - 1)"
+                     [attr.aria-disabled]="currentPage === 1 || isLoading">
+                    <i class="fa fa-chevron-left me-1"></i>{{ 'ARCHIVE.LIST_PATIENT.PREVIOUS' | translate }}
+                  </a>
+                </li>
+                <!-- Botones de páginas individuales -->
+                <li class="page-item"
+                    *ngFor="let page of paginationRange"
+                    [class.active]="page === currentPage"
+                    [class.disabled]="page === '...' || isLoading">
+                  <a class="page-link" 
+                     href="javascript:void(0);" 
+                     (click)="typeof page === 'number' && changePage(page)"
+                     [attr.aria-disabled]="page === '...' || isLoading">
+                    {{ page }}
+                  </a>
+                </li>
+                <!-- Botón para ir a la página siguiente -->
+                <li class="page-item" [class.disabled]="currentPage === totalPages || isLoading">
+                  <a class="page-link" 
+                     href="javascript:void(0);" 
+                     (click)="changePage(currentPage + 1)"
+                     [attr.aria-disabled]="currentPage === totalPages || isLoading">
+                    {{ 'ARCHIVE.LIST_PATIENT.NEXT' | translate }}<i class="fa fa-chevron-right ms-1"></i>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
 
           </div>
         </div>

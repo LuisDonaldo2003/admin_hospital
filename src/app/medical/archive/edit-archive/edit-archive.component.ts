@@ -23,6 +23,13 @@ export class EditArchiveComponent implements OnInit {
   /** ID del expediente a editar. */
   archiveId: number = 0;
 
+  /**
+   * Navega a la lista de archivos (expedientes) registrados.
+   */
+  goToList(): void {
+    this.router.navigate(['/archives/list_archive']);
+  }
+
   /** Campos del formulario de edición. */
   archive_number = '';
   name = '';

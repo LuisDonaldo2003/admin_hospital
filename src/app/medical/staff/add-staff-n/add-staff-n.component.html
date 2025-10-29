@@ -28,80 +28,141 @@
       <div class="col-lg-10 col-xl-8">
         <!-- Card que contiene el formulario -->
         <div class="card card-form shadow border-0">
-          <div class="card-body px-5 py-4">
-            <!-- Título del formulario -->
-            <h3 class="text-center mb-4 fw-bold">{{ 'STAFF.ADD_STAFF.TITLE' | translate }}</h3>
+          <div class="card-body p-4">
+            <!-- Encabezado del formulario con icono -->
+            <div class="form-header text-center mb-4">
+              <div class="form-icon mb-3">
+                <i class="fa fa-user-plus"></i>
+              </div>
+              <h3 class="fw-bold mb-2">{{ 'STAFF.ADD_STAFF.TITLE' | translate }}</h3>
+              <p class="text-muted small">Complete los campos requeridos para agregar un nuevo usuario</p>
+            </div>
 
             <!-- Formulario para agregar staff -->
             <form>
-              <div class="row g-3">
-                <!-- Campo para el nombre -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'STAFF.ADD_STAFF.FIRST_NAME' | translate }} *</label>
-                  <input type="text" class="form-control" [(ngModel)]="name" name="name" required
-                         [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
+              <!-- Sección: Información Personal -->
+              <div class="form-section">
+                <div class="section-header mb-3">
+                  <h5 class="section-title">
+                    <i class="fa fa-user me-2"></i>Información Personal
+                  </h5>
                 </div>
+                <div class="row g-3">
+                  <!-- Campo para el nombre -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-id-card me-1"></i>{{ 'STAFF.ADD_STAFF.FIRST_NAME' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="name" name="name" required
+                           placeholder="Ingrese el nombre"
+                           [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !name.trim()">El nombre es requerido</div>
+                  </div>
 
-                <!-- Campo para el apellido -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'STAFF.ADD_STAFF.SURNAME' | translate }} *</label>
-                  <input type="text" class="form-control" [(ngModel)]="surname" name="surname" required
-                         [ngClass]="{ 'is-invalid': submitted && !surname.trim() }" />
+                  <!-- Campo para el apellido -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-id-card me-1"></i>{{ 'STAFF.ADD_STAFF.SURNAME' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="surname" name="surname" required
+                           placeholder="Ingrese el apellido"
+                           [ngClass]="{ 'is-invalid': submitted && !surname.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !surname.trim()">El apellido es requerido</div>
+                  </div>
+
+                  <!-- Campo para el correo electrónico -->
+                  <div class="col-12">
+                    <label class="form-label">
+                      <i class="fa fa-envelope me-1"></i>{{ 'STAFF.ADD_STAFF.EMAIL' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <input type="email" class="form-control" [(ngModel)]="email" name="email" required
+                           placeholder="correo@ejemplo.com"
+                           [ngClass]="{ 'is-invalid': submitted && !email.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !email.trim()">El correo electrónico es requerido</div>
+                  </div>
                 </div>
+              </div>
 
-                <!-- Campo para el correo electrónico -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'STAFF.ADD_STAFF.EMAIL' | translate }} *</label>
-                  <input type="email" class="form-control" [(ngModel)]="email" name="email" required
-                         [ngClass]="{ 'is-invalid': submitted && !email.trim() }" />
+              <!-- Separador -->
+              <div class="form-divider my-4"></div>
+
+              <!-- Sección: Rol y Seguridad -->
+              <div class="form-section">
+                <div class="section-header mb-3">
+                  <h5 class="section-title">
+                    <i class="fa fa-shield-alt me-2"></i>Rol y Seguridad
+                  </h5>
                 </div>
+                <div class="row g-3">
+                  <!-- Selección de rol para el staff -->
+                  <div class="col-12">
+                    <label class="form-label">
+                      <i class="fa fa-user-tag me-1"></i>{{ 'STAFF.ADD_STAFF.ROLE_SELECT' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-control form-select" [(ngModel)]="selectedValue" name="role" required
+                            [ngClass]="{ 'is-invalid': submitted && !selectedValue }">
+                      <!-- Opción por defecto -->
+                      <option value="" disabled selected>{{ 'STAFF.ADD_STAFF.SELECT_ROLE_PLACEHOLDER' | translate }}</option>
+                      <!-- Opciones de roles disponibles -->
+                      <option *ngFor="let data of roles" [value]="data.id">{{ data.name }}</option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="submitted && !selectedValue">Debe seleccionar un rol</div>
+                  </div>
 
-                <!-- Selección de rol para el staff -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'STAFF.ADD_STAFF.ROLE_SELECT' | translate }} *</label>
-                  <select class="form-control" [(ngModel)]="selectedValue" name="role" required
-                          [ngClass]="{ 'is-invalid': submitted && !selectedValue }">
-                    <!-- Opción por defecto -->
-                    <option value="" disabled selected>{{ 'STAFF.ADD_STAFF.SELECT_ROLE_PLACEHOLDER' | translate }}</option>
-                    <!-- Opciones de roles disponibles -->
-                    <option *ngFor="let data of roles" [value]="data.id">{{ data.name }}</option>
-                  </select>
-                </div>
+                  <!-- Campo para la contraseña -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-lock me-1"></i>{{ 'STAFF.ADD_STAFF.PASSWORD' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <input type="password" class="form-control" [(ngModel)]="password" name="password" required
+                           placeholder="Mínimo 8 caracteres"
+                           [ngClass]="{ 'is-invalid': submitted && !password.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !password.trim()">La contraseña es requerida</div>
+                  </div>
 
-                <!-- Campo para la contraseña -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'STAFF.ADD_STAFF.PASSWORD' | translate }} *</label>
-                  <input type="password" class="form-control" [(ngModel)]="password" name="password" required
-                         [ngClass]="{ 'is-invalid': submitted && !password.trim() }" />
-                </div>
-
-                <!-- Campo para confirmar la contraseña -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'STAFF.ADD_STAFF.CONFIRM_PASSWORD' | translate }} *</label>
-                  <input type="password" class="form-control" [(ngModel)]="password_confirmation" name="password_confirmation" required
-                         [ngClass]="{ 'is-invalid': submitted && !password_confirmation.trim() }" />
+                  <!-- Campo para confirmar la contraseña -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-lock me-1"></i>{{ 'STAFF.ADD_STAFF.CONFIRM_PASSWORD' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <input type="password" class="form-control" [(ngModel)]="password_confirmation" name="password_confirmation" required
+                           placeholder="Confirme la contraseña"
+                           [ngClass]="{ 'is-invalid': submitted && !password_confirmation.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !password_confirmation.trim()">Debe confirmar la contraseña</div>
+                  </div>
                 </div>
               </div>
 
               <!-- Mensaje de validación si hay advertencias -->
               <div class="mt-4" *ngIf="text_validation">
-                <div class="alert alert-warning alert-dismissible fade show">
-                  <strong>{{ 'STAFF.ADD_STAFF.WARNING' | translate }}:</strong> {{ text_validation }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <div class="alert alert-modern alert-warning d-flex align-items-center">
+                  <i class="fa fa-exclamation-triangle me-3"></i>
+                  <div class="flex-grow-1">
+                    <strong>{{ 'STAFF.ADD_STAFF.WARNING' | translate }}:</strong> {{ text_validation }}
+                  </div>
+                  <button type="button" class="btn-close" (click)="text_validation = ''"></button>
                 </div>
               </div>
 
               <!-- Mensaje de éxito si la operación fue exitosa -->
               <div class="mt-4" *ngIf="text_success">
-                <div class="alert alert-success alert-dismissible fade show">
-                  <strong>{{ 'STAFF.ADD_STAFF.SUCCESS' | translate }}:</strong> {{ text_success }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <div class="alert alert-modern alert-success d-flex align-items-center">
+                  <i class="fa fa-check-circle me-3"></i>
+                  <div class="flex-grow-1">
+                    <strong>{{ 'STAFF.ADD_STAFF.SUCCESS' | translate }}:</strong> {{ text_success }}
+                  </div>
+                  <button type="button" class="btn-close" (click)="text_success = ''"></button>
                 </div>
               </div>
 
-              <!-- Botón para guardar el nuevo staff -->
-              <div class="text-end mt-4">
-                <button type="button" class="btn btn-primary px-4" (click)="save()">{{ 'STAFF.ADD_STAFF.SAVE' | translate }}</button>
+              <!-- Botones de acción -->
+              <div class="form-actions d-flex justify-content-end gap-2 mt-4">
+                <button type="button" class="btn btn-cancel" routerLink="/staffs/list-staff">
+                  <i class="fa fa-times me-2"></i>Cancelar
+                </button>
+                <button type="button" class="btn btn-save" (click)="save()">
+                  <i class="fa fa-save me-2"></i>{{ 'STAFF.ADD_STAFF.SAVE' | translate }}
+                </button>
               </div>
             </form>
           </div>

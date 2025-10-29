@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PersonalService, Personal, ApiResponse } from '../service/personal.service';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 
 /**
  * Componente para listar el personal del hospital con paginación, búsqueda y acciones.
@@ -101,7 +102,8 @@ export class PersonalListComponent implements OnInit {
   constructor(
     private router: Router,
     private translate: TranslateService,
-    private personalService: PersonalService
+    private personalService: PersonalService,
+    public permissionService: PermissionService
   ) { 
     const selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(selectedLang);
@@ -413,5 +415,19 @@ export class PersonalListComponent implements OnInit {
   public editarPersonal(id: number | undefined): void {
   if (!id) return;
   this.router.navigate(['/personal/edit', id]);
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para editar personal
+   */
+  canEditPersonal(): boolean {
+    return this.permissionService.hasPermission('edit_profile-m');
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para eliminar personal
+   */
+  canDeletePersonal(): boolean {
+    return this.permissionService.hasPermission('delete_profile-m');
   }
 }

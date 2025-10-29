@@ -55,6 +55,10 @@ export class EditStaffNComponent {
    * Mensaje de validación de campos
    */
   public text_validation: string = '';
+  /**
+   * Bandera para indicar si el formulario fue enviado
+   */
+  public submitted: boolean = false;
 
   /**
    * ID del staff a editar
@@ -122,6 +126,7 @@ export class EditStaffNComponent {
    * Guarda los cambios realizados al usuario, validando los campos y enviando los datos al backend
    */
   save() {
+    this.submitted = true;
     this.text_validation = '';
     this.text_success = '';
 

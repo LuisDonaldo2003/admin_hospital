@@ -67,10 +67,25 @@ export class AddArchiveComponent implements OnInit {
   ) {}
 
   /**
+   * Obtiene la fecha actual en formato YYYY-MM-DD usando la zona horaria local.
+   * Evita problemas con UTC que pueden causar que se muestre un día adelantado.
+   * @returns Fecha actual en formato string YYYY-MM-DD
+   */
+  private getTodayLocalDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
    * Inicializa la fecha de admisión y carga los géneros al iniciar el componente.
    */
   ngOnInit(): void {
-    this.admission_date = new Date().toISOString().split('T')[0];
+    // Usar la fecha local correcta
+    this.admission_date = this.getTodayLocalDate();
+    
     this.loadGenders();
     
     // Verificar si mostrar el tour del formulario automáticamente
@@ -244,7 +259,10 @@ export class AddArchiveComponent implements OnInit {
     this.contact_last_name_father = '';
     this.contact_last_name_mother = '';
     this.contact_name = '';
-    this.admission_date = new Date().toISOString().split('T')[0];
+    
+    // Usar la fecha local correcta
+    this.admission_date = this.getTodayLocalDate();
+    
     this.submitted = false;
     this.text_validation = '';
     // No limpiar text_success aquí para que se vea el mensaje

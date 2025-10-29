@@ -1,9 +1,9 @@
 .card.card-list {
   border-radius: 1rem;
   padding: 1.5rem;
-  border: 4px solid var(--user-border-color, #0B7285) !important; // Borde dinámico
-  background-color: var(--user-card-bg, #ffffff) !important;      // Fondo dinámico
-  color: var(--user-card-text-color, #111827) !important;         // Texto dinámico
+  border: 4px solid var(--user-border-color, #0B7285) !important;
+  background-color: var(--user-card-bg, #ffffff) !important;
+  color: var(--user-card-text-color, #111827) !important;
   position: relative;
   z-index: 1;
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
@@ -18,130 +18,259 @@
     }
   }
 
-  // Tabla: usar alta especificidad y variables para colores
-  table {
+  // ===== TABLA MODERNA =====
+  .modern-table {
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
     background-color: transparent !important;
-    border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 12%, transparent) !important;
+    border: none !important;
     border-radius: 12px;
+    overflow: hidden;
 
-    th, td {
-      border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 6%, transparent) !important;
-      padding: 0.75rem;
-      text-align: center;
-      vertical-align: middle;
+    thead {
+      th {
+        background: linear-gradient(135deg, 
+          color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent),
+          color-mix(in srgb, var(--user-border-color, #0B7285) 8%, transparent)) !important;
+        color: var(--user-card-text-color, #111827) !important;
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 1rem 0.75rem;
+        border: none !important;
+        vertical-align: middle;
+
+        i {
+          opacity: 0.7;
+          font-size: 0.85rem;
+        }
+
+        &:first-child {
+          border-top-left-radius: 12px;
+        }
+
+        &:last-child {
+          border-top-right-radius: 12px;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        transition: all 0.2s ease;
+        background: transparent !important;
+
+        &:hover {
+          background: color-mix(in srgb, var(--user-border-color, #0B7285) 4%, transparent) !important;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        td {
+          padding: 1rem 0.75rem;
+          border: none !important;
+          border-bottom: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 6%, transparent) !important;
+          color: var(--user-card-text-color, #111827) !important;
+          vertical-align: middle;
+          background: transparent !important;
+        }
+
+        &:last-child td {
+          border-bottom: none !important;
+
+          &:first-child {
+            border-bottom-left-radius: 12px;
+          }
+
+          &:last-child {
+            border-bottom-right-radius: 12px;
+          }
+        }
+      }
+    }
+  }
+
+  // ===== CELDAS PERSONALIZADAS =====
+  .user-name-cell {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+
+    i {
+      font-size: 1.1rem;
+      color: var(--user-border-color, #0B7285);
+    }
+
+    strong {
       color: var(--user-card-text-color, #111827) !important;
-      background: transparent !important;
-    }
-
-    thead th {
-  background: color-mix(in srgb, var(--user-border-color, #0B7285) 12%, transparent) !important;
-  color: var(--user-card-text-color, #111827) !important;
-    }
-
-    thead th:first-child {
-      border-top-left-radius: 12px;
-    }
-
-    thead th:last-child {
-      border-top-right-radius: 12px;
-    }
-
-    tbody tr:last-child td:first-child {
-      border-bottom-left-radius: 12px;
-    }
-
-    tbody tr:last-child td:last-child {
-      border-bottom-right-radius: 12px;
-    }
-
-    td:nth-child(2), th:nth-child(2) {
-      max-width: 300px;
-      white-space: normal;
-      word-break: break-word;
     }
   }
 
-  // Anulación explícita para .table-light (bootstrap) que produce cabezales claros con texto poco legible
-  // Usamos alta especificidad para que nunca pinte un fondo claro con texto blanco
-  .page-wrapper .card.card-list thead.table-light,
-  .page-wrapper .card.card-list thead.table-light th {
-    background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 12%, transparent) !important;
+  .email-cell {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+
+    span {
+      color: var(--user-card-text-color, #111827) !important;
+    }
+  }
+
+  .role-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .badge-role {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, 
+      color-mix(in srgb, var(--user-border-color, #0B7285) 12%, transparent),
+      color-mix(in srgb, var(--user-border-color, #0B7285) 6%, transparent));
     color: var(--user-card-text-color, #111827) !important;
+    border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+
+    i {
+      font-size: 0.75rem;
+      color: var(--user-border-color, #0B7285);
+    }
   }
 
-  // Asegurar que la primera fila no herede fondo claro
-  .page-wrapper .card.card-list tbody tr:first-child td {
-    background: transparent !important;
-    color: var(--user-card-text-color, #111827) !important;
+  .badge-protected {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white !important;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+
+    i {
+      font-size: 0.75rem;
+    }
   }
 
-  // Botón "Options" y "New" profesional
+  .badge-no-permission {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    color: white !important;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(107, 114, 128, 0.3);
+
+    i {
+      font-size: 0.75rem;
+    }
+  }
+
+  // ===== BOTONES DE ACCIÓN =====
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn-edit {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border: none;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+
+    i {
+      font-size: 0.85rem;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      filter: brightness(1.1);
+    }
+  }
+
+  .btn-delete {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: none;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+
+    i {
+      font-size: 0.85rem;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+      filter: brightness(1.1);
+    }
+  }
+
+  // Botón "New" profesional
   .btn-options {
     background-color: var(--user-border-color, #0B7285);
     border: none;
-    padding: 6px 14px;
-    font-weight: 500;
-    font-size: 14px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 0.875rem;
     color: #fff;
     border-radius: 8px;
     transition: all 0.2s ease-in-out;
     display: inline-flex;
     align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 
     i {
       margin-right: 6px;
+      font-size: 0.85rem;
     }
 
     &:hover {
-      filter: brightness(0.95);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      filter: brightness(1.1);
     }
   }
 }
 
-// Reglas específicas para asegurar que las celdas y labels dentro de la tabla
-// usen el color calculado por GeneralSettings, incluso si hay reglas globales
-.page-wrapper .card.card-list .table,
-.page-wrapper .card.card-list .table thead,
-.page-wrapper .card.card-list .table tbody,
-.page-wrapper .card.card-list .table thead th,
-.page-wrapper .card.card-list .table tbody td,
-.page-wrapper .card.card-list .table th label,
-.page-wrapper .card.card-list .table td label,
-.page-wrapper .card.card-list .table .form-check-label {
+// ===== REGLAS ESPECÍFICAS PARA TABLA =====
+.page-wrapper .card.card-list .modern-table,
+.page-wrapper .card.card-list .modern-table thead,
+.page-wrapper .card.card-list .modern-table tbody,
+.page-wrapper .card.card-list .modern-table thead th,
+.page-wrapper .card.card-list .modern-table tbody td {
   color: var(--user-card-text-color, #111827) !important;
   background: transparent !important;
 }
 
-// Forzar la eliminación de fondos claros conflictivos (bootstrap u otros)
-// Esto evita que filas/celdas con .bg-light, .table-light, .bg-white o
-// .table-striped muestren un fondo claro que haga ilegible el texto.
-.page-wrapper .card.card-list .table .bg-light,
-.page-wrapper .card.card-list .table .table-light,
-.page-wrapper .card.card-list thead.table-light,
-.page-wrapper .card.card-list .table .bg-white,
-.page-wrapper .card.card-list .table-striped tbody tr:nth-of-type(odd),
-.page-wrapper .card.card-list .table tbody tr,
-.page-wrapper .card.card-list .table tbody tr td {
+// Forzar transparencia en clases de Bootstrap
+.page-wrapper .card.card-list .modern-table .bg-light,
+.page-wrapper .card.card-list .modern-table .table-light,
+.page-wrapper .card.card-list .modern-table thead.table-light,
+.page-wrapper .card.card-list .modern-table .bg-white {
   background: transparent !important;
   background-color: transparent !important;
   color: var(--user-card-text-color, #111827) !important;
 }
 
-// Asegurar también que clases utilitarias no pongan fondo claro en modo oscuro
-:host-context(.dark-mode) .page-wrapper .card.card-list .table .bg-light,
-:host-context(.dark-mode) .page-wrapper .card.card-list .table .table-light,
-:host-context(.dark-mode) .page-wrapper .card.card-list .table .bg-white,
-:host-context(.dark-mode) .page-wrapper .card.card-list .table-striped tbody tr:nth-of-type(odd) {
-  background: transparent !important;
-  background-color: transparent !important;
-  color: var(--user-card-text-color, #ffffff) !important;
-}
-
-// Modo oscuro: respetar variables y forzar color dentro de la card
+// ===== MODO OSCURO =====
 :host-context(.dark-mode) {
   .card.card-list {
     background-color: var(--user-card-bg, #23221c) !important;
@@ -156,61 +285,77 @@
     color: var(--user-card-text-color, #ffffff) !important;
   }
 
-  // Forzar color de labels y celdas dentro de la tabla en modo oscuro
-  .page-wrapper .card.card-list .table thead th,
-  .page-wrapper .card.card-list .table tbody td,
-  .page-wrapper .card.card-list .table th label,
-  .page-wrapper .card.card-list .table td label,
-  .page-wrapper .card.card-list .table .form-check-label {
+  .page-wrapper .card.card-list .modern-table thead th,
+  .page-wrapper .card.card-list .modern-table tbody td,
+  .page-wrapper .card.card-list .modern-table th,
+  .page-wrapper .card.card-list .modern-table td {
     color: var(--user-card-text-color, #ffffff) !important;
-    border-color: rgba(255,255,255,0.06) !important;
+    border-color: rgba(255,255,255,0.08) !important;
     background: transparent !important;
   }
 
-  .page-wrapper .card.card-list table {
-    border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 12%, transparent) !important;
+  .page-wrapper .card.card-list .modern-table thead th {
+    background: linear-gradient(135deg, 
+      color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent),
+      color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent)) !important;
   }
 
-  .btn-options {
-    filter: none;
+  .page-wrapper .card.card-list .modern-table tbody tr:hover {
+    background: color-mix(in srgb, var(--user-border-color, #0B7285) 8%, transparent) !important;
+  }
+
+  .badge-role {
+    background: rgba(255,255,255,0.08) !important;
+    color: var(--user-card-text-color, #ffffff) !important;
+    border-color: rgba(255,255,255,0.15) !important;
+  }
+
+  .user-name-cell strong,
+  .email-cell span {
+    color: var(--user-card-text-color, #ffffff) !important;
   }
 }
 
-/* Mejora: asegurar que el placeholder del input de búsqueda sea siempre legible */
+// ===== CAMPO DE BÚSQUEDA =====
 .search-input {
   .form-control {
+    background: transparent !important;
     color: var(--user-card-text-color, #111827) !important;
-    border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 8%, transparent) !important;
-    padding-right: 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
     caret-color: var(--user-card-text-color, #111827) !important;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--user-border-color, #0B7285) !important;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
+    }
   }
 
   .input-group-text {
     background: transparent !important;
-    border: none !important;
+    border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+    border-left: none !important;
     color: var(--user-card-text-color, #111827) !important;
+    border-radius: 0 8px 8px 0;
   }
 
-  /* Placeholder: reglas cross-browser y forzado de opacidad */
   .form-control::placeholder {
-    color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent) !important;
-    opacity: 1 !important;
-  }
-  .form-control::-webkit-input-placeholder {
-    color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent) !important;
-    opacity: 1 !important;
-  }
-  .form-control:-ms-input-placeholder {
-    color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent) !important;
-    opacity: 1 !important;
-  }
-  .form-control::-ms-input-placeholder {
-    color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent) !important;
+    color: color-mix(in srgb, var(--user-card-text-color, #111827) 50%, transparent) !important;
     opacity: 1 !important;
   }
 }
 
-/* Placeholder para modo oscuro: usar color semitransparente claro */
-:host-context(.dark-mode) .search-input .form-control::placeholder {
-  color: rgba(255,255,255,0.65) !important;
+:host-context(.dark-mode) .search-input {
+  .form-control,
+  .input-group-text {
+    color: var(--user-card-text-color, #ffffff) !important;
+    border-color: rgba(255,255,255,0.15) !important;
+  }
+
+  .form-control::placeholder {
+    color: rgba(255,255,255,0.5) !important;
+  }
 }

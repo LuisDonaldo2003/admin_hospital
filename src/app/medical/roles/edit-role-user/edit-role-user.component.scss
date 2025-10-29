@@ -1,84 +1,198 @@
-// Estilos dinámicos compartidos con Add Role
-// Usan variables globales definidas por GeneralSettingsComponent
+// Estilos modernos dinámicos para Edit Role
+// Usan variables globales definidas por GeneralSettingsComponent:
+// --user-card-bg, --user-card-text-color, --user-border-color, --user-btn-border-color
+// No se redeclaran variables locales para no romper la personalización del usuario.
 
 :host {
-  display: block;
+	display: block;
 }
 
-/* Card contenedor: variables y transiciones */
+// Card contenedor
 .page-wrapper .card {
-  border-radius: 1rem;
-  border: 4px solid var(--user-border-color, #0B7285) !important;
-  background-color: var(--user-card-bg, #ffffff) !important;
-  color: var(--user-card-text-color, #111827) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+	border-radius: 1rem;
+	border: 4px solid var(--user-border-color, #0B7285) !important; // Borde dinámico
+	background-color: var(--user-card-bg, #ffffff) !important;       // Fondo dinámico
+	color: var(--user-card-text-color, #111827) !important;          // Texto dinámico
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+	transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease,
+		box-shadow 200ms ease, transform 120ms ease;
+
+	&:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+	}
 }
 
 .card .card-body {
-  color: var(--user-card-text-color, #111827) !important;
+	color: var(--user-card-text-color, #111827) !important;
 }
 
 .page-wrapper .card .card-title,
 .page-wrapper .card label,
 .page-wrapper .card .form-label,
-.page-wrapper .card .form-check-label {
-  color: var(--user-card-text-color, #111827) !important;
+.page-wrapper .card .form-check-label,
+.page-wrapper .breadcrumb,
+.page-wrapper .breadcrumb .breadcrumb-item {
+	color: var(--user-card-text-color, #111827) !important;
 }
 
-/* Inputs y selects: estilos coherentes y accesibles */
+// Inputs y selects
 .form-control,
 select.form-control,
 select.form-select,
 textarea.form-control {
-  border-radius: 0.6rem;
-  padding: 0.6rem 0.9rem;
-  border: 1px solid rgba(0, 0, 0, 0.14);
-  background-color: var(--user-card-bg, #ffffff);
-  color: var(--user-card-text-color, #111827);
-  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
+	border-radius: 0.6rem;
+	padding: 0.6rem 0.9rem;
+	border: 1px solid rgba(0, 0, 0, 0.18);
+	background-color: #ffffff;
+	color: #111827;
+	transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
 
-  &::placeholder {
-    color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent);
-    opacity: 1;
-  }
+	&::placeholder {
+		color: #9ca3af; // gris medio legible
+		opacity: 1;
+	}
 
-  &:focus {
-    border-color: var(--user-border-color, #0B7285);
-    outline: none;
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 22%, transparent);
-  }
+	&:focus {
+		border-color: var(--user-border-color, #0B7285);
+		outline: none;
+		// Si el navegador soporta color-mix, tienen halo suave; si no, queda sólo el borde
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent);
+	}
 
-  &.is-invalid {
-    border-color: #dc3545 !important;
-    background-color: #fff5f5 !important;
-  }
+	&.is-invalid {
+		border-color: #dc3545 !important;
+		background-color: #fff5f5 !important;
+	}
 }
 
+// Checkboxes y radios con color de acento del usuario
 input[type="checkbox"],
 input[type="radio"] {
-  accent-color: var(--user-border-color, #0B7285);
+	accent-color: var(--user-border-color, #0B7285);
+	cursor: pointer;
 }
 
+// Botones
 .btn {
-  font-weight: 600;
-  padding: 0.55rem 1.2rem;
-  border-radius: 0.6rem;
+	font-weight: 600;
+	padding: 0.55rem 1.2rem;
+	border-radius: 0.6rem;
+	transition: all 150ms ease;
 }
 
 .btn-primary {
-  background-color: var(--user-border-color, #0B7285);
-  border-color: var(--user-border-color, #0B7285);
-  color: #ffffff;
+	background-color: var(--user-border-color, #0B7285);
+	border-color: var(--user-border-color, #0B7285);
+	color: #ffffff;
+	&:hover {
+		filter: brightness(0.95);
+		transform: translateY(-1px);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	}
+	&:active {
+		filter: brightness(0.9);
+		transform: translateY(0);
+	}
 }
 
+.btn-outline-primary {
+	border-color: var(--user-btn-border-color, currentColor);
+	color: var(--user-card-text-color, #111827);
+	&:hover {
+		background: var(--user-btn-border-color, rgba(0, 0, 0, 0.08));
+		color: #ffffff;
+		border-color: var(--user-btn-border-color, currentColor);
+	}
+}
+
+.btn-outline-secondary {
+	&:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	}
+}
+
+// Alertas
 .alert {
-  border-radius: 0.5rem;
-  font-size: 0.925rem;
-  border-left: 4px solid var(--user-border-color, #0B7285);
+	border-radius: 0.5rem;
+	font-size: 0.925rem;
+	border-left: 4px solid var(--user-border-color, #0B7285);
 }
 
-/* Tablas dentro de la card */
+// Cards de permisos individuales
+.permission-card {
+	background: #ffffff;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 0.5rem;
+	padding: 1rem;
+	transition: all 150ms ease;
+	height: 100%;
+	
+	&:hover {
+		border-color: var(--user-border-color, #0B7285);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	}
+	
+	.permission-card-title {
+		font-weight: 600;
+		color: var(--user-border-color, #0B7285);
+		margin-bottom: 0.75rem;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	}
+	
+	.permission-card-items {
+		.form-check {
+			margin-bottom: 0.5rem;
+		}
+	}
+}
+
+// Form checks personalizados
+.form-check {
+	padding-left: 1.8rem;
+	
+	.form-check-input {
+		width: 1.2rem;
+		height: 1.2rem;
+		margin-top: 0.15rem;
+		cursor: pointer;
+		
+		&:checked {
+			background-color: var(--user-border-color, #0B7285);
+			border-color: var(--user-border-color, #0B7285);
+		}
+		
+		&:focus {
+			box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent);
+		}
+	}
+	
+	.form-check-label {
+		cursor: pointer;
+		user-select: none;
+		line-height: 1.5;
+	}
+}
+
+// Contador de permisos
+.permissions-counter {
+	.alert-info {
+		background: linear-gradient(135deg, 
+			color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent),
+			color-mix(in srgb, var(--user-border-color, #0B7285) 5%, transparent));
+		border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent);
+		color: var(--user-card-text-color, #111827);
+		
+		.badge {
+			font-size: 1rem;
+			padding: 0.4rem 0.8rem;
+		}
+	}
+}
+
+// Tabla de permisos (selector más específico para sobreescribir reglas globales)
 .page-wrapper .card .table,
 .page-wrapper .card .table thead,
 .page-wrapper .card .table tbody,
@@ -87,59 +201,104 @@ input[type="radio"] {
 .page-wrapper .card .table th label,
 .page-wrapper .card .table td label,
 .page-wrapper .card .table .form-check-label {
-  color: var(--user-card-text-color, #111827) !important;
-  background-color: transparent !important;
+	color: var(--user-card-text-color, #111827) !important;
+	background-color: transparent !important;
 }
 
 .page-wrapper .card .table thead {
-  background: color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent) !important;
+	/* Sutil banda con mezcla del color de borde (fallback transparente) */
+	background: color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent) !important;
 }
 
-/* Modo oscuro usando :host-context para consistencia con otros componentes */
+.page-wrapper .card .table thead th {
+	color: var(--user-card-text-color, #111827) !important;
+	border-bottom: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent) !important;
+}
+
+.page-wrapper .card .table tbody td {
+	color: var(--user-card-text-color, #111827) !important;
+}
+
+.page-wrapper .card .table tbody tr:hover {
+	background: color-mix(in srgb, var(--user-border-color, #0B7285) 7%, transparent) !important;
+}
+
+// Modo oscuro mediante :host-context para heredar del body/html
 :host-context(.dark-mode) {
-  .page-wrapper .card {
-    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
-    background-color: var(--user-card-bg, #23221c) !important;
-    border-color: var(--user-border-color, #0B7285) !important;
-    color: var(--user-card-text-color, #ffffff) !important;
-  }
+	.page-wrapper .card {
+		// Misma API basada en variables; se respetan los valores que asigna GeneralSettings
+		box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
+	}
 
-  .page-wrapper .card .card-title,
-  .page-wrapper .card label,
-  .page-wrapper .card .form-label,
-  .page-wrapper .card .form-check-label {
-    color: var(--user-card-text-color, #ffffff) !important;
-  }
+	// Forzar color de texto dentro de la card con mayor especificidad
+	.page-wrapper .card .card-title,
+	.page-wrapper .card label,
+	.page-wrapper .card .form-label,
+	.page-wrapper .card .form-check-label {
+		color: var(--user-card-text-color, #ffffff) !important;
+	}
 
-  .form-control,
-  select.form-control,
-  select.form-select,
-  textarea.form-control {
-    background-color: #2a2f3a !important;
-    color: #f1f5f9 !important;
-    border: 1px solid #3a3f4a !important;
+	.form-control,
+	select.form-control,
+	select.form-select,
+	textarea.form-control {
+		background-color: #2a2f3a !important;
+		color: #f1f5f9 !important;
+		border: 1px solid #3a3f4a !important;
 
-    &::placeholder {
-      color: #bfc7cf !important;
-      opacity: 1 !important;
-    }
+		&::placeholder {
+			color: #bfc7cf !important;
+			opacity: 1 !important;
+		}
 
-    &:focus {
-      border-color: var(--user-border-color, #0B7285) !important;
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent);
-    }
-  }
+		&:focus {
+			border-color: var(--user-border-color, #0B7285) !important;
+			box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent);
+		}
+	}
 
-  .card .table thead {
-    background: color-mix(in srgb, var(--user-border-color, #0B7285) 18%, transparent);
-  }
+	.card .table {
+		color: var(--user-card-text-color, #ffffff) !important;
+	}
+
+	.card .table thead {
+		background: color-mix(in srgb, var(--user-border-color, #0B7285) 18%, transparent);
+	}
+
+	.card .table thead th,
+	.card .table tbody td {
+		color: var(--user-card-text-color, #ffffff) !important;
+		border-color: rgba(255, 255, 255, 0.06) !important;
+	}
+
+	.btn-outline-primary:hover {
+		color: #0b0e14;
+	}
+	
+	.permission-card {
+		background: #2a2f3a;
+		border-color: #3a3f4a;
+		
+		&:hover {
+			background: #323742;
+		}
+	}
 }
 
-/* Reducción de animaciones si el usuario lo prefiere */
+// Mejoras de accesibilidad: reducir movimiento si el usuario lo prefiere
 @media (prefers-reduced-motion: reduce) {
-  .page-wrapper .card,
-  .form-control,
-  .btn {
-    transition: none !important;
-  }
+	.page-wrapper .card,
+	.form-control,
+	.btn,
+	.permission-card {
+		transition: none !important;
+		transform: none !important;
+	}
+}
+
+// Responsividad
+@media (max-width: 768px) {
+	.permission-card {
+		margin-bottom: 1rem;
+	}
 }
