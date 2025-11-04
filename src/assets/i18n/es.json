@@ -58,6 +58,10 @@
       "DOCUMENTS": "Documentos de Personal",
       "VIEW_DOCUMENTS": "Ver Documentos",
       "TOGGLE_STATUS": "Activar/Desactivar"
+    },
+    "PDF_COMPRESSOR": {
+      "TITLE": "Compresor de PDF",
+      "DESCRIPTION": "Reduce el tamaño de archivos PDF a menos de 500KB"
     }
   },
   "ARCHIVO": {

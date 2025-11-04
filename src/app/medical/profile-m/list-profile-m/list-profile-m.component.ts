@@ -159,19 +159,16 @@ export class ListProfileMComponent {
    */
   deleteProfile() {
     this.profileService.deleteProfile(this.profile_selected.id).subscribe((resp: any) => {
-      let INDEX = this.profileList.findIndex((item: any) => item.id == this.profile_selected.id);
-      if (INDEX != -1) {
-        this.profileList.splice(INDEX, 1);
-
-        // Oculta y elimina el modal de confirmación (uso de jQuery)
-        $('#delete_patient').hide();
-        $("#delete_patient").removeClass("show");
-        $(".modal-backdrop").remove();
-        $("body").removeClass();
-        $("body").removeAttr("style");
-
-        this.profile_selected = null;
+      // Actualizar el array general primero
+      let INDEX_GENERAL = this.profile_generals.findIndex((item: any) => item.id == this.profile_selected.id);
+      if (INDEX_GENERAL != -1) {
+        this.profile_generals.splice(INDEX_GENERAL, 1);
+        this.totalData = this.profile_generals.length;
       }
+
+      // Recalcular la paginación y recargar los datos
+      this.getTableDataGeneral();
+      this.profile_selected = null;
     })
   }
 

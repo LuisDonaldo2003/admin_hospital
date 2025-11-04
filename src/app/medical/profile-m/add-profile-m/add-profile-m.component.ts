@@ -26,6 +26,10 @@ export class AddProfileMComponent {
    */
   name: string = '';
   /**
+   * Estado del perfil (true = activo, false = inactivo)
+   */
+  state: boolean = true;
+  /**
    * Bandera para mostrar error de formulario inválido
    */
   valid_form: boolean = false;
@@ -66,6 +70,7 @@ export class AddProfileMComponent {
     // Prepara los datos para enviar al servicio
     let data = {
       name: this.name,
+      state: this.state,
     };
     // Reinicia banderas de éxito y validación
     this.valid_form_success = false;
@@ -78,6 +83,7 @@ export class AddProfileMComponent {
       } else {
         // Si es exitoso, limpia el campo y muestra mensaje de éxito
         this.name = '';
+        this.state = true; // Resetear a activo
         this.valid_form_success = true;
       }
     })

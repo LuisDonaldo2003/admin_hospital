@@ -359,3 +359,73 @@
     color: rgba(255,255,255,0.5) !important;
   }
 }
+
+// ===== MODAL DE ELIMINACIÓN - ESTILOS =====
+::ng-deep #deleteModal {
+  .modal-content {
+    background-color: var(--user-card-bg, #ffffff) !important;
+    color: var(--user-card-text-color, #111827) !important;
+    border: 2px solid var(--user-border-color, #0B7285);
+    border-radius: 1rem;
+
+    .modal-body {
+      h5, p, strong {
+        color: var(--user-card-text-color, #111827) !important;
+      }
+
+      .btn-light {
+        background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent);
+        color: var(--user-card-text-color, #111827);
+        border: 1px solid var(--user-border-color, #0B7285);
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
+        }
+      }
+
+      .btn-danger {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        border: none;
+        color: #ffffff;
+        transition: all 0.2s ease;
+
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+        }
+      }
+    }
+  }
+}
+
+:host-context(.dark-mode) ::ng-deep #deleteModal {
+  .modal-content {
+    background-color: var(--user-card-bg, #1A2332) !important;
+    color: var(--user-card-text-color, #ffffff) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+}
+
+// Prevenir fondos blancos durante transiciones del modal
+::ng-deep {
+  .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .modal {
+    background-color: transparent !important;
+  }
+
+  // Evitar que el body tenga fondo blanco al cerrar modal
+  body.modal-open {
+    overflow: hidden;
+  }
+}
+
+// Asegurar que no haya fondos blancos en modo oscuro
+:host-context(.dark-mode) ::ng-deep {
+  .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+  }
+}

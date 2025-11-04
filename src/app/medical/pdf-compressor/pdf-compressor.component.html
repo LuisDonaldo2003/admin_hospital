@@ -1,0 +1,294 @@
+<div class="page-wrapper pdf-compressor-modern">
+  <div class="content">
+    
+    <!-- Page Header -->
+    <div class="modern-header">
+      <div class="header-content">
+        <div class="header-left">
+          <div class="icon-wrapper">
+            <i class="fa fa-file-pdf-o"></i>
+            <span class="pulse-ring"></span>
+          </div>
+          <div class="header-text">
+            <h1 class="main-title">Compresor de PDF</h1>
+            <p class="subtitle">Reduce el tamaño de tus documentos de forma inteligente</p>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          class="btn-back"
+          [routerLink]="['/medical/personal']">
+          <i class="fa fa-arrow-left"></i>
+          <span>Regresar</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mensajes -->
+    <div *ngIf="text_validation" class="modern-alert alert-error">
+      <div class="alert-icon">
+        <i class="fa fa-exclamation-circle"></i>
+      </div>
+      <div class="alert-content">
+        <strong>Error:</strong> {{ text_validation }}
+      </div>
+      <button type="button" class="alert-close" (click)="text_validation = ''">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+
+    <div *ngIf="text_success" class="modern-alert alert-success">
+      <div class="alert-icon">
+        <i class="fa fa-check-circle"></i>
+      </div>
+      <div class="alert-content">
+        <strong>¡Éxito!</strong> {{ text_success }}
+      </div>
+      <button type="button" class="alert-close" (click)="text_success = ''">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+      
+      <!-- Upload Zone -->
+      <div class="upload-container">
+        <div 
+          class="dropzone"
+          [class.drag-active]="isDragOver"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)">
+          
+          <div class="dropzone-icon">
+            <div class="icon-circle">
+              <i class="fa fa-cloud-upload"></i>
+            </div>
+          </div>
+          
+          <h3 class="dropzone-title">Arrastra y suelta tus archivos</h3>
+          <p class="dropzone-text">o selecciónalos desde tu computadora</p>
+          
+          <input 
+            type="file" 
+            id="pdfFiles" 
+            class="file-input"
+            accept=".pdf"
+            multiple
+            (change)="onFileSelected($event)">
+          
+          <label for="pdfFiles" class="btn-select">
+            <i class="fa fa-folder-open me-2"></i>
+            Explorar archivos
+          </label>
+          
+          <div class="dropzone-info">
+            <span><i class="fa fa-info-circle"></i> Formato: PDF</span>
+            <span><i class="fa fa-hdd-o"></i> Máx: 10MB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de archivos seleccionados -->
+      <div *ngIf="selectedFiles.length > 0" class="files-container">
+        <div class="section-title">
+          <div class="title-left">
+            <i class="fa fa-files-o"></i>
+            <h3>Archivos seleccionados</h3>
+            <span class="count-badge">{{ selectedFiles.length }}</span>
+          </div>
+          <div class="title-actions">
+            <button 
+              type="button" 
+              class="btn-action btn-compress"
+              [disabled]="isProcessing"
+              (click)="compressAll()">
+              <i class="fa fa-compress"></i>
+              <span *ngIf="!isProcessing">Comprimir todos</span>
+              <span *ngIf="isProcessing">
+                <span class="spinner"></span>
+                Procesando...
+              </span>
+            </button>
+            <button 
+              type="button" 
+              class="btn-action btn-clear"
+              [disabled]="isProcessing"
+              (click)="clearAll()">
+              <i class="fa fa-trash-o"></i>
+              <span>Limpiar</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="files-grid">
+          <div class="file-card" *ngFor="let file of selectedFiles; let i = index">
+            <div class="file-preview">
+              <i class="fa fa-file-pdf-o"></i>
+            </div>
+            <div class="file-details">
+              <h4 class="file-name" [title]="file.name">{{ file.name }}</h4>
+              <div class="file-meta">
+                <span class="file-size"
+                      [class.size-danger]="file.size > MAX_FILE_SIZE"
+                      [class.size-warning]="file.size <= MAX_FILE_SIZE && file.size > MAX_FILE_SIZE * 0.8"
+                      [class.size-success]="file.size <= MAX_FILE_SIZE * 0.8">
+                  <i class="fa fa-database"></i>
+                  {{ formatFileSize(file.size) }}
+                </span>
+              </div>
+            </div>
+            <button 
+              type="button" 
+              class="btn-remove"
+              [disabled]="isProcessing"
+              (click)="removeFile(i)"
+              title="Eliminar">
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultados de la compresión -->
+      <div *ngIf="compressedFiles.length > 0" class="results-container">
+        <div class="section-title">
+          <div class="title-left">
+            <i class="fa fa-check-circle"></i>
+            <h3>Archivos comprimidos</h3>
+            <span class="count-badge success">{{ compressedFiles.length }}</span>
+          </div>
+          <button 
+            type="button" 
+            class="btn-action btn-download-all"
+            (click)="downloadAll()">
+            <i class="fa fa-download"></i>
+            <span>Descargar todos</span>
+          </button>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="stats-grid">
+          <div class="stat-item stat-original">
+            <div class="stat-icon">
+              <i class="fa fa-file-o"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Tamaño original</span>
+              <h3 class="stat-value">{{ formatFileSize(totalOriginalSize) }}</h3>
+            </div>
+          </div>
+
+          <div class="stat-item stat-compressed">
+            <div class="stat-icon">
+              <i class="fa fa-compress"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Tamaño comprimido</span>
+              <h3 class="stat-value">{{ formatFileSize(totalCompressedSize) }}</h3>
+            </div>
+          </div>
+
+          <div class="stat-item stat-reduction">
+            <div class="stat-icon">
+              <i class="fa fa-line-chart"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Reducción total</span>
+              <h3 class="stat-value">{{ getReductionPercent(totalOriginalSize, totalCompressedSize) }}%</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lista de archivos comprimidos -->
+        <div class="compressed-list">
+          <div class="compressed-item" *ngFor="let file of compressedFiles">
+            <div class="compressed-header">
+              <div class="compressed-name">
+                <i class="fa fa-file-pdf-o"></i>
+                <span>{{ file.name }}</span>
+              </div>
+              <button 
+                type="button" 
+                class="btn-download"
+                (click)="downloadCompressed(file)">
+                <i class="fa fa-download"></i>
+              </button>
+            </div>
+            
+            <div class="compressed-data">
+              <div class="data-col">
+                <span class="data-label">Original</span>
+                <span class="data-value">{{ formatFileSize(file.originalSize) }}</span>
+              </div>
+              
+              <div class="data-col">
+                <span class="data-label">Comprimido</span>
+                <span class="data-value compressed">{{ formatFileSize(file.compressedSize) }}</span>
+              </div>
+              
+              <div class="data-col">
+                <span class="data-label">Reducción</span>
+                <span class="data-value reduction">-{{ getReductionPercent(file.originalSize, file.compressedSize) }}%</span>
+              </div>
+              
+              <div class="data-col">
+                <span *ngIf="meetsLimit(file.compressedSize)" class="status-badge success">
+                  <i class="fa fa-check"></i>
+                  ≤ 500KB
+                </span>
+                <span *ngIf="!meetsLimit(file.compressedSize)" class="status-badge warning">
+                  <i class="fa fa-exclamation-triangle"></i>
+                  > 500KB
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advertencia -->
+        <div *ngIf="hasFilesOverLimit()" class="modern-alert alert-warning">
+          <div class="alert-icon">
+            <i class="fa fa-exclamation-triangle"></i>
+          </div>
+          <div class="alert-content">
+            <strong>Atención:</strong> Algunos archivos aún superan los 500KB. 
+            Considera reducir el contenido o escanear con menor resolución.
+          </div>
+        </div>
+      </div>
+
+      <!-- Información y Consejos -->
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-header">
+            <i class="fa fa-lightbulb-o"></i>
+            <h4>¿Cómo funciona?</h4>
+          </div>
+          <ul class="info-list">
+            <li>Renderiza las páginas del PDF como imágenes JPEG optimizadas</li>
+            <li>Elimina metadata innecesaria del documento</li>
+            <li>Ajusta automáticamente la calidad según el tamaño objetivo</li>
+            <li>Proceso efectivo que puede tomar algunos segundos</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <div class="info-header">
+            <i class="fa fa-star"></i>
+            <h4>Recomendaciones</h4>
+          </div>
+          <ul class="info-list">
+            <li>Escanea en <strong>Blanco y Negro</strong> para mejor compresión</li>
+            <li>Usa resolución de <strong>150-200 DPI</strong> para documentos de texto</li>
+            <li>Evita imágenes de alta resolución innecesarias</li>
+            <li>Re-escanea con menor calidad si la compresión no es suficiente</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

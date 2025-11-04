@@ -30,9 +30,9 @@ export class EditProfileMComponent {
    */
   name: string = '';
   /**
-   * Estado del perfil (1: activo, 2: inactivo)
+   * Estado del perfil (true: activo, false: inactivo)
    */
-  state: number = 1;
+  state: boolean = true;
   /**
    * Bandera para mostrar error de formulario inválido
    */
@@ -77,7 +77,8 @@ export class EditProfileMComponent {
   showProfile() {
     this.profileService.showProfile(this.profile_id).subscribe((resp: any) => {
       this.name = resp.name;
-      this.state = resp.state;
+      // Convertir el estado numérico (1 o 2) a boolean (true o false)
+      this.state = resp.state === 1;
     })
   }
 

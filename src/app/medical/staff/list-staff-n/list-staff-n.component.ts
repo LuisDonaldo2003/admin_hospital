@@ -170,11 +170,16 @@ export class ListStaffNComponent {
    */
   deleteUser() {
     this.staffService.deleteUser(this.staff_selected.id).subscribe(() => {
-      const index = this.usersList.findIndex((item: any) => item.id === this.staff_selected.id);
-      if (index !== -1) {
-        this.usersList.splice(index, 1);
-        this.staff_selected = null;
+      // Actualizar el array general primero
+      const INDEX_GENERAL = this.role_generals.findIndex((item: any) => item.id === this.staff_selected.id);
+      if (INDEX_GENERAL !== -1) {
+        this.role_generals.splice(INDEX_GENERAL, 1);
+        this.totalData = this.role_generals.length;
       }
+
+      // Recalcular la paginación y recargar los datos
+      this.getTableDataGeneral();
+      this.staff_selected = null;
     });
   }
 

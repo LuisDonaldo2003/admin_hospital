@@ -877,3 +877,71 @@ html body .driver-force-visible {
     transform: scale(0.95);
   }
 }
+
+
+
+/* ====================
+   MODALES PERSONALIZADOS CON TEMA DE USUARIO
+   ==================== */
+
+/* M�xima especificidad para modales de eliminaci�n */
+html body #deleteModalContract.modal .modal-dialog .modal-content {
+  background-color: var(--user-card-bg, #f5f5f5) !important;
+  color: var(--user-card-text-color, #111827) !important;
+  border: 3px solid var(--user-border-color, #0B7285) !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+html body #deleteModalContract .modal-body {
+  background-color: transparent !important;
+  padding: 2rem !important;
+}
+
+html body #deleteModalContract .modal-body h5,
+html body #deleteModalContract .modal-body p,
+html body #deleteModalContract .modal-body strong {
+  color: var(--user-card-text-color, #111827) !important;
+}
+
+html body #deleteModalContract .modal-body .btn-light {
+  background-color: rgba(128, 128, 128, 0.1) !important;
+  color: var(--user-card-text-color, #111827) !important;
+  border: 2px solid var(--user-border-color, #0B7285) !important;
+  font-weight: 500 !important;
+}
+
+html body #deleteModalContract .modal-body .btn-light:hover {
+  background-color: rgba(128, 128, 128, 0.2) !important;
+  transform: translateY(-1px);
+}
+
+html body #deleteModalContract .modal-body .btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+}
+
+html body #deleteModalContract .modal-body .btn-danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4) !important;
+}
+
+/* Modo oscuro */
+html body.dark-mode #deleteModalContract.modal .modal-dialog .modal-content {
+  background-color: var(--user-card-bg, #1A2332) !important;
+  color: var(--user-card-text-color, #ffffff) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7) !important;
+}
+
+html body.dark-mode #deleteModalContract .modal-body h5,
+html body.dark-mode #deleteModalContract .modal-body p,
+html body.dark-mode #deleteModalContract .modal-body strong {
+  color: var(--user-card-text-color, #ffffff) !important;
+}
+
+html body.dark-mode #deleteModalContract .modal-body .btn-light {
+  color: var(--user-card-text-color, #ffffff) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}

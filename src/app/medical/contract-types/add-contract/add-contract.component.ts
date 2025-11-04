@@ -18,6 +18,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 export class AddContractComponent {
   // Nombre del contrato a registrar
   name: string = '';
+  // Estado del contrato (true = activo, false = inactivo)
+  state: boolean = true;
   // Indica si el formulario es inválido
   valid_form: boolean = false;
   // Indica si el formulario se guardó correctamente
@@ -49,6 +51,7 @@ export class AddContractComponent {
     }
     let data = {
       name: this.name,
+      state: this.state,
     };
     this.valid_form_success = false;
     this.text_validation = null;
@@ -57,6 +60,7 @@ export class AddContractComponent {
         this.text_validation = resp.message_text;
       } else {
         this.name = '';
+        this.state = true; // Resetear a activo
         this.valid_form_success = true;
       }
     });

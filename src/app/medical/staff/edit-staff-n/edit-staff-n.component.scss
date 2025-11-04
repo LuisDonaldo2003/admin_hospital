@@ -3,7 +3,8 @@
   .card-form {
     border-radius: 1rem;
     padding: 0.5rem;
-    border: 4px solid var(--user-border-color, #0B7285) !important;
+    box-sizing: border-box;
+    border: 4px solid var(--user-border-color, #000) !important; // Borde SIEMPRE dinámico y visible
     background-color: var(--user-card-bg, #ffffff) !important;
     color: var(--user-card-text-color, #111827) !important;
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
@@ -125,7 +126,7 @@
     border-radius: 0.5rem;
     padding: 0.75rem 1rem;
     border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
-    background-color: transparent !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
     color: var(--user-card-text-color, #111827) !important;
     transition: all 0.2s ease;
     font-size: 0.95rem;
@@ -138,6 +139,7 @@
     &:focus {
       border-color: var(--user-border-color, #0B7285);
       box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
+      background-color: rgba(255, 255, 255, 0.08) !important;
       outline: none;
       transform: translateY(-1px);
     }
@@ -149,6 +151,13 @@
       &:focus {
         box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
       }
+    }
+
+    // Opciones del select
+    option {
+      background-color: var(--user-card-bg, #ffffff);
+      color: var(--user-card-text-color, #111827);
+      padding: 0.5rem;
     }
   }
 
@@ -257,6 +266,30 @@
   }
 }
 
+// 🌞 MODO CLARO
+.edit-staff-form {
+  body:not(.dark-mode) & {
+    .card-form {
+      background-color: var(--user-card-bg, #fff) !important;
+      color: var(--user-card-text-color, #000);
+      border: 4px solid var(--user-border-color, #000) !important; // Borde dinámico
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+// 🌚 MODO OSCURO
+.edit-staff-form {
+  body.dark-mode & {
+    .card-form {
+      background-color: var(--user-card-bg, #fff) !important;
+      color: var(--user-card-text-color, #000);
+      border: 4px solid var(--user-border-color, #000) !important; // Borde dinámico
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    }
+  }
+}
+
 // ===== MODO OSCURO =====
 :host-context(.dark-mode) {
   .edit-staff-form {
@@ -283,6 +316,7 @@
     .form-control,
     .form-select {
       color: var(--user-card-text-color, #ffffff) !important;
+      background-color: rgba(255, 255, 255, 0.05) !important;
       border-color: rgba(255, 255, 255, 0.15);
 
       &::placeholder {
@@ -291,12 +325,20 @@
 
       &:focus {
         border-color: var(--user-border-color, #0B7285);
+        background-color: rgba(255, 255, 255, 0.08) !important;
         box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
       }
 
       &.is-invalid {
         border-color: #f87171;
         background-color: rgba(239, 68, 68, 0.1) !important;
+      }
+
+      // Opciones del select en modo oscuro
+      option {
+        background-color: #1f2937;
+        color: #ffffff;
+        padding: 0.5rem;
       }
     }
 

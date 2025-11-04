@@ -119,19 +119,16 @@ export class ListContractComponent {
    */
   deleteContract() {
     this.contractService.deleteContract(this.contract_selected.id).subscribe((resp: any) => {
-      let INDEX = this.contractList.findIndex((item: any) => item.id == this.contract_selected.id);
-      if (INDEX != -1) {
-        this.contractList.splice(INDEX, 1);
-
-        // Oculta el modal y limpia selección
-        $('#delete_patient').hide();
-        $("#delete_patient").removeClass("show");
-        $(".modal-backdrop").remove();
-        $("body").removeClass();
-        $("body").removeAttr("style");
-
-        this.contract_selected = null;
+      // Actualizar el array general primero
+      let INDEX_GENERAL = this.contract_generals.findIndex((item: any) => item.id == this.contract_selected.id);
+      if (INDEX_GENERAL != -1) {
+        this.contract_generals.splice(INDEX_GENERAL, 1);
+        this.totalData = this.contract_generals.length;
       }
+
+      // Recalcular la paginación y recargar los datos
+      this.getTableDataGeneral();
+      this.contract_selected = null;
     })
   }
 

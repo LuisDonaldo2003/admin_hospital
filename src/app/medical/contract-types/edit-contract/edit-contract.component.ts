@@ -23,8 +23,8 @@ export class EditContractComponent {
 
   // Nombre del contrato a editar
   name: string = '';
-  // Estado del contrato (1: activo, 2: inactivo)
-  state: number = 1;
+  // Estado del contrato (true: activo, false: inactivo)
+  state: boolean = true;
   // Indica si el formulario es inválido
   valid_form: boolean = false;
   // Indica si el formulario se guardó correctamente
@@ -60,7 +60,8 @@ export class EditContractComponent {
   showContract() {
     this.contractService.showContract(this.contract_id).subscribe((resp: any) => {
       this.name = resp.name;
-      this.state = resp.state;
+      // Convertir el estado numérico (1 o 2) a boolean (true o false)
+      this.state = resp.state === 1 || resp.state === true;
     })
   }
 

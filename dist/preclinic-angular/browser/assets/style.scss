@@ -8103,10 +8103,10 @@ a.status-grey {
   border: 1px solid #b2b2b2;
 }
 .modal-backdrop {
-  background-color: $background-color_1;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .modal-backdrop.show {
-  opacity: 0.9;
+  opacity: 1;
 }
 .invoices-view {
   width: 70%;

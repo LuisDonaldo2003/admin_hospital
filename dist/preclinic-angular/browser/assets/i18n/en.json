@@ -55,7 +55,13 @@
       "ADD": "Add Personnel",
       "EDIT": "Edit Personnel",
       "DELETE": "Delete Personnel",
-      "DOCUMENTS": "Personnel Documents"
+      "DOCUMENTS": "Personnel Documents",
+      "VIEW_DOCUMENTS": "View Documents",
+      "TOGGLE_STATUS": "Activate/Deactivate"
+    },
+    "PDF_COMPRESSOR": {
+      "TITLE": "PDF Compressor",
+      "DESCRIPTION": "Reduce PDF file size to less than 500KB"
     }
   },
   "ARCHIVO": {
@@ -817,6 +823,7 @@
     "OPTIONS": "Options",
     "EDIT": "Edit",
     "DELETE": "Delete",
+    "PROTECTED_ROLE": "Protected Role",
     "DELETE_CONFIRMATION2": "Are you sure you want to delete the role",
     "CANCEL": "Cancel",
     "SHOWING": "Showing",

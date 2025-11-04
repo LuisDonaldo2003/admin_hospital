@@ -58,6 +58,10 @@
       "DOCUMENTS": "Personnel Documents",
       "VIEW_DOCUMENTS": "View Documents",
       "TOGGLE_STATUS": "Activate/Deactivate"
+    },
+    "PDF_COMPRESSOR": {
+      "TITLE": "PDF Compressor",
+      "DESCRIPTION": "Reduce PDF file size to less than 500KB"
     }
   },
   "ARCHIVO": {

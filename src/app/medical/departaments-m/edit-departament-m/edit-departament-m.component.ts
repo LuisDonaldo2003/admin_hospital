@@ -22,8 +22,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 export class EditDepartamentMComponent {
   // Nombre del departamento a editar
   name: string = '';
-  // Estado del departamento (1: activo, 2: inactivo)
-  state: number = 1;
+  // Estado del departamento (true: activo, false: inactivo)
+  state: boolean = true;
   // Indica si el formulario es inválido
   valid_form: boolean = false;
   // Indica si el formulario se guardó correctamente
@@ -59,7 +59,8 @@ export class EditDepartamentMComponent {
   showDepartament() {
     this.departamentService.showDepartament(this.departament_id).subscribe((resp: any) => {
       this.name = resp.name;
-      this.state = resp.state;
+      // Convertir el estado numérico (1 o 2) a boolean (true o false)
+      this.state = resp.state === 1;
     })
   }
 

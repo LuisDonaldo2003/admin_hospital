@@ -48,7 +48,11 @@
                 <tbody>
                   <tr *ngFor="let data of departamentsList">
                     <td>{{ data.name }}</td>
-                    <td class="text-center">{{ data.state === 1 ? ('DEPARTAMENT.LIST_DEPARTAMENT.ACTIVE' | translate) : ('DEPARTAMENT.LIST_DEPARTAMENT.INACTIVE' | translate) }}</td>
+                    <td class="text-center">
+                      <span class="badge rounded-pill" [ngClass]="data.state === 1 ? 'bg-success' : 'bg-danger'">
+                        {{ data.state === 1 ? ('DEPARTAMENT.LIST_DEPARTAMENT.ACTIVE' | translate) : ('DEPARTAMENT.LIST_DEPARTAMENT.INACTIVE' | translate) }}
+                      </span>
+                    </td>
                     <td class="text-center">{{ data.created_at }}</td>
                     <td class="text-center">
                       <!-- Botones de acción con permisos -->

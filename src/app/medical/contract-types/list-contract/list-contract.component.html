@@ -56,7 +56,11 @@
                   <!-- Recorre la lista de contratos y muestra cada fila -->
                   <tr *ngFor="let data of contractList">
                     <td>{{ data.name }}</td>
-                    <td>{{ data.state === 1 ? ('CONTRACT.LIST_CONTRACT.ACTIVE' | translate) : ('CONTRACT.LIST_CONTRACT.INACTIVE' | translate) }}</td>
+                    <td>
+                      <span class="badge rounded-pill" [ngClass]="data.state === 1 ? 'bg-success' : 'bg-danger'">
+                        {{ data.state === 1 ? ('CONTRACT.LIST_CONTRACT.ACTIVE' | translate) : ('CONTRACT.LIST_CONTRACT.INACTIVE' | translate) }}
+                      </span>
+                    </td>
                     <td>{{ data.created_at }}</td>
                     <td class="text-center">
                       <!-- Botones de acción con permisos -->

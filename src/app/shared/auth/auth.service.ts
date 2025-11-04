@@ -5,6 +5,7 @@ import { routes } from '../routes/routes';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { URL_SERVICIOS } from 'src/app/config/config';
 import { PermissionService } from '../services/permission.service';
+import { ThemeService } from '../services/theme.service';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +33,8 @@ export class AuthService {
   constructor(
     private router: Router, 
     public http: HttpClient,
-    private permissionService: PermissionService
+    private permissionService: PermissionService,
+    private themeService: ThemeService
   ) {
     this.getLocalStorage();
   }
@@ -82,6 +84,7 @@ export class AuthService {
 
   /**
    * Guarda el token y usuario en localStorage y actualiza el estado
+   * IMPORTANTE: Aplica el tema del usuario después de guardar la sesión
    */
   savelocalStorage(auth: any) {
     if (auth && auth.access_token) {
@@ -97,6 +100,13 @@ export class AuthService {
       
       // Refrescar permisos en el servicio de permisos
       this.permissionService.refreshUser();
+      
+      // ✨ APLICAR TEMA DEL USUARIO DESPUÉS DEL LOGIN ✨
+      // Esto carga los colores personalizados del usuario que acaba de iniciar sesión
+      console.log('🎨 Aplicando tema del usuario después del login');
+      setTimeout(() => {
+        this.themeService.applyUserTheme();
+      }, 100); // Pequeño delay para asegurar que el userId esté disponible
       
       // Iniciar heartbeat para mantener vivo el estado del usuario
       this.startUserActivityTracking();
@@ -128,9 +138,15 @@ export class AuthService {
 
   /**
    * Limpia el localStorage y el estado de usuario/token
+   * IMPORTANTE: Limpia el tema del usuario al cerrar sesión
    */
   private clearLocalStorage(): void {
     this.stopUserActivityTracking(); // Detener heartbeat
+    
+    // ✨ LIMPIAR TEMA AL CERRAR SESIÓN ✨
+    console.log('🧹 Limpiando tema al cerrar sesión');
+    this.themeService.clearUserTheme();
+    
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem('authenticated');

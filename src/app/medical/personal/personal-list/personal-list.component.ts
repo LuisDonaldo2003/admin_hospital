@@ -1,5 +1,5 @@
 // Importación de módulos y servicios necesarios para el componente de listado de personal
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +7,30 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PersonalService, Personal, ApiResponse } from '../service/personal.service';
 import { PermissionService } from 'src/app/shared/services/permission.service';
+
+// Interfaces para mejor tipado
+interface PersonalDocument {
+  id: number;
+  tipo_documento: string;
+  nombre_archivo: string;
+  ruta?: string;
+}
+
+interface PersonalStats {
+  total: number;
+  clinico: number;
+  no_clinico: number;
+  documentos_completos: number;
+}
+
+interface PersonalFilters {
+  skip: number;
+  limit: number;
+  search: string;
+  tipo: string;
+  documentos: string;
+  activo?: string;
+}
 
 /**
  * Componente para listar el personal del hospital con paginación, búsqueda y acciones.
@@ -86,25 +110,26 @@ export class PersonalListComponent implements OnInit {
   /**
    * Documentos del personal seleccionado
    */
-  public selectedPersonalDocuments: any[] = [];
+  public selectedPersonalDocuments: PersonalDocument[] = [];
   public selectedPersonalName = '';
 
   /**
    * Estadísticas
    */
-  public stats = {
+  public stats: PersonalStats = {
     total: 0,
     clinico: 0,
     no_clinico: 0,
     documentos_completos: 0
   };
 
-  constructor(
-    private router: Router,
-    private translate: TranslateService,
-    private personalService: PersonalService,
-    public permissionService: PermissionService
-  ) { 
+  // Inyección moderna de dependencias
+  private router = inject(Router);
+  private translate = inject(TranslateService);
+  private personalService = inject(PersonalService);
+  public permissionService = inject(PermissionService);
+
+  constructor() { 
     const selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(selectedLang);
   }
@@ -120,7 +145,7 @@ export class PersonalListComponent implements OnInit {
   public getTableData(): void {
     this.loading = true;
     
-    const params = {
+    const params: PersonalFilters = {
       skip: this.skip,
       limit: this.limit,
       search: this.searchDataValue || '',

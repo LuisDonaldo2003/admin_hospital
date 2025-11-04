@@ -120,19 +120,16 @@ export class ListDepartamentMComponent {
    */
   deleteDepartament() {
     this.departamentsService.deleteDepartament(this.departament_selected.id).subscribe((resp: any) => {
-      let INDEX = this.departamentsList.findIndex((item: any) => item.id == this.departament_selected.id);
-      if (INDEX != -1) {
-        this.departamentsList.splice(INDEX, 1);
-
-        // Oculta el modal y limpia selección
-        $('#delete_patient').hide();
-        $("#delete_patient").removeClass("show");
-        $(".modal-backdrop").remove();
-        $("body").removeClass();
-        $("body").removeAttr("style");
-
-        this.departament_selected = null;
+      // Actualizar el array general primero
+      let INDEX_GENERAL = this.departament_generals.findIndex((item: any) => item.id == this.departament_selected.id);
+      if (INDEX_GENERAL != -1) {
+        this.departament_generals.splice(INDEX_GENERAL, 1);
+        this.totalData = this.departament_generals.length;
       }
+
+      // Recalcular la paginación y recargar los datos
+      this.getTableDataGeneral();
+      this.departament_selected = null;
     })
   }
 

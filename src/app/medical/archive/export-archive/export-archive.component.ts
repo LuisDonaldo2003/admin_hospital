@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
 
-import * as XLSX from 'xlsx';
+import * as ExcelJS from 'exceljs';
 import * as FileSaver from 'file-saver';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -437,26 +437,46 @@ export class ExportArchiveComponent implements OnInit {
       'Fecha de ingreso': a.admission_date ?? 'N/A'
     }));
 
-    const worksheet = XLSX.utils.json_to_sheet(exportData);
-    const workbook = { Sheets: { 'Pacientes': worksheet }, SheetNames: ['Pacientes'] };
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // Crear libro de Excel con ExcelJS
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Pacientes');
 
+    // Agregar encabezados
+    worksheet.columns = [
+      { header: 'No. Archivo', key: 'No. Archivo', width: 15 },
+      { header: 'Nombre', key: 'Nombre', width: 30 },
+      { header: 'Edad', key: 'Edad', width: 15 },
+      { header: 'Género', key: 'Género', width: 15 },
+      { header: 'Localidad', key: 'Localidad', width: 20 },
+      { header: 'Municipio', key: 'Municipio', width: 20 },
+      { header: 'Estado', key: 'Estado', width: 20 },
+      { header: 'Fecha de ingreso', key: 'Fecha de ingreso', width: 20 }
+    ];
+
+    // Agregar datos
+    exportData.forEach((data: any) => {
+      worksheet.addRow(data);
+    });
+
+    // Generar archivo Excel
     const filename = this.getBackupFilename('excel');
-    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    FileSaver.saveAs(blob, filename);
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      FileSaver.saveAs(blob, filename);
 
-    const formData = new FormData();
-    formData.append('file', blob, filename);
-    formData.append('type', 'excel');
+      const formData = new FormData();
+      formData.append('file', blob, filename);
+      formData.append('type', 'excel');
 
-    this.archiveService.uploadBackup(formData).subscribe({
-      next: () => {
-        // Se elimina el log de respaldo enviado
-        this.loadBackups(); // Recarga la lista de respaldos
-      },
-      error: () => {
-        // Se elimina el log de error de respaldo
-      }
+      this.archiveService.uploadBackup(formData).subscribe({
+        next: () => {
+          // Se elimina el log de respaldo enviado
+          this.loadBackups(); // Recarga la lista de respaldos
+        },
+        error: () => {
+          // Se elimina el log de error de respaldo
+        }
+      });
     });
   }
 

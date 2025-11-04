@@ -81,6 +81,11 @@ const routes: Routes = [
           }
         ]
       },
+      {
+        path: 'pdf-compressor',
+        loadComponent: () => 
+          import('./pdf-compressor/pdf-compressor.component').then(m => m.PdfCompressorComponent)
+      },
 
     ]
   }

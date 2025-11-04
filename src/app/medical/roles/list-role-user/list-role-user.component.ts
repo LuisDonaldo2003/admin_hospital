@@ -1,6 +1,5 @@
 // Importación de módulos y servicios necesarios para el componente de listado de roles de usuario
-import { Component } from '@angular/core';
-import { Sort } from '@angular/material/sort';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { RolesService } from '../service/roles.service';
 import { CommonModule } from '@angular/common';
@@ -8,6 +7,22 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PermissionService } from 'src/app/shared/services/permission.service';
+
+// Interfaces para tipado
+interface Role {
+  id: number;
+  name: string;
+  description?: string;
+  permissions?: string[];
+  permission_pluck?: string[]; // Lista de nombres de permisos asociados al rol
+  users_count?: number;
+  created_at?: string; // Fecha de creación del rol
+}
+
+interface PageSelection {
+  skip: number;
+  limit: number;
+}
 
 /**
  * Componente para listar roles de usuario con paginación, búsqueda y acciones.
@@ -19,15 +34,15 @@ import { PermissionService } from 'src/app/shared/services/permission.service';
   templateUrl: './list-role-user.component.html',
   styleUrls: ['./list-role-user.component.scss']
 })
-export class ListRoleUserComponent {
+export class ListRoleUserComponent implements OnInit {
   /**
    * Lista de roles de usuario mostrados en la tabla
    */
-  public rolesList: any = [];
+  public rolesList: Role[] = [];
   /**
    * Fuente de datos para la tabla de Angular Material
    */
-  dataSource!: MatTableDataSource<any>;
+  dataSource!: MatTableDataSource<Role>;
 
   /**
    * Bandera para mostrar el filtro de búsqueda
@@ -76,7 +91,7 @@ export class ListRoleUserComponent {
   /**
    * Selección de páginas con sus rangos
    */
-  public pageSelection: Array<any> = [];
+  public pageSelection: PageSelection[] = [];
   /**
    * Total de páginas calculadas
    */
@@ -85,25 +100,23 @@ export class ListRoleUserComponent {
   /**
    * Lista general de roles de usuario (sin paginación)
    */
-  public role_generals: any = [];
+  public role_generals: Role[] = [];
   /**
    * Rol seleccionado para acciones (editar/eliminar)
    */
-  public role_selected: any;
+  public role_selected: Role | null = null;
 
   /**
    * Idioma seleccionado actualmente
    */
   public selectedLang: string;
 
-  /**
-   * Constructor que inyecta el servicio de roles y traducción
-   */
-  constructor(
-    public RoleService: RolesService,
-    private translate: TranslateService,
-    public permissionService: PermissionService
-  ) {
+  // Inyección moderna de dependencias
+  public roleService = inject(RolesService);
+  private translate = inject(TranslateService);
+  public permissionService = inject(PermissionService);
+
+  constructor() {
     // Establece el idioma inicial
     this.selectedLang = localStorage.getItem('language') || 'en';
     this.translate.use(this.selectedLang);
@@ -133,14 +146,14 @@ export class ListRoleUserComponent {
     this.rolesList = [];
     this.serialNumberArray = [];
 
-    this.RoleService.listRoles().subscribe((resp: any) => {
+    this.roleService.listRoles().subscribe((resp: any) => {
       this.totalData = resp.roles.length;
       this.role_generals = resp.roles
         .map((role: any) => ({
           ...role,
           permissions: role.permission_pluck || []
         }))
-        .sort((a: any, b: any) => a.name.localeCompare(b.name));
+        .sort((a: Role, b: Role) => a.name.localeCompare(b.name));
 
       this.getTableDataGeneral();
     });
@@ -165,54 +178,32 @@ export class ListRoleUserComponent {
   }
 
   /**
-   * Selecciona un rol para acciones (editar/eliminar)
+   * Selecciona un rol para edición o eliminación
    */
-  selectRole(rol: any) {
+  selectRole(rol: Role): void {
     this.role_selected = rol;
   }
 
   /**
    * Elimina el rol seleccionado y actualiza la tabla
    */
-  deleteRol() {
-    this.RoleService.deleteRoles(this.role_selected.id).subscribe((resp: any) => {
-      let INDEX = this.rolesList.findIndex((item: any) => item.id == this.role_selected.id);
-      if (INDEX != -1) {
-        this.rolesList.splice(INDEX, 1);
+  deleteRol(): void {
+    if (!this.role_selected) {
+      console.error('No se ha seleccionado ningún rol');
+      return;
+    }
 
-        // Cierra el modal de forma completamente controlada
-        const modalId = `delete_role-${this.role_selected.id}`;
-        const modalElement = document.getElementById(modalId);
-        
-        if (modalElement) {
-          // Método 1: Usar Bootstrap API si está disponible
-          const bootstrapModal = (window as any).bootstrap?.Modal?.getInstance(modalElement);
-          if (bootstrapModal) {
-            bootstrapModal.hide();
-          } else {
-            // Método 2: Cierre manual seguro
-            modalElement.classList.remove('show');
-            modalElement.style.display = 'none';
-            modalElement.setAttribute('aria-hidden', 'true');
-          }
-        }
-        
-        // Limpieza del DOM sin afectar las clases de tema
-        setTimeout(() => {
-          // Elimina solo la clase específica del modal
-          document.body.classList.remove('modal-open');
-          
-          // Elimina backdrops específicos
-          const backdrops = document.querySelectorAll('.modal-backdrop');
-          backdrops.forEach(backdrop => backdrop.remove());
-          
-          // Restaura overflow del body sin afectar otras clases
-          document.body.style.removeProperty('overflow');
-          document.body.style.removeProperty('padding-right');
-        }, 150);
-
-        this.role_selected = null;
+    this.roleService.deleteRoles(this.role_selected.id).subscribe(() => {
+      // Actualizar el array general primero
+      const INDEX_GENERAL = this.role_generals.findIndex((item: Role) => item.id === this.role_selected!.id);
+      if (INDEX_GENERAL !== -1) {
+        this.role_generals.splice(INDEX_GENERAL, 1);
+        this.totalData = this.role_generals.length;
       }
+
+      // Recalcular la paginación y recargar los datos
+      this.getTableDataGeneral();
+      this.role_selected = null;
     });
   }
 

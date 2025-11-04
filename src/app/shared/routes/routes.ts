@@ -448,4 +448,9 @@ export class routes {
       return this.baseUrl + '/personal/edit_personal';
     }
 
+    //PDF Compressor
+    public static get pdfCompressor(): string {
+      return this.baseUrl + '/pdf-compressor';
+    }
+
 }

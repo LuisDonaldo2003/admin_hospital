@@ -19,6 +19,8 @@ export class AddDepartamentMComponent {
 
   // Nombre del departamento a registrar
   name:string = '';
+  // Estado del departamento (true = activo, false = inactivo)
+  state: boolean = true;
   // Indica si el formulario es inválido
   valid_form: boolean = false;
   // Indica si el formulario se guardó correctamente
@@ -50,6 +52,7 @@ export class AddDepartamentMComponent {
     }
     let data = {
       name: this.name,
+      state: this.state,
     };
     this.valid_form_success = false;
     this.text_validation = null;
@@ -58,6 +61,7 @@ export class AddDepartamentMComponent {
         this.text_validation = resp.message_text;
       }else{
         this.name = '';
+        this.state = true; // Resetear a activo
         this.valid_form_success = true;
       }
     })

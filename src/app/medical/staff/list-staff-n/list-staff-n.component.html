@@ -163,11 +163,10 @@
 </div>
 
 <!-- Modal de confirmación para eliminar usuario -->
-<!-- Solo mostrar modal si NO es un usuario protegido -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true" *ngIf="staff_selected && !isProtectedUser(staff_selected.id, staff_selected.role?.name)">
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-body text-center p-4">
+      <div class="modal-body text-center p-4" *ngIf="staff_selected">
         <!-- Imagen de advertencia -->
         <img src="assets/img/sent.png" alt="" width="50" height="46" />
         <!-- Mensaje de confirmación para eliminar usuario -->
