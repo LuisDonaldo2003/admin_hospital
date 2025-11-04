@@ -35,7 +35,7 @@
                 <i class="fa fa-user-plus"></i>
               </div>
               <h3 class="fw-bold mb-2">{{ 'STAFF.ADD_STAFF.TITLE' | translate }}</h3>
-              <p class="text-muted small">Complete los campos requeridos para agregar un nuevo usuario</p>
+              <p class="text-muted small">{{ 'STAFF.ADD_STAFF.DESCRIPTION' | translate }}</p>
             </div>
 
             <!-- Formulario para agregar staff -->
@@ -44,7 +44,7 @@
               <div class="form-section">
                 <div class="section-header mb-3">
                   <h5 class="section-title">
-                    <i class="fa fa-user me-2"></i>Información Personal
+                    <i class="fa fa-user me-2"></i>{{ 'STAFF.ADD_STAFF.PERSONAL_INFORMATION' | translate }}
                   </h5>
                 </div>
                 <div class="row g-3">
@@ -54,9 +54,9 @@
                       <i class="fa fa-id-card me-1"></i>{{ 'STAFF.ADD_STAFF.FIRST_NAME' | translate }} <span class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control" [(ngModel)]="name" name="name" required
-                           placeholder="Ingrese el nombre"
+                           placeholder="{{ 'STAFF.ADD_STAFF.NAME_PLACEHOLDER' | translate }}"
                            [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !name.trim()">El nombre es requerido</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !name.trim()">{{ 'STAFF.ADD_STAFF.NAME_REQUIRED' | translate }}</div>
                   </div>
 
                   <!-- Campo para el apellido -->
@@ -65,9 +65,9 @@
                       <i class="fa fa-id-card me-1"></i>{{ 'STAFF.ADD_STAFF.SURNAME' | translate }} <span class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control" [(ngModel)]="surname" name="surname" required
-                           placeholder="Ingrese el apellido"
+                           placeholder="{{ 'STAFF.ADD_STAFF.SURNAME_PLACEHOLDER' | translate }}"
                            [ngClass]="{ 'is-invalid': submitted && !surname.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !surname.trim()">El apellido es requerido</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !surname.trim()">{{ 'STAFF.ADD_STAFF.SURNAME_REQUIRED' | translate }}</div>
                   </div>
 
                   <!-- Campo para el correo electrónico -->
@@ -76,9 +76,9 @@
                       <i class="fa fa-envelope me-1"></i>{{ 'STAFF.ADD_STAFF.EMAIL' | translate }} <span class="text-danger">*</span>
                     </label>
                     <input type="email" class="form-control" [(ngModel)]="email" name="email" required
-                           placeholder="correo@ejemplo.com"
+                           placeholder="{{ 'STAFF.ADD_STAFF.EMAIL_PLACEHOLDER' | translate }}"
                            [ngClass]="{ 'is-invalid': submitted && !email.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !email.trim()">El correo electrónico es requerido</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !email.trim()">{{ 'STAFF.ADD_STAFF.EMAIL_REQUIRED' | translate }}</div>
                   </div>
                 </div>
               </div>
@@ -90,7 +90,7 @@
               <div class="form-section">
                 <div class="section-header mb-3">
                   <h5 class="section-title">
-                    <i class="fa fa-shield-alt me-2"></i>Rol y Seguridad
+                    <i class="fa fa-shield-alt me-2"></i>{{ 'STAFF.ADD_STAFF.ROLE_SECURITY' | translate }}
                   </h5>
                 </div>
                 <div class="row g-3">
@@ -106,7 +106,7 @@
                       <!-- Opciones de roles disponibles -->
                       <option *ngFor="let data of roles" [value]="data.id">{{ data.name }}</option>
                     </select>
-                    <div class="invalid-feedback" *ngIf="submitted && !selectedValue">Debe seleccionar un rol</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !selectedValue">{{ 'STAFF.ADD_STAFF.ROLE_REQUIRED' | translate }}</div>
                   </div>
 
                   <!-- Campo para la contraseña -->
@@ -115,9 +115,9 @@
                       <i class="fa fa-lock me-1"></i>{{ 'STAFF.ADD_STAFF.PASSWORD' | translate }} <span class="text-danger">*</span>
                     </label>
                     <input type="password" class="form-control" [(ngModel)]="password" name="password" required
-                           placeholder="Mínimo 8 caracteres"
+                           placeholder="{{ 'STAFF.ADD_STAFF.PASSWORD_PLACEHOLDER' | translate }}"
                            [ngClass]="{ 'is-invalid': submitted && !password.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !password.trim()">La contraseña es requerida</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !password.trim()">{{ 'STAFF.ADD_STAFF.PASSWORD_REQUIRED' | translate }}</div>
                   </div>
 
                   <!-- Campo para confirmar la contraseña -->
@@ -126,9 +126,9 @@
                       <i class="fa fa-lock me-1"></i>{{ 'STAFF.ADD_STAFF.CONFIRM_PASSWORD' | translate }} <span class="text-danger">*</span>
                     </label>
                     <input type="password" class="form-control" [(ngModel)]="password_confirmation" name="password_confirmation" required
-                           placeholder="Confirme la contraseña"
+                           placeholder="{{ 'STAFF.ADD_STAFF.CONFIRM_PASSWORD_PLACEHOLDER' | translate }}"
                            [ngClass]="{ 'is-invalid': submitted && !password_confirmation.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !password_confirmation.trim()">Debe confirmar la contraseña</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !password_confirmation.trim()">{{ 'STAFF.ADD_STAFF.CONFIRM_PASSWORD_REQUIRED' | translate }}</div>
                   </div>
                 </div>
               </div>
@@ -158,7 +158,7 @@
               <!-- Botones de acción -->
               <div class="form-actions d-flex justify-content-end gap-2 mt-4">
                 <button type="button" class="btn btn-cancel" routerLink="/staffs/list-staff">
-                  <i class="fa fa-times me-2"></i>Cancelar
+                  <i class="fa fa-times me-2"></i>{{ 'STAFF.ADD_STAFF.CANCEL' | translate }}
                 </button>
                 <button type="button" class="btn btn-save" (click)="save()">
                   <i class="fa fa-save me-2"></i>{{ 'STAFF.ADD_STAFF.SAVE' | translate }}

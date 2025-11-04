@@ -501,7 +501,7 @@
         border-radius: 0.5rem;
         padding: 0.75rem 1rem;
         border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
-        background-color: #2b2b2b !important;
+        background-color: var(--user-card-bg, #fff) !important;
         color: var(--user-card-text-color, #111827) !important;
         transition: all 0.2s ease;
         font-size: 0.95rem;
@@ -516,7 +516,7 @@
           box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
           outline: none;
           transform: translateY(-1px);
-          background-color: #1f1f1f !important;
+          background-color: var(--user-card-bg, #f8f9fa) !important;
         }
 
         &.is-invalid {
@@ -574,7 +574,7 @@
       .form-control,
       .form-select {
         border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
-        background-color: #2b2b2b !important;
+        background-color: #fff !important;
         color: var(--user-card-text-color, #111827) !important;
 
         &::placeholder {
@@ -585,7 +585,7 @@
           border-color: var(--user-border-color, #0B7285);
           box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
           transform: translateY(-1px);
-          background-color: #1f1f1f !important;
+          background-color: #f8f9fa !important;
         }
       }
 

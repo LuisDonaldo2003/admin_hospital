@@ -324,7 +324,23 @@
     "WARNING": "Warning",
     "SUCCESS": "Success",
     "SAVE": "Save",
-    "LIST": "Go to list"
+    "LIST": "Go to list",
+    "INFORMATION": "Complete the required fields to register a new patient",
+    "INFORMATION_PATIENT": "Patient Information",
+    "ARCHIVE_NUMBER_REQUIERE": "Archive number is required",
+    "NAME_REQUIERE": "Name is required",
+    "LAST_NAME_REQUIERE": "Father's last name is required",
+    "LAST_NAME_REQUIERE2": "Mother's last name is required",
+    "AGE_REQUIRED": "Age is required",
+    "AGE_UNIT_REQUIRED": "Select unit",
+    "GENDER_REQUIRED": "Gender is required",
+    "LOCATION_REQUIRED": "Location is required",
+    "ADMISSION_DATE_REQUIRED": "Admission date is required",
+    "CANCEL": "Cancel",
+    "LOCATION_SECTION": "Location",
+    "ADMISSION_SECTION": "Admission Information",
+    "TOUR_HELP_TITLE": "Help and Guided Tour",
+    "TOUR_HELP_DESC": "Start a guided tour that will explain step by step how to use this form."
   },
   "BACKUPS": {
     "TITLE": "Patient Backups",
@@ -371,7 +387,14 @@
     "LOCATION": "Location",
     "SELECT_LOCATION": "Select location",
     "ADMISSION_DATE": "Admission date",
-    "SAVE": "Save"
+    "SAVE": "Save",
+    "INFORMATION": "Update patient data as needed",
+    "INFORMATION_PATIENT": "Patient Information",
+    "AGE_PLACEHOLDER": "Age",
+    "AGE_UNIT": "Unit",
+    "LOCATION_SECTION": "Location",
+    "ADMISSION_SECTION": "Admission Information",
+    "CANCEL": "Cancel"
   },
 
   "EXPORT_ARCHIVE": {
@@ -459,7 +482,15 @@
     "PREVIOUS": "Previous",
     "NEXT": "Next",
     "DELETE_CONFIRMATION3": "Are you sure you want to delete the patient",
-    "CANCEL": "Cancel"
+    "CANCEL": "Cancel",
+    "FILTERS_TITLE": "Search Filters",
+    "NO_PERMISSIONS": "No permissions",
+    "FULL_NAME_LABEL": "Full Name",
+    "AGE_LABEL": "Age",
+    "GENDER_LABEL": "Gender",
+    "LOCATION_LABEL": "Location",
+    "ADMISSION_LABEL": "Admission",
+    "HELP_BUTTON": "Help and Guided Tour"
   }
 },
 
@@ -791,7 +822,14 @@
     "ATTENTION": "Attention",
     "ASIGNATION": "Permission Assignment",
     "SECCION": "Section",
-    "PERMISSIONS": "Permissions"
+    "PERMISSIONS": "Permissions",
+    "PERMISSIONS_SELECTED": "Selected permissions",
+    "CLEAR_ALL": "Clear all",
+    "SEARCH_PERMISSIONS": "Search permissions...",
+    "ALL_CATEGORIES": "All",
+    "SELECT_ALL_CATEGORY": "Select all permissions in this category",
+    "NO_PERMISSIONS_FOUND": "No permissions found matching",
+    "CANCEL": "Cancel"
   },
   "EDIT_ROLE": {
     "BREADCRUMB_ROLES": "Roles",
@@ -855,6 +893,12 @@
     "ADMISSION_DATE": "Admission Date",
     "AUTO_ASSIGNED": "Automatically assigned",
     "AUTO_ASSIGNED_HELP": "Automatically assigned when saving",
+    "CLOCK_NUMBER": "Clock Number",
+    "CLOCK_NUMBER_PLACEHOLDER": "Ex: 43 (1-4 digits)",
+    "CLOCK_NUMBER_REQUIRED": "Clock number is required",
+    "CLOCK_NUMBER_HELP": "Numbers only, 1 to 4 digits. Must be unique.",
+    "PDF_LIMITS_TITLE": "PDF file limits",
+    "PDF_LIMITS_DESC": "Each document can have a maximum size of 10MB",
     "DOCUMENTS_SECTION": "Documents (PDF) - Optional",
     "UPLOAD_AVAILABLE_DOCS": "Upload available documents",
     "FORMAT_INFO": "PDF format only • Maximum 10MB per file • Documents are optional but recommended",
@@ -873,6 +917,7 @@
     "DELETE": "Delete",
     "DOCUMENTS_REQUIRED": "Personnel type is required",
     "DOCUMENTS_UPLOADED": "Documents Uploaded",
+    "DOCUMENT_STATUS": "Document Status",
     "UPLOAD_ALL_DOCUMENTS": "You must upload the 6 required documents",
     "MISSING_DOCUMENTS": "Missing documents",
     "ALL_DOCUMENTS_UPLOADED": "All documents have been uploaded!",
@@ -939,6 +984,48 @@
     "PERSONNEL_DOCUMENTS": "Personnel Documents",
     "DOWNLOAD": "Download",
     "NO_DOCUMENTS_AVAILABLE": "No documents available for this personnel"
+  },
+  "PDF_COMPRESSOR": {
+    "BREADCRUMB_PERSONAL": "Personnel",
+    "BREADCRUMB_PDF_COMPRESSOR": "PDF Compressor",
+    "TITLE": "PDF Compressor",
+    "SUBTITLE": "Intelligently reduce the size of your documents",
+    "GO_TO_LIST": "Go to list",
+    "ERROR": "Error",
+    "SUCCESS": "Success!",
+    "DRAG_DROP_FILES": "Drag and drop your files",
+    "OR_SELECT_FROM_COMPUTER": "or select them from your computer",
+    "BROWSE_FILES": "Browse files",
+    "FORMAT_PDF": "Format: PDF",
+    "MAX_10MB": "Max: 10MB",
+    "SELECTED_FILES": "Selected files",
+    "COMPRESS_ALL": "Compress all",
+    "PROCESSING": "Processing...",
+    "CLEAR": "Clear",
+    "DELETE": "Delete",
+    "COMPRESSED_FILES": "Compressed files",
+    "DOWNLOAD_ALL": "Download all",
+    "ORIGINAL_SIZE": "Original size",
+    "COMPRESSED_SIZE": "Compressed size",
+    "TOTAL_REDUCTION": "Total reduction",
+    "ORIGINAL": "Original",
+    "COMPRESSED": "Compressed",
+    "REDUCTION": "Reduction",
+    "ATTENTION": "Attention",
+    "FILES_OVER_LIMIT_MESSAGE": "Some files still exceed 500KB. Consider reducing content or scanning at lower resolution.",
+    "HOW_IT_WORKS": "How does it work?",
+    "HOW_STEP1": "Renders PDF pages as optimized JPEG images",
+    "HOW_STEP2": "Removes unnecessary document metadata",
+    "HOW_STEP3": "Automatically adjusts quality according to target size",
+    "HOW_STEP4": "Effective process that may take a few seconds",
+    "RECOMMENDATIONS": "Recommendations",
+    "REC1": "Scan in",
+    "BLACK_WHITE": "Black and White",
+    "FOR_COMPRESSION": "for better compression",
+    "REC2": "Use resolution of",
+    "FOR_TEXT_DOCS": "for text documents",
+    "REC3": "Avoid unnecessary high-resolution images",
+    "REC4": "Re-scan with lower quality if compression is not sufficient"
   }
 },
 
@@ -947,15 +1034,30 @@
     "BREADCRUMB_USERS": "Users",
     "BREADCRUMB_ADD_STAFF": "Add Staff",
     "TITLE": "Add Staff",
+    "DESCRIPTION": "Complete the form to add a new staff member to the system",
+    "PERSONAL_INFORMATION": "Personal Information",
+    "ROLE_SECURITY": "Role and Security",
     "FIRST_NAME": "First Name",
+    "NAME_PLACEHOLDER": "Enter the first name",
+    "NAME_REQUIRED": "First name is required",
     "SURNAME": "Surname",
+    "SURNAME_PLACEHOLDER": "Enter the surname",
+    "SURNAME_REQUIRED": "Surname is required",
     "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "Enter the email address",
+    "EMAIL_REQUIRED": "Email is required",
     "ROLE_SELECT": "Role",
     "SELECT_ROLE_PLACEHOLDER": "Select a role",
+    "ROLE_REQUIRED": "You must select a role",
     "PASSWORD": "Password",
-    "CONFIRM_PASSWORD": "Confirm password",
+    "PASSWORD_PLACEHOLDER": "Minimum 8 characters",
+    "PASSWORD_REQUIRED": "Password is required",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "Confirm the password",
+    "CONFIRM_PASSWORD_REQUIRED": "You must confirm the password",
     "WARNING": "Warning",
     "SUCCESS": "Success",
+    "CANCEL": "Cancel",
     "SAVE": "Save"
   },
   "EDIT_STAFF": {
@@ -991,7 +1093,7 @@
     "TO": "to",
     "RECORDS": "records",
     "PREVIOUS": "Previous",
-    "NEXT": "Next"
+    " NEXT": "Next"
   },
 
   "CREDITS": {
@@ -1023,6 +1125,6 @@
     "COPYRIGHT": {
       "MESSAGE": "All rights reserved. This system has been specifically developed to improve hospital management."
     }
-  }
+    }
 }
 }

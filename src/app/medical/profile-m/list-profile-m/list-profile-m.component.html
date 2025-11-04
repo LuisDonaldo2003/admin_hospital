@@ -31,7 +31,7 @@
                   </span>
                 </div>
                 <!-- Botón para registrar nuevo perfil -->
-                <a routerLink="/profile-m/register" class="btn btn-options d-flex align-items-center gap-1">
+                <a routerLink="/profile-m/add_profile-m" class="btn btn-options d-flex align-items-center gap-1">
                   <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'PROFILE_M.LIST_PROFILE.NEW' | translate }}</span>
                 </a>
                 <!-- Botón para refrescar la tabla -->
@@ -61,7 +61,7 @@
                         {{ data.state === 1 ? ('PROFILE_M.LIST_PROFILE.ACTIVE' | translate) : ('PROFILE_M.LIST_PROFILE.INACTIVE' | translate) }}
                       </span>
                     </td>
-                    <td>{{ data.created_at }}</td>
+                    <td>{{ formatDate(data.created_at) }}</td>
                     <td class="text-center">
                       <!-- Botones de acción con permisos -->
                       <ng-container *ngIf="canEditProfile() || canDeleteProfile()">
@@ -88,7 +88,7 @@
                       </ng-container>
                       <!-- Si no tiene ningún permiso -->
                       <span class="badge badge-no-permission" *ngIf="!canEditProfile() && !canDeleteProfile()">
-                        <i class="fa fa-ban me-1"></i>Sin permisos
+                        <i class="fa fa-ban me-1"></i>{{ 'COMMON.NO_PERMISSIONS' | translate }}
                       </span>
                     </td>
                   </tr>

@@ -24,7 +24,7 @@
                 <i class="fa fa-user-injured"></i>
               </div>
               <h3 class="fw-bold mb-2">{{ 'ARCHIVE.ADD_PATIENT.TITLE' | translate }}</h3>
-              <p class="text-muted small">Complete los campos requeridos para registrar un nuevo paciente</p>
+              <p class="text-muted small">{{ 'ARCHIVE.ADD_PATIENT.INFORMATION' | translate }}</p>
             </div>
 
             <!-- Formulario para agregar archivo/paciente -->
@@ -33,7 +33,7 @@
               <div class="form-section">
                 <div class="section-header mb-3">
                   <h5 class="section-title">
-                    <i class="fa fa-user me-2"></i>Información del Paciente
+                    <i class="fa fa-user me-2"></i>{{ 'ARCHIVE.ADD_PATIENT.INFORMATION_PATIENT' | translate }}
                   </h5>
                 </div>
                 <div class="row g-3">
@@ -51,7 +51,7 @@
                       placeholder="{{ 'ARCHIVE.ADD_PATIENT.EXPEDITION' | translate }}"
                       required 
                       [ngClass]="{ 'is-invalid': submitted && !archive_number.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !archive_number.trim()">El número de archivo es requerido</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !archive_number.trim()">{{ 'ARCHIVE.ADD_PATIENT.ARCHIVE_NUMBER_REQUIERE' | translate }}</div>
                   </div>
 
                   <!-- Campo: Nombre -->
@@ -68,7 +68,7 @@
                       placeholder="{{ 'ARCHIVE.ADD_PATIENT.LETTERS' | translate }}"
                       required 
                       [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !name.trim()">El nombre es requerido</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !name.trim()">{{ 'ARCHIVE.ADD_PATIENT.NAME_REQUIERE' | translate }}</div>
                   </div>
 
                   <!-- Campo: Apellido paterno -->
@@ -85,7 +85,7 @@
                       placeholder="{{ 'ARCHIVE.ADD_PATIENT.LETTERS' | translate }}"
                       required 
                       [ngClass]="{ 'is-invalid': submitted && !last_name_father.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !last_name_father.trim()">El apellido paterno es requerido</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !last_name_father.trim()">{{ 'ARCHIVE.ADD_PATIENT.LAST_NAME_REQUIERE' | translate }}</div>
                   </div>
 
                   <!-- Campo: Apellido materno -->
@@ -102,7 +102,7 @@
                       placeholder="{{ 'ARCHIVE.ADD_PATIENT.LETTERS' | translate }}"
                       required 
                       [ngClass]="{ 'is-invalid': submitted && !last_name_mother.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !last_name_mother.trim()">El apellido materno es requerido</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !last_name_mother.trim()">{{ 'ARCHIVE.ADD_PATIENT.LAST_NAME_REQUIERE2' | translate }}</div>
                   </div>
 
                   <!-- Campo: Edad -->
@@ -121,7 +121,7 @@
                       placeholder="{{ 'ARCHIVE.ADD_PATIENT.NUMBERS' | translate }}"
                       required 
                       [ngClass]="{ 'is-invalid': submitted && !age }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !age">La edad es requerida</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !age">{{ 'ARCHIVE.ADD_PATIENT.AGE_REQUIRED' | translate }}</div>
                   </div>
 
                   <!-- Campo: Unidad de edad -->
@@ -138,7 +138,7 @@
                       <option value="meses">{{ 'ARCHIVE.ADD_PATIENT.MONTHS' | translate }}</option>
                       <option value="días">{{ 'ARCHIVE.ADD_PATIENT.DAYS' | translate }}</option>
                     </select>
-                    <div class="invalid-feedback" *ngIf="submitted && !age_unit">Seleccione la unidad</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !age_unit">{{ 'ARCHIVE.ADD_PATIENT.AGE_UNIT_REQUIRED' | translate }}</div>
                   </div>
 
                   <!-- Campo: Género -->
@@ -154,7 +154,7 @@
                       <option value="">{{ 'ARCHIVE.ADD_PATIENT.SELECT_GENDER' | translate }}</option>
                       <option *ngFor="let g of genders" [value]="g.id">{{ g.name }}</option>
                     </select>
-                    <div class="invalid-feedback" *ngIf="submitted && !gender_id">El género es requerido</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !gender_id">{{ 'ARCHIVE.ADD_PATIENT.GENDER_REQUIRED' | translate }}</div>
                   </div>
                 </div>
               </div>
@@ -166,7 +166,7 @@
               <div class="form-section">
                 <div class="section-header mb-3">
                   <h5 class="section-title">
-                    <i class="fa fa-map-marker-alt me-2"></i>Ubicación
+                    <i class="fa fa-map-marker-alt me-2"></i>{{ 'ARCHIVE.ADD_PATIENT.LOCATION_SECTION' | translate }}
                   </h5>
                 </div>
                 <div class="row g-3">
@@ -185,7 +185,7 @@
                       autocomplete="off"
                       required 
                       [ngClass]="{ 'is-invalid': submitted && !location_text.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !location_text.trim()">La localidad es requerida</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !location_text.trim()">{{ 'ARCHIVE.ADD_PATIENT.LOCATION_REQUIRED' | translate }}</div>
                   </div>
 
                   <!-- Campo: Municipio -->
@@ -227,7 +227,7 @@
               <div class="form-section">
                 <div class="section-header mb-3">
                   <h5 class="section-title">
-                    <i class="fa fa-calendar-check me-2"></i>Información de Admisión
+                    <i class="fa fa-calendar-check me-2"></i>{{ 'ARCHIVE.ADD_PATIENT.ADMISSION_SECTION' | translate }}
                   </h5>
                 </div>
                 <div class="row g-3">
@@ -238,7 +238,7 @@
                     </label>
                     <input type="date" class="form-control" [(ngModel)]="admission_date" name="admission_date"
                            required [ngClass]="{ 'is-invalid': submitted && !admission_date }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !admission_date">La fecha de admisión es requerida</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !admission_date">{{ 'ARCHIVE.ADD_PATIENT.ADMISSION_DATE_REQUIRED' | translate }}</div>
                   </div>
                 </div>
               </div>
@@ -268,7 +268,7 @@
               <!-- Botones de acción -->
               <div class="form-actions d-flex justify-content-end gap-2 mt-4">
                 <button type="button" class="btn btn-cancel" (click)="goToList()">
-                  <i class="fa fa-times me-2"></i>Cancelar
+                  <i class="fa fa-times me-2"></i>{{ 'ARCHIVE.ADD_PATIENT.CANCEL' | translate }}
                 </button>
                 <button type="button" class="btn btn-save" (click)="save()">
                   <i class="fa fa-save me-2"></i>{{ 'ARCHIVE.ADD_PATIENT.SAVE' | translate }}
@@ -284,7 +284,7 @@
   <!-- Botón flotante de ayuda para iniciar el tour del formulario -->
   <button class="tour-help-button" 
           (click)="startArchiveFormTour()" 
-          title="Ayuda y Tour Guiado"
+          title="{{ 'ARCHIVE.ADD_PATIENT.TOUR_HELP_TITLE' | translate }}"
           type="button">
     <i class="fa fa-question"></i>
   </button>

@@ -35,7 +35,7 @@
                 <div class="input-group search-input">
                   <input type="text" 
                          class="form-control" 
-                         placeholder="Buscar por nombre, RFC o número de checador..."
+                         placeholder="{{ 'PERSONAL.LIST_PERSONAL.SEARCH_PLACEHOLDER' | translate }}"
                          [(ngModel)]="searchDataValue" 
                          (ngModelChange)="searchData(searchDataValue)">
                   <span class="input-group-text">

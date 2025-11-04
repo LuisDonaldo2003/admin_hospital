@@ -324,7 +324,21 @@
     "WARNING": "Advertencia",
     "SUCCESS": "Éxito",
     "SAVE": "Guardar",
-    "LIST": "Ir al listado"
+    "LIST": "Ir al listado",
+    "INFORMATION": "Complete los campos requeridos para registrar un nuevo paciente",
+    "INFORMATION_PATIENT":"Información del Paciente",
+    "ARCHIVE_NUMBER_REQUIERE":"El número de archivo es requerido",
+    "NAME_REQUIERE":"El nombre es requerido",
+    "LAST_NAME_REQUIERE":"El apellido paterno es requerido",
+    "LAST_NAME_REQUIERE2":"El apellido materno es requerido",
+    "AGE_REQUIRED":"La edad es requerida",
+    "AGE_UNIT_REQUIRED":"Seleccione la unidad",
+    "GENDER_REQUIRED":"El género es requerido",
+    "LOCATION_REQUIRED":"La localidad es requerida",
+    "ADMISSION_DATE_REQUIRED":"La fecha de admisión es requerida",
+    "CANCEL":"Cancelar",
+    "LOCATION_SECTION":"Ubicación",
+    "ADMISSION_SECTION":"Información de Admisión"
   },
   "BACKUPS": {
     "TITLE": "Respaldo de Pacientes",
@@ -351,6 +365,8 @@
     "PATIENT": "Pacientes",
     "BREADCRUMB_EDIT": "Editar Paciente",
     "TITLE": "Editar Paciente",
+    "INFORMATION": "Actualice los datos del paciente según sea necesario",
+    "INFORMATION_PATIENT": "Información del Paciente",
     "WARNING": "Advertencia",
     "SUCCESS": "Éxito",
     "ARCHIVE_NUMBER": "Número de expediente",
@@ -358,6 +374,8 @@
     "FATHER_LAST_NAME": "Apellido paterno",
     "MOTHER_LAST_NAME": "Apellido materno",
     "AGE": "Edad",
+    "AGE_PLACEHOLDER": "Edad",
+    "AGE_UNIT": "Unidad",
     "DAYS": "Días",
     "MONTHS": "Meses",
     "YEARS": "Años",
@@ -370,7 +388,10 @@
     "SELECT_MUNICIPALITY": "Selecciona municipio",
     "LOCATION": "Ubicación",
     "SELECT_LOCATION": "Selecciona ubicación",
+    "LOCATION_SECTION": "Ubicación",
+    "ADMISSION_SECTION": "Información de Admisión",
     "ADMISSION_DATE": "Fecha de ingreso",
+    "CANCEL": "Cancelar",
     "SAVE": "Guardar"
   },
 
@@ -459,7 +480,15 @@
     "PREVIOUS": "Anterior",
     "NEXT": "Siguiente",
     "DELETE_CONFIRMATION3": "¿Seguro que deseas eliminar el paciente",
-    "CANCEL": "Cancelar"
+    "CANCEL": "Cancelar",
+    "FILTERS_TITLE": "Filtros de Búsqueda",
+    "NO_PERMISSIONS": "Sin permisos",
+    "FULL_NAME_LABEL": "Nombre Completo",
+    "AGE_LABEL": "Edad",
+    "GENDER_LABEL": "Género",
+    "LOCATION_LABEL": "Ubicación",
+    "ADMISSION_LABEL": "Ingreso",
+    "HELP_BUTTON": "Ayuda y Tour Guiado"
   }
 },
 
@@ -516,7 +545,9 @@
     "SAVE_TITLE": "Guardar Paciente",
     "SAVE_DESC": "Una vez completados todos los campos obligatorios, haz clic aquí para guardar la información del paciente.",
     "GO_TO_LIST_TITLE": "Ir al Listado",
-    "GO_TO_LIST_DESC": "Haz clic aquí para regresar al listado principal de pacientes sin guardar cambios."
+    "GO_TO_LIST_DESC": "Haz clic aquí para regresar al listado principal de pacientes sin guardar cambios.",
+    "TOUR_HELP_TITLE": "Ayuda y Tour Guiado",
+    "TOUR_HELP_DESC": "Inicia un tour guiado que te explicará paso a paso cómo usar este formulario."
   },
   "EDIT_ARCHIVE": {
     "FORM_TITLE": "Formulario de Edición",
@@ -653,7 +684,10 @@
     "SUCCESS": "Éxito",
     "SUCCESS_MESSAGE": "Departamento creado correctamente.",
     "ATTENTION": "Atención",
-    "SAVE": "Guardar"
+    "SAVE": "Guardar",
+    "STATE": "Estado",
+    "ACTIVE": "Activo",
+    "INACTIVE": "Inactivo"
   },
 
   "EDIT_DEPARTAMENT": {
@@ -791,7 +825,14 @@
     "ATTENTION": "Atención",
     "ASIGNATION": "Asignación de Permisos",
     "SECCION": "Sección",
-    "PERMISSIONS": "Permisos"
+    "PERMISSIONS": "Permisos",
+    "PERMISSIONS_SELECTED": "Permisos seleccionados",
+    "CLEAR_ALL": "Limpiar todo",
+    "SEARCH_PERMISSIONS": "Buscar permisos...",
+    "ALL_CATEGORIES": "Todos",
+    "SELECT_ALL_CATEGORY": "Seleccionar todos los permisos de esta categoría",
+    "NO_PERMISSIONS_FOUND": "No se encontraron permisos que coincidan con",
+    "CANCEL": "Cancelar"
   },
   "EDIT_ROLE": {
     "BREADCRUMB_ROLES": "Roles",
@@ -873,6 +914,7 @@
     "DELETE": "Eliminar",
     "DOCUMENTS_REQUIRED": "El tipo de personal es requerido",
     "DOCUMENTS_UPLOADED": "Documentos Subidos",
+    "DOCUMENT_STATUS": "Estado de Documentos",
     "UPLOAD_ALL_DOCUMENTS": "Debe subir los 6 documentos requeridos",
     "MISSING_DOCUMENTS": "Documentos faltantes",
     "ALL_DOCUMENTS_UPLOADED": "¡Todos los documentos han sido subidos!",
@@ -882,7 +924,20 @@
     "VIEW_LIST": "Ver Lista",
     "SUCCESS": "Éxito",
     "WARNING": "Advertencia",
-    "SAVE": "Guardar"
+    "SAVE": "Guardar",
+    "DESCRIPTION": "Complete la información para registrar un nuevo miembro del personal",
+    "GENERAL_INFORMATION": "Información General",
+    "RFC_PLACEHOLDER": "Ej: PEPE900101AB2",
+    "RFC_REQUIRED": "El RFC es requerido",
+    "RFC_HELP": "Solo letras y números, máximo 13 caracteres. Ej: PEPE900101AB2",
+    "CLOCK_NUMBER": "Número de Checador",
+    "CLOCK_NUMBER_PLACEHOLDER": "Ej: 43 (1-4 dígitos)",
+    "CLOCK_NUMBER_REQUIRED": "El número de checador es requerido",
+    "CLOCK_NUMBER_HELP": "Solo números, de 1 a 4 dígitos. Debe ser único.",
+    "PDF_LIMITS_TITLE": "Límites de archivos PDF",
+    "MAX_SIZE_PER_FILE": "Tamaño máximo por archivo",
+    "ONLY_PDF_ALLOWED": "Solo archivos PDF son permitidos",
+    "CURRENT_TOTAL_SIZE": "Total acumulado actual"
   },
   "EDIT_PERSONAL": {
     "BREADCRUMB_PERSONAL": "Personal",
@@ -893,7 +948,7 @@
     "BREADCRUMB_PERSONAL": "Personal",
     "BREADCRUMB_LIST": "Lista de Personal",
     "TITLE": "Gestión del Personal",
-    "SEARCH_PLACEHOLDER": "Buscar por nombre o apellidos...",
+    "SEARCH_PLACEHOLDER": "Buscar por nombre, RFC o número de checador...",
     "NEW_PERSONAL": "Nuevo Personal",
     "FILTER_TYPE": "Filtrar por Tipo",
     "ALL_TYPES": "Todos los tipos",
@@ -939,6 +994,46 @@
     "PERSONNEL_DOCUMENTS": "Documentos del Personal",
     "DOWNLOAD": "Descargar",
     "NO_DOCUMENTS_AVAILABLE": "No hay documentos disponibles para este personal"
+  },
+  "PDF_COMPRESSOR": {
+    "TITLE": "Compresor de PDF",
+    "SUBTITLE": "Reduce el tamaño de tus documentos de forma inteligente",
+    "GO_TO_LIST": "Ir al listado",
+    "ERROR": "Error",
+    "SUCCESS": "¡Éxito!",
+    "DRAG_DROP_FILES": "Arrastra y suelta tus archivos",
+    "OR_SELECT_FROM_COMPUTER": "o selecciónalos desde tu computadora",
+    "BROWSE_FILES": "Explorar archivos",
+    "FORMAT_PDF": "Formato: PDF",
+    "MAX_10MB": "Máx: 10MB",
+    "SELECTED_FILES": "Archivos seleccionados",
+    "COMPRESS_ALL": "Comprimir todos",
+    "PROCESSING": "Procesando...",
+    "CLEAR": "Limpiar",
+    "DELETE": "Eliminar",
+    "COMPRESSED_FILES": "Archivos comprimidos",
+    "DOWNLOAD_ALL": "Descargar todos",
+    "ORIGINAL_SIZE": "Tamaño original",
+    "COMPRESSED_SIZE": "Tamaño comprimido",
+    "TOTAL_REDUCTION": "Reducción total",
+    "ORIGINAL": "Original",
+    "COMPRESSED": "Comprimido",
+    "REDUCTION": "Reducción",
+    "ATTENTION": "Atención",
+    "FILES_OVER_LIMIT_MESSAGE": "Algunos archivos aún superan los 500KB. Considera reducir el contenido o escanear con menor resolución.",
+    "HOW_IT_WORKS": "¿Cómo funciona?",
+    "HOW_STEP1": "Renderiza las páginas del PDF como imágenes JPEG optimizadas",
+    "HOW_STEP2": "Elimina metadata innecesaria del documento",
+    "HOW_STEP3": "Ajusta automáticamente la calidad según el tamaño objetivo",
+    "HOW_STEP4": "Proceso efectivo que puede tomar algunos segundos",
+    "RECOMMENDATIONS": "Recomendaciones",
+    "REC1": "Escanea en",
+    "BLACK_WHITE": "Blanco y Negro",
+    "FOR_COMPRESSION": "para mejor compresión",
+    "REC2": "Usa resolución de",
+    "FOR_TEXT_DOCS": "para documentos de texto",
+    "REC3": "Evita imágenes de alta resolución innecesarias",
+    "REC4": "Re-escanea con menor calidad si la compresión no es suficiente"
   }
 },
 
@@ -947,15 +1042,30 @@
     "BREADCRUMB_USERS": "Usuarios",
     "BREADCRUMB_ADD_STAFF": "Agregar Personal",
     "TITLE": "Agregar Personal",
+    "DESCRIPTION": "Complete el formulario para agregar un nuevo miembro del personal al sistema",
+    "PERSONAL_INFORMATION": "Información Personal",
+    "ROLE_SECURITY": "Rol y Seguridad",
     "FIRST_NAME": "Nombre",
+    "NAME_PLACEHOLDER": "Ingrese el nombre",
+    "NAME_REQUIRED": "El nombre es requerido",
     "SURNAME": "Apellido",
+    "SURNAME_PLACEHOLDER": "Ingrese el apellido",
+    "SURNAME_REQUIRED": "El apellido es requerido",
     "EMAIL": "Correo electrónico",
+    "EMAIL_PLACEHOLDER": "Ingrese el correo electrónico",
+    "EMAIL_REQUIRED": "El correo electrónico es requerido",
     "ROLE_SELECT": "Rol",
     "SELECT_ROLE_PLACEHOLDER": "Seleccione un rol",
+    "ROLE_REQUIRED": "Debe seleccionar un rol",
     "PASSWORD": "Contraseña",
-    "CONFIRM_PASSWORD": "Confirmar contraseña",
+    "PASSWORD_PLACEHOLDER": "Mínimo 8 caracteres",
+    "PASSWORD_REQUIRED": "La contraseña es requerida",
+    "CONFIRM_PASSWORD": "Confirmar Contraseña",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "Confirme la contraseña",
+    "CONFIRM_PASSWORD_REQUIRED": "Debe confirmar la contraseña",
     "WARNING": "Advertencia",
     "SUCCESS": "Éxito",
+    "CANCEL": "Cancelar",
     "SAVE": "Guardar"
   },
   "EDIT_STAFF": {
@@ -1023,6 +1133,6 @@
     "COPYRIGHT": {
       "MESSAGE": "Todos los derechos reservados. Este sistema ha sido desarrollado específicamente para mejorar la gestión hospitalaria."
     }
-  }
+}
 }
 }

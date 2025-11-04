@@ -36,7 +36,7 @@
               <h3 class="fw-bold mb-2">
                 {{ 'ARCHIVE.EDIT_PATIENT.TITLE' | translate }}
               </h3>
-              <p class="text-muted small">Actualice los datos del paciente según sea necesario</p>
+              <p class="text-muted small">{{ 'ARCHIVE.EDIT_PATIENT.INFORMATION' | translate }}</p>
             </div>
 
             <!-- Alertas de validación y éxito -->
@@ -66,7 +66,7 @@
               <div class="form-section">
                 <div class="section-header mb-3">
                   <h5 class="section-title">
-                    <i class="fa fa-user me-2"></i>Información del Paciente
+                    <i class="fa fa-user me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.INFORMATION_PATIENT' | translate }}
                   </h5>
                 </div>
                 <div class="row g-3">
@@ -98,12 +98,12 @@
                 <div class="col-md-4">
                   <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.AGE' | translate }}</label>
                   <input type="number" [(ngModel)]="age" name="age" class="form-control" 
-                         min="0" max="120" placeholder="Edad" />
+                         min="0" max="120" placeholder="{{ 'ARCHIVE.EDIT_PATIENT.AGE_PLACEHOLDER' | translate }}" />
                 </div>
 
                 <!-- Unidad de edad -->
                 <div class="col-md-2">
-                  <label class="form-label">Unidad</label>
+                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.AGE_UNIT' | translate }}</label>
                   <select [(ngModel)]="age_unit" name="age_unit" class="form-control">
                     <option value="años">{{ 'ARCHIVE.COMMON.YEARS' | translate }}</option>
                     <option value="meses">{{ 'ARCHIVE.COMMON.MONTHS' | translate }}</option>
@@ -129,7 +129,7 @@
             <div class="form-section">
               <div class="section-header mb-3">
                 <h5 class="section-title">
-                  <i class="fa fa-map-marker-alt me-2"></i>Ubicación
+                  <i class="fa fa-map-marker-alt me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.LOCATION_SECTION' | translate }}
                 </h5>
               </div>
               <div class="row g-3">
@@ -163,7 +163,7 @@
             <div class="form-section">
               <div class="section-header mb-3">
                 <h5 class="section-title">
-                  <i class="fa fa-calendar-check me-2"></i>Información de Admisión
+                  <i class="fa fa-calendar-check me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.ADMISSION_SECTION' | translate }}
                 </h5>
               </div>
               <div class="row g-3">
@@ -179,7 +179,7 @@
             <!-- Botones de acción -->
             <div class="form-actions d-flex justify-content-end gap-2 mt-4">
               <button type="button" class="btn btn-cancel" (click)="goToList()">
-                <i class="fa fa-times me-2"></i>Cancelar
+                <i class="fa fa-times me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.CANCEL' | translate }}
               </button>
               <button type="submit" class="btn btn-primary px-4">
                 <i class="fa fa-save me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.SAVE' | translate }}

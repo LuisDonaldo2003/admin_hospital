@@ -10,16 +10,16 @@
             <span class="pulse-ring"></span>
           </div>
           <div class="header-text">
-            <h1 class="main-title">Compresor de PDF</h1>
-            <p class="subtitle">Reduce el tamaño de tus documentos de forma inteligente</p>
+            <h1 class="main-title">{{ 'PERSONAL.PDF_COMPRESSOR.TITLE' | translate }}</h1>
+            <p class="subtitle">{{ 'PERSONAL.PDF_COMPRESSOR.SUBTITLE' | translate }}</p>
           </div>
         </div>
         <button 
           type="button" 
           class="btn-back"
-          [routerLink]="['/medical/personal']">
+          [routerLink]="['/personal/list_personal']">
           <i class="fa fa-arrow-left"></i>
-          <span>Regresar</span>
+          <span>{{ 'PERSONAL.PDF_COMPRESSOR.GO_TO_LIST' | translate }}</span>
         </button>
       </div>
     </div>
@@ -30,7 +30,7 @@
         <i class="fa fa-exclamation-circle"></i>
       </div>
       <div class="alert-content">
-        <strong>Error:</strong> {{ text_validation }}
+        <strong>{{ 'PERSONAL.PDF_COMPRESSOR.ERROR' | translate }}:</strong> {{ text_validation }}
       </div>
       <button type="button" class="alert-close" (click)="text_validation = ''">
         <i class="fa fa-times"></i>
@@ -42,7 +42,7 @@
         <i class="fa fa-check-circle"></i>
       </div>
       <div class="alert-content">
-        <strong>¡Éxito!</strong> {{ text_success }}
+        <strong>{{ 'PERSONAL.PDF_COMPRESSOR.SUCCESS' | translate }}</strong> {{ text_success }}
       </div>
       <button type="button" class="alert-close" (click)="text_success = ''">
         <i class="fa fa-times"></i>
@@ -67,8 +67,8 @@
             </div>
           </div>
           
-          <h3 class="dropzone-title">Arrastra y suelta tus archivos</h3>
-          <p class="dropzone-text">o selecciónalos desde tu computadora</p>
+          <h3 class="dropzone-title">{{ 'PERSONAL.PDF_COMPRESSOR.DRAG_DROP_FILES' | translate }}</h3>
+          <p class="dropzone-text">{{ 'PERSONAL.PDF_COMPRESSOR.OR_SELECT_FROM_COMPUTER' | translate }}</p>
           
           <input 
             type="file" 
@@ -80,12 +80,12 @@
           
           <label for="pdfFiles" class="btn-select">
             <i class="fa fa-folder-open me-2"></i>
-            Explorar archivos
+            {{ 'PERSONAL.PDF_COMPRESSOR.BROWSE_FILES' | translate }}
           </label>
           
           <div class="dropzone-info">
-            <span><i class="fa fa-info-circle"></i> Formato: PDF</span>
-            <span><i class="fa fa-hdd-o"></i> Máx: 10MB</span>
+            <span><i class="fa fa-info-circle"></i> {{ 'PERSONAL.PDF_COMPRESSOR.FORMAT_PDF' | translate }}</span>
+            <span><i class="fa fa-hdd-o"></i> {{ 'PERSONAL.PDF_COMPRESSOR.MAX_10MB' | translate }}</span>
           </div>
         </div>
       </div>
@@ -95,7 +95,7 @@
         <div class="section-title">
           <div class="title-left">
             <i class="fa fa-files-o"></i>
-            <h3>Archivos seleccionados</h3>
+            <h3>{{ 'PERSONAL.PDF_COMPRESSOR.SELECTED_FILES' | translate }}</h3>
             <span class="count-badge">{{ selectedFiles.length }}</span>
           </div>
           <div class="title-actions">
@@ -105,10 +105,10 @@
               [disabled]="isProcessing"
               (click)="compressAll()">
               <i class="fa fa-compress"></i>
-              <span *ngIf="!isProcessing">Comprimir todos</span>
+              <span *ngIf="!isProcessing">{{ 'PERSONAL.PDF_COMPRESSOR.COMPRESS_ALL' | translate }}</span>
               <span *ngIf="isProcessing">
                 <span class="spinner"></span>
-                Procesando...
+                {{ 'PERSONAL.PDF_COMPRESSOR.PROCESSING' | translate }}
               </span>
             </button>
             <button 
@@ -117,7 +117,7 @@
               [disabled]="isProcessing"
               (click)="clearAll()">
               <i class="fa fa-trash-o"></i>
-              <span>Limpiar</span>
+              <span>{{ 'PERSONAL.PDF_COMPRESSOR.CLEAR' | translate }}</span>
             </button>
           </div>
         </div>
@@ -144,7 +144,7 @@
               class="btn-remove"
               [disabled]="isProcessing"
               (click)="removeFile(i)"
-              title="Eliminar">
+              title="{{ 'PERSONAL.PDF_COMPRESSOR.DELETE' | translate }}">
               <i class="fa fa-times"></i>
             </button>
           </div>
@@ -156,7 +156,7 @@
         <div class="section-title">
           <div class="title-left">
             <i class="fa fa-check-circle"></i>
-            <h3>Archivos comprimidos</h3>
+            <h3>{{ 'PERSONAL.PDF_COMPRESSOR.COMPRESSED_FILES' | translate }}</h3>
             <span class="count-badge success">{{ compressedFiles.length }}</span>
           </div>
           <button 
@@ -164,7 +164,7 @@
             class="btn-action btn-download-all"
             (click)="downloadAll()">
             <i class="fa fa-download"></i>
-            <span>Descargar todos</span>
+            <span>{{ 'PERSONAL.PDF_COMPRESSOR.DOWNLOAD_ALL' | translate }}</span>
           </button>
         </div>
 
@@ -175,7 +175,7 @@
               <i class="fa fa-file-o"></i>
             </div>
             <div class="stat-info">
-              <span class="stat-label">Tamaño original</span>
+              <span class="stat-label">{{ 'PERSONAL.PDF_COMPRESSOR.ORIGINAL_SIZE' | translate }}</span>
               <h3 class="stat-value">{{ formatFileSize(totalOriginalSize) }}</h3>
             </div>
           </div>
@@ -185,7 +185,7 @@
               <i class="fa fa-compress"></i>
             </div>
             <div class="stat-info">
-              <span class="stat-label">Tamaño comprimido</span>
+              <span class="stat-label">{{ 'PERSONAL.PDF_COMPRESSOR.COMPRESSED_SIZE' | translate }}</span>
               <h3 class="stat-value">{{ formatFileSize(totalCompressedSize) }}</h3>
             </div>
           </div>
@@ -195,7 +195,7 @@
               <i class="fa fa-line-chart"></i>
             </div>
             <div class="stat-info">
-              <span class="stat-label">Reducción total</span>
+              <span class="stat-label">{{ 'PERSONAL.PDF_COMPRESSOR.TOTAL_REDUCTION' | translate }}</span>
               <h3 class="stat-value">{{ getReductionPercent(totalOriginalSize, totalCompressedSize) }}%</h3>
             </div>
           </div>
@@ -219,17 +219,17 @@
             
             <div class="compressed-data">
               <div class="data-col">
-                <span class="data-label">Original</span>
+                <span class="data-label">{{ 'PERSONAL.PDF_COMPRESSOR.ORIGINAL' | translate }}</span>
                 <span class="data-value">{{ formatFileSize(file.originalSize) }}</span>
               </div>
               
               <div class="data-col">
-                <span class="data-label">Comprimido</span>
+                <span class="data-label">{{ 'PERSONAL.PDF_COMPRESSOR.COMPRESSED' | translate }}</span>
                 <span class="data-value compressed">{{ formatFileSize(file.compressedSize) }}</span>
               </div>
               
               <div class="data-col">
-                <span class="data-label">Reducción</span>
+                <span class="data-label">{{ 'PERSONAL.PDF_COMPRESSOR.REDUCTION' | translate }}</span>
                 <span class="data-value reduction">-{{ getReductionPercent(file.originalSize, file.compressedSize) }}%</span>
               </div>
               
@@ -253,8 +253,7 @@
             <i class="fa fa-exclamation-triangle"></i>
           </div>
           <div class="alert-content">
-            <strong>Atención:</strong> Algunos archivos aún superan los 500KB. 
-            Considera reducir el contenido o escanear con menor resolución.
+            <strong>{{ 'PERSONAL.PDF_COMPRESSOR.ATTENTION' | translate }}:</strong> {{ 'PERSONAL.PDF_COMPRESSOR.FILES_OVER_LIMIT_MESSAGE' | translate }}
           </div>
         </div>
       </div>
@@ -264,26 +263,26 @@
         <div class="info-card">
           <div class="info-header">
             <i class="fa fa-lightbulb-o"></i>
-            <h4>¿Cómo funciona?</h4>
+            <h4>{{ 'PERSONAL.PDF_COMPRESSOR.HOW_IT_WORKS' | translate }}</h4>
           </div>
           <ul class="info-list">
-            <li>Renderiza las páginas del PDF como imágenes JPEG optimizadas</li>
-            <li>Elimina metadata innecesaria del documento</li>
-            <li>Ajusta automáticamente la calidad según el tamaño objetivo</li>
-            <li>Proceso efectivo que puede tomar algunos segundos</li>
+            <li>{{ 'PERSONAL.PDF_COMPRESSOR.HOW_STEP1' | translate }}</li>
+            <li>{{ 'PERSONAL.PDF_COMPRESSOR.HOW_STEP2' | translate }}</li>
+            <li>{{ 'PERSONAL.PDF_COMPRESSOR.HOW_STEP3' | translate }}</li>
+            <li>{{ 'PERSONAL.PDF_COMPRESSOR.HOW_STEP4' | translate }}</li>
           </ul>
         </div>
 
         <div class="info-card">
           <div class="info-header">
             <i class="fa fa-star"></i>
-            <h4>Recomendaciones</h4>
+            <h4>{{ 'PERSONAL.PDF_COMPRESSOR.RECOMMENDATIONS' | translate }}</h4>
           </div>
           <ul class="info-list">
-            <li>Escanea en <strong>Blanco y Negro</strong> para mejor compresión</li>
-            <li>Usa resolución de <strong>150-200 DPI</strong> para documentos de texto</li>
-            <li>Evita imágenes de alta resolución innecesarias</li>
-            <li>Re-escanea con menor calidad si la compresión no es suficiente</li>
+            <li>{{ 'PERSONAL.PDF_COMPRESSOR.REC1' | translate }} <strong>{{ 'PERSONAL.PDF_COMPRESSOR.BLACK_WHITE' | translate }}</strong> {{ 'PERSONAL.PDF_COMPRESSOR.FOR_COMPRESSION' | translate }}</li>
+            <li>{{ 'PERSONAL.PDF_COMPRESSOR.REC2' | translate }} <strong>150-200 DPI</strong> {{ 'PERSONAL.PDF_COMPRESSOR.FOR_TEXT_DOCS' | translate }}</li>
+            <li>{{ 'PERSONAL.PDF_COMPRESSOR.REC3' | translate }}</li>
+            <li>{{ 'PERSONAL.PDF_COMPRESSOR.REC4' | translate }}</li>
           </ul>
         </div>
       </div>

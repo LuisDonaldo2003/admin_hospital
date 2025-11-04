@@ -34,14 +34,21 @@
               <!-- Selección de estado del contrato (activo/inactivo) -->
               <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label">{{ 'CONTRACT.EDIT_CONTRACT.STATE' | translate }}</label>
-                <div class="col-sm-10 d-flex align-items-center gap-4">
-                  <div class="form-check">
-                    <input type="radio" class="form-check-input" id="active" name="state" [value]="true" [(ngModel)]="state" />
-                    <label class="form-check-label" for="active">{{ 'CONTRACT.EDIT_CONTRACT.ACTIVE' | translate }}</label>
-                  </div>
-                  <div class="form-check">
-                    <input type="radio" class="form-check-input" id="inactive" name="state" [value]="false" [(ngModel)]="state" />
-                    <label class="form-check-label" for="inactive">{{ 'CONTRACT.EDIT_CONTRACT.INACTIVE' | translate }}</label>
+                <div class="col-sm-10 d-flex align-items-center">
+                  <div class="form-check form-switch">
+                    <input 
+                      type="checkbox" 
+                      class="form-check-input" 
+                      id="stateSwitch" 
+                      name="state" 
+                      [(ngModel)]="state" 
+                      role="switch" />
+                    <label class="form-check-label ms-2" for="stateSwitch">
+                      <span class="badge" [ngClass]="state ? 'bg-success' : 'bg-secondary'">
+                        <i class="fa" [ngClass]="state ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                        {{ state ? ('CONTRACT.EDIT_CONTRACT.ACTIVE' | translate) : ('CONTRACT.EDIT_CONTRACT.INACTIVE' | translate) }}
+                      </span>
+                    </label>
                   </div>
                 </div>
               </div>

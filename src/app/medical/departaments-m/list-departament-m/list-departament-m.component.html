@@ -26,7 +26,7 @@
                     <i class="fa fa-search"></i>
                   </span>
                 </div>
-                <a routerLink="/departaments-m/register" class="btn btn-options d-flex align-items-center gap-1">
+                <a routerLink="/departaments-m/add-departament" class="btn btn-options d-flex align-items-center gap-1">
                   <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.NEW' | translate }}</span>
                 </a>
                 <button (click)="PageSize()" class="btn btn-outline-secondary">
@@ -53,7 +53,7 @@
                         {{ data.state === 1 ? ('DEPARTAMENT.LIST_DEPARTAMENT.ACTIVE' | translate) : ('DEPARTAMENT.LIST_DEPARTAMENT.INACTIVE' | translate) }}
                       </span>
                     </td>
-                    <td class="text-center">{{ data.created_at }}</td>
+                    <td class="text-center">{{ formatDate(data.created_at) }}</td>
                     <td class="text-center">
                       <!-- Botones de acción con permisos -->
                       <ng-container *ngIf="canEditDepartament() || canDeleteDepartament()">
@@ -80,7 +80,7 @@
                       </ng-container>
                       <!-- Si no tiene ningún permiso -->
                       <span class="badge badge-no-permission" *ngIf="!canEditDepartament() && !canDeleteDepartament()">
-                        <i class="fa fa-ban me-1"></i>Sin permisos
+                        <i class="fa fa-ban me-1"></i>{{ 'COMMON.NO_PERMISSIONS' | translate }}
                       </span>
                     </td>
                   </tr>

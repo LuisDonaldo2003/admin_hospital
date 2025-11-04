@@ -20,7 +20,7 @@
   <div class="filters-card mb-4">
     <div class="filters-header mb-3">
       <h5 class="mb-0 fw-semibold">
-        <i class="fa fa-filter me-2"></i>Filtros de Búsqueda
+        <i class="fa fa-filter me-2"></i>{{ 'ARCHIVE.LIST_PATIENT.FILTERS_TITLE' | translate }}
       </h5>
     </div>
     
@@ -161,7 +161,7 @@
                 
                 <!-- Si no tiene ningún permiso -->
                 <span class="badge badge-no-permission" *ngIf="!canEditArchive() && !canDeleteArchive()">
-                  <i class="fa fa-ban me-1"></i>Sin permisos
+                  <i class="fa fa-ban me-1"></i>{{ 'ARCHIVE.LIST_PATIENT.NO_PERMISSIONS' | translate }}
                 </span>
               </div>
 
@@ -174,7 +174,7 @@
                   <div class="info-block info-name">
                     <i class="fa fa-user-circle"></i>
                     <div class="info-details">
-                      <span class="info-label-small">Nombre Completo</span>
+                      <span class="info-label-small">{{ 'ARCHIVE.LIST_PATIENT.FULL_NAME_LABEL' | translate }}</span>
                       <span class="info-value-main">{{ a.name }} {{ a.last_name_father }} {{ a.last_name_mother }}</span>
                     </div>
                   </div>
@@ -183,7 +183,7 @@
                   <div class="info-block">
                     <i class="fa fa-birthday-cake"></i>
                     <div class="info-details">
-                      <span class="info-label-small">Edad</span>
+                      <span class="info-label-small">{{ 'ARCHIVE.LIST_PATIENT.AGE_LABEL' | translate }}</span>
                       <span class="info-value-main">{{ a.age }} {{ getAgeUnitLabel(a.age_unit) }}</span>
                     </div>
                   </div>
@@ -192,7 +192,7 @@
                   <div class="info-block">
                     <i class="fa fa-venus-mars"></i>
                     <div class="info-details">
-                      <span class="info-label-small">Género</span>
+                      <span class="info-label-small">{{ 'ARCHIVE.LIST_PATIENT.GENDER_LABEL' | translate }}</span>
                       <span class="info-value-main">{{ a.gender?.name || 'N/D' }}</span>
                     </div>
                   </div>
@@ -201,7 +201,7 @@
                   <div class="info-block info-location">
                     <i class="fa fa-map-marker-alt"></i>
                     <div class="info-details">
-                      <span class="info-label-small">Ubicación</span>
+                      <span class="info-label-small">{{ 'ARCHIVE.LIST_PATIENT.LOCATION_LABEL' | translate }}</span>
                       <span class="info-value-main">
                         {{ a.location_text || 'Sin localidad' }} · {{ a.municipality_text || 'Sin municipio' }} · {{ a.state_text || 'Sin estado' }}
                       </span>
@@ -212,7 +212,7 @@
                   <div class="info-block">
                     <i class="fa fa-calendar-check"></i>
                     <div class="info-details">
-                      <span class="info-label-small">Ingreso</span>
+                      <span class="info-label-small">{{ 'ARCHIVE.LIST_PATIENT.ADMISSION_LABEL' | translate }}</span>
                       <span class="info-value-main">{{ a.admission_date || 'N/D' }}</span>
                     </div>
                   </div>
@@ -300,7 +300,7 @@
 <!-- Botón flotante de ayuda para iniciar el tour -->
 <button class="tour-help-button" 
         (click)="startArchiveListTour()" 
-        title="Ayuda y Tour Guiado"
+        title="{{ 'ARCHIVE.LIST_PATIENT.HELP_BUTTON' | translate }}"
         type="button">
   <i class="fa fa-question"></i>
 </button>

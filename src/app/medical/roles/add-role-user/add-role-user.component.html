@@ -56,7 +56,7 @@
                     <div class="alert alert-info mb-0 d-flex align-items-center justify-content-between">
                       <div>
                         <i class="fas fa-check-circle me-2"></i>
-                        <strong>Permisos seleccionados:</strong> 
+                        <strong>{{ 'ROLES.ADD_ROLE.PERMISSIONS_SELECTED' | translate }}:</strong> 
                         <span class="badge bg-primary fs-6 ms-2">{{ permission.length }}</span>
                       </div>
                       <button 
@@ -65,7 +65,7 @@
                         class="btn btn-sm btn-outline-danger"
                         (click)="permission = []">
                         <i class="fas fa-times me-1"></i>
-                        Limpiar todo
+                        {{ 'ROLES.ADD_ROLE.CLEAR_ALL' | translate }}
                       </button>
                     </div>
                   </div>
@@ -96,7 +96,7 @@
                         type="text" 
                         class="form-control" 
                         [(ngModel)]="searchText"
-                        placeholder="Buscar permisos...">
+                        placeholder="{{ 'ROLES.ADD_ROLE.SEARCH_PERMISSIONS' | translate }}">
                       <button 
                         *ngIf="searchText"
                         class="btn btn-outline-secondary" 
@@ -117,7 +117,7 @@
                           (click)="setActiveTab('all')"
                           type="button">
                           <i class="fas fa-th-large me-1"></i>
-                          Todos
+                          {{ 'ROLES.ADD_ROLE.ALL_CATEGORIES' | translate }}
                         </button>
                       </li>
                       <li class="nav-item" role="presentation" *ngFor="let category of getCategories()">
@@ -211,7 +211,7 @@
                           (change)="toggleCategoryPermissions(activeTab, $event)">
                         <label class="form-check-label fw-bold fs-5" [for]="'select-all-' + activeTab">
                           <i class="fas fa-check-double me-2"></i>
-                          Seleccionar todos los permisos de esta categoría
+                          {{ 'ROLES.ADD_ROLE.SELECT_ALL_CATEGORY' | translate }}
                         </label>
                       </div>
                     </div>
@@ -265,7 +265,7 @@
                 <div *ngIf="searchText && getFilteredPermissions(activeTab !== 'all' ? activeTab : undefined).length === 0" 
                      class="text-center py-5">
                   <i class="fas fa-search fa-3x text-muted mb-3"></i>
-                  <p class="text-muted">No se encontraron permisos que coincidan con "{{ searchText }}"</p>
+                  <p class="text-muted">{{ 'ROLES.ADD_ROLE.NO_PERMISSIONS_FOUND' | translate }} "{{ searchText }}"</p>
                 </div>
               </div>
             </div>
@@ -277,7 +277,7 @@
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
               <a routerLink="/roles/list" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left me-2"></i>
-                Cancelar
+                {{ 'ROLES.ADD_ROLE.CANCEL' | translate }}
               </a>
               
               <button class="btn btn-primary btn-lg" (click)="save($event)">

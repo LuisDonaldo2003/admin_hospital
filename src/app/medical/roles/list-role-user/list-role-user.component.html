@@ -95,7 +95,7 @@
                           <div class="permissions-summary">
                             <span class="permission-count">
                               <i class="fa fa-key me-1"></i>
-                              <strong>{{ data.permission_pluck.length }}</strong> {{ data.permission_pluck.length === 1 ? 'permiso' : 'permisos' }}
+                              <strong>{{ data.permission_pluck.length }}</strong> {{ data.permission_pluck.length === 1 ? ('COMMON.PERMISSION' | translate) : ('COMMON.PERMISSIONS' | translate) }}
                             </span>
                             <button 
                               class="btn btn-sm btn-view-permissions" 
@@ -104,7 +104,7 @@
                               [attr.data-bs-target]="'#permissions-' + data.id"
                               [attr.aria-expanded]="false"
                               [attr.aria-controls]="'permissions-' + data.id">
-                              <i class="fa fa-eye me-1"></i>Ver detalles
+                              <i class="fa fa-eye me-1"></i>{{ 'COMMON.VIEW_DETAILS' | translate }}
                             </button>
                           </div>
                           
@@ -133,7 +133,7 @@
                       <!-- Verificar si el rol es protegido (Director General o Subdirector General) -->
                       <ng-container *ngIf="isProtectedRole(data.id, data.name)">
                         <span class="badge badge-protected">
-                          <i class="fa fa-lock me-1"></i>Protegido
+                          <i class="fa fa-lock me-1"></i>{{ 'COMMON.PROTECTED' | translate }}
                         </span>
                       </ng-container>
                       
@@ -162,7 +162,7 @@
                         </div>
                         <!-- Si no tiene ningún permiso -->
                         <span class="badge badge-no-permission" *ngIf="!canEditRole() && !canDeleteRole()">
-                          <i class="fa fa-ban me-1"></i>Sin permisos
+                          <i class="fa fa-ban me-1"></i>{{ 'COMMON.NO_PERMISSIONS' | translate }}
                         </span>
                       </ng-container>
                     </td>

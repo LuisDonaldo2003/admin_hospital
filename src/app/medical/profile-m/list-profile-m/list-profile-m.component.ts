@@ -273,4 +273,24 @@ export class ListProfileMComponent {
   canDeleteProfile(): boolean {
     return this.permissionService.hasPermission('delete_profile-m');
   }
+
+  /**
+   * Formatea una fecha para mostrar solo la fecha sin hora
+   * @param dateString Fecha en formato string
+   * @returns Fecha formateada sin hora
+   */
+  formatDate(dateString: string): string {
+    if (!dateString) return '';
+    
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } catch (error) {
+      return dateString.split(' ')[0] || dateString;
+    }
+  }
 }
