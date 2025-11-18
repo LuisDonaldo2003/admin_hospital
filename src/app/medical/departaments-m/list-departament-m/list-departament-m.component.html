@@ -20,18 +20,13 @@
             <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 header-bar">
               <h4 class="mb-0 fw-semibold">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.TITLE' | translate }}</h4>
               <div class="d-flex align-items-center gap-2 flex-wrap">
-                <div class="input-group search-input">
-                  <input type="text" class="form-control" placeholder="{{ 'DEPARTAMENT.LIST_DEPARTAMENT.SEARCH_PLACEHOLDER' | translate }}" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
-                  <span class="input-group-text">
-                    <i class="fa fa-search"></i>
-                  </span>
+                <div class="search-box">
+                  <input type="text" class="white-input form-control" placeholder="{{ 'DEPARTAMENT.LIST_DEPARTAMENT.SEARCH_PLACEHOLDER' | translate }}" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
+                  <i class="fa fa-search search-icon"></i>
                 </div>
-                <a routerLink="/departaments-m/add-departament" class="btn btn-options d-flex align-items-center gap-1">
+                <a routerLink="/departaments-m/add-departament" class="btn btn-primary d-flex align-items-center gap-1">
                   <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'DEPARTAMENT.LIST_DEPARTAMENT.NEW' | translate }}</span>
                 </a>
-                <button (click)="PageSize()" class="btn btn-outline-secondary">
-                  <i class="fa fa-refresh"></i>
-                </button>
               </div>
             </div>
 

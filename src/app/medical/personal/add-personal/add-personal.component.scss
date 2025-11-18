@@ -495,19 +495,26 @@
         }
       }
 
-      // Inputs y selects con mayor especificidad
+      // Labels con estilos base
+      .form-label {
+        i {
+          color: var(--user-border-color, #0B7285);
+        }
+      }
+
+      // Inputs y selects - ESTILOS BASE (modo claro por defecto)
       .form-control,
       .form-select {
         border-radius: 0.5rem;
         padding: 0.75rem 1rem;
         border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
-        background-color: var(--user-card-bg, #fff) !important;
-        color: var(--user-card-text-color, #111827) !important;
+        background-color: #ffffff !important;
+        color: #111827 !important;
         transition: all 0.2s ease;
         font-size: 0.95rem;
 
         &::placeholder {
-          color: color-mix(in srgb, var(--user-card-text-color, #111827) 50%, transparent) !important;
+          color: #9ca3af !important;
           opacity: 1;
         }
 
@@ -516,17 +523,22 @@
           box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
           outline: none;
           transform: translateY(-1px);
-          background-color: var(--user-card-bg, #f8f9fa) !important;
+          background-color: #ffffff !important;
         }
 
         &.is-invalid {
           border-color: #ef4444;
-          background-color: color-mix(in srgb, #ef4444 5%, transparent) !important;
+          background-color: #fff5f5 !important;
           
           &:focus {
             box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
           }
         }
+      }
+
+      .form-select option {
+        color: #000 !important;
+        background-color: #fff !important;
       }
 
       .invalid-feedback {
@@ -540,11 +552,6 @@
         font-size: 0.85rem;
         color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent);
         margin-top: 0.25rem;
-      }
-
-      .form-select option {
-        color: #000 !important;
-        background-color: #fff !important;
       }
     }
 
@@ -561,118 +568,47 @@
       border-radius: 0.375rem !important;
       font-size: 0.875rem !important;
     }
+  }
+}
 
-    // 🌞 MODO CLARO
-    &:not(.dark-mode-container) {
-      .card-form {
-        background-color: var(--user-card-bg, #fff) !important;
-        color: var(--user-card-text-color, #000) !important;
-        border: 4px solid var(--user-border-color, #000) !important; // Borde dinámico
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+// � MODO OSCURO - Usar :host-context para mayor especificidad
+:host-context(.dark-mode) {
+  .add-staff-form {
+    .card-form {
+      background-color: var(--user-card-bg, #2a2a3a) !important;
+      color: var(--user-card-text-color, #fff) !important;
+      border: 4px solid var(--user-border-color, #fff) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+        
+      h3, h4, h5, h6,
+      .form-label {
+        color: var(--user-card-text-color, #fff) !important;
       }
 
-      .form-control,
-      .form-select {
-        border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
-        background-color: #fff !important;
-        color: var(--user-card-text-color, #111827) !important;
+      h3 {
+        border-bottom-color: #444 !important;
 
-        &::placeholder {
-          color: color-mix(in srgb, var(--user-card-text-color, #111827) 50%, transparent) !important;
-        }
-
-        &:focus {
-          border-color: var(--user-border-color, #0B7285);
-          box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
-          transform: translateY(-1px);
-          background-color: #f8f9fa !important;
+        .fas.fa-user-plus {
+          color: #007bff !important;
         }
       }
 
-      .form-select option {
-        color: #000 !important;
-        background-color: #fff !important;
+      p {
+        color: #ccc !important;
       }
 
-      // Breadcrumb en modo claro
       .breadcrumb {
-        background-color: #f8f9fa !important;
+        background-color: #2a2a3a !important;
 
         .breadcrumb-item {
-          color: #6c757d !important;
+          color: #999 !important;
 
           a {
             color: #007bff !important;
           }
 
           &.active {
-            color: #495057 !important;
-          }
-        }
-      }
-
-      .document-upload-card {
-        background: #fff !important;
-        border-color: #e9ecef !important;
-
-        .upload-area {
-          background: #fafbfc !important;
-          border-color: #cbd5e0 !important;
-
-          &:hover:not(.has-file) {
-            border-color: #007bff !important;
-            background: #f0f8ff !important;
-          }
-
-          &.has-file {
-            border-color: #28a745 !important;
-            background: #f8fff9 !important;
-          }
-        }
-      }
-    }
-
-    // 🌚 MODO OSCURO
-    &.dark-mode-container {
-      .card-form {
-        background-color: var(--user-card-bg, #2a2a3a) !important;
-        color: var(--user-card-text-color, #fff) !important;
-        border: 4px solid var(--user-border-color, #fff) !important; // Borde dinámico
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
-        
-        h3, h4, h5, h6,
-        .form-label {
-          color: var(--user-card-text-color, #fff) !important;
-        }
-
-        // Títulos en modo oscuro
-        h3 {
-          border-bottom-color: #444 !important;
-
-          .fas.fa-user-plus {
-            color: #007bff !important;
-          }
-        }
-
-        // Párrafos en modo oscuro
-        p {
-          color: #ccc !important;
-        }
-
-        // Breadcrumb en modo oscuro
-        .breadcrumb {
-          background-color: #2a2a3a !important;
-
-          .breadcrumb-item {
-            color: #999 !important;
-
-            a {
-              color: #007bff !important;
-            }
-
-            &.active {
-              color: #fff !important;
-            }
+            color: #fff !important;
           }
         }
       }
@@ -726,19 +662,20 @@
       .form-control,
       .form-select {
         border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
-        background-color: #2b2b2b !important;
-        color: var(--user-card-text-color, #fff) !important;
+        background-color: #2a2f3a !important;
+        color: #f1f5f9 !important;
         transition: all 0.2s ease;
 
         &::placeholder {
-          color: color-mix(in srgb, var(--user-card-text-color, #fff) 50%, transparent) !important;
+          color: #bfc7cf !important;
+          opacity: 1 !important;
         }
 
         &:focus {
           border-color: var(--user-border-color, #0B7285);
           box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
           transform: translateY(-1px);
-          background-color: #1f1f1f !important;
+          background-color: #2a2f3a !important;
         }
 
         &.is-invalid {
@@ -779,13 +716,13 @@
       // MODO OSCURO: selects con estilo consistente
       .form-select {
         border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
-        background-color: #2b2b2b !important;
-        color: var(--user-card-text-color, #fff) !important;
+        background-color: #2a2f3a !important;
+        color: #f1f5f9 !important;
 
         &:focus {
           border-color: var(--user-border-color, #0B7285);
           box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
-          background-color: #1f1f1f !important;
+          background-color: #2a2f3a !important;
         }
       }
 
@@ -886,30 +823,6 @@
     ::selection {
       background-color: #3b82f6 !important;
       color: #fff !important;
-    }
-  }
-}
-
-// Clase especial para el contenedor de modo oscuro
-.dark-mode-container {
-  .add-staff-form {
-    .form-control,
-    .form-select {
-      border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
-      background-color: #2b2b2b !important;
-      color: var(--user-card-text-color, #fff) !important;
-      transition: all 0.2s ease;
-
-      &:focus {
-        border-color: var(--user-border-color, #0B7285);
-        box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
-        background-color: #1f1f1f !important;
-      }
-    }
-
-    .form-select option {
-      color: #222 !important;
-      background-color: #fff !important;
     }
   }
 }

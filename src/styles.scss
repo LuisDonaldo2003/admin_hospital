@@ -266,14 +266,8 @@ body.dark-mode {
     }
   }
 
-  input,
-  select,
-  textarea,
-  .form-control {
-    background-color: #2b2b2b !important;
-    color: #ffffff !important;
-    border-color: #444 !important;
-  }
+  // NOTA: Los estilos de inputs/selects ahora están en la sección de ESTILOS GLOBALES
+  // (líneas 950+) con mayor especificidad para que funcionen correctamente
 
   .btn,
   .dropdown-toggle {
@@ -944,4 +938,517 @@ html body.dark-mode #deleteModalContract .modal-body strong {
 html body.dark-mode #deleteModalContract .modal-body .btn-light {
   color: var(--user-card-text-color, #ffffff) !important;
   background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+
+/* ====================
+   ESTILOS GLOBALES DE FORMULARIOS
+   - Inputs y selects siempre BLANCOS en modo claro
+   - Inputs y selects OSCUROS en modo oscuro
+   - Cards y bordes respetan color del usuario
+   ==================== */
+
+/* ====== MODO CLARO (por defecto) ====== */
+.form-control,
+.form-select,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="search"],
+textarea,
+select {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+  transition: all 0.3s ease;
+
+  &::placeholder {
+    color: #9ca3af !important;
+    opacity: 1;
+  }
+
+  &:focus {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border-color: var(--user-border-color, #0B7285) !important;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent) !important;
+    outline: none;
+  }
+
+  &:disabled,
+  &[readonly] {
+    background-color: #f3f4f6 !important;
+    color: #6b7280 !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+/* Opciones del select - IMPORTANTE para visibilidad */
+select option,
+.form-select option {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  padding: 8px 12px;
+  font-weight: normal;
+}
+
+/* CRÍTICO: Opciones deshabilitadas (placeholder) DEBEN ser visibles */
+select option:disabled,
+.form-select option:disabled,
+select option[disabled],
+.form-select option[disabled] {
+  color: #6b7280 !important;  /* Gris visible pero sin negrita */
+  background-color: #f9fafb !important;
+  opacity: 1 !important;  /* Forzar opacidad completa */
+  -webkit-text-fill-color: #6b7280 !important;  /* Safari/iOS */
+  font-weight: 400 !important; /* Peso normal, sin negrita */
+}
+
+/* Select en estado invalid (muestra la opción disabled) */
+select:invalid,
+.form-select:invalid {
+  color: #6b7280 !important;
+  -webkit-text-fill-color: #6b7280 !important;
+  font-weight: 400 !important;
+}
+
+/* Forzar que el select SIEMPRE muestre texto visible */
+select,
+.form-select {
+  /* Remover apariencia nativa del navegador */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  /* Forzar color visible */
+  -webkit-text-fill-color: #111827 !important;
+  
+  /* Flecha personalizada (SVG en base64) */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  padding-right: 2.5rem !important;
+}
+
+/* Cards respetan color del usuario en modo claro */
+.card,
+.card-form,
+.modal-content {
+  background-color: var(--user-card-bg, #ffffff) !important;
+  border: 3px solid var(--user-border-color, #0B7285) !important;
+  color: var(--user-card-text-color, #111827) !important;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent);
+  transition: all 0.3s ease;
+
+  h1, h2, h3, h4, h5, h6,
+  .card-title,
+  .card-subtitle,
+  label,
+  p,
+  span,
+  strong {
+    color: var(--user-card-text-color, #111827) !important;
+  }
+
+  .card-header {
+    background: linear-gradient(135deg, var(--user-border-color, #0B7285) 0%, color-mix(in srgb, var(--user-border-color, #0B7285) 70%, white) 100%);
+    border-bottom: 2px solid var(--user-border-color, #0B7285);
+    color: #ffffff;
+    
+    h1, h2, h3, h4, h5, h6, span, p {
+      color: #ffffff !important;
+    }
+  }
+}
+
+
+/* ====== MODO OSCURO ====== */
+body.dark-mode,
+:host-context(.dark-mode) {
+  
+  /* Inputs y selects con fondo BLANCO también en modo oscuro */
+  .form-control,
+  .form-select,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"],
+  input[type="search"],
+  textarea,
+  select {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent) !important;
+
+    &::placeholder {
+      color: #9ca3af !important;
+      opacity: 1;
+    }
+
+    &:focus {
+      background-color: #ffffff !important;
+      color: #111827 !important;
+      border-color: var(--user-border-color, #0B7285) !important;
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+    }
+
+    &:disabled,
+    &[readonly] {
+      background-color: #f3f4f6 !important;
+      color: #6b7280 !important;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+  }
+
+  /* Opciones del select en modo oscuro - IMPORTANTE para visibilidad */
+  select option,
+  .form-select option {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    padding: 8px 12px;
+    font-weight: normal;
+  }
+
+  /* Opciones deshabilitadas en modo oscuro */
+  select option:disabled,
+  .form-select option:disabled,
+  select option[disabled],
+  .form-select option[disabled] {
+    color: #6b7280 !important;
+    background-color: #f9fafb !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: #6b7280 !important;
+    font-weight: 400 !important;
+  }
+
+  /* Select en estado invalid en modo oscuro */
+  select:invalid,
+  .form-select:invalid {
+    color: #6b7280 !important;
+    -webkit-text-fill-color: #6b7280 !important;
+    font-weight: 400 !important;
+  }
+
+  /* Cards respetan color del usuario en modo oscuro */
+  .card,
+  .card-form,
+  .modal-content {
+    background-color: var(--user-card-bg, #1e1e1e) !important;
+    border: 3px solid var(--user-border-color, #0B7285) !important;
+    color: var(--user-card-text-color, #f1f5f9) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+
+    h1, h2, h3, h4, h5, h6,
+    .card-title,
+    .card-subtitle,
+    label,
+    p,
+    span,
+    strong {
+      color: var(--user-card-text-color, #f1f5f9) !important;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--user-border-color, #0B7285) 0%, color-mix(in srgb, var(--user-border-color, #0B7285) 60%, black) 100%);
+      border-bottom: 2px solid var(--user-border-color, #0B7285);
+      color: #ffffff;
+      
+      h1, h2, h3, h4, h5, h6, span, p {
+        color: #ffffff !important;
+      }
+    }
+  }
+}
+
+
+/* ====================
+   BOTONES CON COLOR DEL USUARIO
+   ==================== */
+
+.btn-primary,
+.btn-save,
+.btn-submit {
+  background: linear-gradient(135deg, var(--user-border-color, #0B7285), color-mix(in srgb, var(--user-border-color, #0B7285) 80%, black)) !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--user-border-color, #0B7285) 90%, black), var(--user-border-color, #0B7285)) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--user-border-color, #0B7285) 40%, transparent) !important;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent) !important;
+  }
+}
+
+
+/* ====================
+   TABLAS RESPONSIVAS
+   ==================== */
+
+.table {
+  background-color: transparent !important;
+  
+  thead {
+    background: linear-gradient(135deg, var(--user-border-color, #0B7285) 0%, color-mix(in srgb, var(--user-border-color, #0B7285) 70%, white) 100%);
+    color: #ffffff;
+    
+    th {
+      color: #ffffff !important;
+      border-bottom: 2px solid var(--user-border-color, #0B7285);
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 5%, transparent) !important;
+      }
+    }
+
+    td {
+      color: var(--user-card-text-color, #111827) !important;
+      border-bottom: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
+    }
+  }
+}
+
+body.dark-mode .table {
+  thead {
+    background: linear-gradient(135deg, var(--user-border-color, #0B7285) 0%, color-mix(in srgb, var(--user-border-color, #0B7285) 60%, black) 100%);
+  }
+
+  tbody {
+    tr:hover {
+      background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent) !important;
+    }
+
+    td {
+      color: var(--user-card-text-color, #f1f5f9) !important;
+    }
+  }
+}
+
+
+/* ====================
+   BADGES Y ETIQUETAS
+   ==================== */
+
+.badge-primary,
+.tag-primary {
+  background-color: var(--user-border-color, #0B7285) !important;
+  color: #ffffff !important;
+  border: none;
+}
+
+.badge-outline {
+  background-color: transparent !important;
+  border: 2px solid var(--user-border-color, #0B7285) !important;
+  color: var(--user-border-color, #0B7285) !important;
+}
+
+
+/* ====================
+   LINKS Y ENLACES
+   ==================== */
+
+a:not(.btn) {
+  color: var(--user-border-color, #0B7285) !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: color-mix(in srgb, var(--user-border-color, #0B7285) 80%, black) !important;
+    text-decoration: none !important;
+  }
+
+  &:focus,
+  &:active {
+    text-decoration: none !important;
+    outline: none !important;
+  }
+}
+
+body.dark-mode a:not(.btn) {
+  color: color-mix(in srgb, var(--user-border-color, #0B7285) 120%, white) !important;
+
+  &:hover {
+    color: var(--user-border-color, #0B7285) !important;
+    text-decoration: none !important;
+  }
+
+  &:focus,
+  &:active {
+    text-decoration: none !important;
+    outline: none !important;
+  }
+}
+
+
+/* ====================
+   FORZAR COLORES - INPUTS BLANCOS EN AMBOS MODOS
+   Máxima especificidad para sobrescribir estilos anteriores
+   ==================== */
+
+/* MODO CLARO - Inputs blancos */
+html body input,
+html body select,
+html body textarea,
+html body .form-control,
+html body .form-select,
+html body input[type="text"],
+html body input[type="email"],
+html body input[type="password"],
+html body input[type="number"],
+html body input[type="tel"],
+html body input[type="date"],
+html body input[type="time"],
+html body input[type="datetime-local"],
+html body input[type="search"] {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+}
+
+html body input::placeholder,
+html body select::placeholder,
+html body textarea::placeholder,
+html body .form-control::placeholder,
+html body .form-select::placeholder {
+  color: #9ca3af !important;
+  opacity: 1 !important;
+}
+
+html body input:focus,
+html body select:focus,
+html body textarea:focus,
+html body .form-control:focus,
+html body .form-select:focus {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border-color: var(--user-border-color, #0B7285) !important;
+}
+
+/* MODO OSCURO - Inputs TAMBIÉN BLANCOS */
+html body.dark-mode input,
+html body.dark-mode select,
+html body.dark-mode textarea,
+html body.dark-mode .form-control,
+html body.dark-mode .form-select,
+html body.dark-mode input[type="text"],
+html body.dark-mode input[type="email"],
+html body.dark-mode input[type="password"],
+html body.dark-mode input[type="number"],
+html body.dark-mode input[type="tel"],
+html body.dark-mode input[type="date"],
+html body.dark-mode input[type="time"],
+html body.dark-mode input[type="datetime-local"],
+html body.dark-mode input[type="search"] {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent) !important;
+}
+
+html body.dark-mode input::placeholder,
+html body.dark-mode select::placeholder,
+html body.dark-mode textarea::placeholder,
+html body.dark-mode .form-control::placeholder,
+html body.dark-mode .form-select::placeholder {
+  color: #9ca3af !important;
+  opacity: 1 !important;
+}
+
+html body.dark-mode input:focus,
+html body.dark-mode select:focus,
+html body.dark-mode textarea:focus,
+html body.dark-mode .form-control:focus,
+html body.dark-mode .form-select:focus {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border-color: var(--user-border-color, #0B7285) !important;
+}
+
+/* ===== OPCIONES DEL SELECT - MÁXIMA ESPECIFICIDAD ===== */
+/* Modo claro */
+html body select option,
+html body .form-select option {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  padding: 8px 12px;
+  font-weight: normal;
+}
+
+/* Opciones deshabilitadas - Modo claro */
+html body select option:disabled,
+html body .form-select option:disabled,
+html body select option[disabled],
+html body .form-select option[disabled] {
+  color: #6b7280 !important; /* Gris visible sin negrita */
+  background-color: #f9fafb !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #6b7280 !important;
+  font-weight: 400 !important; /* Peso normal */
+}
+
+/* Modo oscuro */
+html body.dark-mode select option,
+html body.dark-mode .form-select option {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  padding: 8px 12px;
+  font-weight: normal;
+}
+
+/* Opciones deshabilitadas - Modo oscuro */
+html body.dark-mode select option:disabled,
+html body.dark-mode .form-select option:disabled,
+html body.dark-mode select option[disabled],
+html body.dark-mode .form-select option[disabled] {
+  color: #6b7280 !important; /* Gris visible sin negrita */
+  background-color: #f9fafb !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #6b7280 !important;
+  font-weight: 400 !important; /* Peso normal */
+}
+
+/* MÁXIMA PRIORIDAD: Forzar visibilidad del texto del select */
+html body select,
+html body .form-select,
+html body.dark-mode select,
+html body.dark-mode .form-select {
+  -webkit-text-fill-color: #111827 !important;
+  color: #111827 !important;
+  opacity: 1 !important;
+}
+
+/* Select en estado invalid (cuando muestra opción disabled) - Sin negrita */
+html body select:invalid,
+html body .form-select:invalid,
+html body.dark-mode select:invalid,
+html body.dark-mode .form-select:invalid {
+  color: #6b7280 !important; /* Color gris visible para placeholder */
+  -webkit-text-fill-color: #6b7280 !important;
+  font-weight: 400 !important; /* Peso normal sin negrita */
 }

@@ -51,7 +51,7 @@ export class AddStaffNComponent {
   /**
    * Rol seleccionado para el nuevo staff
    */
-  public selectedValue!: string;
+  public selectedValue: string = '';
 
   /**
    * Lista de roles disponibles para seleccionar

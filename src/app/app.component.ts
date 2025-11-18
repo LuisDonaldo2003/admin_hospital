@@ -36,22 +36,27 @@ export class AppComponent implements OnInit, OnDestroy {
    * Inicializa la app, aplica el tema y sincroniza colores personalizados del usuario
    */
   ngOnInit(): void {
+    // Colores por defecto de la plataforma hospitalaria
+    const DEFAULT_BORDER_COLOR = '#0B7285'; // Azul médico profesional
+    const DEFAULT_CARD_BG_LIGHT = '#F8FFFE'; // Blanco hospitalario
+    const DEFAULT_CARD_BG_DARK = '#1A2332';  // Azul marino oscuro
+
     // Aplica los colores personalizados desde localStorage al arrancar
     const user = this.authService.user;
     const userId = user ? user.id : null;
     this.applyTheme({
-      borderColor: userId ? localStorage.getItem(`borderColor_${userId}`) || '#ff9800' : '#ff9800',
-      cardBgColorLight: userId ? localStorage.getItem(`cardBgColorLight_${userId}`) || '#f4f7fa' : '#f4f7fa',
-      cardBgColorDark: userId ? localStorage.getItem(`cardBgColorDark_${userId}`) || '#232b32' : '#232b32'
+      borderColor: userId ? localStorage.getItem(`borderColor_${userId}`) || DEFAULT_BORDER_COLOR : DEFAULT_BORDER_COLOR,
+      cardBgColorLight: userId ? localStorage.getItem(`cardBgColorLight_${userId}`) || DEFAULT_CARD_BG_LIGHT : DEFAULT_CARD_BG_LIGHT,
+      cardBgColorDark: userId ? localStorage.getItem(`cardBgColorDark_${userId}`) || DEFAULT_CARD_BG_DARK : DEFAULT_CARD_BG_DARK
     });
     // Suscríbete al estado de autenticación y sincroniza con el backend
     this.authSubscription = this.authService.user$.subscribe(user => {
       if (user) {
         // Aplica inmediatamente los colores del usuario actual
         this.applyTheme({
-          borderColor: localStorage.getItem(`borderColor_${user.id}`) || '#ff9800',
-          cardBgColorLight: localStorage.getItem(`cardBgColorLight_${user.id}`) || '#f4f7fa',
-          cardBgColorDark: localStorage.getItem(`cardBgColorDark_${user.id}`) || '#232b32'
+          borderColor: localStorage.getItem(`borderColor_${user.id}`) || DEFAULT_BORDER_COLOR,
+          cardBgColorLight: localStorage.getItem(`cardBgColorLight_${user.id}`) || DEFAULT_CARD_BG_LIGHT,
+          cardBgColorDark: localStorage.getItem(`cardBgColorDark_${user.id}`) || DEFAULT_CARD_BG_DARK
         });
         this.settingsService.getSettings().subscribe((settings: any) => {
           // Si hay settings personalizados, verifica si cambiaron y actualiza
@@ -71,9 +76,9 @@ export class AppComponent implements OnInit, OnDestroy {
             }
             // Aplica siempre los colores actualizados del usuario
             this.applyTheme({
-              borderColor: settings.borderColor || localStorage.getItem(`borderColor_${user.id}`) || '#ff9800',
-              cardBgColorLight: settings.cardBgColorLight || localStorage.getItem(`cardBgColorLight_${user.id}`) || '#f4f7fa',
-              cardBgColorDark: settings.cardBgColorDark || localStorage.getItem(`cardBgColorDark_${user.id}`) || '#232b32'
+              borderColor: settings.borderColor || localStorage.getItem(`borderColor_${user.id}`) || DEFAULT_BORDER_COLOR,
+              cardBgColorLight: settings.cardBgColorLight || localStorage.getItem(`cardBgColorLight_${user.id}`) || DEFAULT_CARD_BG_LIGHT,
+              cardBgColorDark: settings.cardBgColorDark || localStorage.getItem(`cardBgColorDark_${user.id}`) || DEFAULT_CARD_BG_DARK
             });
           }
         });

@@ -1,0 +1,149 @@
+<div class="page-wrapper">
+  <div class="content list-staff">
+
+    <!-- Breadcrumb -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item">{{ 'TEACHING_MODULE.MODALITIES.BREADCRUMB' | translate }} ></li>
+            <li class="breadcrumb-item active">{{ 'TEACHING_MODULE.MODALITIES.BREADCRUMB_LIST' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card principal -->
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card card-list shadow border-0">
+          <div class="card-body">
+
+            <!-- Header: Título y botón -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 header-bar">
+              <h4 class="mb-0 fw-semibold">
+                <i class="fas fa-desktop me-2"></i>{{ 'TEACHING_MODULE.MODALITIES.TITLE' | translate }}
+              </h4>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="search-box">
+                  <input type="text" class="form-control white-input" [placeholder]="'TEACHING_MODULE.MODALITIES.SEARCH_PLACEHOLDER' | translate" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
+                  <i class="fa fa-search search-icon"></i>
+                </div>
+                <a (click)="addModality()" class="btn btn-options d-flex align-items-center gap-1">
+                  <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'TEACHING_MODULE.MODALITIES.NEW_MODALITY' | translate }}</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Alertas -->
+            <div class="mt-3" *ngIf="text_success">
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>{{ 'TEACHING_MODULE.MODALITIES.SUCCESS' | translate }}</strong> {{ text_success }}
+                <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
+              </div>
+            </div>
+            <div class="mt-3" *ngIf="text_validation">
+              <div class="alert alert-warning alert-dismissible fade show">
+                <strong>{{ 'TEACHING_MODULE.MODALITIES.WARNING' | translate }}:</strong> {{ text_validation }}
+                <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+              </div>
+            </div>
+
+
+            <!-- Tabla -->
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="table-light text-center">
+                  <tr>
+                    <th>{{ 'TEACHING_MODULE.MODALITIES.CODE' | translate }}</th>
+                    <th>{{ 'TEACHING_MODULE.MODALITIES.NAME' | translate }}</th>
+                    <th>{{ 'TEACHING_MODULE.MODALITIES.STATUS' | translate }}</th>
+                    <th class="text-center">{{ 'TEACHING_MODULE.MODALITIES.ACTIONS' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of modalidades; let i = index">
+                    <td><span class="badge bg-secondary">{{ item.codigo }}</span></td>
+                    <td>{{ item.nombre }}</td>
+                    <td>
+                      <span class="badge rounded-pill" [ngClass]="item.activo ? 'bg-success' : 'bg-danger'">
+                        {{ item.activo ? ('TEACHING_MODULE.MODALITIES.ACTIVE' | translate) : ('TEACHING_MODULE.MODALITIES.INACTIVE' | translate) }}
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <div class="d-flex justify-content-center gap-2">
+                        <button class="btn btn-sm btn-edit" (click)="editModality(item)" [title]="'TEACHING_MODULE.MODALITIES.EDIT' | translate">
+                          <i class="fa fa-pen"></i>
+                        </button>
+                        <button class="btn btn-sm btn-delete" (click)="itemToDelete = item" data-bs-toggle="modal" data-bs-target="#deleteModalModality" [title]="'TEACHING_MODULE.MODALITIES.DELETE' | translate">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr *ngIf="modalidades.length === 0 && !loading">
+                    <td colspan="4" class="text-center text-muted py-4">
+                      <i class="fas fa-inbox fa-2x mb-2"></i>
+                      <p class="mb-0">{{ 'TEACHING_MODULE.MODALITIES.NO_RECORDS' | translate }}</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Paginación -->
+            <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+              <div class="pagination-info small">
+                {{ 'TEACHING_MODULE.MODALITIES.SHOWING' | translate }} {{ serialNumberArray.length ? serialNumberArray[0] : (totalData ? 1 : 0) }} {{ 'TEACHING_MODULE.MODALITIES.TO' | translate }} {{ serialNumberArray.length ? serialNumberArray[serialNumberArray.length - 1] : totalData }} {{ 'TEACHING_MODULE.MODALITIES.OF' | translate }} {{ totalData }} {{ 'TEACHING_MODULE.MODALITIES.RECORDS' | translate }}
+              </div>
+              <nav>
+                <ul class="pagination mb-0">
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('previous')">{{ 'TEACHING_MODULE.MODALITIES.PREVIOUS' | translate }}</a>
+                  </li>
+                  <ng-container *ngFor="let item of pageNumberArray">
+                    <li class="page-item" [class.active]="item === currentPage">
+                      <a class="page-link" href="javascript:void(0);" (click)="moveToPage(item)">{{ item }}</a>
+                    </li>
+                  </ng-container>
+                  <li class="page-item" [class.disabled]="currentPage === pageNumberArray[pageNumberArray.length - 1]">
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('next')">{{ 'TEACHING_MODULE.MODALITIES.NEXT' | translate }}</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+            <!-- Loading -->
+            <div *ngIf="loading" class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">{{ 'TEACHING_MODULE.MODALITIES.LOADING' | translate }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de eliminación -->
+<div class="modal fade" id="deleteModalModality" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center p-4">
+        <img src="assets/img/sent.png" alt="" width="50" height="46" />
+        <h5 class="mt-3" *ngIf="itemToDelete">
+          {{ 'TEACHING_MODULE.MODALITIES.DELETE_CONFIRMATION' | translate }} <strong>{{ itemToDelete.nombre }}</strong>?
+        </h5>
+        <p class="text-muted small">{{ 'TEACHING_MODULE.MODALITIES.DELETE_WARNING' | translate }}</p>
+        <div class="mt-4 d-flex justify-content-center gap-3">
+          <button class="btn btn-light" data-bs-dismiss="modal">{{ 'TEACHING_MODULE.MODALITIES.CANCEL' | translate }}</button>
+          <button class="btn btn-danger" (click)="confirmDelete()" data-bs-dismiss="modal">
+            <i class="fa fa-trash me-2"></i>{{ 'TEACHING_MODULE.MODALITIES.DELETE' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

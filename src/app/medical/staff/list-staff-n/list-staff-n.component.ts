@@ -31,6 +31,10 @@ export class ListStaffNComponent {
    */
   public usersList: any = [];
   /**
+   * Lista completa de usuarios sin filtrar (origen)
+   */
+  public allUsers: any = [];
+  /**
    * Fuente de datos para la tabla de Angular Material
    */
   dataSource!: MatTableDataSource<any>;
@@ -39,6 +43,10 @@ export class ListStaffNComponent {
    * Valor actual del campo de búsqueda
    */
   public searchDataValue = '';
+  /**
+   * Filtro por rol seleccionado (nombre de rol)
+   */
+  public roleFilter: string = '';
   /**
    * Cantidad de registros por página
    */
@@ -84,6 +92,14 @@ export class ListStaffNComponent {
    * Lista general de usuarios (sin paginación)
    */
   public role_generals: any = [];
+  /**
+   * Lista de roles extraída de los usuarios (para filtro)
+   */
+  public roleList: string[] = [];
+  /**
+   * Indica si la lista está invertida
+   */
+  public inverted: boolean = false;
   /**
    * Usuario seleccionado para acciones (editar/eliminar)
    */
@@ -132,10 +148,20 @@ export class ListStaffNComponent {
 
     this.staffService.listUsers().subscribe((resp: any) => {
       this.totalData = resp.users.length;
-      this.role_generals = resp.users.sort((a: any, b: any) =>
-        a.name.localeCompare(b.name)
-      );
-      this.getTableDataGeneral();
+      // Guardar copia completa
+      this.allUsers = resp.users.slice();
+
+      // Extraer lista única de roles
+      const rolesSet = new Set<string>();
+      this.allUsers.forEach((u: any) => {
+        const r = u.role?.name || '';
+        if (r) rolesSet.add(r);
+      });
+      this.roleList = Array.from(rolesSet).sort();
+
+      // Inicializar listado filtrado y paginado
+      this.role_generals = this.allUsers.slice().sort((a: any, b: any) => a.name.localeCompare(b.name));
+      this.applyFilters();
     });
   }
 
@@ -146,6 +172,7 @@ export class ListStaffNComponent {
     this.usersList = [];
     this.serialNumberArray = [];
 
+    // role_generals ya contiene la lista filtrada y ordenada
     this.role_generals.map((res: any, index: number) => {
       const serialNumber = index + 1;
       if (index >= this.skip && serialNumber <= this.limit) {
@@ -187,8 +214,59 @@ export class ListStaffNComponent {
    * Filtra los datos de la tabla según el valor de búsqueda
    */
   public searchData(value: string): void {
-    this.dataSource.filter = value.trim().toLowerCase();
-    this.usersList = this.dataSource.filteredData;
+    this.searchDataValue = value || '';
+    this.applyFilters();
+  }
+
+  /**
+   * Aplica filtros de búsqueda y rol sobre la lista completa
+   */
+  public applyFilters(): void {
+    const q = (this.searchDataValue || '').trim().toLowerCase();
+    const role = (this.roleFilter || '').trim().toLowerCase();
+
+    let filtered = this.allUsers.slice();
+
+    if (q) {
+      filtered = filtered.filter((u: any) => {
+        const full = ((u.name || '') + ' ' + (u.surname || '') + ' ' + (u.email || '')).toLowerCase();
+        return full.indexOf(q) !== -1;
+      });
+    }
+
+    if (role) {
+      filtered = filtered.filter((u: any) => (u.role?.name || '').toLowerCase() === role);
+    }
+
+    // Ordenar por nombre (respetar inversión)
+    filtered = filtered.sort((a: any, b: any) => a.name.localeCompare(b.name));
+    if (this.inverted) filtered = filtered.reverse();
+
+    this.role_generals = filtered;
+    this.totalData = this.role_generals.length;
+    // reset paginación
+    this.skip = 0;
+    this.limit = this.pageSize;
+    this.currentPage = 1;
+    this.pageSelection = [];
+    this.getTableDataGeneral();
+  }
+
+  /**
+   * Cambia el filtro de rol y reaplica filtros
+   */
+  public onRoleFilterChange(value: string): void {
+    this.roleFilter = value;
+    this.applyFilters();
+  }
+
+  /**
+   * Invierte el orden actual de la lista y reaplica paginación
+   */
+  public toggleReverseOrder(): void {
+    this.inverted = !this.inverted;
+    this.role_generals = this.role_generals.slice().reverse();
+    this.getTableDataGeneral();
   }
 
   /**

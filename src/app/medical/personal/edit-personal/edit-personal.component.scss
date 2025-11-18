@@ -39,6 +39,7 @@
           padding: 20px !important;
           text-align: center !important;
           min-height: 140px !important;
+
           display: flex !important;
           align-items: center !important;
           justify-content: center !important;
@@ -238,19 +239,25 @@
   select.form-control {
     border-radius: 0.5rem;
     padding: 0.6rem 1rem;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    color: #000;
+    border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: #9ca3af !important;
+      opacity: 1;
+    }
 
     &:focus {
-      border-color: #0d6efd;
-      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+      border-color: var(--user-border-color, #0B7285);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent);
       outline: none;
     }
 
     &.is-invalid {
       border-color: #dc3545;
-      background-color: #ffe6e6;
+      background-color: #fff5f5 !important;
     }
   }
 
@@ -281,16 +288,19 @@
     .form-select {
       border-radius: 0.5rem;
       padding: 0.6rem 1rem;
-      border: 1px solid #ccc;
-      background-color: #fff;
-      color: #000;
-      font-size: 1.1rem;
-      box-shadow: none;
-      transition: background 0.2s, color 0.2s, border 0.2s;
+      border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
+      background-color: #ffffff !important;
+      color: #111827 !important;
+      transition: all 0.2s ease;
+
+      &::placeholder {
+        color: #9ca3af !important;
+        opacity: 1;
+      }
 
       &:focus {
-        border: 1px solid #0d6efd;
-        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+        border-color: var(--user-border-color, #0B7285);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent);
         outline: none;
       }
     }
@@ -316,19 +326,33 @@
 
     .form-control,
     .form-select {
-      background-color: #fff !important;
-      color: #222 !important;
-      border: 1px solid #444 !important;
-      font-size: 1.1rem;
+      background-color: #2a2f3a !important;
+      color: #f1f5f9 !important;
+      border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
       border-radius: 0.5rem;
       padding: 0.6rem 1rem;
-      box-shadow: none !important;
-      transition: background 0.2s, color 0.2s, border 0.2s;
+      transition: all 0.2s ease;
+
+      &::placeholder {
+        color: #bfc7cf !important;
+        opacity: 1 !important;
+      }
+
+      &:focus {
+        border-color: var(--user-border-color, #0B7285) !important;
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent) !important;
+        outline: none;
+      }
+
+      &.is-invalid {
+        border-color: #f87171 !important;
+        background-color: rgba(248, 113, 113, 0.1) !important;
+      }
     }
 
     .form-select:focus {
-      border: 1px solid #444 !important;
-      box-shadow: none !important;
+      border-color: var(--user-border-color, #0B7285) !important;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent) !important;
       outline: none;
     }
 
@@ -338,13 +362,13 @@
     }
 
     .form-control::placeholder {
-      color: #888 !important;
+      color: #bfc7cf !important;
     }
 
     .form-control.is-invalid,
     select.form-control.is-invalid {
       border-color: #f87171;
-      background-color: #442626;
+      background-color: rgba(248, 113, 113, 0.1) !important;
     }
 
     .btn-primary {
@@ -371,16 +395,15 @@
       }
     }
 
-    // MODO OSCURO: selects con letra blanca y fondo Bootstrap
+    // MODO OSCURO: selects con estilo consistente
     .form-select {
-      background-color: #2a2a3a !important; // Fondo oscuro Bootstrap
-      color: #fff !important; // Letra blanca en el select
-      border: 1px solid #444 !important; // Solo borde estándar oscuro
-      box-shadow: none !important; // Sin contorno ni glow
+      background-color: #2a2f3a !important;
+      color: #f1f5f9 !important;
+      border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
 
       &:focus {
-        border: 1px solid #444 !important; // Sin color especial al enfocar
-        box-shadow: none !important;
+        border-color: var(--user-border-color, #0B7285) !important;
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent) !important;
       }
     }
 
@@ -413,19 +436,23 @@
 body.dark-mode .add-staff-form {
   .form-control,
   .form-select {
-    background-color: #fff !important;
-    color: #222 !important;
-    border: 1px solid #444 !important;
-    font-size: 1.1rem;
+    background-color: #2a2f3a !important;
+    color: #f1f5f9 !important;
+    border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
     border-radius: 0.5rem;
     padding: 0.6rem 1rem;
-    box-shadow: none !important;
-    transition: background 0.2s, color 0.2s, border 0.2s;
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: #bfc7cf !important;
+      opacity: 1 !important;
+    }
   }
 
-  .form-select:focus {
-    border: 1px solid #444 !important;
-    box-shadow: none !important;
+  .form-select:focus,
+  .form-control:focus {
+    border-color: var(--user-border-color, #0B7285) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent) !important;
     outline: none;
   }
 

@@ -557,19 +557,24 @@
 // Campo de búsqueda mejorado
 .search-input {
   .form-control {
-    color: var(--user-card-text-color, #111827) !important;
+    color: #111827 !important;
     border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
     padding: 0.6rem 0.85rem;
     padding-right: 0.6rem;
     border-radius: 8px;
     font-size: 0.875rem;
-    caret-color: var(--user-card-text-color, #111827) !important;
+    caret-color: #111827 !important;
     transition: border-color 0.2s ease;
-    background: transparent !important;
+    background: #ffffff !important;
     
     &:focus {
       border-color: var(--user-border-color, #0B7285) !important;
       box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent) !important;
+    }
+
+    &::placeholder {
+      color: #9ca3af !important;
+      opacity: 1 !important;
     }
   }
 
@@ -581,29 +586,20 @@
     border-radius: 0 8px 8px 0;
   }
 
-  .form-control::placeholder {
-    color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent) !important;
-    opacity: 1 !important;
-  }
-  .form-control::-webkit-input-placeholder {
-    color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent) !important;
-    opacity: 1 !important;
-  }
-  .form-control:-ms-input-placeholder {
-    color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent) !important;
-    opacity: 1 !important;
-  }
+  .form-control::placeholder,
+  .form-control::-webkit-input-placeholder,
+  .form-control:-ms-input-placeholder,
   .form-control::-ms-input-placeholder {
-    color: color-mix(in srgb, var(--user-card-text-color, #111827) 60%, transparent) !important;
+    color: #9ca3af !important;
     opacity: 1 !important;
   }
 }
 
 // Estilos para los filtros
 .form-select {
-  color: var(--user-card-text-color, #111827) !important;
+  color: #111827 !important;
   border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
-  background-color: transparent !important;
+  background-color: #ffffff !important;
   padding: 0.6rem 0.85rem;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -726,8 +722,9 @@
   .search-input {
     .form-control {
       border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
-      color: #ffffff !important;
-      caret-color: #ffffff !important;
+      color: #f1f5f9 !important;
+      caret-color: #f1f5f9 !important;
+      background: #2a2f3a !important;
       
       &:focus {
         border-color: var(--user-border-color, #0B7285) !important;
@@ -735,7 +732,7 @@
       }
 
       &::placeholder {
-        color: rgba(255,255,255,0.65) !important;
+        color: #bfc7cf !important;
       }
     }
     
@@ -747,8 +744,9 @@
   }
   
   .form-select {
-    color: var(--user-card-text-color, #ffffff) !important;
+    color: #f1f5f9 !important;
     border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+    background-color: #2a2f3a !important;
     
     &:focus {
       border-color: var(--user-border-color, #0B7285) !important;

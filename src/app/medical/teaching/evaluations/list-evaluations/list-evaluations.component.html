@@ -1,0 +1,327 @@
+<!-- Contenedor principal de la página de evaluaciones -->
+<div class="page-wrapper">
+  <!-- Contenido principal -->
+  <div class="content list-staff">
+
+    <!-- Encabezado de la página con breadcrumb de navegación -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <!-- Breadcrumb para mostrar la ruta actual -->
+          <ol class="breadcrumb p-2 rounded">
+            <li class="breadcrumb-item">{{ 'TEACHING_MODULE.EVALUATIONS.BREADCRUMB' | translate }} <span>&gt;</span></li>
+            <li class="breadcrumb-item active">{{ 'TEACHING_MODULE.EVALUATIONS.BREADCRUMB_LIST' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de filtros y búsqueda mejorada -->
+    <div class="filters-card mb-4">
+      <div class="filters-header mb-3">
+        <h5 class="mb-0 fw-semibold">
+          <i class="fa fa-clipboard-check me-2"></i>{{ 'TEACHING_MODULE.EVALUATIONS.FILTERS' | translate }}
+        </h5>
+      </div>
+      
+      <!-- Fila de búsqueda -->
+      <div class="row g-3 mb-3">
+        <!-- Búsqueda general -->
+        <div class="col-lg-6">
+          <div class="input-group search-input-group">
+            <span class="input-group-text">
+              <i class="fa fa-search"></i>
+            </span>
+            <input type="text"
+                   class="form-control"
+                   placeholder="{{ 'TEACHING_MODULE.EVALUATIONS.SEARCH_PLACEHOLDER' | translate }}"
+                   [(ngModel)]="searchTerm"
+                   (keyup.enter)="searchData()"
+                   (input)="searchTerm === '' && searchData()"
+                   [disabled]="loading">
+          </div>
+        </div>
+
+        <!-- Filtro de estado -->
+        <div class="col-lg-6">
+          <select class="form-select"
+                  [(ngModel)]="filtroEstado"
+                  (change)="filterData()"
+                  [disabled]="loading">
+            <option value="PENDIENTE">{{ 'TEACHING_MODULE.EVALUATIONS.ONLY_PENDING' | translate }}</option>
+            <option value="">{{ 'TEACHING_MODULE.EVALUATIONS.ALL_EVALUATIONS' | translate }}</option>
+            <option value="APROBADO">{{ 'TEACHING_MODULE.EVALUATIONS.APPROVED' | translate }}</option>
+            <option value="REPROBADO">{{ 'TEACHING_MODULE.EVALUATIONS.FAILED' | translate }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="row g-3">
+        <div class="col-lg-4">
+          <button class="btn btn-clear w-100"
+                  (click)="clearFilters()"
+                  [disabled]="loading">
+            <i class="fa fa-refresh me-2"></i>
+            {{ 'TEACHING_MODULE.EVALUATIONS.CLEAR_FILTERS' | translate }}
+          </button>
+        </div>
+        <div class="col-lg-4">
+          <button class="btn btn-back w-100"
+                  (click)="goBack()"
+                  [disabled]="loading">
+            <i class="fa fa-arrow-left me-2"></i>
+            {{ 'TEACHING_MODULE.EVALUATIONS.BACK_TO_LIST' | translate }}
+          </button>
+        </div>
+        <div class="col-lg-4">
+          <button class="btn btn-add-patient w-100"
+                  (click)="addEvaluacion()"
+                  [disabled]="loading">
+            <i class="fa fa-plus me-2"></i>
+            {{ 'TEACHING_MODULE.EVALUATIONS.NEW_EVALUATION' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra de estadísticas -->
+      <div class="stats-bar mt-3" *ngIf="!loading">
+        <div class="stat-item">
+          <i class="fa fa-clipboard-list"></i>
+          <span class="stat-label">{{ 'TEACHING_MODULE.EVALUATIONS.TOTAL' | translate }}:</span>
+          <span class="stat-value">{{ totalData }}</span>
+        </div>
+        <div class="stat-item">
+          <i class="fa fa-hourglass-half"></i>
+          <span class="stat-label">{{ 'TEACHING_MODULE.EVALUATIONS.PENDING' | translate }}:</span>
+          <span class="stat-value">{{ stats.pendientes || 0 }}</span>
+        </div>
+        <div class="stat-item">
+          <i class="fa fa-check-circle"></i>
+          <span class="stat-label">{{ 'TEACHING_MODULE.EVALUATIONS.STATUS_APPROVED' | translate }}:</span>
+          <span class="stat-value">{{ stats.aprobadas || 0 }}</span>
+        </div>
+        <div class="stat-item">
+          <i class="fa fa-times-circle"></i>
+          <span class="stat-label">{{ 'TEACHING_MODULE.EVALUATIONS.STATUS_FAILED' | translate }}:</span>
+          <span class="stat-value">{{ stats.reprobadas || 0 }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card principal con listado -->
+    <div class="card card-list">
+      <div class="card-body">
+        
+        <!-- Alerta de éxito -->
+        <div class="mb-3" *ngIf="text_success">
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><i class="fa fa-check-circle me-2"></i>{{ 'TEACHING_MODULE.EVALUATIONS.SUCCESS' | translate }}!</strong> {{ text_success }}
+            <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
+          </div>
+        </div>
+
+        <!-- Alerta de validación/error -->
+        <div class="mb-3" *ngIf="text_validation">
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'TEACHING_MODULE.EVALUATIONS.WARNING' | translate }}:</strong> {{ text_validation }}
+            <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+          </div>
+        </div>
+
+        <!-- Grid de evaluaciones con cards compactas -->
+        <div class="patients-grid" *ngIf="!loading && evaluaciones.length > 0">
+          <div class="patient-card" *ngFor="let evaluacion of evaluaciones; let i = index">
+            <!-- Encabezado de la card -->
+            <div class="patient-card-header">
+              <div class="expediente-section">
+                <i class="fa fa-hashtag"></i>
+                <span class="expediente-number">#{{ (currentPage - 1) * pageSize + i + 1 }}</span>
+              </div>
+              
+              <div class="action-buttons-compact">
+                <button class="btn-icon btn-expand"
+                        (click)="toggleCard(evaluacion.id!)"
+                        title="{{ 'TEACHING_MODULE.EVALUATIONS.EXPAND' | translate }}">
+                  <i class="fa" [class.fa-chevron-down]="!expandedCards.has(evaluacion.id!)" 
+                     [class.fa-chevron-up]="expandedCards.has(evaluacion.id!)"></i>
+                </button>
+                <button class="btn-icon btn-edit"
+                        (click)="editEvaluacion(evaluacion)"
+                        title="{{ 'TEACHING_MODULE.EVALUATIONS.EDIT' | translate }}">
+                  <i class="fa fa-edit"></i>
+                </button>
+                <button class="btn-icon btn-delete"
+                        (click)="deleteEvaluacion(evaluacion)"
+                        title="{{ 'TEACHING_MODULE.EVALUATIONS.DELETE' | translate }}">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Cuerpo de la card -->
+            <div class="patient-card-body">
+              <!-- Información principal (siempre visible) -->
+              <div class="patient-horizontal-info mb-2">
+                <div class="info-block info-name">
+                  <i class="fa fa-user"></i>
+                  <div class="info-details">
+                    <span class="info-label-small">{{ 'TEACHING_MODULE.EVALUATIONS.NAME' | translate }}</span>
+                    <span class="info-value-main">{{ evaluacion.nombre }}</span>
+                  </div>
+                </div>
+
+                <div class="info-block info-compact">
+                  <i class="fa fa-stethoscope"></i>
+                  <div class="info-details">
+                    <span class="info-label-small">{{ 'TEACHING_MODULE.EVALUATIONS.SPECIALTY' | translate }}</span>
+                    <span class="info-value-main">{{ evaluacion.especialidad }}</span>
+                  </div>
+                </div>
+
+                <div class="info-block info-small">
+                  <i class="fa" [class.fa-hourglass-half]="evaluacion.estado === 'PENDIENTE'"
+                     [class.fa-check-circle]="evaluacion.estado === 'APROBADO'"
+                     [class.fa-times-circle]="evaluacion.estado === 'REPROBADO'"></i>
+                  <div class="info-details">
+                    <span class="info-label-small">{{ 'TEACHING_MODULE.EVALUATIONS.STATUS' | translate }}</span>
+                    <span class="info-value-main" 
+                          [style.color]="evaluacion.estado === 'PENDIENTE' ? '#f59e0b' : 
+                                         evaluacion.estado === 'APROBADO' ? '#10b981' : '#ef4444'">
+                      {{ evaluacion.estado === 'PENDIENTE' ? ('TEACHING_MODULE.EVALUATIONS.STATUS_PENDING' | translate) : 
+                         evaluacion.estado === 'APROBADO' ? ('TEACHING_MODULE.EVALUATIONS.STATUS_APPROVED_VALUE' | translate) : 
+                         ('TEACHING_MODULE.EVALUATIONS.STATUS_FAILED_VALUE' | translate) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Información expandida -->
+              <div class="expanded-details" *ngIf="expandedCards.has(evaluacion.id!)">
+                <div class="details-separator"></div>
+
+                <div class="patient-horizontal-info mb-2">
+                  <div class="info-block info-date">
+                    <i class="fa fa-calendar-check"></i>
+                    <div class="info-details">
+                      <span class="info-label-small">{{ 'TEACHING_MODULE.EVALUATIONS.START_DATE' | translate }}</span>
+                      <span class="info-value-main">{{ formatDate(evaluacion.fecha_inicio) }}</span>
+                    </div>
+                  </div>
+
+                  <div class="info-block info-date">
+                    <i class="fa fa-calendar-times"></i>
+                    <div class="info-details">
+                      <span class="info-label-small">{{ 'TEACHING_MODULE.EVALUATIONS.DEADLINE' | translate }}</span>
+                      <span class="info-value-main">{{ formatDate(evaluacion.fecha_limite) }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="patient-horizontal-info" *ngIf="evaluacion.observaciones">
+                  <div class="info-block info-location">
+                    <i class="fa fa-sticky-note"></i>
+                    <div class="info-details">
+                      <span class="info-label-small">{{ 'TEACHING_MODULE.EVALUATIONS.OBSERVATIONS' | translate }}</span>
+                      <span class="info-value-main">{{ evaluacion.observaciones }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado de carga -->
+        <div class="text-center py-5" *ngIf="loading">
+          <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">{{ 'TEACHING_MODULE.EVALUATIONS.LOADING' | translate }}</span>
+          </div>
+          <p class="mt-3 text-muted">{{ 'TEACHING_MODULE.EVALUATIONS.LOADING' | translate }}...</p>
+        </div>
+
+        <!-- Estado vacío -->
+        <div class="empty-state" *ngIf="!loading && evaluaciones.length === 0">
+          <div class="empty-icon">
+            <i class="fa fa-clipboard-check"></i>
+          </div>
+          <h5>{{ filtroEstado === 'PENDIENTE' ? ('TEACHING_MODULE.EVALUATIONS.NO_PENDING' | translate) : ('TEACHING_MODULE.EVALUATIONS.NO_FOUND' | translate) }}</h5>
+          <p>{{ filtroEstado === 'PENDIENTE' ? ('TEACHING_MODULE.EVALUATIONS.ALL_COMPLETE' | translate) : ('TEACHING_MODULE.EVALUATIONS.ADJUST_FILTERS' | translate) }}</p>
+          <button class="btn btn-add-patient" (click)="addEvaluacion()">
+            <i class="fa fa-plus me-2"></i>
+            {{ 'TEACHING_MODULE.EVALUATIONS.ADD_FIRST' | translate }}
+          </button>
+        </div>
+
+        <!-- Paginación -->
+        <div class="pagination-wrapper" *ngIf="!loading && evaluaciones.length > 0 && pageNumberArray.length > 1">
+          <div class="pagination-info">
+            <i class="fa fa-info-circle me-2"></i>
+            {{ 'TEACHING_MODULE.EVALUATIONS.SHOWING' | translate }} {{ ((currentPage - 1) * pageSize) + 1 }} {{ 'TEACHING_MODULE.EVALUATIONS.TO' | translate }} 
+            {{ Math.min(currentPage * pageSize, totalData) }} {{ 'TEACHING_MODULE.EVALUATIONS.OF' | translate }} {{ totalData }} {{ 'TEACHING_MODULE.EVALUATIONS.EVALUATIONS_TEXT' | translate }}
+          </div>
+          <nav aria-label="Paginación de evaluaciones">
+            <ul class="pagination mb-0">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" 
+                   (click)="currentPage > 1 && moveToPage(currentPage - 1)"
+                   [attr.aria-disabled]="currentPage === 1">
+                  <i class="fa fa-chevron-left me-1"></i>{{ 'TEACHING_MODULE.EVALUATIONS.PREVIOUS' | translate }}
+                </a>
+              </li>
+              
+              <li class="page-item" 
+                  *ngFor="let page of pageNumberArray" 
+                  [class.active]="currentPage === page">
+                <a class="page-link" (click)="moveToPage(page)">{{ page }}</a>
+              </li>
+              
+              <li class="page-item" [class.disabled]="currentPage === pageNumberArray.length">
+                <a class="page-link" 
+                   (click)="currentPage < pageNumberArray.length && moveToPage(currentPage + 1)"
+                   [attr.aria-disabled]="currentPage === pageNumberArray.length">
+                  {{ 'TEACHING_MODULE.EVALUATIONS.NEXT' | translate }}<i class="fa fa-chevron-right ms-1"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="deleteModalLabel">
+          <i class="fa fa-exclamation-triangle me-2"></i>
+          {{ 'TEACHING_MODULE.EVALUATIONS.DELETE_CONFIRMATION_TITLE' | translate }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ 'TEACHING_MODULE.EVALUATIONS.DELETE_CONFIRMATION_MESSAGE' | translate }}</p>
+        <div class="alert alert-warning" *ngIf="evaluacionToDelete">
+          <strong>{{ evaluacionToDelete.nombre }}</strong><br>
+          <small>{{ 'TEACHING_MODULE.EVALUATIONS.SPECIALTY' | translate }}: {{ evaluacionToDelete.especialidad }}</small><br>
+          <small>{{ 'TEACHING_MODULE.EVALUATIONS.STATUS' | translate }}: {{ evaluacionToDelete.estado }}</small>
+        </div>
+        <p class="text-muted"><small>{{ 'TEACHING_MODULE.EVALUATIONS.DELETE_CONFIRMATION_WARNING' | translate }}</small></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          {{ 'TEACHING_MODULE.EVALUATIONS.CANCEL' | translate }}
+        </button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()" [disabled]="deleting">
+          <i class="fa fa-trash me-2"></i>
+          {{ deleting ? ('TEACHING_MODULE.EVALUATIONS.DELETING' | translate) : ('TEACHING_MODULE.EVALUATIONS.DELETE' | translate) }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

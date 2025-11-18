@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-teaching',
-  imports: [],
+  standalone: true,
+  imports: [RouterModule],
   templateUrl: './teaching.component.html',
-  styleUrl: './teaching.component.scss'
+  styleUrls: ['./teaching.component.scss']
 })
 export class TeachingComponent {
 

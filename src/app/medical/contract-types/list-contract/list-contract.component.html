@@ -24,20 +24,14 @@
               <h4 class="mb-0 fw-semibold">{{ 'CONTRACT.LIST_CONTRACT.TITLE' | translate }}</h4>
               <div class="d-flex align-items-center gap-2 flex-wrap">
                 <!-- Campo de búsqueda -->
-                <div class="input-group search-input">
-                  <input type="text" class="form-control" placeholder="{{ 'CONTRACT.LIST_CONTRACT.SEARCH_PLACEHOLDER' | translate }}" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
-                  <span class="input-group-text">
-                    <i class="fa fa-search"></i>
-                  </span>
+                <div class="search-box">
+                  <input type="text" class="form-control white-input" placeholder="{{ 'CONTRACT.LIST_CONTRACT.SEARCH_PLACEHOLDER' | translate }}" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
+                  <i class="fa fa-search search-icon"></i>
                 </div>
                 <!-- Botón para registrar nuevo contrato -->
                 <a routerLink="/contract-types/add_contract" class="btn btn-options d-flex align-items-center gap-1">
                   <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'CONTRACT.LIST_CONTRACT.NEW' | translate }}</span>
                 </a>
-                <!-- Botón para refrescar la tabla -->
-                <button (click)="PageSize()" class="btn btn-outline-secondary">
-                  <i class="fa fa-refresh"></i>
-                </button>
               </div>
             </div>
 

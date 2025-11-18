@@ -32,6 +32,7 @@ export class SidebarComponent implements OnDestroy {
   public groupMap: { [key: string]: string } = {
     'GRUPO_ADMINISTRADOR': 'ADMINISTRADOR',
     'GRUPO_RH': 'RH',
+    'GRUPO_ENSEÑANZA': 'TEACHING',
     'GRUPO_ARCHIVO': 'ARCHIVO',
     'GRUPO_PHARMACY': 'PHARMACY',
     'GRUPO_TABLERO': 'TABLERO',

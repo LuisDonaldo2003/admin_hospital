@@ -24,17 +24,29 @@
           <div class="card-body">
 
             <!-- Barra de acciones y búsqueda sobre la tabla -->
-            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 header-bar">
+            <div class="d-flex justify-content-between align-items-start flex-wrap mb-3 header-bar">
               <!-- Título de la tabla -->
               <h4 class="mb-0 fw-semibold">{{ 'STAFF.LIST_STAFF.TITLE' | translate }}</h4>
-              <div class="d-flex align-items-center gap-2 flex-wrap">
-                <!-- Input de búsqueda -->
-                <div class="input-group search-input">
-                  <input type="text" class="form-control" [placeholder]="'STAFF.LIST_STAFF.SEARCH_PLACEHOLDER' | translate" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
-                  <span class="input-group-text">
-                    <i class="fa fa-search"></i>
-                  </span>
+              
+              <!-- Contenedor de controles de filtrado y acciones -->
+              <div class="filter-controls-wrapper">
+                <!-- Sección de filtros: búsqueda y rol -->
+                <div class="filters-section d-flex gap-2 mb-2">
+                  <!-- Input de búsqueda -->
+                  <div class="search-box">
+                    <input type="text" class="form-control white-input" [placeholder]="'STAFF.LIST_STAFF.SEARCH_PLACEHOLDER' | translate" [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
+                    <i class="fa fa-search search-icon"></i>
+                  </div>
+                  
+                  <!-- Filtro por rol -->
+                  <div class="role-filter-box">
+                    <select class="form-select white-select" [(ngModel)]="roleFilter" (ngModelChange)="onRoleFilterChange($event)">
+                      <option value="">{{ 'STAFF.LIST_STAFF.ALL_ROLES' | translate }}</option>
+                      <option *ngFor="let r of roleList" [value]="r">{{ r }}</option>
+                    </select>
+                  </div>
                 </div>
+                
                 <!-- Botón para agregar nuevo staff - Solo visible con permiso register_staff -->
                 <a *appHasPermission="'register_staff'" routerLink="/staffs/add-staff" class="btn btn-options d-flex align-items-center gap-1">
                   <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'STAFF.LIST_STAFF.NEW' | translate }}</span>
@@ -49,7 +61,12 @@
                   <tr>
                     <!-- Encabezados de la tabla -->
                     <th mat-sort-header="name" style="width: 25%;">
-                      <i class="fa fa-user me-2"></i>{{ 'STAFF.LIST_STAFF.COMPLETE_NAME' | translate }}
+                      <div class="d-flex align-items-center justify-content-between">
+                        <span><i class="fa fa-user me-2"></i>{{ 'STAFF.LIST_STAFF.COMPLETE_NAME' | translate }}</span>
+                        <button type="button" class="btn btn-sm btn-sort-toggle ms-2" (click)="toggleReverseOrder()" [title]="inverted ? 'Ordenar A-Z' : 'Ordenar Z-A'">
+                          <i class="fa" [ngClass]="inverted ? 'fa-sort-alpha-down' : 'fa-sort-alpha-up'"></i>
+                        </button>
+                      </div>
                     </th>
                     <th mat-sort-header="email" style="width: 30%;">
                       <i class="fa fa-envelope me-2"></i>{{ 'STAFF.LIST_STAFF.EMAIL' | translate }}
@@ -70,6 +87,10 @@
                       <div class="user-name-cell">
                         <i class="fa fa-user-circle text-primary me-2"></i>
                         <strong>{{ data.name }} {{ data.surname || '' }}</strong>
+                        <!-- Si el nombre inicia con Z, mostrar botón para invertir el orden -->
+                        <button *ngIf="data.name?.toLowerCase().startsWith('z')" type="button" class="btn btn-sm btn-reverse ms-2" (click)="toggleReverseOrder()" title="Invertir orden">
+                          <i class="fa fa-sort"></i>
+                        </button>
                       </div>
                     </td>
                     

@@ -1,0 +1,206 @@
+<!-- Contenedor principal -->
+<div class="page-wrapper">
+  <div class="content teaching-form-page">
+
+    <!-- Breadcrumb de navegación -->
+    <div class="page-header mb-3">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb p-2 rounded">
+            <li class="breadcrumb-item">
+              <a>{{ 'TEACHING_MODULE.EVALUATIONS.BREADCRUMB' | translate }}</a>
+              <span>&gt;</span>
+            </li>
+            <li class="breadcrumb-item active">
+              {{ isEditMode ? ('TEACHING_MODULE.EVALUATIONS.EDIT_TITLE' | translate) : ('TEACHING_MODULE.EVALUATIONS.ADD_TITLE' | translate) }}
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card principal con el formulario -->
+    <div class="card evaluation-form">
+      <div class="card-body">
+        
+        <!-- Encabezado del formulario con ícono circular -->
+        <div class="form-header mb-3">
+          <div class="form-icon">
+            <i class="fa fa-clipboard-check"></i>
+          </div>
+          <h3 class="form-title">
+            {{ isEditMode ? ('TEACHING_MODULE.EVALUATIONS.EDIT_TITLE' | translate) : ('TEACHING_MODULE.EVALUATIONS.ADD_TITLE' | translate) }}
+          </h3>
+          <p class="form-subtitle">
+            {{ isEditMode ? ('TEACHING_MODULE.EVALUATIONS.FORM_SUBTITLE' | translate) : ('TEACHING_MODULE.EVALUATIONS.FORM_SUBTITLE' | translate) }}
+          </p>
+        </div>
+
+        <!-- Loader -->
+        @if (loading) {
+          <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3 text-muted">Cargando evaluación...</p>
+          </div>
+        }
+
+        <!-- Formulario -->
+        @if (!loading) {
+          <form #evaluacionForm="ngForm">
+          
+          <!-- Alerta de éxito -->
+          @if (text_success) {
+            <div class="mb-4">
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong><i class="fa fa-check-circle me-2"></i>{{ 'TEACHING_MODULE.EVALUATIONS.SUCCESS' | translate }}!</strong> {{ text_success }}
+                <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
+              </div>
+            </div>
+          }
+
+          <!-- Alerta de validación/error -->
+          @if (text_validation) {
+            <div class="mb-4">
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'TEACHING_MODULE.EVALUATIONS.WARNING' | translate }}:</strong> {{ text_validation }}
+                <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+              </div>
+            </div>
+          }
+
+          <!-- SECCIÓN 1: Información General -->
+          <div class="form-section">
+            <div class="section-title">
+              <i class="fa fa-user-md me-2"></i>
+              {{ 'TEACHING_MODULE.EVALUATIONS.FORM_SUBTITLE' | translate }}
+            </div>
+
+            <div class="row g-3">
+              <!-- Nombre Completo -->
+              <div class="col-md-6">
+                <label class="form-label required">{{ 'TEACHING_MODULE.EVALUATIONS.FULL_NAME' | translate }}</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [(ngModel)]="evaluacion.nombre" 
+                  name="nombre"
+                  placeholder="{{ 'TEACHING_MODULE.EVALUATIONS.FULL_NAME_PLACEHOLDER' | translate }}"
+                  required
+                  [disabled]="saving">
+              </div>
+
+              <!-- Especialidad/Profesión -->
+              <div class="col-md-6">
+                <label class="form-label required">{{ 'TEACHING_MODULE.EVALUATIONS.SPECIALTY' | translate }}</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [(ngModel)]="evaluacion.especialidad" 
+                  name="especialidad"
+                  placeholder="{{ 'TEACHING_MODULE.EVALUATIONS.SPECIALTY_PLACEHOLDER' | translate }}"
+                  required
+                  [disabled]="saving">
+              </div>
+            </div>
+          </div>
+
+          <!-- SECCIÓN 2: Fechas -->
+          <div class="form-section">
+            <div class="section-title">
+              <i class="fa fa-calendar-alt me-2"></i>
+              {{ 'TEACHING_MODULE.EVALUATIONS.START_DATE' | translate }} / {{ 'TEACHING_MODULE.EVALUATIONS.DEADLINE' | translate }}
+            </div>
+
+            <div class="row g-3">
+              <!-- Fecha Inicio -->
+              <div class="col-md-6">
+                <label class="form-label">{{ 'TEACHING_MODULE.EVALUATIONS.START_DATE_LABEL' | translate }}</label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  [(ngModel)]="evaluacion.fecha_inicio" 
+                  name="fecha_inicio"
+                  [disabled]="saving">
+              </div>
+
+              <!-- Fecha Límite -->
+              <div class="col-md-6">
+                <label class="form-label required">{{ 'TEACHING_MODULE.EVALUATIONS.DEADLINE_LABEL' | translate }}</label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  [(ngModel)]="evaluacion.fecha_limite" 
+                  name="fecha_limite"
+                  required
+                  [disabled]="saving">
+              </div>
+            </div>
+          </div>
+
+          <!-- SECCIÓN 3: Estado y Observaciones -->
+          <div class="form-section">
+            <div class="section-title">
+              <i class="fa fa-tasks me-2"></i>
+              {{ 'TEACHING_MODULE.EVALUATIONS.STATUS' | translate }} / {{ 'TEACHING_MODULE.EVALUATIONS.OBSERVATIONS' | translate }}
+            </div>
+
+            <div class="row g-3">
+              <!-- Estado -->
+              <div class="col-md-6">
+                <label class="form-label required">{{ 'TEACHING_MODULE.EVALUATIONS.STATUS_LABEL' | translate }}</label>
+                <select 
+                  class="form-select" 
+                  [(ngModel)]="evaluacion.estado" 
+                  name="estado"
+                  required
+                  [disabled]="saving">
+                  <option value="PENDIENTE">{{ 'TEACHING_MODULE.EVALUATIONS.STATUS_PENDING' | translate }}</option>
+                  <option value="APROBADO">{{ 'TEACHING_MODULE.EVALUATIONS.STATUS_APPROVED_VALUE' | translate }}</option>
+                  <option value="REPROBADO">{{ 'TEACHING_MODULE.EVALUATIONS.STATUS_FAILED_VALUE' | translate }}</option>
+                </select>
+              </div>
+
+              <!-- Observaciones -->
+              <div class="col-md-12">
+                <label class="form-label">{{ 'TEACHING_MODULE.EVALUATIONS.OBSERVATIONS' | translate }}</label>
+                <textarea 
+                  class="form-control" 
+                  rows="3"
+                  [(ngModel)]="evaluacion.observaciones" 
+                  name="observaciones"
+                  placeholder="{{ 'TEACHING_MODULE.EVALUATIONS.OBSERVATIONS_PLACEHOLDER' | translate }}"
+                  [disabled]="saving"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="form-actions">
+            <button 
+              type="button" 
+              class="btn btn-cancel" 
+              (click)="cancel()"
+              [disabled]="saving">
+              <i class="fa fa-times me-2"></i>
+              {{ 'TEACHING_MODULE.EVALUATIONS.CANCEL' | translate }}
+            </button>
+            <button 
+              type="submit" 
+              class="btn btn-save" 
+              (click)="saveEvaluacion()" 
+              [disabled]="!isFormValid() || saving">
+              <i class="fa" [class.fa-save]="!saving" [class.fa-spinner]="saving" [class.fa-spin]="saving" class="me-2"></i>
+              {{ saving ? ('TEACHING_MODULE.EVALUATIONS.SAVING' | translate) : (isEditMode ? ('TEACHING_MODULE.EVALUATIONS.UPDATE' | translate) : ('TEACHING_MODULE.EVALUATIONS.SAVE' | translate)) }}
+            </button>
+          </div>
+
+        </form>
+        }
+
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,239 @@
+<div class="page-wrapper">
+  <div class="content teaching-form">
+    <!-- Encabezado de la página con breadcrumb -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item">
+              <a>{{ 'TEACHING_MODULE.ASSISTANTS.BREADCRUMB' | translate }}</a>
+            </li>
+            <li class="breadcrumb-item active">
+              {{ isEditMode ? ('TEACHING_MODULE.ASSISTANTS.BREADCRUMB_EDIT' | translate) : ('TEACHING_MODULE.ASSISTANTS.BREADCRUMB_NEW' | translate) }}
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección central del formulario -->
+    <div class="row justify-content-center">
+      <div class="col-lg-11 col-xl-10">
+        <!-- Card que contiene el formulario -->
+        <div class="card card-form shadow border-0">
+          <div class="card-body p-4">
+            <!-- Encabezado del formulario con icono -->
+            <div class="form-header text-center mb-4">
+              <div class="form-icon mb-3">
+                <i class="fa fa-graduation-cap"></i>
+              </div>
+              <h3 class="fw-bold mb-2">{{ isEditMode ? ('TEACHING_MODULE.ASSISTANTS.EDIT_TITLE' | translate) : ('TEACHING_MODULE.ASSISTANTS.ADD_TITLE' | translate) }}</h3>
+              <p class="text-muted small">{{ 'TEACHING_MODULE.ASSISTANTS.FORM_SUBTITLE' | translate }}</p>
+            </div>
+
+            <!-- Formulario -->
+            <form #teachingForm="ngForm" *ngIf="!loading">
+              <!-- Sección: Información Personal -->
+              <div class="form-section">
+                <div class="section-header mb-3">
+                  <h5 class="section-title">
+                    <i class="fa fa-user me-2"></i>{{ 'TEACHING_MODULE.ASSISTANTS.PERSONAL_INFO' | translate }}
+                  </h5>
+                </div>
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">
+                      <i class="fa fa-user-md me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.PROFESSION' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-control form-select" [(ngModel)]="teaching.profesion" name="profesion" required>
+                      <option value="">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT' | translate }}</option>
+                      <option *ngFor="let prof of profesiones" [value]="prof">{{ prof }}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-id-card me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.FULL_NAME' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="teaching.nombre" name="nombre" required
+                           placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.FULL_NAME_PLACEHOLDER' | translate }}">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">
+                      <i class="fa fa-envelope me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.EMAIL' | translate }}
+                    </label>
+                    <input type="email" class="form-control" [(ngModel)]="teaching.correo" name="correo"
+                           placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.EMAIL_PLACEHOLDER' | translate }}">
+                  </div>
+                </div>
+
+                <div class="row g-3 mt-2">
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-hospital me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.AREA' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-control form-select" [(ngModel)]="teaching.area" name="area" required>
+                      <option value="">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_AREA' | translate }}</option>
+                      <option *ngFor="let area of areas" [value]="area">{{ area }}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">
+                      <i class="fa fa-file-alt me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.EI' | translate }}
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="teaching.ei" name="ei" 
+                           placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.EI_PLACEHOLDER' | translate }}">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">
+                      <i class="fa fa-file-alt me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.EF' | translate }}
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="teaching.ef" name="ef" 
+                           placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.EF_PLACEHOLDER' | translate }}">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Separador -->
+              <div class="form-divider my-4"></div>
+
+              <!-- Sección: Detalles del Evento -->
+              <div class="form-section">
+                <div class="section-header mb-3">
+                  <h5 class="section-title">
+                    <i class="fa fa-calendar-check me-2"></i>{{ 'TEACHING_MODULE.ASSISTANTS.EVENT_DETAILS' | translate }}
+                  </h5>
+                </div>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label class="form-label">
+                      <i class="fa fa-bullhorn me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.EVENT_NAME' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="teaching.nombre_evento" 
+                           name="nombre_evento" required
+                           placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.EVENT_NAME_PLACEHOLDER' | translate }}">
+                  </div>
+                </div>
+
+                <div class="row g-3 mt-2">
+                  <div class="col-md-8">
+                    <label class="form-label">
+                      <i class="fa fa-comment me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.THEME' | translate }}
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="teaching.tema" 
+                           name="tema" placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.THEME_PLACEHOLDER' | translate }}">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">
+                      <i class="fa fa-calendar me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.DATE' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <input type="date" class="form-control" [(ngModel)]="teaching.fecha" name="fecha" required>
+                  </div>
+                </div>
+
+                <div class="row g-3 mt-2">
+                  <div class="col-md-4">
+                    <label class="form-label">
+                      <i class="fa fa-desktop me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.MODALITY' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-control form-select" [(ngModel)]="teaching.modalidad_id" name="modalidad_id" required>
+                      <option [ngValue]="undefined">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_MODALITY' | translate }}</option>
+                      <option *ngFor="let modalidad of modalidades" [ngValue]="modalidad.id">
+                        {{ modalidad.nombre }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">
+                      <i class="fa fa-users me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.PARTICIPATION' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-control form-select" [(ngModel)]="teaching.participacion_id" name="participacion_id" required>
+                      <option [ngValue]="undefined">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_PARTICIPATION' | translate }}</option>
+                      <option *ngFor="let participacion of participaciones" [ngValue]="participacion.id">
+                        {{ participacion.nombre }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">
+                      <i class="fa fa-clock me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.HOURS' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="teaching.horas" 
+                           name="horas" placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.HOURS_PLACEHOLDER' | translate }}" required>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Separador -->
+              <div class="form-divider my-4"></div>
+
+              <!-- Sección: Información Institucional -->
+              <div class="form-section">
+                <div class="section-header mb-3">
+                  <h5 class="section-title">
+                    <i class="fa fa-building me-2"></i>{{ 'TEACHING_MODULE.ASSISTANTS.INSTITUTIONAL_INFO' | translate }}
+                  </h5>
+                </div>
+                <div class="row g-3">
+                  <div class="col-md-9">
+                    <label class="form-label">
+                      <i class="fa fa-map-marker-alt me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.ADSCRIPTION' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="teaching.adscripcion" 
+                           name="adscripcion" required 
+                           placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.ADSCRIPTION_PLACEHOLDER' | translate }}">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">
+                      <i class="fa fa-file-invoice me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.FOJA' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="teaching.foja" 
+                           name="foja" placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.FOJA_PLACEHOLDER' | translate }}" required>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mensaje de validación -->
+              <div class="mt-4" *ngIf="text_validation">
+                <div class="alert alert-modern alert-warning d-flex align-items-center">
+                  <i class="fa fa-exclamation-triangle me-3"></i>
+                  <div class="flex-grow-1">
+                    <strong>{{ 'TEACHING_MODULE.ASSISTANTS.WARNING' | translate }}:</strong> {{ text_validation }}
+                  </div>
+                  <button type="button" class="btn-close" (click)="text_validation = ''"></button>
+                </div>
+              </div>
+
+              <!-- Mensaje de éxito -->
+              <div class="mt-4" *ngIf="text_success">
+                <div class="alert alert-modern alert-success d-flex align-items-center">
+                  <i class="fa fa-check-circle me-3"></i>
+                  <div class="flex-grow-1">
+                    <strong>{{ 'TEACHING_MODULE.ASSISTANTS.SUCCESS' | translate }}!</strong> {{ text_success }}
+                  </div>
+                  <button type="button" class="btn-close" (click)="text_success = ''"></button>
+                </div>
+              </div>
+
+              <!-- Botones de acción -->
+              <div class="form-actions d-flex justify-content-end gap-2 mt-4">
+                <button type="button" class="btn btn-cancel" (click)="goToList()">
+                  <i class="fa fa-times me-2"></i>{{ 'TEACHING_MODULE.ASSISTANTS.CANCEL' | translate }}
+                </button>
+                <button type="button" class="btn btn-save" (click)="save()" [disabled]="!teachingForm.valid || loading">
+                  <i class="fa fa-save me-2"></i>{{ loading ? ('TEACHING_MODULE.ASSISTANTS.SAVING' | translate) : (isEditMode ? ('TEACHING_MODULE.ASSISTANTS.UPDATE' | translate) : ('TEACHING_MODULE.ASSISTANTS.SAVE' | translate)) }}
+                </button>
+              </div>
+            </form>
+
+            <!-- Loader -->
+            <div *ngIf="loading" class="text-center py-5">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

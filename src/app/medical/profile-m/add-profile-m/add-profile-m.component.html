@@ -32,31 +32,31 @@
             <!-- Formulario de registro de perfil -->
             <form>
               <!-- Campo para el nombre del perfil -->
-              <div class="mb-3 row">
-                <label for="name" class="col-sm-2 col-form-label">{{ 'PROFILE_M.ADD_PROFILE.NAME' | translate }}</label>
-                <div class="col-sm-10">
-                  <input type="text" id="name" name="name" [(ngModel)]="name" class="form-control" [placeholder]="'PROFILE_M.ADD_PROFILE.PLACEHOLDER_NAME' | translate" />
-                </div>
+              <div class="mb-3">
+                <label for="name" class="form-label">{{ 'PROFILE_M.ADD_PROFILE.NAME' | translate }}</label>
+                <input type="text" id="name" name="name" [(ngModel)]="name" class="form-control" [placeholder]="'PROFILE_M.ADD_PROFILE.PLACEHOLDER_NAME' | translate" />
               </div>
 
-              <!-- Selección de estado del perfil (activo/inactivo) -->
-              <div class="mb-3 row">
-                <label class="col-sm-2 col-form-label">{{ 'COMMON.STATE' | translate }}</label>
+              <!-- Selección de estado del perfil (activo/inactivo) - Toggle mejorado -->
+              <div class="mb-3 row align-items-center">
+                <label class="col-sm-2 col-form-label">{{ 'PROFILE_M.ADD_PROFILE.STATE' | translate }}</label>
                 <div class="col-sm-10 d-flex align-items-center">
-                  <div class="form-check form-switch">
-                    <input 
-                      type="checkbox" 
-                      class="form-check-input" 
-                      id="stateSwitch" 
-                      name="state" 
-                      [(ngModel)]="state" 
-                      role="switch" />
-                    <label class="form-check-label ms-2" for="stateSwitch">
-                      <span class="badge" [ngClass]="state ? 'bg-success' : 'bg-secondary'">
-                        <i class="fa" [ngClass]="state ? 'fa-check-circle' : 'fa-times-circle'"></i>
-                        {{ state ? ('COMMON.ACTIVE' | translate) : ('COMMON.INACTIVE' | translate) }}
+                  <div class="toggle-wrapper d-flex align-items-center">
+                    <label class="toggle-switch" for="stateSwitch">
+                      <input
+                        type="checkbox"
+                        id="stateSwitch"
+                        name="state"
+                        [(ngModel)]="state"
+                        aria-label="{{ 'PROFILE_M.ADD_PROFILE.STATE' | translate }}" />
+                      <span class="switch-slider" aria-hidden="true">
+                        <span class="switch-knob"></span>
                       </span>
                     </label>
+                    <span class="toggle-badge ms-3" [ngClass]="state ? 'active' : 'inactive'">
+                      <i class="fa" [ngClass]="state ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ state ? ('PROFILE_M.ADD_PROFILE.ACTIVE' | translate) : ('PROFILE_M.ADD_PROFILE.INACTIVE' | translate) }}
+                    </span>
                   </div>
                 </div>
               </div>

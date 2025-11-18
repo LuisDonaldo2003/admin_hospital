@@ -56,35 +56,18 @@ const routes: Routes = [
       },
       {
         path: 'personal',
-        loadComponent: () => 
-          import('./personal/personal.component').then(m => m.PersonalComponent),
-        children: [
-          {
-            path: 'list_personal',
-            loadComponent: () => 
-              import('./personal/personal-list/personal-list.component').then(m => m.PersonalListComponent)
-          },
-          {
-            path: 'add_personal',
-            loadComponent: () => 
-              import('./personal/add-personal/add-personal.component').then(m => m.AddPersonalComponent)
-          },
-          {
-            path: 'edit_personal/:id',
-            loadComponent: () => 
-              import('./personal/edit-personal/edit-personal.component').then(m => m.EditPersonalComponent)
-          },
-          {
-            path: '',
-            redirectTo: 'list',
-            pathMatch: 'full'
-          }
-        ]
+        loadChildren: () => 
+          import('./personal/personal.module').then(m => m.PersonalModule),
       },
       {
         path: 'pdf-compressor',
         loadComponent: () => 
           import('./pdf-compressor/pdf-compressor.component').then(m => m.PdfCompressorComponent)
+      },
+      {
+        path: 'teaching',
+        loadChildren: () => 
+          import('./teaching/teaching.module').then(m => m.TeachingModule),
       },
 
     ]

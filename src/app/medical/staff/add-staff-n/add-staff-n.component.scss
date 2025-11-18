@@ -1,37 +1,19 @@
+// ========================================
+// ADD STAFF - ESTILOS OPTIMIZADOS
+// Estructura limpia sin duplicaciones
+// ========================================
+
 .add-staff-form {
-  // ===== CARD PRINCIPAL DEL FORMULARIO =====
+  // ===== CARD PRINCIPAL =====
   .card-form {
     border-radius: 1rem;
     padding: 0.5rem;
     box-sizing: border-box;
-    border: 4px solid var(--user-border-color, #000) !important; // Borde SIEMPRE dinámico y visible
+    border: 4px solid var(--user-border-color, #000) !important;
     background-color: var(--user-card-bg, #ffffff) !important;
     color: var(--user-card-text-color, #111827) !important;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    position: relative;
-    overflow: hidden;
-
-    // Efecto de brillo sutil
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.1),
-        transparent
-      );
-      transition: left 0.5s;
-    }
-
-    &:hover::before {
-      left: 100%;
-    }
   }
 
   // ===== ENCABEZADO DEL FORMULARIO =====
@@ -121,31 +103,20 @@
   }
 
   // ===== INPUTS Y SELECTS =====
+  // Los estilos base (colores) vienen de styles.scss global
+  // Aquí solo personalizamos espaciado y efectos
   .form-control,
   .form-select {
     border-radius: 0.5rem;
     padding: 0.75rem 1rem;
-    border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
-    background-color: transparent !important;
-    color: var(--user-card-text-color, #111827) !important;
-    transition: all 0.2s ease;
     font-size: 0.95rem;
 
-    &::placeholder {
-      color: color-mix(in srgb, var(--user-card-text-color, #111827) 50%, transparent) !important;
-      opacity: 1;
-    }
-
     &:focus {
-      border-color: var(--user-border-color, #0B7285);
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
-      outline: none;
       transform: translateY(-1px);
     }
 
     &.is-invalid {
       border-color: #ef4444;
-      background-color: color-mix(in srgb, #ef4444 5%, transparent) !important;
       
       &:focus {
         box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
@@ -258,31 +229,9 @@
   }
 }
 
-// 🌞 MODO CLARO
-.add-staff-form {
-  body:not(.dark-mode) & {
-    .card-form {
-      background-color: var(--user-card-bg, #fff) !important;
-      color: var(--user-card-text-color, #000);
-      border: 4px solid var(--user-border-color, #000) !important; // Borde dinámico
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-  }
-}
-
-// 🌚 MODO OSCURO
-.add-staff-form {
-  body.dark-mode & {
-    .card-form {
-      background-color: var(--user-card-bg, #fff) !important;
-      color: var(--user-card-text-color, #000);
-      border: 4px solid var(--user-border-color, #000) !important; // Borde dinámico
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-    }
-  }
-}
-
-// ===== MODO OSCURO =====
+// ========================================
+// MODO OSCURO - SIN DUPLICACIONES
+// ========================================
 :host-context(.dark-mode) {
   .add-staff-form {
     .card-form {
@@ -305,25 +254,7 @@
       color: var(--user-card-text-color, #ffffff) !important;
     }
 
-    .form-control,
-    .form-select {
-      color: var(--user-card-text-color, #ffffff) !important;
-      border-color: rgba(255, 255, 255, 0.15);
-
-      &::placeholder {
-        color: rgba(255, 255, 255, 0.5) !important;
-      }
-
-      &:focus {
-        border-color: var(--user-border-color, #0B7285);
-        box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
-      }
-
-      &.is-invalid {
-        border-color: #f87171;
-        background-color: rgba(239, 68, 68, 0.1) !important;
-      }
-    }
+    // Los estilos de inputs/selects en modo oscuro vienen de styles.scss global
 
     .alert-modern {
       &.alert-warning {

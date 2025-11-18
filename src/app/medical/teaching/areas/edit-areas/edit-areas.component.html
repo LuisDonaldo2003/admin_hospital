@@ -1,0 +1,119 @@
+<div class="page-wrapper">
+  <div class="content">
+    <!-- Breadcrumb -->
+    <div class="page-header mb-4">
+      <div class="row align-items-center">
+        <div class="col-sm-12">
+          <ol class="breadcrumb p-2 rounded">
+            <li class="breadcrumb-item">
+              <a>{{ 'TEACHING_MODULE.AREAS.BREADCRUMB' | translate }}</a>
+              <span>></span>
+            </li>
+            <li class="breadcrumb-item active">{{ 'TEACHING_MODULE.AREAS.BREADCRUMB_EDIT' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    @if (loading) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2 text-muted">Cargando área...</p>
+      </div>
+    } @else {
+      <!-- Card -->
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-0">
+            <i class="fas fa-building me-2"></i>
+            {{ 'TEACHING_MODULE.AREAS.EDIT_TITLE' | translate }}
+          </h4>
+        </div>
+        <div class="card-body">
+          <!-- Alerta de error -->
+          @if (text_validation) {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <i class="fa fa-exclamation-circle me-2"></i>{{ text_validation }}
+              <button type="button" class="btn-close" (click)="text_validation = ''"></button>
+            </div>
+          }
+
+          <!-- Formulario -->
+          <form #areaForm="ngForm" (ngSubmit)="save()">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label required">{{ 'TEACHING_MODULE.AREAS.NAME_LABEL' | translate }}</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="area.nombre" 
+                    name="nombre" 
+                    required
+                    placeholder="Ej: MEDICINA, ENFERMERÍA">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Descripción</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="area.descripcion" 
+                    name="descripcion"
+                    placeholder="Descripción breve del área">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="mb-3">
+                  <div class="form-check form-switch">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      [(ngModel)]="area.activo" 
+                      name="activo"
+                      id="activoSwitch">
+                    <label class="form-check-label" for="activoSwitch">
+                      <strong>{{ 'TEACHING_MODULE.AREAS.ACTIVE_LABEL' | translate }}</strong>
+                      <small class="text-muted d-block">El área estará disponible en el sistema</small>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="row">
+              <div class="col-12">
+                <div class="d-flex justify-content-end gap-2">
+                  <button 
+                    type="button" 
+                    class="btn btn-secondary" 
+                    (click)="cancel()"
+                    [disabled]="saving">
+                    <i class="fa fa-times me-2"></i>
+                    {{ 'TEACHING_MODULE.AREAS.CANCEL' | translate }}
+                  </button>
+                  <button 
+                    type="submit" 
+                    class="btn btn-primary"
+                    [disabled]="!areaForm.valid || saving">
+                    <i class="fa fa-save me-2"></i>
+                    {{ saving ? ('TEACHING_MODULE.AREAS.SAVING' | translate) : ('TEACHING_MODULE.AREAS.UPDATE' | translate) }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    }
+  </div>
+</div>

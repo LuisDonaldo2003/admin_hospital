@@ -453,4 +453,55 @@ export class routes {
       return this.baseUrl + '/pdf-compressor';
     }
 
+    //Teaching (Enseñanzas) - Assistants
+    public static get assistantsList(): string {
+      return this.baseUrl + '/teaching/list_teaching';
+    }
+    public static get addAssistant(): string {
+      return this.baseUrl + '/teaching/add_teaching';
+    }
+    public static get editAssistant(): string {
+      return this.baseUrl + '/teaching/edit_teaching';
+    }
+    
+    // Evaluations
+    public static get evaluations(): string {
+      return this.baseUrl + '/teaching/list_evaluation';
+    }
+    public static get addEvaluation(): string {
+      return this.baseUrl + '/teaching/add_evaluation';
+    }
+    public static get editEvaluation(): string {
+      return this.baseUrl + '/teaching/edit_evaluation';
+    }
+    
+    // Catalogs
+    public static get modalities(): string {
+      return this.baseUrl + '/teaching/list_modality';
+    }
+    public static get addModality(): string {
+      return this.baseUrl + '/teaching/add_modality';
+    }
+    public static get editModality(): string {
+      return this.baseUrl + '/teaching/edit_modality';
+    }
+    public static get stakeholdings(): string {
+      return this.baseUrl + '/teaching/list_stakeholding';
+    }
+    public static get addStakeholding(): string {
+      return this.baseUrl + '/teaching/add_stakeholding';
+    }
+    public static get editStakeholding(): string {
+      return this.baseUrl + '/teaching/edit_stakeholding';
+    }
+    public static get teachingAreas(): string {
+      return this.baseUrl + '/teaching/list_area';
+    }
+    public static get addArea(): string {
+      return this.baseUrl + '/teaching/add_area';
+    }
+    public static get editArea(): string {
+      return this.baseUrl + '/teaching/edit_area';
+    }
+
 }

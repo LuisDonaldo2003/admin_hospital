@@ -1,0 +1,68 @@
+<div class="page-wrapper">
+  <div class="content">
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item"><a href="#">{{ 'TEACHING_MODULE.MODALITIES.BREADCRUMB' | translate }} <span>&gt;</span></a></li>
+            <li class="breadcrumb-item active">{{ 'TEACHING_MODULE.MODALITIES.BREADCRUMB_ADD' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h4 class="mb-4">{{ 'TEACHING_MODULE.MODALITIES.ADD_TITLE' | translate }}</h4>
+
+            <div *ngIf="text_success" class="mb-3">
+              <div class="alert alert-success">{{ text_success }}</div>
+            </div>
+            <div *ngIf="text_validation" class="mb-3">
+              <div class="alert alert-danger">{{ text_validation }}</div>
+            </div>
+
+            <form>
+              <div class="row">
+                <div class="col-12 col-md-6 mb-3">
+                  <label class="form-label">Código <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="modality.codigo" name="codigo" placeholder="Ej: CAP.LOC.M" required />
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                  <label class="form-label">{{ 'TEACHING_MODULE.MODALITIES.NAME_LABEL' | translate }} <span class="text-danger">{{ 'TEACHING_MODULE.MODALITIES.NAME_REQUIRED' | translate }}</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="modality.nombre" name="nombre" required />
+                </div>
+              </div>
+
+              <div class="mb-3 row align-items-center">
+                <label class="col-sm-2 col-form-label">{{ 'TEACHING_MODULE.MODALITIES.ACTIVE_LABEL' | translate }}</label>
+                <div class="col-sm-10 d-flex align-items-center">
+                  <div class="toggle-wrapper d-flex align-items-center">
+                    <label class="toggle-switch" for="activo">
+                      <input type="checkbox" id="activo" name="activo" [(ngModel)]="modality.activo" aria-label="{{ 'TEACHING_MODULE.MODALITIES.ACTIVE_LABEL' | translate }}" />
+                      <span class="switch-slider" aria-hidden="true"><span class="switch-knob"></span></span>
+                    </label>
+                    <span class="toggle-badge ms-3" [ngClass]="modality.activo ? 'active' : 'inactive'">
+                      <i class="fa" [ngClass]="modality.activo ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ modality.activo ? ('TEACHING_MODULE.MODALITIES.ACTIVE' | translate) : ('TEACHING_MODULE.MODALITIES.INACTIVE' | translate) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-end">
+                <button type="button" class="btn btn-primary px-4" (click)="save()" [disabled]="saving || !modality.nombre || !modality.codigo">
+                  {{ saving ? ('TEACHING_MODULE.MODALITIES.SAVING' | translate) : ('TEACHING_MODULE.MODALITIES.SAVE' | translate) }}
+                </button>
+                <button type="button" class="btn btn-secondary ms-2" (click)="cancel()" [disabled]="saving">{{ 'TEACHING_MODULE.MODALITIES.CANCEL' | translate }}</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
