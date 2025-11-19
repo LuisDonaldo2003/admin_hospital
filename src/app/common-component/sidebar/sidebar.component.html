@@ -1,7 +1,7 @@
 <!-- Barra lateral principal de navegación -->
 <div class="sidebar" id="sidebar" (mouseover)="miniSideBarMouseHover('over')" (mouseout)="miniSideBarMouseHover('out')">
-  <!-- Scroll personalizado para el menú -->
-  <ng-scrollbar>
+  <!-- Scroll personalizado para el menú con referencia para control de posición -->
+  <ng-scrollbar #sidebarScroll>
     <div id="sidebar-menu" class="sidebar-menu">
       <ul>
         <!-- Itera por cada grupo de menús -->
@@ -27,7 +27,7 @@
             <!-- Menú con subrutas -->
             <li class="submenu" *ngIf="menu.hasSubRoute === true">
               <a [class.active]="base === menu.base" (click)="expandSubMenus(menu)" href="javascript:void(0)"
-                 [ngClass]="{ subdrop: menu.showSubRoute === true }">
+                [ngClass]="{ subdrop: menu.showSubRoute === true }">
                 <span class="menu-side">
                   <!-- Icono del menú principal -->
                   <i *ngIf="menu.faIcon && menu.icon" [ngClass]="menu.icon + ' sidebar-icon'"></i>
@@ -42,18 +42,16 @@
                 <ng-container *ngFor="let subMenus of menu.subMenus">
                   <li [ngClass]="menu.showSubRoute === true ? 'd-block' : 'd-none'">
                     <!-- Enlaces externos -->
-                    <a *ngIf="subMenus.show_nav && subMenus.external" 
-                       [href]="subMenus.route" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       class="external-link">
-                      {{ 'SIDEBAR.' + group.group + '.' + cleanMenuValue(menu.menuValue) + '.' + cleanMenuValue(subMenus.menuValue) | translate }}
+                    <a *ngIf="subMenus.show_nav && subMenus.external" [href]="subMenus.route" target="_blank"
+                      rel="noopener noreferrer" class="external-link">
+                      {{ 'SIDEBAR.' + group.group + '.' + cleanMenuValue(menu.menuValue) + '.' +
+                      cleanMenuValue(subMenus.menuValue) | translate }}
                     </a>
                     <!-- Enlaces internos -->
-                    <a *ngIf="subMenus.show_nav && !subMenus.external" 
-                       [routerLink]="subMenus.route" 
-                       [class.active]="currentUrl === subMenus.base">
-                      {{ 'SIDEBAR.' + group.group + '.' + cleanMenuValue(menu.menuValue) + '.' + cleanMenuValue(subMenus.menuValue) | translate }}
+                    <a *ngIf="subMenus.show_nav && !subMenus.external" [routerLink]="subMenus.route"
+                      [class.active]="currentUrl === subMenus.base">
+                      {{ 'SIDEBAR.' + group.group + '.' + cleanMenuValue(menu.menuValue) + '.' +
+                      cleanMenuValue(subMenus.menuValue) | translate }}
                     </a>
                   </li>
                 </ng-container>

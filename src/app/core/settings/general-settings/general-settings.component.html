@@ -1,117 +1,197 @@
-<!-- Contenedor principal de la página de configuración general -->
+<!-- Contenedor principal simplificado -->
 <div class="page-wrapper">
-  <!-- Contenido principal de la página -->
   <div class="content container-fluid">
 
-    <!-- Encabezado de la página con acciones -->
+    <!-- Encabezado compacto -->
     <div class="page-header">
-      <div class="row align-items-center">
-        <div class="col-sm-8">
-          <div class="page-header-content">
-            <h3 class="page-title">
-              <i class="fas fa-cog me-2 text-primary"></i>
-              {{ 'SETTINGS.GENERAL.TITLE' | translate }}
-            </h3>
-            <p class="page-subtitle text-muted mb-0">
-              {{ 'SETTINGS.GENERAL.SUBTITLE' | translate }}
-            </p>
-          </div>
+      <div class="header-content">
+        <div class="header-left">
+          <h3 class="page-title">
+            <i class="fas fa-cog"></i>
+            {{ 'SETTINGS.GENERAL.TITLE' | translate }}
+          </h3>
+          <p class="page-subtitle">
+            {{ 'SETTINGS.GENERAL.SUBTITLE' | translate }}
+          </p>
         </div>
-        <div class="col-sm-4 text-end">
-          <!-- Botón para restaurar colores por defecto -->
-          <div class="settings-actions">
-            <button type="button" class="btn btn-outline-secondary btn-sm me-2" (click)="resetColorsToDefault()">
-              <i class="fas fa-undo me-1"></i>
-              {{ 'SETTINGS.GENERAL.RESET_DEFAULTS' | translate }}
-            </button>
-          </div>
+        <div class="header-right">
+          <button type="button" class="btn-reset" (click)="resetColorsToDefault()">
+            <i class="fas fa-undo"></i>
+            {{ 'SETTINGS.GENERAL.RESET_DEFAULTS' | translate }}
+          </button>
         </div>
       </div>
     </div>
-    <!-- /Encabezado de página -->
 
-    <!-- Sección principal de configuración -->
-    <div class="row g-4">
-      
-      <!-- Columna izquierda: idioma y modo de color -->
-      <div class="col-lg-6">
+    <!-- Grid de configuraciones en 2 filas -->
+    <div class="settings-container">
 
-        <!-- Configuración de idioma -->
-        <div class="settings-card language-settings">
-          <div class="settings-card-header">
-            <div class="settings-icon">
-              <i class="fas fa-globe text-info"></i>
+      <!-- Fila superior: 3 columnas -->
+      <div class="settings-row">
+
+        <!-- Idioma -->
+        <div class="setting-card">
+          <div class="card-header">
+            <div class="header-icon">
+              <i class="fas fa-globe"></i>
             </div>
-            <div class="settings-info">
-              <h5 class="settings-title">{{ 'SETTINGS.GENERAL.LANGUAGE' | translate }}</h5>
-              <p class="settings-subtitle">{{ 'SETTINGS.GENERAL.CHOOSE_PREFERRED_LANGUAGE' | translate }}</p>
+            <div class="header-text">
+              <h5>{{ 'SETTINGS.GENERAL.LANGUAGE' | translate }}</h5>
+              <p>{{ 'SETTINGS.GENERAL.CHOOSE_PREFERRED_LANGUAGE' | translate }}</p>
             </div>
           </div>
-          <div class="settings-card-body">
-            <div class="language-selector">
-              <!-- Opción de idioma inglés -->
-              <div class="language-option" [class.active]="selectedLang === 'en'" (click)="setLanguage('en')">
-                <img src="assets/flags/us.png" width="32" height="24" alt="English" class="flag-icon">
-                <div class="language-info">
-                  <span class="language-name">{{ 'SETTINGS.GENERAL.ENGLISH' | translate }}</span>
-                  <small class="language-code">EN</small>
+          <div class="card-body">
+            <div class="option-group">
+              <div class="option-item" [class.selected]="selectedLang === 'en'" (click)="setLanguage('en')">
+                <img src="assets/flags/us.png" alt="English" class="flag">
+                <div class="option-text">
+                  <span class="option-name">{{ 'SETTINGS.GENERAL.ENGLISH' | translate }}</span>
+                  <small class="option-code">EN</small>
                 </div>
-                <div class="language-check">
-                  <i class="fas fa-check" *ngIf="selectedLang === 'en'"></i>
+                <div class="option-check" *ngIf="selectedLang === 'en'">
+                  <i class="fas fa-check"></i>
                 </div>
               </div>
-              <!-- Opción de idioma español -->
-              <div class="language-option" [class.active]="selectedLang === 'es'" (click)="setLanguage('es')">
-                <img src="assets/flags/mx.png" width="32" height="24" alt="Español" class="flag-icon">
-                <div class="language-info">
-                  <span class="language-name">{{ 'SETTINGS.GENERAL.SPANISH' | translate }}</span>
-                  <small class="language-code">ES</small>
+              <div class="option-item" [class.selected]="selectedLang === 'es'" (click)="setLanguage('es')">
+                <img src="assets/flags/mx.png" alt="Español" class="flag">
+                <div class="option-text">
+                  <span class="option-name">{{ 'SETTINGS.GENERAL.SPANISH' | translate }}</span>
+                  <small class="option-code">ES</small>
                 </div>
-                <div class="language-check">
-                  <i class="fas fa-check" *ngIf="selectedLang === 'es'"></i>
+                <div class="option-check" *ngIf="selectedLang === 'es'">
+                  <i class="fas fa-check"></i>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Configuración de modo oscuro/claro -->
-        <div class="settings-card theme-settings">
-          <div class="settings-card-header">
-            <div class="settings-icon">
-              <i class="fas fa-moon text-secondary"></i>
+        <!-- Tema -->
+        <div class="setting-card">
+          <div class="card-header">
+            <div class="header-icon">
+              <i class="fas fa-moon"></i>
             </div>
-            <div class="settings-info">
-              <h5 class="settings-title">{{ 'SETTINGS.GENERAL.COLOR_MODE' | translate }}</h5>
-              <p class="settings-subtitle">{{ 'SETTINGS.GENERAL.DESCRIPTION_MODE' | translate }}</p>
+            <div class="header-text">
+              <h5>{{ 'SETTINGS.GENERAL.COLOR_MODE' | translate }}</h5>
+              <p>{{ 'SETTINGS.GENERAL.DESCRIPTION_MODE' | translate }}</p>
             </div>
           </div>
-          <div class="settings-card-body">
-            <div class="theme-selector">
-              <!-- Opción modo claro -->
-              <div class="theme-option" [class.active]="!isDarkMode" (click)="setTheme(false)">
-                <div class="theme-preview light-theme">
+          <div class="card-body">
+            <div class="option-group">
+              <div class="option-item" [class.selected]="!isDarkMode" (click)="setTheme(false)">
+                <div class="theme-icon light">
                   <i class="fas fa-sun"></i>
                 </div>
-                <div class="theme-info">
-                  <span class="theme-name">{{ 'SETTINGS.GENERAL.LIGHT_MODE' | translate }}</span>
-                  <small class="theme-desc">{{ 'SETTINGS.GENERAL.LIGHT_MODE_DESC' | translate }}</small>
+                <div class="option-text">
+                  <span class="option-name">{{ 'SETTINGS.GENERAL.LIGHT_MODE' | translate }}</span>
+                  <small class="option-desc">{{ 'SETTINGS.GENERAL.LIGHT_MODE_DESC' | translate }}</small>
                 </div>
-                <div class="theme-check">
-                  <i class="fas fa-check" *ngIf="!isDarkMode"></i>
+                <div class="option-check" *ngIf="!isDarkMode">
+                  <i class="fas fa-check"></i>
                 </div>
               </div>
-              <!-- Opción modo oscuro -->
-              <div class="theme-option" [class.active]="isDarkMode" (click)="setTheme(true)">
-                <div class="theme-preview dark-theme">
+              <div class="option-item" [class.selected]="isDarkMode" (click)="setTheme(true)">
+                <div class="theme-icon dark">
                   <i class="fas fa-moon"></i>
                 </div>
-                <div class="theme-info">
-                  <span class="theme-name">{{ 'SETTINGS.GENERAL.DARK_MODE' | translate }}</span>
-                  <small class="theme-desc">{{ 'SETTINGS.GENERAL.DARK_MODE_DESC' | translate }}</small>
+                <div class="option-text">
+                  <span class="option-name">{{ 'SETTINGS.GENERAL.DARK_MODE' | translate }}</span>
+                  <small class="option-desc">{{ 'SETTINGS.GENERAL.DARK_MODE_DESC' | translate }}</small>
                 </div>
-                <div class="theme-check">
-                  <i class="fas fa-check" *ngIf="isDarkMode"></i>
+                <div class="option-check" *ngIf="isDarkMode">
+                  <i class="fas fa-check"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vista previa -->
+        <div class="setting-card">
+          <div class="card-header">
+            <div class="header-icon">
+              <i class="fas fa-eye"></i>
+            </div>
+            <div class="header-text">
+              <h5>{{ 'SETTINGS.GENERAL.PREVIEW' | translate }}</h5>
+              <p>{{ 'SETTINGS.GENERAL.PREVIEW_CURRENT_SETTINGS' | translate }}</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="preview-box" [style.background-color]="isDarkMode ? cardBgColorDark : cardBgColorLight"
+              [style.border-color]="borderColor">
+              <h6>{{ 'SETTINGS.GENERAL.SAMPLE_CARD' | translate }}</h6>
+              <p>{{ 'SETTINGS.GENERAL.PREVIEW_TEXT' | translate }}</p>
+              <button class="preview-btn" [style.background-color]="borderColor">
+                {{ 'SETTINGS.GENERAL.SAMPLE_BUTTON' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Fila inferior: Personalización de colores (ancho completo) -->
+      <div class="settings-row full-width">
+
+        <div class="setting-card colors-card">
+          <div class="card-header">
+            <div class="header-icon">
+              <i class="fas fa-palette"></i>
+            </div>
+            <div class="header-text">
+              <h5>{{ 'SETTINGS.GENERAL.COLOR_CUSTOMIZATION' | translate }}</h5>
+              <p>{{ 'SETTINGS.GENERAL.CUSTOMIZE_THEME_COLORS' | translate }}</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="colors-grid">
+              <!-- Color de borde -->
+              <div class="color-control">
+                <label>
+                  <i class="fas fa-border-style"></i>
+                  {{ 'SETTINGS.GENERAL.OUTLINE_COLOR' | translate }}
+                </label>
+                <div class="color-picker">
+                  <div class="color-preview" [style.background-color]="borderColor"></div>
+                  <input type="color" [(ngModel)]="borderColor" name="borderColor">
+                  <button type="button" class="btn-apply" (click)="updateBorderColor()">
+                    <i class="fas fa-check"></i>
+                    {{ 'SETTINGS.GENERAL.APPLY' | translate }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Color de fondo claro -->
+              <div class="color-control" *ngIf="!isDarkMode">
+                <label>
+                  <i class="fas fa-fill-drip"></i>
+                  {{ 'SETTINGS.GENERAL.CARD_BG_COLOR_LIGHT' | translate }}
+                </label>
+                <div class="color-picker">
+                  <div class="color-preview" [style.background-color]="cardBgColorLight"></div>
+                  <input type="color" [(ngModel)]="cardBgColorLight" name="cardBgColorLight">
+                  <button type="button" class="btn-apply" (click)="updateCardBgColorLight()">
+                    <i class="fas fa-check"></i>
+                    {{ 'SETTINGS.GENERAL.APPLY' | translate }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Color de fondo oscuro -->
+              <div class="color-control" *ngIf="isDarkMode">
+                <label>
+                  <i class="fas fa-fill-drip"></i>
+                  {{ 'SETTINGS.GENERAL.CARD_BG_COLOR_DARK' | translate }}
+                </label>
+                <div class="color-picker">
+                  <div class="color-preview" [style.background-color]="cardBgColorDark"></div>
+                  <input type="color" [(ngModel)]="cardBgColorDark" name="cardBgColorDark">
+                  <button type="button" class="btn-apply" (click)="updateCardBgColorDark()">
+                    <i class="fas fa-check"></i>
+                    {{ 'SETTINGS.GENERAL.APPLY' | translate }}
+                  </button>
                 </div>
               </div>
             </div>
@@ -120,124 +200,6 @@
 
       </div>
 
-      <!-- Columna derecha: personalización de colores y vista previa -->
-      <div class="col-lg-6">
-
-        <!-- Personalización de colores del tema -->
-        <div class="settings-card color-settings">
-          <div class="settings-card-header">
-            <div class="settings-icon">
-              <i class="fas fa-palette text-primary"></i>
-            </div>
-            <div class="settings-info">
-              <h5 class="settings-title">{{ 'SETTINGS.GENERAL.COLOR_CUSTOMIZATION' | translate }}</h5>
-              <p class="settings-subtitle">{{ 'SETTINGS.GENERAL.CUSTOMIZE_THEME_COLORS' | translate }}</p>
-            </div>
-          </div>
-          <div class="settings-card-body">
-            
-            <!-- Grupo: color de borde -->
-            <div class="color-setting-group">
-              <label class="color-label">
-                <i class="fas fa-border-style me-2"></i>
-                {{ 'SETTINGS.GENERAL.OUTLINE_COLOR' | translate }}
-              </label>
-              <div class="color-input-group">
-                <div class="color-preview" [style.background-color]="borderColor"></div>
-                <input
-                  type="color"
-                  [(ngModel)]="borderColor"
-                  name="borderColor"
-                  class="color-input">
-                <button
-                  type="button"
-                  class="btn btn-primary btn-sm apply-btn"
-                  (click)="updateBorderColor()">
-                  <i class="fas fa-check me-1"></i>
-                  {{ 'SETTINGS.GENERAL.APPLY' | translate }}
-                </button>
-              </div>
-            </div>
-
-            <!-- Grupo: color de fondo claro -->
-            <div class="color-setting-group" *ngIf="!isDarkMode">
-              <label class="color-label">
-                <i class="fas fa-fill-drip me-2"></i>
-                {{ 'SETTINGS.GENERAL.CARD_BG_COLOR_LIGHT' | translate }}
-              </label>
-              <div class="color-input-group">
-                <div class="color-preview" [style.background-color]="cardBgColorLight"></div>
-                <input
-                  type="color"
-                  [(ngModel)]="cardBgColorLight"
-                  name="cardBgColorLight"
-                  class="color-input">
-                <button
-                  type="button"
-                  class="btn btn-primary btn-sm apply-btn"
-                  (click)="updateCardBgColorLight()">
-                  <i class="fas fa-check me-1"></i>
-                  {{ 'SETTINGS.GENERAL.APPLY' | translate }}
-                </button>
-              </div>
-            </div>
-
-            <!-- Grupo: color de fondo oscuro -->
-            <div class="color-setting-group" *ngIf="isDarkMode">
-              <label class="color-label">
-                <i class="fas fa-fill-drip me-2"></i>
-                {{ 'SETTINGS.GENERAL.CARD_BG_COLOR_DARK' | translate }}
-              </label>
-              <div class="color-input-group">
-                <div class="color-preview" [style.background-color]="cardBgColorDark"></div>
-                <input
-                  type="color"
-                  [(ngModel)]="cardBgColorDark"
-                  name="cardBgColorDark"
-                  class="color-input">
-                <button
-                  type="button"
-                  class="btn btn-primary btn-sm apply-btn"
-                  (click)="updateCardBgColorDark()">
-                  <i class="fas fa-check me-1"></i>
-                  {{ 'SETTINGS.GENERAL.APPLY' | translate }}
-                </button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Vista previa de la configuración actual -->
-        <div class="settings-card preview-settings">
-          <div class="settings-card-header">
-            <div class="settings-icon">
-              <i class="fas fa-eye text-success"></i>
-            </div>
-            <div class="settings-info">
-              <h5 class="settings-title">{{ 'SETTINGS.GENERAL.PREVIEW' | translate }}</h5>
-              <p class="settings-subtitle">{{ 'SETTINGS.GENERAL.PREVIEW_CURRENT_SETTINGS' | translate }}</p>
-            </div>
-          </div>
-          <div class="settings-card-body">
-            <div class="preview-container">
-              <div class="preview-card" [style.background-color]="isDarkMode ? cardBgColorDark : cardBgColorLight" 
-                   [style.border-color]="borderColor">
-                <div class="preview-header">
-                  <h6>{{ 'SETTINGS.GENERAL.SAMPLE_CARD' | translate }}</h6>
-                </div>
-                <div class="preview-body">
-                  <p>{{ 'SETTINGS.GENERAL.PREVIEW_TEXT' | translate }}</p>
-                  <div class="preview-button" [style.background-color]="borderColor">
-                    {{ 'SETTINGS.GENERAL.SAMPLE_BUTTON' | translate }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
     </div>
 
   </div>

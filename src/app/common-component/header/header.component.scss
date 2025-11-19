@@ -1,7 +1,437 @@
-.logo-wrapper,
-.avatar-img,
-.user-img img,
-.profile-avatar {
-  border: 3px solid var(--user-border-color, red) !important;
+/* ================================================
+   HEADER COMPONENT - ESTILOS COMPLETOS
+================================================ */
+
+/* Variables CSS para personalización */
+:host {
+  --header-height: 70px;
+  --header-bg: var(--user-card-bg, #ffffff);
+  --header-text: var(--user-card-text-color, #1a2332);
+  --header-border: var(--user-border-color, #e5e7eb);
+  --header-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --transition: all 0.3s ease;
+}
+
+/* ================================================
+   HEADER PRINCIPAL
+================================================ */
+
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--header-bg);
+  border-bottom: 2px solid var(--header-border);
+  box-shadow: var(--header-shadow);
+}
+
+.header {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  gap: 1rem;
+}
+
+/* ================================================
+   SECCIÓN IZQUIERDA - LOGO Y CONTROLES
+================================================ */
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--header-text);
+  transition: var(--transition);
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.logo-wrapper {
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--header-border);
+  transition: var(--transition);
+
+  &:hover {
+    border-color: var(--user-border-color, #0B7285);
+    transform: scale(1.05);
+  }
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--header-text);
+  letter-spacing: 0.5px;
+}
+
+/* Botón de toggle del sidebar */
+.sidebar-toggle {
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Botón móvil del sidebar */
+.mobile-sidebar-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: var(--transition);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* ================================================
+   SECCIÓN DERECHA - MENÚ DE USUARIO
+================================================ */
+
+.header-right {
+  margin-left: auto;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Dropdown de perfil de usuario */
+.user-profile-dropdown {
+  position: relative;
+}
+
+.user-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: transparent;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* Información del usuario */
+.user-info {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.user-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--header-text);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: var(--user-card-text-color, #6b7280);
+  line-height: 1.2;
+}
+
+/* Avatar del usuario - TAMAÑO OPTIMIZADO 65px */
+.user-avatar-wrapper {
+  position: relative;
+  width: 65px;
+  height: 65px;
+  flex-shrink: 0;
+}
+
+.user-avatar {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--header-border);
+  transition: var(--transition);
+
+  /* Propiedades para mejorar la calidad de renderizado */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-font-smoothing: subpixel-antialiased;
+
+  &:hover {
+    border-color: var(--user-border-color, #0B7285);
+  }
+}
+
+.avatar-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-top-color: var(--user-border-color, #0B7285);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Menú desplegable */
+.dropdown-menu {
+  min-width: 200px;
+  padding: 0.5rem;
+  border: 2px solid var(--header-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: var(--header-bg);
+
+  .dropdown-item {
+    padding: 0.625rem 1rem;
+    border-radius: 8px;
+    color: var(--header-text);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--user-border-color, #0B7285);
+    }
+
+    i {
+      width: 20px;
+      text-align: center;
+    }
+  }
+
+  .dropdown-divider {
+    margin: 0.5rem 0;
+    border-color: var(--header-border);
+  }
+}
+
+/* Botón de configuración */
+.settings-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  transition: var(--transition);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: rotate(90deg);
+  }
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* ================================================
+   MENÚ MÓVIL
+================================================ */
+
+.mobile-user-menu {
+  display: none;
+}
+
+.mobile-menu-toggle {
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: var(--header-text);
+  border-radius: 8px;
+  transition: var(--transition);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* ================================================
+   MODO OSCURO
+================================================ */
+
+body.dark-mode {
+  .app-header {
+    background: var(--user-card-bg, #2a2a2a);
+    border-bottom-color: var(--user-border-color, #3a3a3a);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .sidebar-toggle,
+  .mobile-sidebar-toggle,
+  .mobile-menu-toggle {
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  .user-profile-btn {
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  .settings-link {
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  .dropdown-menu {
+    background: var(--user-card-bg, #2a2a2a);
+    border-color: var(--user-border-color, #3a3a3a);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+    .dropdown-item {
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+/* ================================================
+   RESPONSIVE DESIGN
+================================================ */
+
+/* Tablets y pantallas medianas */
+@media (max-width: 992px) {
+  .header {
+    padding: 0 1rem;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .user-avatar-wrapper {
+    width: 58px;
+    height: 58px;
+  }
+
+  .user-avatar {
+    width: 58px;
+    height: 58px;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 0.75rem;
+  }
+
+  .logo-text {
+    display: none;
+  }
+
+  .sidebar-toggle {
+    display: none;
+  }
+
+  .mobile-sidebar-toggle {
+    display: flex;
+  }
+
+  .user-menu {
+    display: none;
+  }
+
+  .mobile-user-menu {
+    display: block;
+  }
+
+  .logo-wrapper {
+    width: 52px;
+    height: 52px;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 576px) {
+  :host {
+    --header-height: 60px;
+  }
+
+  .header {
+    padding: 0 0.5rem;
+  }
+
+  .header-left {
+    gap: 0.5rem;
+  }
 }

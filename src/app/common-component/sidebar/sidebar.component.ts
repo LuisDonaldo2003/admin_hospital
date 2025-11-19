@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/shared/auth/auth.service';
@@ -6,6 +6,7 @@ import { DataService } from 'src/app/shared/data/data.service';
 import { MenuItem, SideBarData } from 'src/app/shared/models/models';
 import { routes } from 'src/app/shared/routes/routes';
 import { SideBarService } from 'src/app/shared/side-bar/side-bar.service';
+import { NgScrollbar } from 'ngx-scrollbar';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,7 +15,12 @@ import { SideBarService } from 'src/app/shared/side-bar/side-bar.service';
   standalone: false
 })
 // Componente para la barra lateral de navegación
-export class SidebarComponent implements OnDestroy {
+export class SidebarComponent implements OnDestroy, AfterViewInit {
+  // Referencia al componente ng-scrollbar para controlar el scroll
+  @ViewChild(NgScrollbar) scrollbarRef!: NgScrollbar;
+
+  // Clave para guardar la posición de scroll en sessionStorage
+  private readonly SCROLL_POSITION_KEY = 'sidebar_scroll_position';
   // Propiedades para la navegación y estado visual
   base = '';
   page = '';
@@ -140,6 +146,9 @@ export class SidebarComponent implements OnDestroy {
 
   // Actualiza las rutas y clases visuales según la navegación
   private getRoutes(route: { url: string }): void {
+    // Guardar posición de scroll antes de navegar
+    this.saveScrollPosition();
+
     const bodyTag = document.body;
     bodyTag.classList.remove('slide-nav', 'opened');
     this.currentUrl = route.url;
@@ -167,6 +176,42 @@ export class SidebarComponent implements OnDestroy {
     // Los valores del data service ya vienen limpios (PERSONAL, ROL, etc.)
     // Solo necesitamos devolverlos tal como están
     return value;
+  }
+
+  // Se ejecuta después de que la vista del componente esté inicializada
+  ngAfterViewInit(): void {
+    // Restaurar posición de scroll después de que la vista esté lista
+    // Usamos setTimeout para asegurar que el DOM esté completamente renderizado
+    setTimeout(() => {
+      this.restoreScrollPosition();
+    }, 100);
+  }
+
+  // Guarda la posición actual de scroll en sessionStorage
+  private saveScrollPosition(): void {
+    try {
+      if (this.scrollbarRef?.viewport) {
+        const scrollTop = this.scrollbarRef.viewport.nativeElement.scrollTop;
+        sessionStorage.setItem(this.SCROLL_POSITION_KEY, scrollTop.toString());
+      }
+    } catch (error) {
+      // Silenciosamente ignorar errores de sessionStorage
+      console.debug('No se pudo guardar la posición de scroll:', error);
+    }
+  }
+
+  // Restaura la posición de scroll desde sessionStorage
+  private restoreScrollPosition(): void {
+    try {
+      const savedPosition = sessionStorage.getItem(this.SCROLL_POSITION_KEY);
+      if (savedPosition && this.scrollbarRef?.viewport) {
+        const scrollTop = parseInt(savedPosition, 10);
+        this.scrollbarRef.viewport.nativeElement.scrollTop = scrollTop;
+      }
+    } catch (error) {
+      // Silenciosamente ignorar errores de sessionStorage
+      console.debug('No se pudo restaurar la posición de scroll:', error);
+    }
   }
 
   // Libera la suscripción al destruir el componente

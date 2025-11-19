@@ -82,7 +82,7 @@ export class GeneralSettingsComponent implements OnInit {
     this.settingsService.getSettings().subscribe({
       next: (settings: any) => {
         console.log('🎨 Configuración cargada desde backend:', settings);
-        
+
         if (settings && (settings.borderColor || settings.cardBgColorLight || settings.cardBgColorDark)) {
           // Actualiza localStorage con los valores del backend
           if (settings.borderColor) this.setUserSetting('borderColor', settings.borderColor);
@@ -99,7 +99,7 @@ export class GeneralSettingsComponent implements OnInit {
           this.cardBgColorLight = this.DEFAULT_CARD_BG_LIGHT;
           this.cardBgColorDark = this.DEFAULT_CARD_BG_DARK;
         }
-        
+
         // Aplica el tema completo al DOM
         this.applyTheme();
       },
@@ -147,10 +147,10 @@ export class GeneralSettingsComponent implements OnInit {
    */
   updateBorderColor(): void {
     console.log('🎨 Actualizando color de borde:', this.borderColor);
-    
+
     // 1. Guardar en localStorage
     this.setUserSetting('borderColor', this.borderColor);
-    
+
     // 2. Enviar al backend
     this.settingsService.updateSettings({
       borderColor: this.borderColor,
@@ -178,9 +178,9 @@ export class GeneralSettingsComponent implements OnInit {
    */
   updateCardBgColorLight(): void {
     console.log('☀️ Actualizando color de fondo claro:', this.cardBgColorLight);
-    
+
     this.setUserSetting('cardBgColorLight', this.cardBgColorLight);
-    
+
     this.settingsService.updateSettings({
       borderColor: this.borderColor,
       cardBgColorLight: this.cardBgColorLight,
@@ -209,9 +209,9 @@ export class GeneralSettingsComponent implements OnInit {
    */
   updateCardBgColorDark(): void {
     console.log('🌙 Actualizando color de fondo oscuro:', this.cardBgColorDark);
-    
+
     this.setUserSetting('cardBgColorDark', this.cardBgColorDark);
-    
+
     this.settingsService.updateSettings({
       borderColor: this.borderColor,
       cardBgColorLight: this.cardBgColorLight,
@@ -244,17 +244,17 @@ export class GeneralSettingsComponent implements OnInit {
   private getContrastYIQ(hexcolor: string): string {
     // Limpia el símbolo # si existe
     hexcolor = hexcolor.replace('#', '');
-    
+
     // Extrae componentes RGB
-    const r = parseInt(hexcolor.substr(0,2),16);
-    const g = parseInt(hexcolor.substr(2,2),16);
-    const b = parseInt(hexcolor.substr(4,2),16);
-    
+    const r = parseInt(hexcolor.substr(0, 2), 16);
+    const g = parseInt(hexcolor.substr(2, 2), 16);
+    const b = parseInt(hexcolor.substr(4, 2), 16);
+
     // Calcula la luminosidad percibida
-    const yiq = ((r*299)+(g*587)+(b*114))/1000;
-    
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+
     console.log(`🔍 Contraste calculado para ${hexcolor}: YIQ=${yiq.toFixed(2)} → ${yiq >= 128 ? 'Texto Negro' : 'Texto Blanco'}`);
-    
+
     return (yiq >= 128) ? '#000000' : '#ffffff';
   }
 
@@ -273,53 +273,53 @@ export class GeneralSettingsComponent implements OnInit {
    */
   applyTheme(): void {
     console.log(`🎨 Aplicando tema: ${this.isDarkMode ? 'Oscuro' : 'Claro'}`);
-    
+
     if (this.isDarkMode) {
       // MODO OSCURO
       document.body.classList.add('dark-mode');
       document.documentElement.classList.add('dark-mode');
-      
+
       // Inyecta color de fondo oscuro
       document.body.style.setProperty('--user-card-bg', this.cardBgColorDark);
       document.documentElement.style.setProperty('--user-card-bg', this.cardBgColorDark);
-      
+
       // Calcula y aplica color de texto con contraste
       const textColor = localStorage.getItem('cardTextColorDark') || this.getContrastYIQ(this.cardBgColorDark);
       document.body.style.setProperty('--user-card-text-color', textColor);
       document.documentElement.style.setProperty('--user-card-text-color', textColor);
-      
+
       // Color de borde de botones (inverso del texto para contraste)
       const btnBorder = localStorage.getItem('cardBtnBorderColorDark') || (textColor === '#000000' ? '#ffffff' : '#000000');
       document.body.style.setProperty('--user-btn-border-color', btnBorder);
       document.documentElement.style.setProperty('--user-btn-border-color', btnBorder);
-      
+
       console.log(`🌙 Modo Oscuro - Fondo: ${this.cardBgColorDark}, Texto: ${textColor}`);
     } else {
       // MODO CLARO
       document.body.classList.remove('dark-mode');
       document.documentElement.classList.remove('dark-mode');
-      
+
       // Inyecta color de fondo claro
       document.body.style.setProperty('--user-card-bg', this.cardBgColorLight);
       document.documentElement.style.setProperty('--user-card-bg', this.cardBgColorLight);
-      
+
       // Calcula y aplica color de texto con contraste
       const textColor = localStorage.getItem('cardTextColorLight') || this.getContrastYIQ(this.cardBgColorLight);
       document.body.style.setProperty('--user-card-text-color', textColor);
       document.documentElement.style.setProperty('--user-card-text-color', textColor);
-      
+
       // Color de borde de botones (inverso del texto para contraste)
       const btnBorder = localStorage.getItem('cardBtnBorderColorLight') || (textColor === '#000000' ? '#ffffff' : '#000000');
       document.body.style.setProperty('--user-btn-border-color', btnBorder);
       document.documentElement.style.setProperty('--user-btn-border-color', btnBorder);
-      
+
       console.log(`☀️ Modo Claro - Fondo: ${this.cardBgColorLight}, Texto: ${textColor}`);
     }
-    
+
     // Inyecta color de borde global (aplicado en ambos modos)
     document.body.style.setProperty('--user-border-color', this.borderColor);
     document.documentElement.style.setProperty('--user-border-color', this.borderColor);
-    
+
     console.log(`🖌️ Color de borde aplicado: ${this.borderColor}`);
   }
 
@@ -379,10 +379,10 @@ export class GeneralSettingsComponent implements OnInit {
     if (!color) return '';
     const hex = color.replace('#', '');
     if (hex.length !== 6) return '';
-    const r = parseInt(hex.substr(0,2),16);
-    const g = parseInt(hex.substr(2,2),16);
-    const b = parseInt(hex.substr(4,2),16);
-    const yiq = ((r*299)+(g*587)+(b*114))/1000;
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
     return yiq >= 200 ? 'light-border' : '';
   }
 
@@ -397,34 +397,34 @@ export class GeneralSettingsComponent implements OnInit {
    */
   resetColorsToDefault(): void {
     console.log('🔄 Restaurando colores por defecto...');
-    
+
     const defaults = {
       borderColor: this.DEFAULT_BORDER_COLOR,       // #0B7285 - Azul médico
       cardBgColorLight: this.DEFAULT_CARD_BG_LIGHT, // #F8FFFE - Blanco hospitalario
       cardBgColorDark: this.DEFAULT_CARD_BG_DARK    // #1A2332 - Azul marino oscuro
     };
-    
+
     // Actualiza localStorage
     this.setUserSetting('borderColor', defaults.borderColor);
     this.setUserSetting('cardBgColorLight', defaults.cardBgColorLight);
     this.setUserSetting('cardBgColorDark', defaults.cardBgColorDark);
-    
+
     // Limpia colores de texto calculados para forzar recálculo
     localStorage.removeItem('cardTextColorLight');
     localStorage.removeItem('cardTextColorDark');
     localStorage.removeItem('cardBtnBorderColorLight');
     localStorage.removeItem('cardBtnBorderColorDark');
-    
+
     // Envía al backend
     this.settingsService.updateSettings(defaults).subscribe({
       next: () => {
         console.log('✅ Colores restaurados exitosamente');
-        
+
         // Actualiza variables locales
         this.borderColor = defaults.borderColor;
         this.cardBgColorLight = defaults.cardBgColorLight;
         this.cardBgColorDark = defaults.cardBgColorDark;
-        
+
         // Aplica el tema al DOM
         this.applyTheme();
       },

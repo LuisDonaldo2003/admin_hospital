@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ProfileService } from 'src/app/core/profile/service/profile.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 import { routes } from 'src/app/shared/routes/routes';
@@ -7,23 +8,37 @@ import { SideBarService } from 'src/app/shared/side-bar/side-bar.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoleConfigService } from 'src/app/shared/services/role-config.service';
 
+/**
+ * Componente del encabezado principal de la aplicación
+ * Maneja la navegación, perfil de usuario y configuraciones globales
+ */
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: false
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
+  // Rutas de la aplicación
   public routes = routes;
+
+  // Estado de la UI
   public openBox = false;
   public miniSidebar = false;
   public addClass = false;
-  public user: any;
+  public avatarLoading = true;
+
+  // Datos del usuario
+  public user: any = null;
   public profileData: any = {};
-  public avatarUrl: string = 'assets/img/user-06.jpg';
-  public avatarLoading: boolean = true;
+  public avatarUrl = 'assets/img/user-06.jpg';
   public roles: string[] = [];
+
+  // Configuración de idioma
   public selectedLang: string;
+
+  // Gestión de suscripciones
+  private subscriptions = new Subscription();
 
   constructor(
     public router: Router,
@@ -33,105 +48,183 @@ export class HeaderComponent {
     private translate: TranslateService,
     private roleConfigService: RoleConfigService
   ) {
-    // Suscribe al evento de cambio de menú lateral
-    this.sideBar.toggleSideBar.subscribe((res: string) => {
-      this.miniSidebar = res === 'true';
-    });
-
-    // Obtiene el usuario desde localStorage
-    const USER = localStorage.getItem("user");
-    this.user = JSON.parse(USER ? USER : '');
-
-    // Carga el avatar desde localStorage si existe
-    const avatarLS = localStorage.getItem('avatarUrl_' + (this.user?.id || ''));
-    if (avatarLS) {
-      this.avatarUrl = avatarLS;
-      this.avatarLoading = false;
-    }
-
-    // Inicializa el idioma seleccionado
     this.selectedLang = localStorage.getItem('language') || 'en';
     this.translate.use(this.selectedLang);
   }
 
-  // Al inicializar el componente, carga los datos del perfil
-  ngOnInit() {
-    this.getProfileData();
+  /**
+   * Inicializa el componente
+   * Carga datos del usuario y suscribe a eventos
+   */
+  ngOnInit(): void {
+    this.initializeUser();
+    this.subscribeSidebarChanges();
+    this.loadProfileData();
   }
 
-  // Obtiene los datos del perfil y actualiza el avatar si es necesario
-  private getProfileData(): void {
-    this.profileService.getProfile().subscribe((resp: any) => {
-      this.profileData = resp.data;
-      this.roles = resp.roles;
-      // Si el avatar existe y es diferente al actual, actualiza y guarda en localStorage
-      if (resp.data?.avatar) {
-        this.avatarUrl = resp.data.avatar;
-        localStorage.setItem('avatarUrl_' + (this.user?.id || ''), resp.data.avatar);
-      } else {
-        this.avatarUrl = 'assets/img/user-06.jpg';
+  /**
+   * Limpia las suscripciones al destruir el componente
+   */
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  /**
+   * Inicializa los datos del usuario desde localStorage
+   */
+  private initializeUser(): void {
+    const userString = localStorage.getItem('user');
+    if (userString) {
+      try {
+        this.user = JSON.parse(userString);
+        this.loadAvatarFromCache();
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        this.user = null;
       }
+    }
+  }
+
+  /**
+   * Carga el avatar desde localStorage si existe
+   */
+  private loadAvatarFromCache(): void {
+    if (!this.user?.id) return;
+
+    const cachedAvatar = localStorage.getItem(`avatarUrl_${this.user.id}`);
+    if (cachedAvatar) {
+      this.avatarUrl = cachedAvatar;
       this.avatarLoading = false;
-    });
+    }
   }
 
-  // Devuelve el nombre del rol principal del usuario
+  /**
+   * Suscribe a cambios en el estado del sidebar
+   */
+  private subscribeSidebarChanges(): void {
+    const sidebarSub = this.sideBar.toggleSideBar.subscribe((res: string) => {
+      this.miniSidebar = res === 'true';
+    });
+    this.subscriptions.add(sidebarSub);
+  }
+
+  /**
+   * Carga los datos del perfil desde el servidor
+   */
+  private loadProfileData(): void {
+    const profileSub = this.profileService.getProfile().subscribe({
+      next: (resp: any) => {
+        this.handleProfileResponse(resp);
+      },
+      error: (error) => {
+        console.error('Error loading profile:', error);
+        this.avatarLoading = false;
+      }
+    });
+    this.subscriptions.add(profileSub);
+  }
+
+  /**
+   * Procesa la respuesta del perfil y actualiza el avatar
+   */
+  private handleProfileResponse(resp: any): void {
+    this.profileData = resp.data || {};
+    this.roles = resp.roles || [];
+
+    if (resp.data?.avatar) {
+      this.updateAvatar(resp.data.avatar);
+    } else {
+      this.avatarUrl = 'assets/img/user-06.jpg';
+    }
+
+    this.avatarLoading = false;
+  }
+
+  /**
+   * Actualiza el avatar y lo guarda en caché
+   */
+  private updateAvatar(avatarUrl: string): void {
+    this.avatarUrl = avatarUrl;
+    if (this.user?.id) {
+      localStorage.setItem(`avatarUrl_${this.user.id}`, avatarUrl);
+    }
+  }
+
+  /**
+   * Obtiene el nombre del rol principal del usuario
+   */
   getRole(): string {
-    let roleName = "";
-    this.user.roles.forEach((rol: any) => {
-      roleName = rol;
-    });
-    return roleName;
+    if (!this.user?.roles || this.user.roles.length === 0) {
+      return '';
+    }
+    return this.user.roles[this.user.roles.length - 1];
   }
 
-  // Devuelve la ruta principal (home) según el rol del usuario conectado usando configuración dinámica
+  /**
+   * Obtiene la ruta principal según el rol del usuario
+   */
   getHomeRoute(): string {
-    const rawRoles: any[] = (this.user?.roles) || [];
+    const rawRoles: any[] = this.user?.roles || [];
     return this.roleConfigService.getHomeRouteForRoles(rawRoles);
   }
 
-  // Cambia el idioma de la interfaz y lo guarda en localStorage
+  /**
+   * Cambia el idioma de la interfaz
+   */
   toggleLanguage(): void {
     this.selectedLang = this.selectedLang === 'es' ? 'en' : 'es';
     this.translate.use(this.selectedLang);
     localStorage.setItem('language', this.selectedLang);
   }
 
-  // Abre o cierra el cuadro de mensajes en la interfaz
-  openBoxFunc() {
+  /**
+   * Abre o cierra el cuadro de mensajes
+   */
+  openBoxFunc(): void {
     this.openBox = !this.openBox;
     const mainWrapper = document.getElementsByClassName('main-wrapper')[0];
-    if (this.openBox) {
-      mainWrapper.classList.add('open-msg-box');
-    } else {
-      mainWrapper.classList.remove('open-msg-box');
+
+    if (mainWrapper) {
+      if (this.openBox) {
+        mainWrapper.classList.add('open-msg-box');
+      } else {
+        mainWrapper.classList.remove('open-msg-box');
+      }
     }
   }
 
-  // Cierra la sesión del usuario
-  logout() {
+  /**
+   * Cierra la sesión del usuario
+   */
+  logout(): void {
     this.auth.logout();
   }
 
-  // Alterna la visibilidad del menú lateral
-  public toggleSideBar(): void {
+  /**
+   * Alterna la visibilidad del sidebar
+   */
+  toggleSideBar(): void {
     this.sideBar.switchSideMenuPosition();
   }
 
-  // Alterna la visibilidad del menú lateral en dispositivos móviles
-  public toggleMobileSideBar(): void {
+  /**
+   * Alterna la visibilidad del sidebar en móvil
+   */
+  toggleMobileSideBar(): void {
     this.sideBar.switchMobileSideBarPosition();
     this.addClass = !this.addClass;
 
     const root = document.getElementsByTagName('html')[0];
-    const sidebar: any = document.getElementById('sidebar');
+    const sidebar = document.getElementById('sidebar');
 
-    if (this.addClass) {
-      root.classList.add('menu-opened');
-      sidebar.classList.add('opened');
-    } else {
-      root.classList.remove('menu-opened');
-      sidebar.classList.remove('opened');
+    if (root && sidebar) {
+      if (this.addClass) {
+        root.classList.add('menu-opened');
+        sidebar.classList.add('opened');
+      } else {
+        root.classList.remove('menu-opened');
+        sidebar.classList.remove('opened');
+      }
     }
   }
 }

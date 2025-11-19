@@ -11,8 +11,8 @@
 .page-wrapper .card {
 	border-radius: 1rem;
 	border: 4px solid var(--user-border-color, #0B7285) !important; // Borde dinámico
-	background-color: var(--user-card-bg, #ffffff) !important;       // Fondo dinámico
-	color: var(--user-card-text-color, #111827) !important;          // Texto dinámico
+	background-color: var(--user-card-bg, #ffffff) !important; // Fondo dinámico
+	color: var(--user-card-text-color, #111827) !important; // Texto dinámico
 	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 	transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease,
 		box-shadow 200ms ease, transform 120ms ease;
@@ -85,11 +85,13 @@ input[type="radio"] {
 	background-color: var(--user-border-color, #0B7285);
 	border-color: var(--user-border-color, #0B7285);
 	color: #ffffff;
+
 	&:hover {
 		filter: brightness(0.95);
 		transform: translateY(-1px);
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 	}
+
 	&:active {
 		filter: brightness(0.9);
 		transform: translateY(0);
@@ -99,6 +101,7 @@ input[type="radio"] {
 .btn-outline-primary {
 	border-color: var(--user-btn-border-color, currentColor);
 	color: var(--user-card-text-color, #111827);
+
 	&:hover {
 		background: var(--user-btn-border-color, rgba(0, 0, 0, 0.08));
 		color: #ffffff;
@@ -125,7 +128,7 @@ input[type="radio"] {
 // Tabs de categorías
 .category-tabs {
 	gap: 0.5rem;
-	
+
 	.nav-link {
 		border-radius: 0.5rem;
 		padding: 0.5rem 1rem;
@@ -134,12 +137,12 @@ input[type="radio"] {
 		border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent);
 		font-weight: 500;
 		transition: all 150ms ease;
-		
+
 		&:hover {
 			background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
 			transform: translateY(-2px);
 		}
-		
+
 		&.active {
 			background-color: var(--user-border-color, #0B7285);
 			color: #ffffff;
@@ -157,43 +160,43 @@ input[type="radio"] {
 	padding: 1rem;
 	transition: all 150ms ease;
 	height: 100%;
-	
+
 	&:hover {
 		border-color: var(--user-border-color, #0B7285);
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 		transform: translateY(-2px);
 	}
-	
+
 	&.large {
 		padding: 1.5rem;
 	}
-	
+
 	.category-header {
 		padding-bottom: 0.75rem;
 		border-bottom: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
 		margin-bottom: 0.75rem;
-		
+
 		.form-check-label {
 			font-size: 1.1rem;
 			cursor: pointer;
 			user-select: none;
 		}
 	}
-	
+
 	.category-permissions {
 		max-height: 400px;
 		overflow-y: auto;
 		padding-right: 0.5rem;
-		
+
 		&::-webkit-scrollbar {
 			width: 6px;
 		}
-		
+
 		&::-webkit-scrollbar-track {
 			background: rgba(0, 0, 0, 0.05);
 			border-radius: 10px;
 		}
-		
+
 		&::-webkit-scrollbar-thumb {
 			background: var(--user-border-color, #0B7285);
 			border-radius: 10px;
@@ -211,7 +214,7 @@ input[type="radio"] {
 		text-transform: uppercase;
 		letter-spacing: 0.5px;
 	}
-	
+
 	.permission-items {
 		padding-left: 1rem;
 		border-left: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent);
@@ -226,12 +229,12 @@ input[type="radio"] {
 	padding: 1rem;
 	transition: all 150ms ease;
 	height: 100%;
-	
+
 	&:hover {
 		border-color: var(--user-border-color, #0B7285);
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	}
-	
+
 	.permission-card-title {
 		font-weight: 600;
 		color: var(--user-border-color, #0B7285);
@@ -239,7 +242,7 @@ input[type="radio"] {
 		padding-bottom: 0.5rem;
 		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	}
-	
+
 	.permission-card-items {
 		.form-check {
 			margin-bottom: 0.5rem;
@@ -247,42 +250,60 @@ input[type="radio"] {
 	}
 }
 
-// Form checks personalizados
+// Form checks personalizados con estilos mejorados para visibilidad
 .form-check {
 	padding-left: 1.8rem;
-	
+
 	.form-check-input {
-		width: 1.2rem;
-		height: 1.2rem;
+		width: 1.25rem;
+		height: 1.25rem;
 		margin-top: 0.15rem;
 		cursor: pointer;
-		
+		border: 2px solid rgba(0, 0, 0, 0.25);
+		background-color: #ffffff;
+		transition: all 150ms ease;
+
+		// Estado checked - MUY VISIBLE
 		&:checked {
-			background-color: var(--user-border-color, #0B7285);
-			border-color: var(--user-border-color, #0B7285);
+			background-color: var(--user-border-color, #0B7285) !important;
+			border-color: var(--user-border-color, #0B7285) !important;
+			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e") !important;
+			background-size: 100% 100%;
+			background-position: center;
+			background-repeat: no-repeat;
 		}
-		
+
+		// Estado hover
+		&:hover {
+			border-color: var(--user-border-color, #0B7285);
+			box-shadow: 0 0 0 3px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
+		}
+
+		// Estado focus
 		&:focus {
-			box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent);
+			border-color: var(--user-border-color, #0B7285);
+			box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--user-border-color, #0B7285) 25%, transparent);
+			outline: none;
 		}
 	}
-	
+
 	.form-check-label {
 		cursor: pointer;
 		user-select: none;
 		line-height: 1.5;
+		color: var(--user-card-text-color, #111827);
 	}
 }
 
 // Contador de permisos
 .permissions-counter {
 	.alert-info {
-		background: linear-gradient(135deg, 
-			color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent),
-			color-mix(in srgb, var(--user-border-color, #0B7285) 5%, transparent));
+		background: linear-gradient(135deg,
+				color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent),
+				color-mix(in srgb, var(--user-border-color, #0B7285) 5%, transparent));
 		border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent);
 		color: var(--user-card-text-color, #111827);
-		
+
 		.badge {
 			font-size: 1rem;
 			padding: 0.4rem 0.8rem;
@@ -364,6 +385,17 @@ input[type="radio"] {
 		}
 	}
 
+	// Checkboxes en modo oscuro
+	.form-check-input {
+		background-color: #2a2f3a !important;
+		border-color: rgba(255, 255, 255, 0.3) !important;
+
+		&:checked {
+			background-color: var(--user-border-color, #0B7285) !important;
+			border-color: var(--user-border-color, #0B7285) !important;
+		}
+	}
+
 	.card .table {
 		color: var(--user-card-text-color, #ffffff) !important;
 	}
@@ -381,26 +413,26 @@ input[type="radio"] {
 	.btn-outline-primary:hover {
 		color: #0b0e14;
 	}
-	
+
 	// Cards de categorías en modo oscuro
 	.category-card {
 		background: rgba(255, 255, 255, 0.05);
 		border-color: rgba(255, 255, 255, 0.1);
-		
+
 		&:hover {
 			background: rgba(255, 255, 255, 0.08);
 		}
 	}
-	
+
 	.permission-card {
 		background: #2a2f3a;
 		border-color: #3a3f4a;
-		
+
 		&:hover {
 			background: #323742;
 		}
 	}
-	
+
 	.input-group-text {
 		background-color: #2a2f3a;
 		border-color: #3a3f4a;
@@ -410,6 +442,7 @@ input[type="radio"] {
 
 // Mejoras de accesibilidad: reducir movimiento si el usuario lo prefiere
 @media (prefers-reduced-motion: reduce) {
+
 	.page-wrapper .card,
 	.form-control,
 	.btn,
@@ -429,10 +462,9 @@ input[type="radio"] {
 			padding: 0.4rem 0.8rem;
 		}
 	}
-	
+
 	.permission-card,
 	.category-card {
 		margin-bottom: 1rem;
 	}
 }
-

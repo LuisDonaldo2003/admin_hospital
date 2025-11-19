@@ -1,70 +1,121 @@
-<!-- Barra de encabezado principal -->
-<div class="header">
-  <!-- Lado izquierdo: Logo y botón de menú lateral -->
-  <div class="header-left d-flex align-items-center">
-    <!-- Logo y nombre del sistema, redirige según el rol -->
-    <a [routerLink]="getHomeRoute()" class="logo d-flex align-items-center">
-      <div class="logo-wrapper">
-        <img src="assets/img/logo-hospital.png" alt="SISMEG Logo" class="logo-img" />
-      </div>
-      <span class="ms-2 fw-bold fs-5">SISMEG</span>
-    </a>
-    <!-- Botón para mostrar/ocultar menú lateral -->
-    <a (click)="toggleSideBar()" id="toggle_btn" class="ms-3" href="javascript:void(0);">
-      <img src="assets/img/icons/bar-icon.svg" alt="Menu Icon" />
-    </a>
-  </div>
+<!-- Encabezado principal de la aplicación -->
+<header class="app-header" role="banner">
+  <div class="header">
 
-  <!-- Botón para mostrar menú lateral en dispositivos móviles -->
-  <a (click)="toggleMobileSideBar()" id="mobile_btn" class="mobile_btn float-start">
-    <img src="assets/img/icons/bar-icon.svg" alt="Mobile Menu" />
-  </a>
-
-  <!-- Menú de usuario con avatar y opciones -->
-  <ul class="nav user-menu float-end">
-    <li class="nav-item dropdown has-arrow user-profile-list">
-      <a href="javascript:void(0);" class="dropdown-toggle nav-link user-link" data-bs-toggle="dropdown">
-        <div class="user-names">
-          <h5>{{user.name}}</h5>
-          <span>{{getRole()}}</span>
+    <!-- Sección izquierda: Logo y controles de navegación -->
+    <div class="header-left">
+      <!-- Logo y nombre del sistema -->
+      <a [routerLink]="getHomeRoute()" class="logo" aria-label="Ir a página principal">
+        <div class="logo-wrapper">
+          <img src="assets/img/logo-hospital.png" alt="SISMEG Logo" class="logo-img" />
         </div>
-        <!-- Avatar del usuario -->
-        <img 
-          class="rounded-circle avatar-img"
-          width="60" height="60"
-          [src]="avatarUrl"
-          alt="Admin"
-          (load)="avatarLoading = false"
-          (error)="avatarLoading = false"
-        />
-        <!-- Spinner mientras carga el avatar -->
-        <span *ngIf="avatarLoading" class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
+        <span class="logo-text">SISMEG</span>
       </a>
-      <!-- Opciones del menú de usuario -->
-      <div class="dropdown-menu">
-        <a class="dropdown-item" [routerLink]="routes.profile">{{ 'HEADER.PROFILES' | translate }}</a>
-        <a class="dropdown-item" [routerLink]="routes.editProfile">{{ 'HEADER.EDIT_PROFILE' | translate }}</a>
-        <a class="dropdown-item" href="#" (click)="logout()">{{ 'HEADER.LOGOUT' | translate }}</a>
-      </div>
-    </li>
-    <!-- Icono de ajustes -->
-    <li class="nav-item">
-      <a [routerLink]="routes.settings" class="hasnotifications nav-link">
-        <img src="assets/img/icons/setting-icon-01.svg" alt="Settings" />
-      </a>
-    </li>
-  </ul>
 
-  <!-- Menú de usuario para dispositivos móviles -->
-  <div class="dropdown mobile-user-menu float-end">
-    <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-      <i class="fa-solid fa-ellipsis-vertical"></i>
-    </a>
-    <div class="dropdown-menu dropdown-menu-end">
-      <a class="dropdown-item" [routerLink]="routes.profile">{{ 'HEADER.PROFILES' | translate }}</a>
-      <a class="dropdown-item" [routerLink]="routes.editProfile">{{ 'HEADER.EDIT_PROFILE' | translate }}</a>
-      <a class="dropdown-item" [routerLink]="routes.login">{{ 'HEADER.LOGOUT' | translate }}</a>
+      <!-- Botón para toggle del sidebar (desktop) -->
+      <button type="button" id="toggle_btn" class="sidebar-toggle" aria-label="Alternar menú lateral"
+        (click)="toggleSideBar()">
+        <img src="assets/img/icons/bar-icon.svg" alt="" />
+      </button>
     </div>
+
+    <!-- Botón para toggle del sidebar (móvil) -->
+    <button type="button" id="mobile_btn" class="mobile-sidebar-toggle" aria-label="Abrir menú lateral"
+      (click)="toggleMobileSideBar()">
+      <img src="assets/img/icons/bar-icon.svg" alt="" />
+    </button>
+
+    <!-- Sección derecha: Menú de usuario y configuraciones -->
+    <nav class="header-right" role="navigation">
+      <ul class="nav user-menu">
+
+        <!-- Menú desplegable de usuario -->
+        <li class="nav-item dropdown user-profile-dropdown">
+          <button type="button" class="user-profile-btn" data-bs-toggle="dropdown" aria-expanded="false"
+            aria-label="Menú de usuario">
+
+            <!-- Información del usuario -->
+            <div class="user-info">
+              <h5 class="user-name">{{ user?.name || 'Usuario' }}</h5>
+              <span class="user-role">{{ getRole() }}</span>
+            </div>
+
+            <!-- Avatar del usuario - TAMAÑO OPTIMIZADO 65px -->
+            <div class="user-avatar-wrapper">
+              <img class="user-avatar" width="65" height="65" [src]="avatarUrl" [alt]="user?.name || 'Avatar'"
+                (load)="avatarLoading = false" (error)="avatarLoading = false" />
+              <!-- Spinner de carga -->
+              <span *ngIf="avatarLoading" class="avatar-spinner" role="status" aria-label="Cargando avatar">
+              </span>
+            </div>
+          </button>
+
+          <!-- Opciones del menú desplegable -->
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" [routerLink]="routes.profile" aria-label="Ver perfil">
+                <i class="fas fa-user me-2"></i>
+                {{ 'HEADER.PROFILES' | translate }}
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="routes.editProfile" aria-label="Editar perfil">
+                <i class="fas fa-user-edit me-2"></i>
+                {{ 'HEADER.EDIT_PROFILE' | translate }}
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0)" (click)="logout()" aria-label="Cerrar sesión">
+                <i class="fas fa-sign-out-alt me-2"></i>
+                {{ 'HEADER.LOGOUT' | translate }}
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Botón de configuración -->
+        <li class="nav-item">
+          <a [routerLink]="routes.settings" class="nav-link settings-link" aria-label="Ir a configuración">
+            <img src="assets/img/icons/setting-icon-01.svg" alt="" />
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Menú móvil (versión simplificada) -->
+    <div class="mobile-user-menu">
+      <button type="button" class="mobile-menu-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+        aria-label="Menú de opciones">
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+      </button>
+
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+          <a class="dropdown-item" [routerLink]="routes.profile">
+            <i class="fas fa-user me-2"></i>
+            {{ 'HEADER.PROFILES' | translate }}
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" [routerLink]="routes.editProfile">
+            <i class="fas fa-user-edit me-2"></i>
+            {{ 'HEADER.EDIT_PROFILE' | translate }}
+          </a>
+        </li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+        <li>
+          <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">
+            <i class="fas fa-sign-out-alt me-2"></i>
+            {{ 'HEADER.LOGOUT' | translate }}
+          </a>
+        </li>
+      </ul>
+    </div>
+
   </div>
-</div>
-  
+</header>
