@@ -514,6 +514,24 @@
       }
     }
   }
+x
+  /* Forzar que inputs y selects sean blancos y texto oscuro (coherente con list-assistants) */
+  .form-control,
+  .form-select,
+  input,
+  select,
+  textarea {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent) !important;
+  }
+
+  /* Asegurar que las opciones y placeholders se vean correctamente */
+  .form-select option,
+  select option {
+    color: #000 !important;
+    background-color: #fff !important;
+  }
 }
 
 // Anulación explícita para .table-light (bootstrap)
@@ -592,6 +610,31 @@
   .form-control::-ms-input-placeholder {
     color: #9ca3af !important;
     opacity: 1 !important;
+  }
+}
+
+// Copiado/adaptado desde list-modalities: caja de búsqueda con icono absoluto
+.search-box {
+  position: relative;
+  min-width: 220px;
+
+  .white-input {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db;
+    color: var(--user-card-text-color, #111827) !important;
+    padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    height: 40px;
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(0,0,0,0.45);
+    cursor: pointer;
   }
 }
 

@@ -4,12 +4,12 @@
 <div class="page-wrapper">
   <div class="content list-personal">
 
-    <!-- Encabezado de la página con breadcrumb de navegación -->
+    <!-- Encabezado de la página con breadcrumb de navegación y búsqueda -->
     <div class="page-header mb-3">
-      <div class="row">
-        <div class="col-sm-12">
+      <div class="row align-items-center">
+        <div class="col-md-8 col-sm-12">
           <!-- Breadcrumb compacto -->
-          <ol class="breadcrumb p-2 rounded">
+          <ol class="breadcrumb p-2 rounded mb-0">
             <li class="breadcrumb-item">
               {{ 'PERSONAL.LIST_PERSONAL.BREADCRUMB_PERSONAL' | translate }}
               <span>></span>
@@ -17,6 +17,7 @@
             <li class="breadcrumb-item active">{{ 'PERSONAL.LIST_PERSONAL.BREADCRUMB_LIST' | translate }}</li>
           </ol>
         </div>
+        <!-- Search input moved into the card header (header-bar) as requested -->
       </div>
     </div>
 
@@ -31,16 +32,16 @@
               <!-- Título de la tabla -->
               <h4 class="mb-0 fw-semibold">{{ 'PERSONAL.LIST_PERSONAL.TITLE' | translate }}</h4>
               <div class="d-flex align-items-center gap-2 flex-wrap">
-                <!-- Input de búsqueda -->
-                <div class="input-group search-input">
+                <!-- Search box copied from list-modalities for consistent design -->
+                <div class="search-box">
                   <input type="text" 
-                         class="form-control" 
+                         class="form-control white-input" 
                          placeholder="{{ 'PERSONAL.LIST_PERSONAL.SEARCH_PLACEHOLDER' | translate }}"
                          [(ngModel)]="searchDataValue" 
-                         (ngModelChange)="searchData(searchDataValue)">
-                  <span class="input-group-text">
-                    <i class="fa fa-search"></i>
-                  </span>
+                         (keyup.enter)="searchData(searchDataValue)"
+                         (input)="searchDataValue === '' && searchData(searchDataValue)"
+                         [disabled]="loading">
+                  <i class="fa fa-search search-icon" (click)="searchData(searchDataValue)"></i>
                 </div>
                 <!-- Botón para agregar nuevo personal -->
                 <a routerLink="/personal/add_personal" class="btn btn-options d-flex align-items-center gap-1">

@@ -91,17 +91,18 @@
                   [disabled]="saving">
               </div>
 
-              <!-- Especialidad/Profesión -->
+              <!-- Especialidad/Profesión (ahora select poblado desde backend) -->
               <div class="col-md-6">
                 <label class="form-label required">{{ 'TEACHING_MODULE.EVALUATIONS.SPECIALTY' | translate }}</label>
-                <input 
-                  type="text" 
-                  class="form-control" 
-                  [(ngModel)]="evaluacion.especialidad" 
+                <select
+                  class="form-select"
+                  [(ngModel)]="evaluacion.especialidad"
                   name="especialidad"
-                  placeholder="{{ 'TEACHING_MODULE.EVALUATIONS.SPECIALTY_PLACEHOLDER' | translate }}"
                   required
-                  [disabled]="saving">
+                  [disabled]="saving || profesiones.length === 0">
+                  <option value="" disabled selected>{{ 'TEACHING_MODULE.EVALUATIONS.SPECIALTY_PLACEHOLDER' | translate }}</option>
+                  <option *ngFor="let prof of profesiones" [value]="prof">{{ prof }}</option>
+                </select>
               </div>
             </div>
           </div>

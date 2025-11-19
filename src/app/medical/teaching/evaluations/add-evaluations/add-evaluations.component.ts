@@ -24,6 +24,7 @@ export class AddEvaluationsComponent implements OnInit {
   public evaluacionId: number | null = null;
   public saving = false;
   public loading = false;
+  public profesiones: string[] = [];
   
   // Notificaciones
   public text_success: string = '';
@@ -42,7 +43,24 @@ export class AddEvaluationsComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    // Componente solo para agregar
+    // Cargar datos necesarios para el formulario
+    this.loadProfesiones();
+  }
+
+  private loadProfesiones(): void {
+    this.teachingService.getProfesiones().subscribe({
+      next: (response) => {
+        if (response && response.success && Array.isArray(response.data)) {
+          this.profesiones = response.data;
+        } else {
+          this.profesiones = [];
+        }
+      },
+      error: (err) => {
+        console.error('Error cargando profesiones:', err);
+        this.profesiones = [];
+      }
+    });
   }
   
   private getEmptyEvaluacion(): Evaluacion {

@@ -27,9 +27,9 @@
       width: 60px;
       height: 60px;
       margin: 0 auto 0.75rem;
-      background: linear-gradient(135deg, 
-        var(--user-border-color, #f59e0b),
-        color-mix(in srgb, var(--user-border-color, #f59e0b) 80%, #000));
+      background: linear-gradient(135deg,
+          var(--user-border-color, #f59e0b),
+          color-mix(in srgb, var(--user-border-color, #f59e0b) 80%, #000));
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -96,14 +96,11 @@
   // ===== INPUTS Y SELECTS =====
   .form-control,
   .form-select {
-    border: 2px solid rgba(46, 55, 164, 0.1);
     border-radius: 10px;
     padding: 10px 15px;
     font-size: 14px;
     min-height: 45px;
     transition: all 0.2s ease;
-    background-color: #fff !important;
-    color: #333448 !important;
 
     &:focus {
       outline: none;
@@ -114,7 +111,6 @@
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
-      background-color: #f6f6f6 !important;
     }
 
     &::placeholder {
@@ -134,13 +130,14 @@
     border: none;
     padding: 1rem 1.25rem;
     font-size: 0.95rem;
-    
+
     &.alert-success {
       background: linear-gradient(135deg, #10b981, #059669);
       color: white;
       box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 
-      strong, i {
+      strong,
+      i {
         color: white;
       }
 
@@ -154,7 +151,8 @@
       color: white;
       box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 
-      strong, i {
+      strong,
+      i {
         color: white;
       }
 
@@ -225,15 +223,15 @@
     }
 
     .btn-save {
-      background: linear-gradient(135deg, 
-        var(--user-border-color, #f59e0b), 
-        color-mix(in srgb, var(--user-border-color, #f59e0b) 85%, #000));
+      background: linear-gradient(135deg,
+          var(--user-border-color, #f59e0b),
+          color-mix(in srgb, var(--user-border-color, #f59e0b) 85%, #000));
       color: white;
 
       &:hover:not(:disabled) {
-        background: linear-gradient(135deg, 
-          color-mix(in srgb, var(--user-border-color, #f59e0b) 90%, #000), 
-          color-mix(in srgb, var(--user-border-color, #f59e0b) 75%, #000));
+        background: linear-gradient(135deg,
+            color-mix(in srgb, var(--user-border-color, #f59e0b) 90%, #000),
+            color-mix(in srgb, var(--user-border-color, #f59e0b) 75%, #000));
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
       }
@@ -289,6 +287,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -302,6 +301,7 @@
     color: var(--user-card-text-color, #ffffff) !important;
 
     .form-header {
+
       .form-title,
       .form-subtitle {
         color: var(--user-card-text-color, #ffffff) !important;
@@ -318,13 +318,10 @@
 
     .form-control,
     .form-select {
-      background-color: rgba(255, 255, 255, 0.05) !important;
-      color: #ffffff !important;
       border-color: rgba(255, 255, 255, 0.15);
 
       &:focus {
         border-color: var(--user-border-color, #f59e0b);
-        background-color: rgba(255, 255, 255, 0.08) !important;
       }
 
       &::placeholder {
@@ -332,7 +329,7 @@
       }
 
       &:disabled {
-        background-color: rgba(255, 255, 255, 0.03) !important;
+        opacity: 0.5;
       }
     }
 

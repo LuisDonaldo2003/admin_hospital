@@ -26,7 +26,7 @@ const routes: Routes = [{
       data: { requiredPermissions: ['list_personal'] }
     },
     {
-      path: 'list_personal/edit_personal/:id',
+      path: 'edit_personal/:id',
       component: EditPersonalComponent,
       canActivate: [PermissionGuard],
       data: { requiredPermissions: ['edit_personal'] }

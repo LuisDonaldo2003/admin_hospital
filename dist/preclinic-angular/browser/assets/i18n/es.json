@@ -978,7 +978,7 @@
     "BREADCRUMB_PERSONAL": "Personal",
     "BREADCRUMB_LIST": "Lista de Personal",
     "TITLE": "Gestión del Personal",
-    "SEARCH_PLACEHOLDER": "Buscar por nombre, RFC o número de checador...",
+    "SEARCH_PLACEHOLDER": "Buscar",
     "NEW_PERSONAL": "Nuevo Personal",
     "FILTER_TYPE": "Filtrar por Tipo",
     "ALL_TYPES": "Todos los tipos",
@@ -1305,7 +1305,9 @@
       "SAVE": "Guardar",
       "UPDATE": "Actualizar",
       "SAVING": "Guardando...",
-      "REQUIRED": "*"
+      "REQUIRED": "*",
+      "DELETE_CONFIRMATION_EVALUATION": "¿Está seguro que desea eliminar esta evaluación?"
+
     },
     "MODALITIES": {
       "BREADCRUMB": "Enseñanza",

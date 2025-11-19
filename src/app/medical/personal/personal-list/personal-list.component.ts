@@ -439,7 +439,7 @@ export class PersonalListComponent implements OnInit {
    */
   public editarPersonal(id: number | undefined): void {
   if (!id) return;
-  this.router.navigate(['/personal/edit', id]);
+  this.router.navigate(['/personal/edit_personal', id]);
   }
 
   /**

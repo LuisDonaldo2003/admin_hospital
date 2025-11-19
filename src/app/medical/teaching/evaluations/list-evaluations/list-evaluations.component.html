@@ -293,34 +293,22 @@
   </div>
 </div>
 
-<!-- Modal de confirmación para eliminar -->
+<!-- Modal de Eliminación para confirmar borrado de evaluación (copiado de list-assistants) -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="deleteModalLabel">
-          <i class="fa fa-exclamation-triangle me-2"></i>
-          {{ 'TEACHING_MODULE.EVALUATIONS.DELETE_CONFIRMATION_TITLE' | translate }}
+      <div class="modal-body text-center p-4">
+        <!-- Imagen de advertencia -->
+        <img src="assets/img/sent.png" alt="" width="50" height="46" />
+        <!-- Mensaje de confirmación -->
+        <h5 class="mt-3" *ngIf="evaluacionToDelete">
+          {{ 'TEACHING_MODULE.EVALUATIONS.DELETE_CONFIRMATION_EVALUATION' | translate }} <strong>{{ evaluacionToDelete.nombre }}</strong>?
         </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        <p>{{ 'TEACHING_MODULE.EVALUATIONS.DELETE_CONFIRMATION_MESSAGE' | translate }}</p>
-        <div class="alert alert-warning" *ngIf="evaluacionToDelete">
-          <strong>{{ evaluacionToDelete.nombre }}</strong><br>
-          <small>{{ 'TEACHING_MODULE.EVALUATIONS.SPECIALTY' | translate }}: {{ evaluacionToDelete.especialidad }}</small><br>
-          <small>{{ 'TEACHING_MODULE.EVALUATIONS.STATUS' | translate }}: {{ evaluacionToDelete.estado }}</small>
+        <!-- Botones para cancelar o confirmar eliminación -->
+        <div class="mt-4 d-flex justify-content-center gap-3">
+          <button class="btn btn-light" data-bs-dismiss="modal">{{ 'TEACHING_MODULE.EVALUATIONS.CANCEL' | translate }}</button>
+          <button class="btn btn-danger" (click)="confirmDelete()" data-bs-dismiss="modal">{{ 'TEACHING_MODULE.EVALUATIONS.DELETE' | translate }}</button>
         </div>
-        <p class="text-muted"><small>{{ 'TEACHING_MODULE.EVALUATIONS.DELETE_CONFIRMATION_WARNING' | translate }}</small></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          {{ 'TEACHING_MODULE.EVALUATIONS.CANCEL' | translate }}
-        </button>
-        <button type="button" class="btn btn-danger" (click)="confirmDelete()" [disabled]="deleting">
-          <i class="fa fa-trash me-2"></i>
-          {{ deleting ? ('TEACHING_MODULE.EVALUATIONS.DELETING' | translate) : ('TEACHING_MODULE.EVALUATIONS.DELETE' | translate) }}
-        </button>
       </div>
     </div>
   </div>
