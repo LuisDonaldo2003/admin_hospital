@@ -13,7 +13,13 @@
 		background-color: transparent !important;
 		color: var(--user-card-text-color, #111827) !important;
 
-		h4, p, span, small, th, td, .pagination-info {
+		h4,
+		p,
+		span,
+		small,
+		th,
+		td,
+		.pagination-info {
 			color: var(--user-card-text-color, #111827) !important;
 		}
 	}
@@ -26,7 +32,8 @@
 		border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 12%, transparent) !important;
 		border-radius: 12px;
 
-		th, td {
+		th,
+		td {
 			border: 1px solid color-mix(in srgb, var(--user-border-color, #0B7285) 6%, transparent) !important;
 			padding: 0.75rem;
 			text-align: center;
@@ -40,10 +47,21 @@
 			color: var(--user-card-text-color, #111827) !important;
 		}
 
-		thead th:first-child { border-top-left-radius: 12px; }
-		thead th:last-child { border-top-right-radius: 12px; }
-		tbody tr:last-child td:first-child { border-bottom-left-radius: 12px; }
-		tbody tr:last-child td:last-child { border-bottom-right-radius: 12px; }
+		thead th:first-child {
+			border-top-left-radius: 12px;
+		}
+
+		thead th:last-child {
+			border-top-right-radius: 12px;
+		}
+
+		tbody tr:last-child td:first-child {
+			border-bottom-left-radius: 12px;
+		}
+
+		tbody tr:last-child td:last-child {
+			border-bottom-right-radius: 12px;
+		}
 	}
 
 	.btn-options {
@@ -89,12 +107,13 @@
 			right: 10px;
 			top: 50%;
 			transform: translateY(-50%);
-			color: rgba(0,0,0,0.45);
+			color: rgba(0, 0, 0, 0.45);
 		}
 	}
 }
 
-.btn-edit, .btn-delete {
+.btn-edit,
+.btn-delete {
 	border: none;
 	padding: 6px 12px;
 	font-size: 13px;
@@ -109,6 +128,7 @@
 
 .btn-edit {
 	background: linear-gradient(135deg, #3b82f6, #2563eb);
+
 	&:hover {
 		transform: scale(1.05);
 		box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
@@ -117,6 +137,7 @@
 
 .btn-delete {
 	background: linear-gradient(135deg, #ef4444, #dc2626);
+
 	&:hover {
 		transform: scale(1.05);
 		box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
@@ -139,7 +160,7 @@
 }
 
 .card.card-list table tbody tr:hover {
-	background-color: rgba(59,130,246,0.06) !important;
+	background-color: rgba(59, 130, 246, 0.06) !important;
 	transition: background 0.2s;
 }
 
@@ -151,7 +172,10 @@
 		border-radius: 1rem;
 
 		.modal-body {
-			h5, p, strong {
+
+			h5,
+			p,
+			strong {
 				color: var(--user-card-text-color, #111827) !important;
 			}
 
@@ -210,12 +234,12 @@
 	.page-wrapper .card.card-list .table thead th,
 	.page-wrapper .card.card-list .table tbody td {
 		color: var(--user-card-text-color, #ffffff) !important;
-		border-color: rgba(255,255,255,0.06) !important;
+		border-color: rgba(255, 255, 255, 0.06) !important;
 		background: transparent !important;
 	}
 
 	.card.card-list table tbody tr:hover {
-		background-color: rgba(255,255,255,0.04) !important;
+		background-color: rgba(255, 255, 255, 0.04) !important;
 	}
 
 	::ng-deep #deleteModalModality .modal-content {
@@ -243,21 +267,21 @@
 			font-weight: 500;
 			transition: all 0.2s ease;
 			font-size: 0.875rem;
-			
+
 			&:hover {
 				background-color: color-mix(in srgb, var(--user-border-color, #0B7285) 10%, transparent);
 				border-color: var(--user-border-color, #0B7285);
 				transform: translateY(-1px);
 			}
 		}
-		
+
 		&.active .page-link {
 			background-color: var(--user-border-color, #0B7285) !important;
 			border-color: var(--user-border-color, #0B7285) !important;
 			color: #fff !important;
 			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 		}
-		
+
 		&.disabled .page-link {
 			background-color: color-mix(in srgb, var(--user-card-text-color, #111827) 5%, transparent);
 			border-color: color-mix(in srgb, var(--user-card-text-color, #111827) 15%, transparent);
@@ -282,21 +306,21 @@
 				background-color: rgba(255, 255, 255, 0.05);
 				border-color: rgba(255, 255, 255, 0.2);
 				color: var(--user-card-text-color, #ffffff) !important;
-				
+
 				&:hover {
 					background-color: rgba(255, 255, 255, 0.1);
 					border-color: var(--user-border-color, #0B7285);
 					color: #ffffff !important;
 				}
 			}
-			
+
 			&.active .page-link {
 				background-color: var(--user-border-color, #0B7285) !important;
 				border-color: var(--user-border-color, #0B7285) !important;
 				color: #ffffff !important;
 				box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 			}
-			
+
 			&.disabled .page-link {
 				background-color: rgba(255, 255, 255, 0.02);
 				border-color: rgba(255, 255, 255, 0.1);
@@ -309,5 +333,22 @@
 
 	.pagination-info {
 		color: var(--user-card-text-color, #ffffff) !important;
+	}
+}
+
+// ===== BADGE SIN PERMISOS =====
+.badge-no-permission {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.4rem 0.8rem;
+	background: linear-gradient(135deg, #6b7280, #4b5563);
+	color: white !important;
+	border-radius: 6px;
+	font-size: 0.8rem;
+	font-weight: 600;
+	box-shadow: 0 2px 4px rgba(107, 114, 128, 0.3);
+
+	i {
+		font-size: 0.75rem;
 	}
 }

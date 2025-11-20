@@ -165,14 +165,14 @@
                                 {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.TITLE') | translate }}
                               </div>
                               <div class="permission-items">
-                                <div class="form-check" *ngFor="let subMenu of item.subMenus">
+                                <div class="form-check" *ngFor="let subMenu of item.subMenus; let idx = index">
                                   <input 
                                     class="form-check-input" 
                                     type="checkbox" 
                                     [checked]="isPermissionSelected(subMenu.permision)"
                                     (change)="addPermission(subMenu)" 
-                                    [id]="subMenu.menuValue">
-                                  <label class="form-check-label" [for]="subMenu.menuValue">
+                                    [id]="'perm-' + item.menuValue + '-' + subMenu.menuValue + '-' + idx">
+                                  <label class="form-check-label" [for]="'perm-' + item.menuValue + '-' + subMenu.menuValue + '-' + idx">
                                     {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.' + subMenu.menuValue) | translate }}
                                   </label>
                                 </div>
@@ -186,8 +186,8 @@
                                 type="checkbox" 
                                 [checked]="isPermissionSelected(item.permision)"
                                 (change)="addPermission(item)" 
-                                [id]="item.menuValue">
-                              <label class="form-check-label fw-semibold" [for]="item.menuValue">
+                                [id]="'perm-single-' + item.menuValue + '-' + item.permision">
+                              <label class="form-check-label fw-semibold" [for]="'perm-single-' + item.menuValue + '-' + item.permision">
                                 {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.TITLE') | translate }}
                               </label>
                             </div>
@@ -226,14 +226,14 @@
                               {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.TITLE') | translate }}
                             </div>
                             <div class="permission-card-items">
-                              <div class="form-check" *ngFor="let subMenu of item.subMenus">
+                              <div class="form-check" *ngFor="let subMenu of item.subMenus; let idx = index">
                                 <input 
                                   class="form-check-input" 
                                   type="checkbox" 
                                   [checked]="isPermissionSelected(subMenu.permision)"
                                   (change)="addPermission(subMenu)" 
-                                  [id]="subMenu.menuValue + '-detail'">
-                                <label class="form-check-label" [for]="subMenu.menuValue + '-detail'">
+                                  [id]="'perm-detail-' + item.menuValue + '-' + subMenu.menuValue + '-' + idx">
+                                <label class="form-check-label" [for]="'perm-detail-' + item.menuValue + '-' + subMenu.menuValue + '-' + idx">
                                   {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.' + subMenu.menuValue) | translate }}
                                 </label>
                               </div>
@@ -248,8 +248,8 @@
                                 type="checkbox" 
                                 [checked]="isPermissionSelected(item.permision)"
                                 (change)="addPermission(item)" 
-                                [id]="item.menuValue + '-detail'">
-                              <label class="form-check-label fw-semibold" [for]="item.menuValue + '-detail'">
+                                [id]="'perm-detail-single-' + item.menuValue + '-' + item.permision">
+                              <label class="form-check-label fw-semibold" [for]="'perm-detail-single-' + item.menuValue + '-' + item.permision">
                                 <i class="fas fa-cog me-2"></i>
                                 {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.TITLE') | translate }}
                               </label>

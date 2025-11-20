@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TeachingService } from '../../services/teaching.service';
 import { Evaluacion, EvaluacionStats } from '../../models/teaching.interface';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 
 /**
  * Componente para seguimiento de evaluaciones pendientes
@@ -58,6 +59,7 @@ export class ListEvaluationsComponent implements OnInit {
   private router = inject(Router);
   private translate = inject(TranslateService);
   private teachingService = inject(TeachingService);
+  public permissionService = inject(PermissionService);
 
   public selectedLang: string = 'es';
 
@@ -233,5 +235,19 @@ export class ListEvaluationsComponent implements OnInit {
         modal.hide();
       }
     }
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para editar
+   */
+  canEdit(): boolean {
+    return this.permissionService.hasPermission('edit_evaluation');
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para eliminar
+   */
+  canDelete(): boolean {
+    return this.permissionService.hasPermission('delete_evaluation');
   }
 }

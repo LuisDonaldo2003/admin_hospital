@@ -1144,7 +1144,8 @@
       "TO": "a",
       "RECORDS": "registros",
       "PREVIOUS": "Anterior",
-      "NEXT": "Siguiente"
+      "NEXT": "Siguiente",
+      "NO_PERMISSIONS": "Sin permisos"
     },
     "CREDITS": {
       "BREADCRUMB": {
@@ -1316,7 +1317,8 @@
       "UPDATE": "Actualizar",
       "SAVING": "Guardando...",
       "REQUIRED": "*",
-      "DELETE_CONFIRMATION_EVALUATION": "¿Está seguro que desea eliminar esta evaluación?"
+      "DELETE_CONFIRMATION_EVALUATION": "¿Está seguro que desea eliminar esta evaluación?",
+      "NO_PERMISSIONS": "Sin permisos"
     },
     "MODALITIES": {
       "BREADCRUMB": "Enseñanza",
@@ -1355,7 +1357,8 @@
       "SAVE": "Guardar",
       "SAVING": "Guardando...",
       "SUCCESS_MESSAGE": "Modalidad creada correctamente",
-      "ERROR_MESSAGE": "Error al guardar"
+      "ERROR_MESSAGE": "Error al guardar",
+      "NO_PERMISSIONS": "Sin permisos"
     },
     "STAKEHOLDINGS": {
       "BREADCRUMB": "Enseñanza",
@@ -1393,7 +1396,8 @@
       "SAVE": "Guardar",
       "SAVING": "Guardando...",
       "SUCCESS_MESSAGE": "Participación creada correctamente",
-      "ERROR_MESSAGE": "Error al guardar"
+      "ERROR_MESSAGE": "Error al guardar",
+      "NO_PERMISSIONS": "Sin permisos"
     },
     "AREAS": {
       "BREADCRUMB": "Enseñanza",
@@ -1432,7 +1436,8 @@
       "UPDATE": "Actualizar",
       "SAVING": "Guardando...",
       "SUCCESS_MESSAGE": "Área creada correctamente",
-      "ERROR_MESSAGE": "Error al guardar"
+      "ERROR_MESSAGE": "Error al guardar",
+      "NO_PERMISSIONS": "Sin permisos"
     }
   }
 }

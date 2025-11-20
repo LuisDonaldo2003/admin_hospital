@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CatalogsService, CatalogItem } from '../../services/catalogs.service';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 
 @Component({
   selector: 'app-list-stakeholdings',
@@ -16,6 +17,7 @@ export class ListStakeholdingsComponent implements OnInit {
   private catalogsService = inject(CatalogsService);
   private router = inject(Router);
   private translate = inject(TranslateService);
+  public permissionService = inject(PermissionService);
   public selectedLang: string = 'en';
 
   public participaciones: CatalogItem[] = [];
@@ -184,5 +186,19 @@ export class ListStakeholdingsComponent implements OnInit {
         alert('Error al cambiar estado');
       }
     });
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para editar
+   */
+  canEdit(): boolean {
+    return this.permissionService.hasPermission('edit_stakeholding');
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para eliminar
+   */
+  canDelete(): boolean {
+    return this.permissionService.hasPermission('delete_stakeholding');
   }
 }

@@ -387,21 +387,21 @@ export class ListAssistantsComponent implements OnInit {
    * Permisos - verificar si puede crear
    */
   canCreate(): boolean {
-    return this.permissionService.hasPermission('teaching.create');
+    return this.permissionService.hasPermission('add_teaching');
   }
   
   /**
    * Permisos - verificar si puede editar
    */
   canEdit(): boolean {
-    return this.permissionService.hasPermission('teaching.edit');
+    return this.permissionService.hasPermission('edit_teaching');
   }
   
   /**
    * Permisos - verificar si puede eliminar
    */
   canDelete(): boolean {
-    return this.permissionService.hasPermission('teaching.delete');
+    return this.permissionService.hasPermission('delete_teaching');
   }
   
   /**

@@ -886,3 +886,21 @@
   }
 }
 
+// ===== BADGE SIN PERMISOS =====
+.badge-no-permission {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.7rem;
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+  color: white !important;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(107, 114, 128, 0.3);
+
+  i {
+    font-size: 0.7rem;
+    color: white !important;
+  }
+}
+

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { CatalogsService, CatalogItem } from '../../services/catalogs.service';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 
 @Component({
   selector: 'app-list-areas',
@@ -17,6 +18,7 @@ import { CatalogsService, CatalogItem } from '../../services/catalogs.service';
 export class ListAreasComponent implements OnInit {
   private catalogsService = inject(CatalogsService);
   private router = inject(Router);
+  public permissionService = inject(PermissionService);
 
   public areas: CatalogItem[] = [];
   public loading = false;
@@ -182,5 +184,19 @@ export class ListAreasComponent implements OnInit {
         alert('Error al cambiar estado');
       }
     });
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para editar
+   */
+  canEdit(): boolean {
+    return this.permissionService.hasPermission('edit_area');
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para eliminar
+   */
+  canDelete(): boolean {
+    return this.permissionService.hasPermission('delete_area');
   }
 }

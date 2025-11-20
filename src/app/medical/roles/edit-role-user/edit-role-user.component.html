@@ -99,14 +99,14 @@
                             {{ ('SIDEBAR.' + cleanGroup(side.group) + '.' + side.menuValue + '.TITLE') | translate }}
                           </div>
                           <div class="permission-card-items">
-                            <div class="form-check" *ngFor="let subMenu of side.subMenus">
+                            <div class="form-check" *ngFor="let subMenu of side.subMenus; let idx = index">
                               <input 
                                 class="form-check-input" 
                                 type="checkbox" 
                                 (change)="addPermission(subMenu)" 
                                 [checked]="permissions.includes(subMenu.permision)" 
-                                [id]="subMenu.menuValue">
-                              <label class="form-check-label" [for]="subMenu.menuValue">
+                                [id]="'edit-perm-' + side.menuValue + '-' + subMenu.menuValue + '-' + idx">
+                              <label class="form-check-label" [for]="'edit-perm-' + side.menuValue + '-' + subMenu.menuValue + '-' + idx">
                                 {{ ('SIDEBAR.' + cleanGroup(side.group) + '.' + side.menuValue + '.' + subMenu.menuValue) | translate }}
                               </label>
                             </div>
@@ -121,8 +121,8 @@
                               type="checkbox" 
                               (change)="addPermission(side)" 
                               [checked]="permissions.includes(side.permision)" 
-                              [id]="side.menuValue">
-                            <label class="form-check-label fw-semibold" [for]="side.menuValue">
+                              [id]="'edit-perm-single-' + side.menuValue + '-' + side.permision">
+                            <label class="form-check-label fw-semibold" [for]="'edit-perm-single-' + side.menuValue + '-' + side.permision">
                               <i class="fas fa-cog me-2"></i>
                               {{ ('SIDEBAR.' + cleanGroup(side.group) + '.' + side.menuValue + '.TITLE') | translate }}
                             </label>

@@ -1,5 +1,5 @@
 // Importación de módulos y servicios necesarios para el componente de listado de staff
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { StaffService } from '../service/staff.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { HasPermissionDirective } from 'src/app/shared/directives/has-permission.directive';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 
 /**
  * Componente para listar los usuarios del staff con paginación, búsqueda y acciones.
@@ -109,6 +110,11 @@ export class ListStaffNComponent {
    * Idioma seleccionado actualmente
    */
   public selectedLang: string;
+
+  /**
+   * Servicio de permisos inyectado
+   */
+  private permissionService = inject(PermissionService);
 
   /**
    * Constructor que inyecta el servicio de staff y traducción
@@ -352,5 +358,19 @@ export class ListStaffNComponent {
     const normalizedRoleName = userRole?.toLowerCase().trim() || '';
     
     return protectedRoles.includes(normalizedRoleName);
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para editar staff
+   */
+  canEditStaff(): boolean {
+    return this.permissionService.hasPermission('edit_staff');
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para eliminar staff
+   */
+  canDeleteStaff(): boolean {
+    return this.permissionService.hasPermission('delete_staff');
   }
 }

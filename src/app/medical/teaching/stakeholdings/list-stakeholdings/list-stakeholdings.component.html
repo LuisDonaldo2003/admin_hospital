@@ -69,14 +69,19 @@
                       </span>
                     </td>
                     <td class="text-center">
-                      <div class="d-flex justify-content-center gap-2">
-                        <button class="btn btn-sm btn-edit" (click)="editStakeholding(item)" [title]="'TEACHING_MODULE.STAKEHOLDINGS.EDIT' | translate">
+                      <!-- Si el usuario tiene al menos un permiso (editar o eliminar) -->
+                      <div class="d-flex justify-content-center gap-2" *ngIf="canEdit() || canDelete()">
+                        <button *ngIf="canEdit()" class="btn btn-sm btn-edit" (click)="editStakeholding(item)" [title]="'TEACHING_MODULE.STAKEHOLDINGS.EDIT' | translate">
                           <i class="fa fa-pen"></i>
                         </button>
-                        <button class="btn btn-sm btn-delete" (click)="itemToDelete = item" data-bs-toggle="modal" data-bs-target="#deleteModalStakeholding" [title]="'TEACHING_MODULE.STAKEHOLDINGS.DELETE' | translate">
+                        <button *ngIf="canDelete()" class="btn btn-sm btn-delete" (click)="itemToDelete = item" data-bs-toggle="modal" data-bs-target="#deleteModalStakeholding" [title]="'TEACHING_MODULE.STAKEHOLDINGS.DELETE' | translate">
                           <i class="fa fa-trash"></i>
                         </button>
                       </div>
+                      <!-- Si no tiene ningún permiso -->
+                      <span class="badge badge-no-permission" *ngIf="!canEdit() && !canDelete()">
+                        <i class="fa fa-ban me-1"></i>{{ 'TEACHING_MODULE.STAKEHOLDINGS.NO_PERMISSIONS' | translate }}
+                      </span>
                     </td>
                   </tr>
                   <tr *ngIf="participaciones.length === 0 && !loading">

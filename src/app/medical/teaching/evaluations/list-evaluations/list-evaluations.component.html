@@ -146,16 +146,22 @@
                   <i class="fa" [class.fa-chevron-down]="!expandedCards.has(evaluacion.id!)" 
                      [class.fa-chevron-up]="expandedCards.has(evaluacion.id!)"></i>
                 </button>
-                <button class="btn-icon btn-edit"
+                <button *ngIf="canEdit()" 
+                        class="btn-icon btn-edit"
                         (click)="editEvaluacion(evaluacion)"
                         title="{{ 'TEACHING_MODULE.EVALUATIONS.EDIT' | translate }}">
                   <i class="fa fa-edit"></i>
                 </button>
-                <button class="btn-icon btn-delete"
+                <button *ngIf="canDelete()" 
+                        class="btn-icon btn-delete"
                         (click)="deleteEvaluacion(evaluacion)"
                         title="{{ 'TEACHING_MODULE.EVALUATIONS.DELETE' | translate }}">
                   <i class="fa fa-trash"></i>
                 </button>
+                <!-- Badge sin permisos -->
+                <span class="badge badge-no-permission" *ngIf="!canEdit() && !canDelete()">
+                  <i class="fa fa-ban me-1"></i>{{ 'TEACHING_MODULE.EVALUATIONS.NO_PERMISSIONS' | translate }}
+                </span>
               </div>
             </div>
 

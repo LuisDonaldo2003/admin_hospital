@@ -1106,7 +1106,8 @@
       "TO": "to",
       "RECORDS": "records",
       "PREVIOUS": "Previous",
-      " NEXT": "Next"
+      " NEXT": "Next",
+      "NO_PERMISSIONS": "No permissions"
     },
     "CREDITS": {
       "BREADCRUMB": {
@@ -1277,7 +1278,8 @@
       "SAVE": "Save",
       "UPDATE": "Update",
       "SAVING": "Saving...",
-      "REQUIRED": "*"
+      "REQUIRED": "*",
+      "NO_PERMISSIONS": "No permissions"
     },
     "MODALITIES": {
       "BREADCRUMB": "Teaching",
@@ -1316,7 +1318,8 @@
       "SAVE": "Save",
       "SAVING": "Saving...",
       "SUCCESS_MESSAGE": "Modality created successfully",
-      "ERROR_MESSAGE": "Error saving"
+      "ERROR_MESSAGE": "Error saving",
+      "NO_PERMISSIONS": "No permissions"
     },
     "STAKEHOLDINGS": {
       "BREADCRUMB": "Teaching",
@@ -1354,7 +1357,48 @@
       "SAVE": "Save",
       "SAVING": "Saving...",
       "SUCCESS_MESSAGE": "Participation created successfully",
-      "ERROR_MESSAGE": "Error saving"
+      "ERROR_MESSAGE": "Error saving",
+      "NO_PERMISSIONS": "No permissions"
+    },
+    "AREAS": {
+      "BREADCRUMB": "Teaching",
+      "BREADCRUMB_LIST": "Areas",
+      "TITLE": "Areas Management",
+      "NEW_AREA": "New Area",
+      "SEARCH_PLACEHOLDER": "Search...",
+      "SUCCESS": "Success!",
+      "WARNING": "Warning",
+      "NAME": "Name",
+      "STATUS": "Status",
+      "ACTIONS": "Actions",
+      "ACTIVE": "Active",
+      "INACTIVE": "Inactive",
+      "EDIT": "Edit area",
+      "DELETE": "Delete area",
+      "NO_RECORDS": "No areas registered",
+      "SHOWING": "Showing",
+      "TO": "to",
+      "OF": "of",
+      "RECORDS": "records",
+      "PREVIOUS": "Previous",
+      "NEXT": "Next",
+      "LOADING": "Loading...",
+      "DELETE_CONFIRMATION": "Delete",
+      "DELETE_WARNING": "This action cannot be undone",
+      "CANCEL": "Cancel",
+      "ADD_TITLE": "Add Area",
+      "EDIT_TITLE": "Edit Area",
+      "BREADCRUMB_ADD": "Add",
+      "BREADCRUMB_EDIT": "Edit",
+      "NAME_LABEL": "Name",
+      "NAME_REQUIRED": "*",
+      "ACTIVE_LABEL": "Active",
+      "SAVE": "Save",
+      "UPDATE": "Update",
+      "SAVING": "Saving...",
+      "SUCCESS_MESSAGE": "Area created successfully",
+      "ERROR_MESSAGE": "Error saving",
+      "NO_PERMISSIONS": "No permissions"
     }
   }
 }

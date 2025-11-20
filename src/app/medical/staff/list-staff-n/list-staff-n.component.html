@@ -122,7 +122,7 @@
                       
                       <!-- Si NO es un usuario protegido, mostrar acciones según permisos -->
                       <ng-container *ngIf="!isProtectedUser(data.id, data.role?.name)">
-                        <!-- Botones de acción siempre visibles según permisos -->
+                        <!-- Contenedor de acciones -->
                         <div class="action-buttons">
                           <!-- Botón Editar - solo si tiene permiso -->
                           <button 
@@ -143,6 +143,10 @@
                             <i class="fa fa-trash"></i>
                           </button>
                         </div>
+                        <!-- Badge sin permisos - solo si NO tiene ningún permiso -->
+                        <span class="badge badge-no-permission" *ngIf="!canEditStaff() && !canDeleteStaff()">
+                          <i class="fa fa-ban me-1"></i>{{ 'STAFF.LIST_STAFF.NO_PERMISSIONS' | translate }}
+                        </span>
                       </ng-container>
                     </td>
                   </tr>

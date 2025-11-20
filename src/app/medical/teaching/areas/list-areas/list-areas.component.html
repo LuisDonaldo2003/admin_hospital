@@ -5,7 +5,7 @@
     <div class="page-header mb-4">
       <div class="row">
         <div class="col-sm-12">
-          <ol class="breadcrumb bg-light p-2 rounded">
+          <ol class="breadcrumb p-2 rounded">
             <li class="breadcrumb-item">{{ 'TEACHING_MODULE.AREAS.BREADCRUMB' | translate }} ></li>
             <li class="breadcrumb-item active">{{ 'TEACHING_MODULE.AREAS.BREADCRUMB_LIST' | translate }}</li>
           </ol>
@@ -71,14 +71,19 @@
                       </span>
                     </td>
                     <td class="text-center">
-                      <div class="d-flex justify-content-center gap-2">
-                        <button class="btn btn-sm btn-edit" (click)="editArea(item)" [title]="'TEACHING_MODULE.AREAS.EDIT' | translate">
+                      <!-- Si el usuario tiene al menos un permiso (editar o eliminar) -->
+                      <div class="d-flex justify-content-center gap-2" *ngIf="canEdit() || canDelete()">
+                        <button *ngIf="canEdit()" class="btn btn-sm btn-edit" (click)="editArea(item)" [title]="'TEACHING_MODULE.AREAS.EDIT' | translate">
                           <i class="fa fa-pen"></i>
                         </button>
-                        <button class="btn btn-sm btn-delete" (click)="itemToDelete = item" data-bs-toggle="modal" data-bs-target="#deleteModalArea" [title]="'TEACHING_MODULE.AREAS.DELETE' | translate">
+                        <button *ngIf="canDelete()" class="btn btn-sm btn-delete" (click)="itemToDelete = item" data-bs-toggle="modal" data-bs-target="#deleteModalArea" [title]="'TEACHING_MODULE.AREAS.DELETE' | translate">
                           <i class="fa fa-trash"></i>
                         </button>
                       </div>
+                      <!-- Si no tiene ningún permiso -->
+                      <span class="badge badge-no-permission" *ngIf="!canEdit() && !canDelete()">
+                        <i class="fa fa-ban me-1"></i>{{ 'TEACHING_MODULE.AREAS.NO_PERMISSIONS' | translate }}
+                      </span>
                     </td>
                   </tr>
                   <tr *ngIf="areas.length === 0 && !loading">
