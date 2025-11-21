@@ -5,6 +5,8 @@ import { AuthService } from 'src/app/shared/auth/auth.service';
 import { ProfileService } from 'src/app/core/profile/service/profile.service';
 import { routes } from 'src/app/shared/routes/routes';
 import { RoleConfigService } from 'src/app/shared/services/role-config.service';
+import { HttpClient } from '@angular/common/http';
+import { URL_SERVICIOS } from 'src/app/config/config';
 
 @Component({
   selector: 'app-login',
@@ -37,15 +39,25 @@ export class LoginComponent implements OnInit {
     public auth: AuthService,
     public router: Router,
     private profileService: ProfileService,
-    private roleConfigService: RoleConfigService
+    private roleConfigService: RoleConfigService,
+    private http: HttpClient
   ) {}
 
   /**
    * Inicializa el componente de login
    */
   ngOnInit(): void {
-    // Si deseas limpiar sesiones anteriores
-    // localStorage.removeItem('authenticated');
+    // Si el usuario ya está logueado con token válido, redirigir automáticamente
+    if (this.auth.isLoggedIn()) {
+      this.redirectByRole();
+      return;
+    }
+    // Si hay token pero está expirado, simplemente limpiar localStorage sin hacer logout completo
+    else if (localStorage.getItem('token') && this.auth.isTokenExpired()) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('authenticated');
+    }
   }
 
   /**
@@ -72,14 +84,15 @@ export class LoginComponent implements OnInit {
         this.loading = false;
 
         if (resp?.success) {
-          // Login exitoso: redirige según el rol detectado
+          // Login exitoso: limpiar mensaje de baneo y redirigir
+          localStorage.removeItem('ban_message_shown');
           this.redirectByRole();
         } else if (resp?.unverified) {
           // Caso de usuario autenticado pero sin verificación de cuenta
           this.unverifiedMsg = 'Tu cuenta no está verificada. Te hemos enviado un nuevo código.';
           this.router.navigate(['/verify-code']);
         } else {
-          // Credenciales inválidas u otro error devuelto por el backend
+          // Credenciales inválidas
           this.ERROR = true;
         }
       },

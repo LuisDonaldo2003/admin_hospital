@@ -1,13 +1,25 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule, inject } from '@angular/core';
+import { RouterModule, Routes, Router } from '@angular/router';
 import { MaintenanceComponent } from './shared/components/maintenance/maintenance.component';
+import { AuthService } from './shared/auth/auth.service';
 // import { AuthGuard } from './shared/gaurd/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'login',
+    canActivate: [() => {
+      const authService = inject(AuthService);
+      const router = inject(Router);
+      // Si el usuario ya está logueado con token válido, redirigir a su dashboard
+      if (authService.isLoggedIn() && !authService.isTokenExpired()) {
+        const defaultRoute = authService.getDefaultRouteForUser();
+        return router.parseUrl(defaultRoute);
+      }
+      // Si no está logueado o el token expiró, ir al login
+      return router.parseUrl('/login');
+    }],
+    children: []
   },
   {
     path: 'maintenance',

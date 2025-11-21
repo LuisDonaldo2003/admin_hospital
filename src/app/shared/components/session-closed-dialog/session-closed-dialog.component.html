@@ -1,0 +1,33 @@
+<div class="session-dialog-container">
+  <!-- Icon with concentric circles -->
+  <div class="icon-wrapper">
+    <div class="icon-background">
+      <div class="icon-inner">
+        <i class="fas fa-lock"></i>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Title -->
+  <h2 class="dialog-title">🔒 Sesión iniciada en otro dispositivo</h2>
+  
+  <!-- Message -->
+  <p class="dialog-message">
+    La sesión se a inicializado en otro dispositivo o posible otro navegador
+  </p>
+  
+  <!-- Action Button -->
+  <button 
+    mat-raised-button 
+    class="confirm-button"
+    (click)="onConfirm()">
+    Entendido
+    <i class="fas fa-chevron-right"></i>
+  </button>
+  
+  <!-- Footer note -->
+  <div class="security-note">
+    <i class="fas fa-info-circle"></i>
+    <span>Esta es una medida de seguridad para proteger tu cuenta, disculpe las molestias</span>
+  </div>
+</div>

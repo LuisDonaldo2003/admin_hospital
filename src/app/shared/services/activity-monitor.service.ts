@@ -10,8 +10,8 @@ export class ActivityMonitorService {
   private lastActivity: number = Date.now();
   // Timer para verificar inactividad
   private inactivityTimer: any;
-  // Tiempo máximo permitido de inactividad antes de cerrar sesión (7 horas)
-  private readonly INACTIVITY_TIMEOUT = 7 * 60 * 60 * 1000;
+  // Tiempo máximo permitido de inactividad antes de cerrar sesión (30 minutos)
+  private readonly INACTIVITY_TIMEOUT = 30 * 60 * 1000;
   // Tiempo antes de expirar el token para advertir y renovar (5 minutos)
   private readonly WARNING_TIME = 5 * 60 * 1000;
   // Intervalo de verificación de actividad (cada 30 segundos)

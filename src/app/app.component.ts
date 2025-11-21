@@ -36,6 +36,9 @@ export class AppComponent implements OnInit, OnDestroy {
    * Inicializa la app, aplica el tema y sincroniza colores personalizados del usuario
    */
   ngOnInit(): void {
+    // Restaurar sesión desde localStorage si existe
+    this.authService.getLocalStorage();
+    
     // Colores por defecto de la plataforma hospitalaria
     const DEFAULT_BORDER_COLOR = '#0B7285'; // Azul médico profesional
     const DEFAULT_CARD_BG_LIGHT = '#F8FFFE'; // Blanco hospitalario
