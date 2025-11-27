@@ -57,15 +57,14 @@ export class AddStaffNComponent {
    * Lista de roles disponibles para seleccionar
    */
   public roles: any = [];
-
   /**
-   * Mensaje de éxito tras el registro
+   * Banderas y datos para controlar las alertas desde la plantilla
    */
-  public text_success: string = '';
-  /**
-   * Mensaje de validación de campos
-   */
-  public text_validation: string = '';
+  public showValidation: boolean = false;
+  public showSuccess: boolean = false;
+  public validationType: 'missing' | 'password_mismatch' | 'permission' | 'none' = 'none';
+  public missingFields: string[] = [];
+  public backendErrorText: string = '';
   /**
    * Bandera para indicar si el formulario fue enviado
    */
@@ -101,36 +100,35 @@ export class AddStaffNComponent {
    */
   save() {
     this.submitted = true;
-    this.text_validation = '';
-    this.text_success = '';
+    this.showValidation = false;
+    this.showSuccess = false;
+    this.validationType = 'none';
+    this.missingFields = [];
+    this.backendErrorText = '';
 
     // Arreglo para campos faltantes
     const missingFields: string[] = [];
 
-    // Validación de campos obligatorios
-    if (!this.name.trim()) missingFields.push(this.translate.instant('NAME'));
-    if (!this.surname.trim()) missingFields.push(this.translate.instant('SURNAME'));
-    if (!this.email.trim()) missingFields.push(this.translate.instant('EMAIL'));
-    if (!this.password.trim()) missingFields.push(this.translate.instant('PASSWORD'));
-    if (!this.password_confirmation.trim()) missingFields.push(this.translate.instant('CONFIRM_PASSWORD'));
-    if (!this.selectedValue) missingFields.push(this.translate.instant('ROLE'));
+    // Validación de campos obligatorios (guardamos las claves de traducción, la plantilla las traducirá)
+    if (!this.name.trim()) missingFields.push('STAFF.ADD_STAFF.FIRST_NAME');
+    if (!this.surname.trim()) missingFields.push('STAFF.ADD_STAFF.SURNAME');
+    if (!this.email.trim()) missingFields.push('STAFF.ADD_STAFF.EMAIL');
+    if (!this.password.trim()) missingFields.push('STAFF.ADD_STAFF.PASSWORD');
+    if (!this.password_confirmation.trim()) missingFields.push('STAFF.ADD_STAFF.CONFIRM_PASSWORD');
+    if (!this.selectedValue) missingFields.push('STAFF.ADD_STAFF.ROLE_SELECT');
 
-    // Si hay campos faltantes, muestra mensaje de validación
+    // Si hay campos faltantes, activa la validación y delega el mensaje al HTML
     if (missingFields.length > 0) {
-      const plural = missingFields.length > 1;
-      const campos = missingFields.join(', ');
-      const mensaje = this.translate.instant('FIELDS_MISSING', {
-        plural: plural ? 'n' : '',
-        sPlural: plural ? 's' : '',
-        campos
-      });
-      this.text_validation = mensaje;
+      this.missingFields = missingFields;
+      this.showValidation = true;
+      this.validationType = 'missing';
       return;
     }
 
     // Validación de coincidencia de contraseñas
     if (this.password !== this.password_confirmation) {
-      this.text_validation = this.translate.instant('PASSWORD_MISMATCH');
+      this.showValidation = true;
+      this.validationType = 'password_mismatch';
       return;
     }
 
@@ -147,10 +145,12 @@ export class AddStaffNComponent {
     this.staffservice.registerUser(formData).subscribe((resp: any) => {
       // Si el backend responde con error de permisos
       if (resp.message === 403) {
-        this.text_validation = resp.message_text;
+        this.showValidation = true;
+        this.validationType = 'permission';
+        this.backendErrorText = resp.message_text || '';
       } else {
-        // Si el registro fue exitoso, muestra mensaje y redirige
-        this.text_success = this.translate.instant('USER_REGISTERED_SUCCESS');
+        // Si el registro fue exitoso, activa el indicador de éxito (plantilla mostrará el texto)
+        this.showSuccess = true;
 
         setTimeout(() => {
           this.router.navigate(['/staffs/list-staff']);

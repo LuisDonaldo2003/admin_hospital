@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ProfileMService } from '../service/profile-m.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -58,6 +58,8 @@ export class EditProfileMComponent {
     public profileService: ProfileMService,
     public activedRoute: ActivatedRoute,
     private translate: TranslateService
+    ,
+    private router: Router
   ) {}
 
   /**
@@ -111,6 +113,9 @@ export class EditProfileMComponent {
       }
       // Si es exitoso, muestra mensaje de éxito
       this.valid_form_success = true;
+      setTimeout(() => {
+        this.router.navigateByUrl('/profile-m/list_profile-m');
+      }, 2000);
     })
   }
 }

@@ -356,7 +356,7 @@
                     <div class="document-upload-card">
                       <div class="upload-header">
                         <i class="fa fa-graduation-cap text-primary me-2"></i>
-                        <label class="form-label mb-0">Título Profesional</label>
+                        <label class="form-label mb-0">{{'PERSONAL.ADD_PERSONAL.PROFESSIONAL_TITLE' | translate}}</label>
                       </div>
                       <div class="upload-area" 
                            [class.has-file]="documentos.has('Título profesional')"
@@ -399,7 +399,7 @@
                     <div class="document-upload-card">
                       <div class="upload-header">
                         <i class="fa fa-certificate text-primary me-2"></i>
-                        <label class="form-label mb-0">Constancias de Cursos</label>
+                        <label class="form-label mb-0">{{'PERSONAL.ADD_PERSONAL.COURSE_CERTIFICATES' | translate}}</label>
                       </div>
                       <div class="upload-area" 
                            [class.has-file]="documentos.has('Constancias de cursos')"
@@ -442,7 +442,7 @@
                     <div class="document-upload-card">
                       <div class="upload-header">
                         <i class="fa fa-id-badge text-primary me-2"></i>
-                        <label class="form-label mb-0">Cédula Profesional</label>
+                        <label class="form-label mb-0">{{'PERSONAL.ADD_PERSONAL.PROFESSIONAL_LICENSE' | translate}}</label>
                       </div>
                       <div class="upload-area" 
                            [class.has-file]="documentos.has('Cédula profesional')"
@@ -544,19 +544,21 @@
                 </div>
               </div>
 
-              <!-- Alerta de éxito -->
-              <div class="mt-4" *ngIf="text_success">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong>{{ 'PERSONAL.ADD_PERSONAL.SUCCESS_TITLE' | translate }}</strong> {{ text_success }}
-                  <button type="button" class="btn-close" (click)="text_success = ''" [attr.aria-label]="'PERSONAL.ADD_PERSONAL.CLOSE' | translate"></button>
+              <!-- Alerta de éxito (controlada desde HTML) -->
+              <div class="mt-4" *ngIf="showSuccess">
+                <div class="alert-modern alert-success alert-dismissible" role="alert">
+                  <strong>{{ 'PERSONAL.ADD_PERSONAL.SUCCESS_TITLE' | translate }}</strong>
+                  <span *ngIf="uploadedDocsCount === 7">{{ 'PERSONAL.ADD_PERSONAL.SUCCESS_ALL_DOCS' | translate }}</span>
+                  <span *ngIf="uploadedDocsCount !== 7">{{ 'PERSONAL.ADD_PERSONAL.SUCCESS_PARTIAL' | translate:{count: uploadedDocsCount} }}</span>
+                  <button type="button" class="btn-close" (click)="showSuccess = false" [attr.aria-label]="'PERSONAL.ADD_PERSONAL.CLOSE' | translate"></button>
                 </div>
               </div>
 
-              <!-- Alerta de validación/error -->
-              <div class="mt-4" *ngIf="text_validation">
-                <div class="alert alert-warning alert-dismissible fade show">
-                  <strong>{{ 'PERSONAL.ADD_PERSONAL.WARNING' | translate }}:</strong> {{ text_validation }}
-                  <button type="button" class="btn-close" (click)="text_validation = ''" [attr.aria-label]="'PERSONAL.ADD_PERSONAL.CLOSE' | translate"></button>
+              <!-- Alerta de validación/error (controlada desde HTML) -->
+              <div class="mt-4" *ngIf="showValidation">
+                <div class="alert-modern alert-warning alert-dismissible">
+                  <strong>Advertencia:</strong> {{ serverValidationMessage }}
+                  <button type="button" class="btn-close" (click)="showValidation = false; serverValidationMessage = ''" aria-label="Cerrar"></button>
                 </div>
               </div>
 

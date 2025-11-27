@@ -1,0 +1,152 @@
+<!-- Contenedor principal de la página -->
+<div class="page-wrapper">
+    <div class="content">
+
+        <!-- Breadcrumb de navegación -->
+        <div class="page-header mb-4">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb bg-light p-2 rounded">
+                        <li class="breadcrumb-item">
+                            <a routerLink="/role-families/list">{{ 'ROLE_FAMILIES.ASSIGN_ROLES.BREADCRUMB_ASSIGN' |
+                                translate }} ></a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ 'ROLE_FAMILIES.ASSIGN_ROLES.TITLE' | translate
+                            }}</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card card-assign shadow border-0">
+                    <div class="card-body">
+
+                        <!-- Encabezado -->
+                        <div class="header-section mb-4">
+                            <h4 class="mb-2 fw-semibold">
+                                <i class="fa fa-link me-2"></i>
+                                {{ 'ROLE_FAMILIES.ASSIGN_ROLES.TITLE' | translate }}
+                            </h4>
+                            <p class="description-text mb-0">
+                                {{ 'ROLE_FAMILIES.ASSIGN_ROLES.DESCRIPTION' | translate }}
+                            </p>
+                        </div>
+
+                        <!-- Selector de Familia -->
+                        <div class="family-selector-section mb-4">
+                            <div class="row g-3">
+                                <div class="col-lg-8">
+                                    <label class="form-label fw-semibold">
+                                        <i class="fa fa-folder me-2"></i>{{
+                                        'ROLE_FAMILIES.ASSIGN_ROLES.SELECT_FAMILY_LABEL' | translate }} *
+                                    </label>
+                                    <select class="form-select selector-family" [(ngModel)]="selectedFamilyId"
+                                        (change)="onFamilyChange()">
+                                        <option value="">-- {{ 'ROLE_FAMILIES.ASSIGN_ROLES.SELECT_FAMILY_PLACEHOLDER' |
+                                            translate }}
+                                            --</option>
+                                        <option *ngFor="let family of families" [value]="family.id">
+                                            {{ family.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4 d-flex align-items-end">
+                                    <div class="counter-badge w-100">
+                                        <i class="fa fa-check-circle me-2"></i>
+                                        <strong>{{ 'ROLE_FAMILIES.ASSIGN_ROLES.ROLES_SELECTED' | translate
+                                            }}:</strong>
+                                        <span class="count">{{ selectedRoleIds.length }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="separator"></div>
+
+                        <!-- Lista de Roles -->
+                        <div *ngIf="selectedFamilyId" class="roles-grid-section">
+                            <h5 class="section-title mb-3">
+                                <i class="fa fa-shield-alt me-2"></i>{{ 'ROLE_FAMILIES.ASSIGN_ROLES.TITLE' |
+                                translate }}
+                            </h5>
+
+                            <div class="roles-grid">
+                                <div *ngFor="let role of roles" class="role-card"
+                                    [class.selected]="isRoleSelected(role.id)" (click)="toggleRole(role.id)">
+                                    <div class="role-card-content">
+                                        <div class="checkbox-wrapper">
+                                            <input type="checkbox" [id]="'role-' + role.id"
+                                                [checked]="isRoleSelected(role.id)" (click)="$event.stopPropagation()"
+                                                (change)="toggleRole(role.id)">
+                                            <span class="checkmark"></span>
+                                        </div>
+                                        <div class="role-info">
+                                            <i class="fa fa-shield-alt role-icon"></i>
+                                            <span class="role-name">{{ role.name }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Mensaje cuando no hay roles -->
+                                <div *ngIf="roles.length === 0" class="col-12 text-center py-5 no-roles-message">
+                                    <i class="fa fa-inbox fa-3x mb-3"></i>
+                                    <p class="mb-0">{{ 'ROLE_FAMILIES.ASSIGN_ROLES.NO_ROLES' | translate }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mensaje cuando no hay familia seleccionada -->
+                        <div *ngIf="!selectedFamilyId" class="empty-state">
+                            <i class="fa fa-hand-point-up fa-3x mb-3"></i>
+                            <p class="mb-0"> {{ 'ROLE_FAMILIES.ASSIGN_ROLES.SELECT_FAMILY_MESSAGE' | translate
+                                }}</p>
+                        </div>
+
+                        <div class="separator mt-4"></div>
+
+                        <!-- Mensaje de validación si hay advertencias -->
+                        <div class="mt-4" *ngIf="text_validation">
+                            <div class="alert alert-modern alert-warning d-flex align-items-center">
+                                <i class="fa fa-exclamation-triangle me-3"></i>
+                                <div class="flex-grow-1">
+                                    <strong>{{ 'ROLE_FAMILIES.ASSIGN_ROLES.WARNING' | translate }}:</strong> {{
+                                    text_validation }}
+                                </div>
+                                <button type="button" class="btn-close" (click)="text_validation = ''"></button>
+                            </div>
+                        </div>
+
+                        <!-- Mensaje de éxito si la operación fue exitosa -->
+                        <div class="mt-4" *ngIf="text_success">
+                            <div class="alert alert-modern alert-success d-flex align-items-center">
+                                <i class="fa fa-check-circle me-3"></i>
+                                <div class="flex-grow-1">
+                                    <strong>{{ 'ROLE_FAMILIES.ASSIGN_ROLES.SUCCESS' | translate }}:</strong> {{
+                                    text_success }}
+                                </div>
+                                <button type="button" class="btn-close" (click)="text_success = ''"></button>
+                            </div>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="actions-section">
+                            <a routerLink="/role-families/list" class="btn btn-back">
+                                <i class="fa fa-arrow-left me-2"></i>{{ 'ROLE_FAMILIES.ASSIGN_ROLES.BACK' |
+                                translate }}
+                            </a>
+                            <button class="btn btn-save" (click)="saveAssignment()" [disabled]="!selectedFamilyId">
+                                <i class="fa fa-save me-2"></i>{{ 'ROLE_FAMILIES.ASSIGN_ROLES.SAVE_ASSIGNMENT' |
+                                translate }}
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

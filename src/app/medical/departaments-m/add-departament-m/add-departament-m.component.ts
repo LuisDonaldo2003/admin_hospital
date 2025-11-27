@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DepartamentMService } from '../service/departament-m.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-departament-m',
@@ -34,6 +35,8 @@ export class AddDepartamentMComponent {
   constructor(
     public departamentService: DepartamentMService,
     private translate: TranslateService
+    ,
+    private router: Router
   ) {}
 
   /**
@@ -63,6 +66,9 @@ export class AddDepartamentMComponent {
         this.name = '';
         this.state = true; // Resetear a activo
         this.valid_form_success = true;
+        setTimeout(() => {
+          this.router.navigateByUrl('/departaments-m/list-departament');
+        }, 2000);
       }
     })
   }

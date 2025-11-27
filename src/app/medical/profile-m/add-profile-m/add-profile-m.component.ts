@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProfileMService } from '../service/profile-m.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 /**
  * Componente para agregar un nuevo perfil médico.
@@ -48,6 +49,8 @@ export class AddProfileMComponent {
   constructor(
     public profileService: ProfileMService,
     private translate: TranslateService
+    ,
+    private router: Router
   ) {}
 
   /**
@@ -85,6 +88,9 @@ export class AddProfileMComponent {
         this.name = '';
         this.state = true; // Resetear a activo
         this.valid_form_success = true;
+        setTimeout(() => {
+          this.router.navigateByUrl('/profile-m/list_profile-m');
+        }, 2000);
       }
     })
   }

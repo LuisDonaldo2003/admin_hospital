@@ -6,8 +6,8 @@
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item"><a href="#">Personal ></a></li>
-            <li class="breadcrumb-item active">Editar Personal</li>
+            <li class="breadcrumb-item"><a href="#">{{'PERSONAL.EDIT_PERSONAL.EDIT' | translate}} ></a></li>
+            <li class="breadcrumb-item active">{{'PERSONAL.EDIT_PERSONAL.TITLE' | translate}}</li>
           </ol>
         </div>
       </div>
@@ -17,9 +17,9 @@
     <div class="row justify-content-center" *ngIf="loadingPersonal">
       <div class="col-12 text-center py-5">
         <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Cargando...</span>
+          <span class="visually-hidden">{{'PERSONAL.EDIT_PERSONAL.LOADING' | translate}}</span>
         </div>
-        <p class="mt-3 text-muted">Cargando datos del personal...</p>
+        <p class="mt-3 text-muted">{{'PERSONAL.EDIT_PERSONAL.LOADING_DATA' | translate}}</p>
       </div>
     </div>
 
@@ -29,7 +29,7 @@
         <div class="card card-form shadow border-0">
           <div class="card-body px-5 py-4">
             <!-- Título del formulario -->
-            <h3 class="text-center mb-4 fw-bold">Editar Personal</h3>
+            <h3 class="text-center mb-4 fw-bold">{{'PERSONAL.EDIT_PERSONAL.EDIT_PERSONAL' | translate}}</h3>
 
             <!-- Formulario para editar personal -->
             <form (keydown.enter)="save()" class="form-section" novalidate>
@@ -37,101 +37,101 @@
                 
                 <!-- Campo: Nombre -->
                 <div class="col-md-6">
-                  <label class="form-label">Nombre(s) *</label>
+                  <label class="form-label">{{'PERSONAL.EDIT_PERSONAL.NAME' | translate}}(s) *</label>
                   <input 
                     type="text" 
                     class="form-control" 
                     [(ngModel)]="nombre"
                     name="nombre"
-                    placeholder="Ingrese el nombre"
+                    placeholder="{{ 'PERSONAL.EDIT_PERSONAL.NAME_PLACEHOLDER' | translate }}"
                     required 
                     [ngClass]="{ 'is-invalid': submitted && !nombre.trim() }" />
                   <div *ngIf="submitted && !nombre.trim()" class="invalid-feedback">
-                    El nombre es requerido
+                    {{  'PERSONAL.EDIT_PERSONAL.NAME_REQUIRED' | translate }}
                   </div>
                 </div>
 
                 <!-- Campo: Apellidos -->
                 <div class="col-md-6">
-                  <label class="form-label">Apellidos *</label>
+                  <label class="form-label">{{'PERSONAL.EDIT_PERSONAL.LAST_NAME' | translate}} *</label>
                   <input 
                     type="text" 
                     class="form-control" 
                     [(ngModel)]="apellidos"
                     name="apellidos"
-                    placeholder="Ingrese los apellidos"
+                    placeholder="{{ 'PERSONAL.EDIT_PERSONAL.LAST_NAME_PLACEHOLDER' | translate }}"
                     required 
                     [ngClass]="{ 'is-invalid': submitted && !apellidos.trim() }" />
                   <div *ngIf="submitted && !apellidos.trim()" class="invalid-feedback">
-                    Los apellidos son requeridos
+                    {{'PERSONAL.EDIT_PERSONAL.LAST_NAME_REQUIRED2' | translate}}
                   </div>
                 </div>
 
                 <!-- Campo: Tipo de Personal -->
                 <div class="col-md-6">
-                  <label class="form-label">Tipo de Personal *</label>
+                  <label class="form-label">{{'PERSONAL.EDIT_PERSONAL.TYPE' | translate}} *</label>
                   <select 
                     class="form-select" 
                     [(ngModel)]="tipo"
                     name="tipo"
                     required 
                     [ngClass]="{ 'is-invalid': submitted && !tipo }">
-                    <option value="">Seleccionar tipo</option>
+                    <option value="">{{ 'PERSONAL.EDIT_PERSONAL.SELECT_TYPE' | translate }}</option>
                     <option value="Clínico">Clínico</option>
                     <option value="No Clínico">No Clínico</option>
                   </select>
                   <div *ngIf="submitted && !tipo" class="invalid-feedback">
-                    El tipo de personal es requerido
+                    {{'PERSONAL.EDIT_PERSONAL.TYPE_REQUIRED' | translate}}
                   </div>
                 </div>
 
                 <!-- Fecha de Ingreso (solo lectura) -->
                 <div class="col-md-6">
-                  <label class="form-label">Fecha de Ingreso</label>
+                  <label class="form-label">{{'PERSONAL.EDIT_PERSONAL.ENTRY_DATE' | translate}}</label>
                   <input 
                     type="text" 
                     class="form-control" 
                     [value]="fechaIngreso"
                     readonly
-                    placeholder="Fecha de ingreso" />
-                  <small class="form-text text-muted">Solo lectura</small>
+                    placeholder="{{'PERSONAL.EDIT_PERSONAL.ENTRY_DATE' | translate}}" />
+                  <small class="form-text text-muted">{{'PERSONAL.EDIT_PERSONAL.READ_ONLY' | translate}}</small>
                 </div>
 
                 <!-- Campo: RFC -->
                 <div class="col-md-6">
-                  <label class="form-label">RFC *</label>
+                  <label class="form-label">{{'PERSONAL.EDIT_PERSONAL.RFC' | translate}} *</label>
                   <input 
                     type="text" 
                     class="form-control text-uppercase" 
                     [(ngModel)]="rfc"
                     name="rfc"
-                    placeholder="Ej: PEPE900101AB2"
+                    placeholder="{{ 'PERSONAL.EDIT_PERSONAL.RFC_PLACEHOLDER' | translate }}"
                     maxlength="13"
                     required 
                     style="text-transform: uppercase;"
                     [ngClass]="{ 'is-invalid': submitted && !rfc.trim() }" />
                   <div *ngIf="submitted && !rfc.trim()" class="invalid-feedback">
-                    El RFC es requerido
+                    {{'PERSONAL.EDIT_PERSONAL.RFC_REQUIRED' | translate}}
                   </div>
-                  <small class="form-text text-muted">Solo letras y números, máximo 13 caracteres. Ej: PEPE900101AB2</small>
+                  <small class="form-text text-muted">{{'PERSONAL.EDIT_PERSONAL.RFC_HELP' | translate}}</small>
                 </div>
 
                 <!-- Campo: Número de Checador -->
                 <div class="col-md-6">
-                  <label class="form-label">Número de Checador *</label>
+                  <label class="form-label">{{'PERSONAL.EDIT_PERSONAL.CHECKER_NUMBER' | translate}} *</label>
                   <input 
                     type="text" 
                     class="form-control" 
                     [(ngModel)]="numeroChecador"
                     name="numeroChecador"
-                    placeholder="Ej: 12345"
+                    placeholder="{{ 'PERSONAL.EDIT_PERSONAL.CHECKER_NUMBER_PLACEHOLDER' | translate }}"
                     pattern="[0-9]*"
                     required 
                     [ngClass]="{ 'is-invalid': submitted && !numeroChecador.trim() }" />
                   <div *ngIf="submitted && !numeroChecador.trim()" class="invalid-feedback">
-                    El número de checador es requerido
+                    {{'PERSONAL.EDIT_PERSONAL.CHECKER_NUMBER_REQUIRED' | translate}}
                   </div>
-                  <small class="form-text text-muted">Solo números. Se usa para control de asistencia</small>
+                  <small class="form-text text-muted">{{'PERSONAL.EDIT_PERSONAL.CHECKER_NUMBER_HELP' | translate}}</small>
                 </div>
 
               </div>
@@ -140,11 +140,11 @@
               <div class="form-section mt-4">
                 <h5 class="form-section-title mb-3">
                   <i class="fa fa-file-pdf-o text-danger me-2"></i>
-                  Documentos (PDF) - Opcionales
+                  {{'PERSONAL.EDIT_PERSONAL.DOCUMENTS' | translate}} (PDF) - {{'PERSONAL.EDIT_PERSONAL.OPTIONAL' | translate}}
                 </h5>
                 <p class="text-muted mb-3">
-                  Gestiona los documentos en formato PDF (máximo 10MB cada uno). 
-                  <strong>Los documentos son opcionales. Si no están todos, el personal se marcará como "documentos incompletos".</strong>
+                  {{'PERSONAL.EDIT_PERSONAL.DOCUMENTS_DESCRIPTION' | translate}} 
+                  <strong>{{'PERSONAL.EDIT_PERSONAL.DOCUMENTS_WARNING' | translate}}</strong>
                 </p>
 
                 <div class="row g-4">
@@ -153,7 +153,7 @@
                     <div class="document-upload-card">
                       <div class="upload-header">
                         <i class="fa fa-id-card text-primary me-2"></i>
-                        <label class="form-label mb-0">Acta de Nacimiento</label>
+                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.BIRTH_CERTIFICATE' | translate}}</label>
                       </div>
                       <div class="upload-area"
                            [class.has-file]="documentExists('Acta de nacimiento') || documentosNuevos.has('Acta de nacimiento')"
@@ -163,9 +163,9 @@
                            (drop)="onDrop($event, 'Acta de nacimiento', $event.currentTarget)">
                         <div *ngIf="!(documentExists('Acta de nacimiento') || documentosNuevos.has('Acta de nacimiento'))" class="upload-placeholder">
                           <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
                           <div class="select-row">
-                            <small class="text-muted mb-0">o</small>
+                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
                             <input
                               type="file"
                               class="file-input"
@@ -174,13 +174,13 @@
                               aria-label="Seleccionar Acta de Nacimiento"
                               (change)="onFileSelected($event, 'Acta de nacimiento')" />
                             <label for="acta-nacimiento-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
                             </label>
                           </div>
                         </div>
                         <div *ngIf="documentExists('Acta de nacimiento') && !documentosNuevos.has('Acta de nacimiento')" class="upload-success">
                           <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Documento existente</p>
+                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.EXISTING_DOCUMENT' | translate}}</p>
                           <small class="text-muted d-block">{{ getDocumentDisplayName('Acta de nacimiento') }}</small>
                           <div class="btn-group-sm mt-2">
                             <button type="button"
@@ -199,12 +199,12 @@
                         </div>
                         <div *ngIf="documentosNuevos.has('Acta de nacimiento')" class="upload-success">
                           <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <p class="text-success mb-1 fw-bold">{{ 'PERSONAL.EDIT_PERSONAL.NEW_FILE_UPLOADED' | translate }}</p>
                           <small class="text-muted d-block">{{ documentosNuevos.get('Acta de nacimiento')?.name }}</small>
                           <button type="button"
                                   class="btn btn-outline-danger btn-sm mt-2"
                                   (click)="removeNewDocument('Acta de nacimiento')">
-                            <i class="fa fa-trash me-1"></i>Eliminar
+                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
                           </button>
                         </div>
                       </div>
@@ -215,7 +215,7 @@
                     <div class="document-upload-card">
                       <div class="upload-header">
                         <i class="fa fa-home text-primary me-2"></i>
-                        <label class="form-label mb-0">Comprobante de Domicilio</label>
+                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.PROOF_OF_ADDRESS' | translate}}</label>
                       </div>
                       <div class="upload-area"
                            [class.has-file]="documentExists('Comprobante de domicilio') || documentosNuevos.has('Comprobante de domicilio')"
@@ -225,9 +225,9 @@
                            (drop)="onDrop($event, 'Comprobante de domicilio', $event.currentTarget)">
                         <div *ngIf="!(documentExists('Comprobante de domicilio') || documentosNuevos.has('Comprobante de domicilio'))" class="upload-placeholder">
                           <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
                           <div class="select-row">
-                            <small class="text-muted mb-0">o</small>
+                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
                             <input
                               type="file"
                               class="file-input"
@@ -236,7 +236,7 @@
                               aria-label="Seleccionar Comprobante de Domicilio"
                               (change)="onFileSelected($event, 'Comprobante de domicilio')" />
                             <label for="comprobante-domicilio-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
                             </label>
                           </div>
                         </div>
@@ -266,7 +266,7 @@
                           <button type="button"
                                   class="btn btn-outline-danger btn-sm mt-2"
                                   (click)="removeNewDocument('Comprobante de domicilio')">
-                            <i class="fa fa-trash me-1"></i>Eliminar
+                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
                           </button>
                         </div>
                       </div>
@@ -277,7 +277,7 @@
                     <div class="document-upload-card">
                       <div class="upload-header">
                         <i class="fa fa-address-card text-primary me-2"></i>
-                        <label class="form-label mb-0">CURP</label>
+                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.CURP' | translate}}</label>
                       </div>
                       <div class="upload-area"
                            [class.has-file]="documentExists('CURP') || documentosNuevos.has('CURP')"
@@ -287,9 +287,9 @@
                            (drop)="onDrop($event, 'CURP', $event.currentTarget)">
                         <div *ngIf="!(documentExists('CURP') || documentosNuevos.has('CURP'))" class="upload-placeholder">
                           <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
                           <div class="select-row">
-                            <small class="text-muted mb-0">o</small>
+                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
                             <input
                               type="file"
                               class="file-input"
@@ -298,7 +298,7 @@
                               aria-label="Seleccionar CURP"
                               (change)="onFileSelected($event, 'CURP')" />
                             <label for="curp-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
                             </label>
                           </div>
                         </div>
@@ -323,12 +323,12 @@
                         </div>
                         <div *ngIf="documentosNuevos.has('CURP')" class="upload-success">
                           <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.NEW_FILE_UPLOADED' | translate}}</p>
                           <small class="text-muted d-block">{{ documentosNuevos.get('CURP')?.name }}</small>
                           <button type="button"
                                   class="btn btn-outline-danger btn-sm mt-2"
                                   (click)="removeNewDocument('CURP')">
-                            <i class="fa fa-trash me-1"></i>Eliminar
+                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
                           </button>
                         </div>
                       </div>
@@ -339,7 +339,7 @@
                     <div class="document-upload-card">
                       <div class="upload-header">
                         <i class="fa fa-credit-card text-primary me-2"></i>
-                        <label class="form-label mb-0">INE</label>
+                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.INE' | translate}}</label>
                       </div>
                       <div class="upload-area"
                            [class.has-file]="documentExists('INE') || documentosNuevos.has('INE')"
@@ -349,9 +349,9 @@
                            (drop)="onDrop($event, 'INE', $event.currentTarget)">
                         <div *ngIf="!(documentExists('INE') || documentosNuevos.has('INE'))" class="upload-placeholder">
                           <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
                           <div class="select-row">
-                            <small class="text-muted mb-0">o</small>
+                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
                             <input
                               type="file"
                               class="file-input"
@@ -360,13 +360,13 @@
                               aria-label="Seleccionar INE"
                               (change)="onFileSelected($event, 'INE')" />
                             <label for="ine-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
                             </label>
                           </div>
                         </div>
                         <div *ngIf="documentExists('INE') && !documentosNuevos.has('INE')" class="upload-success">
                           <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Documento existente</p>
+                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.EXISTING_DOCUMENT' | translate}}</p>
                           <small class="text-muted d-block">{{ getDocumentDisplayName('INE') }}</small>
                           <div class="btn-group-sm mt-2">
                             <button type="button"
@@ -385,12 +385,12 @@
                         </div>
                         <div *ngIf="documentosNuevos.has('INE')" class="upload-success">
                           <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.NEW_FILE_UPLOADED' | translate}}</p>
                           <small class="text-muted d-block">{{ documentosNuevos.get('INE')?.name }}</small>
                           <button type="button"
                                   class="btn btn-outline-danger btn-sm mt-2"
                                   (click)="removeNewDocument('INE')">
-                            <i class="fa fa-trash me-1"></i>Eliminar
+                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
                           </button>
                         </div>
                       </div>
@@ -402,7 +402,7 @@
                     <div class="document-upload-card">
                       <div class="upload-header">
                         <i class="fa fa-graduation-cap text-primary me-2"></i>
-                        <label class="form-label mb-0">Título Profesional</label>
+                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.TITULO_PROFESIONAL' | translate}}</label>
                       </div>
                       <div class="upload-area"
                            [class.has-file]="documentExists('Título profesional') || documentosNuevos.has('Título profesional')"
@@ -412,9 +412,9 @@
                            (drop)="onDrop($event, 'Título profesional', $event.currentTarget)">
                         <div *ngIf="!(documentExists('Título profesional') || documentosNuevos.has('Título profesional'))" class="upload-placeholder">
                           <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
                           <div class="select-row">
-                            <small class="text-muted mb-0">o</small>
+                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
                             <input
                               type="file"
                               class="file-input"
@@ -423,7 +423,7 @@
                               aria-label="Seleccionar Título Profesional"
                               (change)="onFileSelected($event, 'Título profesional')" />
                             <label for="titulo-profesional-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
                             </label>
                           </div>
                         </div>
@@ -448,12 +448,12 @@
                         </div>
                         <div *ngIf="documentosNuevos.has('Título profesional')" class="upload-success">
                           <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.NEW_FILE_UPLOADED' | translate}}</p>
                           <small class="text-muted d-block">{{ documentosNuevos.get('Título profesional')?.name }}</small>
                           <button type="button"
                                   class="btn btn-outline-danger btn-sm mt-2"
                                   (click)="removeNewDocument('Título profesional')">
-                            <i class="fa fa-trash me-1"></i>Eliminar
+                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
                           </button>
                         </div>
                       </div>
@@ -465,7 +465,7 @@
                     <div class="document-upload-card">
                       <div class="upload-header">
                         <i class="fa fa-certificate text-primary me-2"></i>
-                        <label class="form-label mb-0">Constancias de Cursos</label>
+                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.CONSTANCIAS_CURSOS' | translate}}</label>
                       </div>
                       <div class="upload-area"
                            [class.has-file]="documentExists('Constancias de cursos') || documentosNuevos.has('Constancias de cursos')"
@@ -475,9 +475,9 @@
                            (drop)="onDrop($event, 'Constancias de cursos', $event.currentTarget)">
                         <div *ngIf="!(documentExists('Constancias de cursos') || documentosNuevos.has('Constancias de cursos'))" class="upload-placeholder">
                           <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
                           <div class="select-row">
-                            <small class="text-muted mb-0">o</small>
+                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
                             <input
                               type="file"
                               class="file-input"
@@ -486,7 +486,7 @@
                               aria-label="Seleccionar Constancias de Cursos"
                               (change)="onFileSelected($event, 'Constancias de cursos')" />
                             <label for="constancias-cursos-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
                             </label>
                           </div>
                         </div>
@@ -500,25 +500,25 @@
                                     class="btn btn-outline-primary btn-sm me-2"
                                     (click)="downloadDocument(getExistingDocument('Constancias de cursos')?.id!)"
                                     *ngIf="getExistingDocument('Constancias de cursos')?.id">
-                              <i class="fa fa-download me-1"></i>Descargar
+                              <i class="fa fa-download me-1"></i>{{'PERSONAL.EDIT.DOWNLOAD'}}
                             </button>
                             <button type="button"
                                     class="btn btn-outline-danger btn-sm"
                                     (click)="removeExistingDocument(getExistingDocument('Constancias de cursos')!)"
                                     *ngIf="getExistingDocument('Constancias de cursos')">
-                              <i class="fa fa-trash me-1"></i>Eliminar
+                              <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
                             </button>
                           </div>
                         </div>
                         <!-- Documento nuevo -->
                         <div *ngIf="documentosNuevos.has('Constancias de cursos')" class="upload-success">
                           <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.NEW_FILE_UPLOADED' | translate}}</p>
                           <small class="text-muted d-block">{{ documentosNuevos.get('Constancias de cursos')?.name }}</small>
                           <button type="button"
                                   class="btn btn-outline-danger btn-sm mt-2"
                                   (click)="removeNewDocument('Constancias de cursos')">
-                            <i class="fa fa-trash me-1"></i>Eliminar
+                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
                           </button>
                         </div>
                       </div>
@@ -530,7 +530,7 @@
                     <div class="document-upload-card">
                       <div class="upload-header">
                         <i class="fa fa-id-badge text-primary me-2"></i>
-                        <label class="form-label mb-0">Cédula Profesional</label>
+                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.CEDULA_PROFESIONAL' | translate}}</label>
                       </div>
                       <div class="upload-area"
                            [class.has-file]="documentExists('Cédula profesional') || documentosNuevos.has('Cédula profesional')"
@@ -540,9 +540,9 @@
                            (drop)="onDrop($event, 'Cédula profesional', $event.currentTarget)">
                         <div *ngIf="!(documentExists('Cédula profesional') || documentosNuevos.has('Cédula profesional'))" class="upload-placeholder">
                           <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">Arrastra tu archivo aquí</p>
+                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
                           <div class="select-row">
-                            <small class="text-muted mb-0">o</small>
+                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
                             <input
                               type="file"
                               class="file-input"
@@ -551,39 +551,39 @@
                               aria-label="Seleccionar Cédula Profesional"
                               (change)="onFileSelected($event, 'Cédula profesional')" />
                             <label for="cedula-profesional-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> Seleccionar archivo
+                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
                             </label>
                           </div>
                         </div>
                         <!-- Documento existente -->
                         <div *ngIf="documentExists('Cédula profesional') && !documentosNuevos.has('Cédula profesional')" class="upload-success">
                           <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Documento existente</p>
+                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.EXISTING_DOCUMENT' | translate}}</p>
                           <small class="text-muted d-block">{{ getDocumentDisplayName('Cédula profesional') }}</small>
                           <div class="mt-2">
                             <button type="button"
                                     class="btn btn-outline-primary btn-sm me-2"
                                     (click)="downloadDocument(getExistingDocument('Cédula profesional')?.id!)"
                                     *ngIf="getExistingDocument('Cédula profesional')?.id">
-                              <i class="fa fa-download me-1"></i>Descargar
+                              <i class="fa fa-download me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DOWNLOAD' | translate}}
                             </button>
                             <button type="button"
                                     class="btn btn-outline-danger btn-sm"
                                     (click)="removeExistingDocument(getExistingDocument('Cédula profesional')!)"
                                     *ngIf="getExistingDocument('Cédula profesional')">
-                              <i class="fa fa-trash me-1"></i>Eliminar
+                              <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
                             </button>
                           </div>
                         </div>
                         <!-- Documento nuevo -->
                         <div *ngIf="documentosNuevos.has('Cédula profesional')" class="upload-success">
                           <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
+                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.NEW_FILE_UPLOADED' | translate}}</p>
                           <small class="text-muted d-block">{{ documentosNuevos.get('Cédula profesional')?.name }}</small>
                           <button type="button"
                                   class="btn btn-outline-danger btn-sm mt-2"
                                   (click)="removeNewDocument('Cédula profesional')">
-                            <i class="fa fa-trash me-1"></i>Eliminar
+                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
                           </button>
                         </div>
                       </div>
@@ -624,22 +624,22 @@
               <div class="form-section mt-4">
                 <h6 class="mb-3">
                   <i class="fa fa-info-circle text-info me-2"></i>
-                  Estado de Documentos
+                  {{'PERSONAL.EDIT_PERSONAL.DOCUMENT_STATUS' | translate}}
                 </h6>
                 
                 <!-- Documentos completos -->
                 <div *ngIf="getMissingDocuments().length === 0" class="alert alert-success" style="background-color: #d4edda !important; color: #155724 !important;">
                   <i class="fa fa-check-circle me-2"></i>
-                  <strong style="color: #155724 !important;">¡Todos los documentos están completos!</strong>
-                  <br><small style="color: #0f4132 !important;">El personal está marcado como "documentos completos".</small>
+                  <strong style="color: #155724 !important;">{{'PERSONAL.EDIT_PERSONAL.ALL_DOCUMENTS_COMPLETE' | translate}}</strong>
+                  <br><small style="color: #0f4132 !important;">{{'PERSONAL.EDIT_PERSONAL.PERSONNEL_MARKED_COMPLETE' | translate}}</small>
                 </div>
 
                 <!-- Documentos faltantes -->
                 <div *ngIf="getMissingDocuments().length > 0" class="alert alert-warning" style="background-color: #fff3cd !important; color: #856404 !important;">
                   <i class="fa fa-exclamation-triangle me-2"></i>
-                  <strong style="color: #856404 !important;">Documentos faltantes: {{ getMissingDocuments().length }}/6</strong>
+                  <strong style="color: #856404 !important;">{{'PERSONAL.EDIT_PERSONAL.MISSING_DOCUMENTS' | translate}}{{ getMissingDocuments().length }}/6</strong>
                   <div class="mt-2">
-                    <small style="color: #664d03 !important;">Documentos pendientes: 
+                    <small style="color: #664d03 !important;">{{'PERSONAL.EDIT_PERSONAL.PENDING_DOCUMENTS' | translate}}: 
                       <span *ngFor="let tipo of getMissingDocuments(); let last = last">
                         <span style="color: #212529 !important;">{{ tipo }}</span><span *ngIf="!last">, </span>
                       </span>
@@ -651,7 +651,7 @@
               <!-- Alerta de éxito -->
               <div class="mt-4" *ngIf="text_success">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong>¡Éxito!</strong> {{ text_success }}
+                  <strong>{{'PERSONAL.EDIT_PERSONAL.SUCCESS' | translate}}</strong> {{ text_success }}
                   <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
                 </div>
               </div>
@@ -665,18 +665,18 @@
               </div>
 
               <!-- Botones de acción: guardar y ver lista -->
-              <div class="text-end mt-4 d-flex gap-2 justify-content-end form-actions">
-                <button type="button" 
-                        class="btn btn-primary px-4 btn-save" 
-                        (click)="save()"
-                        [disabled]="loading">
-                  <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-                  {{ loading ? 'Guardando...' : 'Actualizar Personal' }}
-                </button>
-                <button type="button" class="btn btn-outline-secondary px-4" (click)="goToList()">
-                  <i class="fa fa-list"></i> Ver Lista
-                </button>
-              </div>
+               <div class="text-end mt-4 d-flex gap-2 justify-content-end form-actions">
+                  <button type="button" 
+                          class="btn btn-primary px-4 btn-save" 
+                          (click)="save()"
+                          [disabled]="loading">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                    {{ loading ? ('PERSONAL.EDIT_PERSONAL.SAVING' | translate) : ('PERSONAL.EDIT_PERSONAL.UPDATING' | translate) }}
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary px-4" (click)="goToList()">
+                    <i class="fa fa-list"></i> {{'PERSONAL.EDIT_PERSONAL.VIEW_LIST' | translate}}
+                  </button>
+                </div>
 
             </form>
           </div>

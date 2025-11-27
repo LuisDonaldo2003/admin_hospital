@@ -1,0 +1,179 @@
+<!-- Contenedor principal de la página de listado de familias de roles -->
+<div class="page-wrapper">
+    <div class="content list-staff">
+
+        <!-- Encabezado de la página con breadcrumb de navegación -->
+        <div class="page-header mb-4">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Breadcrumb para mostrar la ruta de navegación -->
+                    <ol class="breadcrumb bg-light p-2 rounded">
+                        <li class="breadcrumb-item">{{'ROLE_FAMILIES.LIST_ROLE_FAMILY.BREADCRUMB_FAMILIES'| translate }}
+                            ></li>
+                        <li class="breadcrumb-item active">{{'ROLE_FAMILIES.LIST_ROLE_FAMILY.BREADCRUMB_FAMILIES'|
+                            translate }}
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección principal del contenido -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-list shadow border-0">
+                    <div class="card-body">
+
+                        <!-- Barra de acciones y búsqueda sobre la tabla -->
+                        <div class="d-flex justify-content-between align-items-start flex-wrap mb-3 header-bar">
+                            <!-- Título de la tabla -->
+                            <h4 class="mb-0 fw-semibold">{{'ROLE_FAMILIES.LIST_ROLE_FAMILY.TITLE'| translate }}</h4>
+
+                            <!-- Contenedor de controles de filtrado y acciones -->
+                            <div class="filter-controls-wrapper">
+                                <!-- Sección de filtros: búsqueda -->
+                                <div class="filters-section d-flex gap-2 mb-2">
+                                    <!-- Input de búsqueda -->
+                                    <div class="search-box">
+                                        <input type="text" class="form-control white-input"
+                                            placeholder="{{'ROLE_FAMILIES.LIST_ROLE_FAMILY.SEARCH_PLACEHOLDER'| translate }}"
+                                            [(ngModel)]="searchDataValue" (ngModelChange)="searchData(searchDataValue)">
+                                        <i class="fa fa-search search-icon"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Botón para agregar nueva familia -->
+                                <a routerLink="/role-families/register"
+                                    class="btn btn-options d-flex align-items-center gap-1">
+                                    <i class="fa fa-plus"></i> <span
+                                        class="d-none d-sm-inline">{{'ROLE_FAMILIES.LIST_ROLE_FAMILY.NEW_FAMILY'|
+                                        translate }}</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Tabla de familias -->
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle modern-table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <!-- Encabezados de la tabla -->
+                                        <th style="width: 20%;">
+                                            <i class="fa fa-sitemap me-2"></i>{{'ROLE_FAMILIES.LIST_ROLE_FAMILY.NAME'|
+                                            translate }}
+                                        </th>
+                                        <th style="width: 30%;">
+                                            <i
+                                                class="fa fa-align-left me-2"></i>{{'ROLE_FAMILIES.LIST_ROLE_FAMILY.DESCRIPTION'|
+                                            translate }}
+                                        </th>
+                                        <th style="width: 35%;">
+                                            <i
+                                                class="fa fa-shield me-2"></i>{{'ROLE_FAMILIES.LIST_ROLE_FAMILY.ASSIGNED_ROLES'|
+                                            translate }}
+                                        </th>
+                                        <th style="width: 15%;" class="text-center">
+                                            <i class="fa fa-cog me-2"></i>{{'ROLE_FAMILIES.LIST_ROLE_FAMILY.ACTIONS'|
+                                            translate }}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Iteración sobre la lista de familias para mostrar cada fila -->
+                                    <tr *ngFor="let family of familiesListFilter">
+                                        <!-- Columna: Nombre -->
+                                        <td>
+                                            <div class="family-name-cell">
+                                                <i class="fa fa-folder text-primary me-2"></i>
+                                                <strong>{{ family.name }}</strong>
+                                            </div>
+                                        </td>
+
+                                        <!-- Columna: Descripción -->
+                                        <td>
+                                            <div class="description-cell">
+                                                <span>{{ family.description || 'Sin descripción' }}</span>
+                                            </div>
+                                        </td>
+
+                                        <!-- Columna: Roles Asignados -->
+                                        <td>
+                                            <div class="roles-cell">
+                                                <ng-container *ngIf="family.roles && family.roles.length > 0">
+                                                    <span *ngFor="let role of family.roles"
+                                                        class="badge badge-role me-1 mb-1">
+                                                        <i class="fa fa-shield-alt me-1"></i>{{ role.name }}
+                                                    </span>
+                                                </ng-container>
+                                                <span *ngIf="!family.roles || family.roles.length === 0"
+                                                    class="badge badge-no-roles">
+                                                    <i
+                                                        class="fa fa-info-circle me-1"></i>{{'ROLE_FAMILIES.LIST_ROLE_FAMILY.NO_ROLES'|
+                                                    translate }}
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        <!-- Columna: Acciones -->
+                                        <td class="text-center">
+                                            <div class="action-buttons">
+                                                <!-- Botón Editar -->
+                                                <button class="btn btn-sm btn-edit"
+                                                    [routerLink]="['/role-families/list/edit/', family.id]"
+                                                    title="Editar familia">
+                                                    <i class="fa fa-pen"></i>
+                                                </button>
+                                                <!-- Botón Eliminar -->
+                                                <button class="btn btn-sm btn-delete" (click)="selectFamily(family)"
+                                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                    title="Eliminar familia">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Mensaje cuando no hay resultados -->
+                                    <tr *ngIf="familiesListFilter.length === 0">
+                                        <td colspan="4" class="text-center py-4">
+                                            <i class="fa fa-inbox fa-2x text-muted mb-2 d-block"></i>
+                                            <p class="text-muted mb-0">
+                                                {{'ROLE_FAMILIES.LIST_ROLE_FAMILY.NO_FAMILIES_FOUND'|
+                                                translate }}</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar familia -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-4" *ngIf="family_selected">
+                <!-- Imagen de advertencia -->
+                <img src="assets/img/sent.png" alt="" width="50" height="46" />
+                <!-- Mensaje de confirmación para eliminar familia -->
+                <h5 class="mt-3">
+                    {{ 'ROLE_FAMILIES.LIST_ROLE_FAMILY.DELETE_CONFIRMATION' | translate }} <strong>{{
+                        family_selected.name }}</strong>?
+                </h5>
+                <div class="mt-4 d-flex justify-content-center gap-3">
+                    <!-- Botón para cancelar la eliminación -->
+                    <button class="btn btn-light" data-bs-dismiss="modal">{{ 'ROLE_FAMILIES.LIST_ROLE_FAMILY.CANCEL' |
+                        translate }}</button>
+                    <!-- Botón para confirmar la eliminación -->
+                    <button class="btn btn-danger" (click)="deleteFamily()" data-bs-dismiss="modal">{{
+                        'ROLE_FAMILIES.LIST_ROLE_FAMILY.DELETE' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

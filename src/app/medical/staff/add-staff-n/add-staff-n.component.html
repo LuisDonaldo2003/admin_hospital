@@ -133,25 +133,35 @@
                 </div>
               </div>
 
-              <!-- Mensaje de validación si hay advertencias -->
-              <div class="mt-4" *ngIf="text_validation">
+              <!-- Mensaje de validación si hay advertencias (controlado desde la plantilla) -->
+              <div class="mt-4" *ngIf="showValidation">
                 <div class="alert alert-modern alert-warning d-flex align-items-center">
                   <i class="fa fa-exclamation-triangle me-3"></i>
                   <div class="flex-grow-1">
-                    <strong>{{ 'STAFF.ADD_STAFF.WARNING' | translate }}:</strong> {{ text_validation }}
+                    <strong>{{ 'STAFF.ADD_STAFF.WARNING' | translate }}:</strong>
+                    <ng-container [ngSwitch]="validationType">
+                      <span *ngSwitchCase="'missing'">
+                        <span *ngFor="let f of missingFields; let last = last">
+                          {{ f | translate }}<span *ngIf="!last">, </span>
+                        </span>
+                      </span>
+                      <span *ngSwitchCase="'password_mismatch'">{{ 'STAFF.ADD_STAFF.PASSWORD_MISMATCH' | translate }}</span>
+                      <span *ngSwitchCase="'permission'">{{ backendErrorText }}</span>
+                      <span *ngSwitchDefault>{{ 'STAFF.ADD_STAFF.UNKNOWN_VALIDATION' | translate }}</span>
+                    </ng-container>
                   </div>
-                  <button type="button" class="btn-close" (click)="text_validation = ''"></button>
+                  <button type="button" class="btn-close" (click)="showValidation = false; validationType = 'none'"></button>
                 </div>
               </div>
 
-              <!-- Mensaje de éxito si la operación fue exitosa -->
-              <div class="mt-4" *ngIf="text_success">
+              <!-- Mensaje de éxito si la operación fue exitosa (controlado desde la plantilla) -->
+              <div class="mt-4" *ngIf="showSuccess">
                 <div class="alert alert-modern alert-success d-flex align-items-center">
                   <i class="fa fa-check-circle me-3"></i>
                   <div class="flex-grow-1">
-                    <strong>{{ 'STAFF.ADD_STAFF.SUCCESS' | translate }}:</strong> {{ text_success }}
+                    <strong>{{ 'STAFF.ADD_STAFF.SUCCESS' | translate }}:</strong> {{ 'STAFF.ADD_STAFF.USER_CREATED_SUCCESS' | translate }}
                   </div>
-                  <button type="button" class="btn-close" (click)="text_success = ''"></button>
+                  <button type="button" class="btn-close" (click)="showSuccess = false"></button>
                 </div>
               </div>
 

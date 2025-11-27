@@ -24,6 +24,14 @@
         "TITLE": "Acceso a Pulse",
         "MANAGEMENT": "Gestión de Acceso",
         "DASHBOARD": "Dashboard de Pulse"
+      },
+      "ROLE_FAMILIES": {
+        "TITLE": "Familias de Roles",
+        "LIST": "Lista de Familias",
+        "ADD": "Agregar Familia",
+        "ASSIGN": "Asignar Roles",
+        "EDIT": "Editar Familia",
+        "DELETE": "Eliminar Familia"
       }
     },
     "RH": {
@@ -169,6 +177,23 @@
       "CREDITS": {
         "TITLE": "Créditos"
       }
+    },
+    "PHARMACY": {
+      "TITLE": "Farmacia",
+      "ANTIBIOTICS": {
+        "TITLE": "Antibióticos",
+        "ADD": "Agregar Antibiótico",
+        "LIST": "Lista de Antibióticos",
+        "EDIT": "Editar Antibiótico",
+        "DELETE": "Eliminar Antibiótico"
+      },
+      "INVENTORY": {
+        "TITLE": "Inventario",
+        "ADD": "Agregar Inventario",
+        "LIST": "Lista de Inventario",
+        "EDIT": "Editar Inventario",
+        "DELETE": "Eliminar Inventario"
+      }
     }
   },
   "DASHBOARD": {
@@ -280,7 +305,7 @@
     "EDIT_PROFILE": {
       "BREADCRUMB_PROFILE": "Perfil",
       "BREADCRUMB_EDIT_PROFILE": "Editar Perfil",
-      "TITLE": "Editar Perfil",
+      "TITLE": "Información Personal",
       "NAME": "Nombre",
       "SURNAME": "Apellido",
       "PHONE": "Teléfono",
@@ -300,7 +325,10 @@
       "AVATAR": "Avatar",
       "WARNING": "Advertencia",
       "SUCCESS": "Éxito",
-      "SAVE_CHANGES": "Guardar cambios"
+      "SAVE_CHANGES": "Guardar cambios",
+      "DOCUMENTATION_OFFICIAL": "Documentación Oficial",
+      "PROFESSIONAL_INFORMATION": "Información Profesional",
+      "SUBTITLE": "Actualiza tu información personal y profesional"
     },
     "PROFILES": {
       "DASHBOARD": "Inicio",
@@ -389,7 +417,9 @@
       "ADMISSION_DATE_REQUIRED": "La fecha de admisión es requerida",
       "CANCEL": "Cancelar",
       "LOCATION_SECTION": "Ubicación",
-      "ADMISSION_SECTION": "Información de Admisión"
+      "ADMISSION_SECTION": "Información de Admisión",
+      "TOUR_HELP_TITLE": "Ayuda y Tour Guiado",
+      "TOUR_HELP_DESC": "Inicia un tour guiado que te explicará paso a paso cómo usar este formulario."
     },
     "BACKUPS": {
       "TITLE": "Respaldo de Pacientes",
@@ -873,7 +903,10 @@
       "ALL_CATEGORIES": "Todos",
       "SELECT_ALL_CATEGORY": "Seleccionar todos los permisos de esta categoría",
       "NO_PERMISSIONS_FOUND": "No se encontraron permisos que coincidan con",
-      "CANCEL": "Cancelar"
+      "CANCEL": "Cancelar",
+      "SAVE_CHANGES": "Save Changes",
+      "WARNING": "Warning",
+      "SUCCESS": "Success"
     },
     "EDIT_ROLE": {
       "BREADCRUMB_ROLES": "Roles",
@@ -888,7 +921,14 @@
       "GREAT_ROLE": "Rol actualizado correctamente.",
       "ASIGNATION": "Asignación de Permisos",
       "SECCION": "Sección",
-      "PERMISSIONS": "Permisos"
+      "PERMISSIONS": "Permisos",
+      "NAME_PLACEHOLDER": "Enter the name",
+      "NAME_REQUIRED": "Name is required",
+      "SAVE": "Save",
+      "ROLE_UPDATED_SUCCESS": "Role updated successfully",
+      "PERMISSIONS_SELECTED": "Permissions selected",
+      "CANCEL": "Cancel",
+      "CLEAR_ALL": "Clear all"
     },
     "LIST_ROLE": {
       "BREADCRUMB_ROLES": "Roles",
@@ -981,12 +1021,73 @@
       "PDF_LIMITS_TITLE": "Límites de archivos PDF",
       "MAX_SIZE_PER_FILE": "Tamaño máximo por archivo",
       "ONLY_PDF_ALLOWED": "Solo archivos PDF son permitidos",
-      "CURRENT_TOTAL_SIZE": "Total acumulado actual"
+      "CURRENT_TOTAL_SIZE": "Total acumulado actual",
+      "PDF_LIMITS_DESC": "Each document can have a maximum size of 10MB",
+      "COURSE_CERTIFICATES": "Course Certificates"
     },
     "EDIT_PERSONAL": {
       "BREADCRUMB_PERSONAL": "Personal",
       "BREADCRUMB_EDIT": "Editar Personal",
-      "TITLE": "Editar Personal"
+      "TITLE": "Editar Personal",
+      "EDIT": "Personal",
+      "LOADING": "Loading...",
+      "LOADING_DATA": "Loading personnel data...",
+      "EDIT_PERSONAL": "Edit Personnel",
+      "NAME": "Name",
+      "NAME_PLACEHOLDER": "Enter the first name",
+      "NAME_REQUIRED": "First name is required",
+      "LAST_NAME": "Surnames",
+      "LAST_NAME_PLACEHOLDER": "Enter the surnames",
+      "LAST_NAME_REQUIRED2": "Surnames are required",
+      "TYPE": "Personnel Type",
+      "SELECT_TYPE": "Select type",
+      "TYPE_REQUIRED": "Personnel type is required",
+      "ENTRY_DATE": "Entry Date",
+      "READ_ONLY": "This field is read-only",
+      "RFC": "RFC",
+      "RFC_PLACEHOLDER": "Ex: ABCD010101XXX",
+      "RFC_REQUIRED": "RFC is required",
+      "RFC_HELP": "Enter RFC in capital letters",
+      "CHECKER_NUMBER": "Checker Number",
+      "CHECKER_NUMBER_PLACEHOLDER": "Ex: 43 (1-4 digits)",
+      "CHECKER_NUMBER_REQUIRED": "Checker number is required",
+      "CHECKER_NUMBER_HELP": "Numbers only, 1 to 4 digits. Must be unique.",
+      "DOCUMENTS": "Documents",
+      "OPTIONAL": "Optional",
+      "DOCUMENTS_DESCRIPTION": "Upload optional PDF documents to complete personnel records.",
+      "DOCUMENTS_WARNING": "Each file must be a PDF and must not exceed the maximum size.",
+      "DRAG_FILE_HERE": "Drag your file here",
+      "OR": "or",
+      "SELECT_FILE": "Select file",
+      "FILE_LOADED": "File loaded",
+      "DELETE": "Delete",
+      "EXISTING_DOCUMENT": "Existing document",
+      "NEW_FILE_UPLOADED": "New file uploaded",
+      "DOWNLOAD": "Download",
+      "BIRTH_CERTIFICATE": "Birth Certificate",
+      "PROOF_OF_ADDRESS": "Proof of Address",
+      "CURP": "CURP",
+      "INE": "INE",
+      "TITULO_PROFESIONAL": "Professional Title",
+      "CONSTANCIAS_CURSOS": "Course Certificates",
+      "CEDULA_PROFESIONAL": "Professional License",
+      "NEW_DOCUMENTS_TO_UPLOAD": "New Documents to Upload",
+      "DOCUMENT_ITEM": "Document",
+      "DOCUMENTS_COUNT_SUFFIX": "documents",
+      "DOCUMENT_STATUS": "Document Status",
+      "ALL_DOCUMENTS_COMPLETE": "All documents complete",
+      "PERSONNEL_MARKED_COMPLETE": "Personnel will be marked as 'documents complete'.",
+      "MISSING_DOCUMENTS": "Missing documents ",
+      "PENDING_DOCUMENTS": "Pending documents",
+      "SUCCESS": "Success",
+      "WARNING": "Warning",
+      "CLOSE": "Close",
+      "VIEW_LIST": "View List",
+      "SAVE": "Save",
+      "UPDATE": "Update",
+      "UPDATE_PERSONAL": "Update Personnel",
+      "UPDATING": "Updating...",
+      "SAVING": "Saving..."
     },
     "LIST_PERSONAL": {
       "BREADCRUMB_PERSONAL": "Personal",
@@ -1077,7 +1178,9 @@
       "REC2": "Usa resolución de",
       "FOR_TEXT_DOCS": "para documentos de texto",
       "REC3": "Evita imágenes de alta resolución innecesarias",
-      "REC4": "Re-escanea con menor calidad si la compresión no es suficiente"
+      "REC4": "Re-escanea con menor calidad si la compresión no es suficiente",
+      "BREADCRUMB_PERSONAL": "Personnel",
+      "BREADCRUMB_PDF_COMPRESSOR": "PDF Compressor"
     }
   },
   "STAFF": {
@@ -1109,7 +1212,8 @@
       "WARNING": "Advertencia",
       "SUCCESS": "Éxito",
       "CANCEL": "Cancelar",
-      "SAVE": "Guardar"
+      "SAVE": "Guardar",
+      "USER_CREATED_SUCCESS": "User created successfully"
     },
     "EDIT_STAFF": {
       "BREADCRUMB_USERS": "Usuarios",
@@ -1122,7 +1226,17 @@
       "SELECT_ROLE_PLACEHOLDER": "Seleccione un rol",
       "SUCCESS": "Éxito",
       "WARNING": "Advertencia",
-      "SAVE": "Guardar"
+      "SAVE": "Guardar",
+      "DESCRIPTION": "Update the necessary information",
+      "NAME_PLACEHOLDER": "Enter the first name",
+      "NAME_REQUIRED": "First name is required",
+      "PERSONAL_INFORMATION": "Información Personal",
+      "ROLE_SECURITY": "Role and Security",
+      "EMAIL_REQUIRED": "Email is required",
+      "SURNAME_PLACEHOLDER": "Enter the surname",
+      "SURNAME_REQUIRED": "Surname is required",
+      "CANCEL": "Cancel",
+      "USER_UPDATED_SUCCESS": "User updated successfully"
     },
     "LIST_STAFF": {
       "BREADCRUMB_USERS": "Usuarios",
@@ -1438,6 +1552,86 @@
       "SUCCESS_MESSAGE": "Área creada correctamente",
       "ERROR_MESSAGE": "Error al guardar",
       "NO_PERMISSIONS": "Sin permisos"
+    }
+  },
+  "ROLE_FAMILIES": {
+    "ADD_ROLE_FAMILY": {
+      "BREADCRUMB_FAMILIES": "Familias de Roles",
+      "BREADCRUMB_REGISTER": "Agregar Familia",
+      "TITLE": "Crear Familia de Roles",
+      "DESCRIPTION": "Crear una nueva familia de roles.",
+      "DESCRIPTION2": "Puedes asignar roles a esta familia desde la opción \"Asignar Roles\".",
+      "NAME_LABEL": "Nombre de la Familia",
+      "NAME_PLACEHOLDER": "Ex: Teaching, Archive, HR",
+      "NAME_HINT": "Este nombre identificará la familia de roles",
+      "DESCRIPTION_LABEL": "Descripción",
+      "DESCRIPTION_PLACEHOLDER": "Descripción de la familia de roles",
+      "CANCEL": "Cancelar",
+      "SAVE": "Guardar",
+      "ERROR": "Error",
+      "NAME_REQUIRED": "Nombre es requerido.",
+      "SUCCESS": "Éxito",
+      "SUCCESS_MESSAGE": "Familia creada correctamente.",
+      "ATTENTION": "Atención"
+    },
+    "EDIT_ROLE_FAMILY": {
+      "BREADCRUMB_FAMILIES": "Familias de Roles",
+      "BREADCRUMB_EDIT": "Editar Familia",
+      "TITLE": "Editar Familia de Roles",
+      "NAME_LABEL": "Nombre de la Familia",
+      "NAME_PLACEHOLDER": "Ex: Teaching, Archive, HR",
+      "NAME_HINT": "Este nombre identificará la familia de roles",
+      "FAMILY_INFORMATION": "Información de la Familia",
+      "DESCRIPTION": "Crea una nueva familia de roles.",
+      "DESCRIPTION2": "Puedes asignar roles a esta familia desde la opción \"Asignar Roles\".",
+      "DESCRIPTION_LABEL": "Descripción",
+      "DESCRIPTION_PLACEHOLDER": "Descripción de la familia de roles",
+      "CANCEL": "Cancelar",
+      "UPDATE": "Actualizar",
+      "ERROR": "Error",
+      "NAME_REQUIRED": "Nombre es requerido.",
+      "SUCCESS": "Éxito",
+      "SUCCESS_MESSAGE": "Familia actualizada correctamente.",
+      "ATTENTION": "Atención"
+    },
+    "LIST_ROLE_FAMILY": {
+      "BREADCRUMB_FAMILIES": "Familias de Roles",
+      "BREADCRUMB_LIST": "Lista de Familias",
+      "TITLE": "Lista de Familias",
+      "SEARCH_PLACEHOLDER": "Buscar familia...",
+      "NEW_FAMILY": "Nueva Familia",
+      "NAME": "Nombre",
+      "DESCRIPTION": "Descripción",
+      "ASSIGNED_ROLES": "Roles Asignados",
+      "ACTIONS": "Acciones",
+      "NO_DESCRIPTION": "No descripción",
+      "NO_ROLES": "No roles asignados",
+      "EDIT": "Editar familia",
+      "DELETE": "Eliminar familia",
+      "NO_FAMILIES_FOUND": "No se encontraron familias",
+      "DELETE_CONFIRMATION": "¿Estás seguro de eliminar la familia",
+      "CANCEL": "Cancelar"
+    },
+    "ASSIGN_ROLES": {
+      "BREADCRUMB_FAMILIES": "Familias de Roles",
+      "BREADCRUMB_ASSIGN": "Asignar Roles",
+      "TITLE": "Asignar Roles a Familias",
+      "DESCRIPTION": "Selecciona una familia y marca los roles que pertenecen a ella. Los cambios se guardarán cuando hagas clic en \"Guardar Asignación\".",
+      "SELECT_FAMILY_LABEL": "Selecciona una Familia",
+      "SELECT_FAMILY_PLACEHOLDER": "-- Selecciona familia --",
+      "ROLES_SELECTED": "Roles seleccionados",
+      "AVAILABLE_ROLES": "Roles Disponibles",
+      "NO_ROLES_AVAILABLE": "No roles disponibles",
+      "SELECT_FAMILY_MESSAGE": "Selecciona una familia para iniciar la asignación",
+      "BACK": "Atrás",
+      "SAVE_ASSIGNMENT": "Guardar Asignación",
+      "SUCCESS": "Éxito",
+      "SUCCESS_MESSAGE": "Roles asignados correctamente.",
+      "ERROR": "Error",
+      "ERROR_MESSAGE": "Error al asignar roles.",
+      "REQUIRED": "Por favor, selecciona al menos un rol.",
+      "SELECT_FAMILY_ERROR": "Por favor, selecciona una familia.",
+      "ATTENTION": "Atención"
     }
   }
 }

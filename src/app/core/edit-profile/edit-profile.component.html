@@ -6,7 +6,8 @@
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item"><a href="#">{{ 'PROFILE.EDIT_PROFILE.BREADCRUMB_PROFILE' | translate }} ></a></li>
+            <li class="breadcrumb-item"><a href="#">{{ 'PROFILE.EDIT_PROFILE.BREADCRUMB_PROFILE' | translate }} ></a>
+            </li>
             <li class="breadcrumb-item active">{{ 'PROFILE.EDIT_PROFILE.BREADCRUMB_EDIT_PROFILE' | translate }}</li>
           </ol>
         </div>
@@ -16,123 +17,192 @@
     <div class="row justify-content-center">
       <div class="col-lg-10 col-xl-8">
         <!-- Tarjeta principal del formulario de edición -->
-        <div class="card card-form shadow border-0">
+        <div class="card card-form shadow-lg border-0">
           <div class="card-body px-5 py-4">
-            <!-- Título del formulario -->
-            <h3 class="text-center mb-4 fw-bold">{{ 'PROFILE.EDIT_PROFILE.TITLE' | translate }}</h3>
+            <!-- Título del formulario con diseño mejorado -->
+            <div class="profile-header mb-5">
+              <h3 class="profile-title">{{ 'PROFILE.EDIT_PROFILE.TITLE' | translate }}</h3>
+              <p class="profile-subtitle">{{ 'PROFILE.EDIT_PROFILE.SUBTITLE' | translate }}</p>
+            </div>
 
             <!-- Formulario de edición de perfil -->
             <form (ngSubmit)="save()" #form="ngForm">
-              <div class="row g-3">
 
-                <!-- Campo: Nombre -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.NAME' | translate }} *</label>
-                  <input type="text" class="form-control" [(ngModel)]="profileData.name" name="name" required
-                         [ngClass]="{ 'is-invalid': submitted && !profileData.name?.trim() }" />
+              <!-- Sección: Información Personal -->
+              <div class="form-section">
+                <div class="section-header">
+                  <i class="fa fa-user section-icon"></i>
+                  <h5 class="section-title">{{ 'PROFILE.EDIT_PROFILE.TITLE' | translate }}</h5>
                 </div>
 
-                <!-- Campo: Apellido -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.SURNAME' | translate }} *</label>
-                  <input type="text" class="form-control" [(ngModel)]="profileData.surname" name="surname" required
-                         [ngClass]="{ 'is-invalid': submitted && !profileData.surname?.trim() }" />
-                </div>
-
-                <!-- Campo: Teléfono -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.PHONE' | translate }}</label>
-                  <input type="text" class="form-control" [(ngModel)]="profileData.mobile" name="mobile" />
-                </div>
-
-                <!-- Campo: Fecha de nacimiento -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.BIRTHDAY' | translate }}</label>
-                  <input type="date" class="form-control" [(ngModel)]="profileData.birth_date" name="birth_date" />
-                </div>
-
-                <!-- Campo: Género -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.GENDER' | translate }}</label>
-                  <select class="form-control" [(ngModel)]="profileData.gender" name="gender">
-                    <option [value]="1">{{ 'PROFILE.EDIT_PROFILE.GENDER_MALE' | translate }}</option>
-                    <option [value]="2">{{ 'PROFILE.EDIT_PROFILE.GENDER_FEMALE' | translate }}</option>
-                  </select>
-                </div>
-
-                <!-- Campo: CURP -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.CURP' | translate }}</label>
-                  <input type="text" class="form-control" [(ngModel)]="profileData.curp" name="curp" />
-                </div>
-
-                <!-- Campo: RFC -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.RFC' | translate }}</label>
-                  <input type="text" class="form-control" [(ngModel)]="profileData.rfc" name="rfc" />
-                </div>
-
-                <!-- Campo: INE -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.INE' | translate }}</label>
-                  <input type="text" class="form-control" [(ngModel)]="profileData.ine" name="ine" />
-                </div>
-
-                <!-- Campo: Número de asistencia -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.ASSISTANCE' | translate }}</label>
-                  <input type="text" class="form-control" [(ngModel)]="profileData.attendance_number" name="attendance_number" />
-                </div>
-
-                <!-- Campo: Cédula profesional -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.PROFESSIONAL_LICENSE' | translate }}</label>
-                  <input type="text" class="form-control" [(ngModel)]="profileData.professional_license" name="professional_license" />
-                </div>
-
-                <!-- Campo: Función real -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.FUNCTION_REAL' | translate }}</label>
-                  <input type="text" class="form-control" [(ngModel)]="profileData.funcion_real" name="funcion_real" />
-                </div>
-
-                <!-- Campo: Departamento -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.DEPARTAMENT' | translate }}</label>
-                  <select class="form-control" [(ngModel)]="profileData.departament_id" name="departament_id">
-                    <option *ngFor="let d of departamentos" [value]="d.id">{{ d.name }}</option>
-                  </select>
-                </div>
-
-                <!-- Campo: Perfil relacionado -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.RELATION_PROFILE' | translate }}</label>
-                  <select class="form-control" [(ngModel)]="profileData.profile_id" name="profile_id">
-                    <option *ngFor="let p of perfiles" [value]="p.id">{{ p.name }}</option>
-                  </select>
-                </div>
-
-                <!-- Campo: Tipo de contrato -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.CONTRACT_TYPE' | translate }}</label>
-                  <select class="form-control" [(ngModel)]="profileData.contract_type_id" name="contract_type_id">
-                    <option *ngFor="let c of contratos" [value]="c.id">{{ c.name }}</option>
-                  </select>
-                </div>
-
-                <!-- Campo: Avatar y carga de imagen -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'PROFILE.EDIT_PROFILE.AVATAR' | translate }}</label>
-                  <div class="avatar-upload-professional">
-                    <div class="avatar-preview-wrapper">
-                      <img [src]="avatarPreview || profileData.avatar || defaultAvatar" alt="Avatar" class="avatar-preview-img"
-                           (error)="onAvatarImgError($event)" />
-                      <label class="avatar-upload-btn" for="avatarInput">
-                        <i class="fa fa-camera"></i>
-                        <input id="avatarInput" type="file" (change)="onAvatarChange($event)" accept="image/*" hidden />
-                      </label>
+                <div class="row g-4">
+                  <!-- Campo: Avatar y carga de imagen -->
+                  <div class="col-12 d-flex justify-content-center mb-3">
+                    <div class="avatar-upload-professional">
+                      <div class="avatar-preview-wrapper">
+                        <img [src]="avatarPreview || profileData.avatar || defaultAvatar" alt="Avatar"
+                          class="avatar-preview-img" (error)="onAvatarImgError($event)" />
+                        <label class="avatar-upload-btn" for="avatarInput">
+                          <i class="fa fa-camera"></i>
+                          <input id="avatarInput" type="file" (change)="onAvatarChange($event)" accept="image/*"
+                            hidden />
+                        </label>
+                      </div>
+                      <div *ngIf="avatarFileName" class="avatar-filename mt-2 text-center">{{ avatarFileName }}</div>
                     </div>
-                    <div *ngIf="avatarFileName" class="avatar-filename mt-1">{{ avatarFileName }}</div>
+                  </div>
+
+                  <!-- Campo: Nombre -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-user-circle me-2"></i>{{ 'PROFILE.EDIT_PROFILE.NAME' | translate }} *
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="profileData.name" name="name" required
+                      [ngClass]="{ 'is-invalid': submitted && !profileData.name?.trim() }" />
+                  </div>
+
+                  <!-- Campo: Apellido -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-user-circle me-2"></i>{{ 'PROFILE.EDIT_PROFILE.SURNAME' | translate }} *
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="profileData.surname" name="surname" required
+                      [ngClass]="{ 'is-invalid': submitted && !profileData.surname?.trim() }" />
+                  </div>
+
+                  <!-- Campo: Teléfono -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-phone me-2"></i>{{ 'PROFILE.EDIT_PROFILE.PHONE' | translate }}
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="profileData.mobile" name="mobile" />
+                  </div>
+
+                  <!-- Campo: Fecha de nacimiento -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-calendar me-2"></i>{{ 'PROFILE.EDIT_PROFILE.BIRTHDAY' | translate }}
+                    </label>
+                    <input type="date" class="form-control" [(ngModel)]="profileData.birth_date" name="birth_date" />
+                  </div>
+
+                  <!-- Campo: Género -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-venus-mars me-2"></i>{{ 'PROFILE.EDIT_PROFILE.GENDER' | translate }}
+                    </label>
+                    <select class="form-control" [(ngModel)]="profileData.gender" name="gender">
+                      <option [value]="1">{{ 'PROFILE.EDIT_PROFILE.GENDER_MALE' | translate }}</option>
+                      <option [value]="2">{{ 'PROFILE.EDIT_PROFILE.GENDER_FEMALE' | translate }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Separador visual -->
+              <div class="section-divider"></div>
+
+              <!-- Sección: Documentación Oficial -->
+              <div class="form-section">
+                <div class="section-header">
+                  <i class="fa fa-id-card section-icon"></i>
+                  <h5 class="section-title">{{ 'PROFILE.EDIT_PROFILE.DOCUMENTATION_OFFICIAL' | translate }}</h5>
+                </div>
+
+                <div class="row g-4">
+                  <!-- Campo: CURP -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-file-text me-2"></i>{{ 'PROFILE.EDIT_PROFILE.CURP' | translate }}
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="profileData.curp" name="curp" />
+                  </div>
+
+                  <!-- Campo: RFC -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-file-text me-2"></i>{{ 'PROFILE.EDIT_PROFILE.RFC' | translate }}
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="profileData.rfc" name="rfc" />
+                  </div>
+
+                  <!-- Campo: INE -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-id-badge me-2"></i>{{ 'PROFILE.EDIT_PROFILE.INE' | translate }}
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="profileData.ine" name="ine" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Separador visual -->
+              <div class="section-divider"></div>
+
+              <!-- Sección: Información Profesional -->
+              <div class="form-section">
+                <div class="section-header">
+                  <i class="fa fa-briefcase section-icon"></i>
+                  <h5 class="section-title">{{ 'PROFILE.EDIT_PROFILE.PROFESSIONAL_INFORMATION' | translate }}</h5>
+                </div>
+
+                <div class="row g-4">
+                  <!-- Campo: Número de asistencia -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-hashtag me-2"></i>{{ 'PROFILE.EDIT_PROFILE.ASSISTANCE' | translate }}
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="profileData.attendance_number"
+                      name="attendance_number" />
+                  </div>
+
+                  <!-- Campo: Cédula profesional -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-graduation-cap me-2"></i>{{ 'PROFILE.EDIT_PROFILE.PROFESSIONAL_LICENSE' |
+                      translate }}
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="profileData.professional_license"
+                      name="professional_license" />
+                  </div>
+
+                  <!-- Campo: Función real -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-tasks me-2"></i>{{ 'PROFILE.EDIT_PROFILE.FUNCTION_REAL' | translate }}
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="profileData.funcion_real"
+                      name="funcion_real" />
+                  </div>
+
+                  <!-- Campo: Departamento -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-building me-2"></i>{{ 'PROFILE.EDIT_PROFILE.DEPARTAMENT' | translate }}
+                    </label>
+                    <select class="form-control" [(ngModel)]="profileData.departament_id" name="departament_id">
+                      <option *ngFor="let d of departamentos" [value]="d.id">{{ d.name }}</option>
+                    </select>
+                  </div>
+
+                  <!-- Campo: Perfil relacionado -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-users me-2"></i>{{ 'PROFILE.EDIT_PROFILE.RELATION_PROFILE' | translate }}
+                    </label>
+                    <select class="form-control" [(ngModel)]="profileData.profile_id" name="profile_id">
+                      <option *ngFor="let p of perfiles" [value]="p.id">{{ p.name }}</option>
+                    </select>
+                  </div>
+
+                  <!-- Campo: Tipo de contrato -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-file-contract me-2"></i>{{ 'PROFILE.EDIT_PROFILE.CONTRACT_TYPE' | translate }}
+                    </label>
+                    <select class="form-control" [(ngModel)]="profileData.contract_type_id" name="contract_type_id">
+                      <option *ngFor="let c of contratos" [value]="c.id">{{ c.name }}</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -140,6 +210,7 @@
               <!-- Mensaje de validación (advertencia) -->
               <div class="mt-4" *ngIf="text_validation">
                 <div class="alert alert-warning alert-dismissible fade show">
+                  <i class="fa fa-exclamation-triangle me-2"></i>
                   <strong>{{ 'PROFILE.EDIT_PROFILE.WARNING' | translate }}:</strong> {{ text_validation }}
                   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
@@ -148,15 +219,22 @@
               <!-- Mensaje de éxito -->
               <div class="mt-4" *ngIf="text_success">
                 <div class="alert alert-success alert-dismissible fade show">
+                  <i class="fa fa-check-circle me-2"></i>
                   <strong>{{ 'PROFILE.EDIT_PROFILE.SUCCESS' | translate }}:</strong> {{ text_success }}
                   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
               </div>
 
-              <!-- Botón para guardar cambios -->
-              <div class="text-end mt-4">
-                <button type="submit" class="btn btn-primary px-4">{{ 'PROFILE.EDIT_PROFILE.SAVE_CHANGES' | translate }}</button>
+              <!-- Botón para guardar cambios con diseño mejorado -->
+              <div class="text-center mt-5">
+                <button type="submit" class="btn btn-primary btn-save">
+                  <i class="fa fa-save me-2"></i>{{ 'PROFILE.EDIT_PROFILE.SAVE_CHANGES' | translate }}
+                </button>
               </div>
             </form>
-
-
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

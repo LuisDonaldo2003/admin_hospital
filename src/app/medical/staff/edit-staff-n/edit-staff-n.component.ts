@@ -1,6 +1,6 @@
 // Importación de módulos y servicios necesarios para el componente de edición de staff
 import { Component } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { StaffService } from '../service/staff.service';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
@@ -50,11 +50,14 @@ export class EditStaffNComponent {
   /**
    * Mensaje de éxito tras la edición
    */
-  public text_success: string = '';
   /**
-   * Mensaje de validación de campos
+   * Banderas y datos para controlar las alertas desde la plantilla
    */
-  public text_validation: string = '';
+  public showValidation: boolean = false;
+  public showSuccess: boolean = false;
+  public validationType: 'missing' | 'permission' | 'none' = 'none';
+  public missingFields: string[] = [];
+  public backendErrorText: string = '';
   /**
    * Bandera para indicar si el formulario fue enviado
    */
@@ -75,7 +78,8 @@ export class EditStaffNComponent {
   constructor(
     public staffService: StaffService,
     public activedRoute: ActivatedRoute,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router
   ) {}
 
   /**
@@ -127,27 +131,26 @@ export class EditStaffNComponent {
    */
   save() {
     this.submitted = true;
-    this.text_validation = '';
-    this.text_success = '';
+    this.showValidation = false;
+    this.showSuccess = false;
+    this.validationType = 'none';
+    this.missingFields = [];
+    this.backendErrorText = '';
 
     // Arreglo para campos faltantes
     const missingFields: string[] = [];
 
-    // Validación de campos obligatorios
-    if (!(`${this.name ?? ''}`.trim())) missingFields.push(this.translate.instant('NAME'));
-    if (!(`${this.surname ?? ''}`.trim())) missingFields.push(this.translate.instant('SURNAME'));
-    if (!(`${this.email ?? ''}`.trim())) missingFields.push(this.translate.instant('EMAIL'));
-    if (!this.selectedValue) missingFields.push(this.translate.instant('ROLE'));
+    // Validación de campos obligatorios (guardamos claves de traducción, la plantilla las traducirá)
+    if (!(`${this.name ?? ''}`.trim())) missingFields.push('STAFF.EDIT_STAFF.FIRST_NAME');
+    if (!(`${this.surname ?? ''}`.trim())) missingFields.push('STAFF.EDIT_STAFF.SURNAME');
+    if (!(`${this.email ?? ''}`.trim())) missingFields.push('STAFF.EDIT_STAFF.EMAIL');
+    if (!this.selectedValue) missingFields.push('STAFF.EDIT_STAFF.ROLE_SELECT');
 
-    // Si hay campos faltantes, muestra mensaje de validación
+    // Si hay campos faltantes, activa la validación y delega el mensaje al HTML
     if (missingFields.length > 0) {
-      const plural = missingFields.length > 1;
-      const campos = missingFields.join(', ');
-      this.text_validation = this.translate.instant('FIELDS_MISSING', {
-        plural: plural ? 'n' : '',
-        sPlural: plural ? 's' : '',
-        campos
-      });
+      this.missingFields = missingFields;
+      this.showValidation = true;
+      this.validationType = 'missing';
       return;
     }
 
@@ -162,10 +165,12 @@ export class EditStaffNComponent {
     this.staffService.updateUser(this.staff_id, formData).subscribe((resp: any) => {
       // Si el backend responde con error de permisos
       if (resp.message === 403) {
-        this.text_validation = resp.message_text;
+        this.showValidation = true;
+        this.validationType = 'permission';
+        this.backendErrorText = resp.message_text || '';
       } else {
-        // Si la edición fue exitosa, muestra mensaje y refresca los datos del usuario
-        this.text_success = this.translate.instant('USER_UPDATED_SUCCESS');
+        // Si la edición fue exitosa, activa la alerta de éxito y refresca los datos del usuario
+        this.showSuccess = true;
         // Refresca los datos del usuario tras guardar
         this.staffService.showUser(this.staff_id).subscribe((resp: any) => {
           this.staff_selected = resp.user;
@@ -174,6 +179,10 @@ export class EditStaffNComponent {
           this.surname = this.staff_selected.surname ?? '';
           this.email = this.staff_selected.email ?? '';
         });
+        // Redirige al listado después de 2 segundos
+        setTimeout(() => {
+          this.router.navigate(['/staffs/list-staff']);
+        }, 2000);
       }
     });
   }

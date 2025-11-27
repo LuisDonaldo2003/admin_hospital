@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ContractTypesService } from '../service/contract-types.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -42,6 +42,8 @@ export class EditContractComponent {
     public contractService: ContractTypesService,
     public activedRoute: ActivatedRoute,
     private translate: TranslateService
+    ,
+    private router: Router
   ) {}
 
   /**
@@ -86,6 +88,9 @@ export class EditContractComponent {
         return;
       }
       this.valid_form_success = true;
+      setTimeout(() => {
+        this.router.navigateByUrl('/contract-types/list_contract');
+      }, 2000);
     })
   }
 }

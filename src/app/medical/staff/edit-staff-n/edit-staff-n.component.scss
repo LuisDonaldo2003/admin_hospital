@@ -9,29 +9,6 @@
     color: var(--user-card-text-color, #111827) !important;
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    position: relative;
-    overflow: hidden;
-
-    // Efecto de brillo sutil
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.1),
-        transparent
-      );
-      transition: left 0.5s;
-    }
-
-    &:hover::before {
-      left: 100%;
-    }
   }
 
   // ===== ENCABEZADO DEL FORMULARIO =====
@@ -126,27 +103,27 @@
     border-radius: 0.5rem;
     padding: 0.75rem 1rem;
     border: 2px solid color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    color: var(--user-card-text-color, #111827) !important;
+    background-color: #ffffff !important;
+    color: #111827 !important;
     transition: all 0.2s ease;
     font-size: 0.95rem;
 
     &::placeholder {
-      color: color-mix(in srgb, var(--user-card-text-color, #111827) 50%, transparent) !important;
+      color: #9ca3af !important;
       opacity: 1;
     }
 
     &:focus {
       border-color: var(--user-border-color, #0B7285);
       box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 15%, transparent);
-      background-color: rgba(255, 255, 255, 0.08) !important;
+      background-color: #ffffff !important;
+      color: #111827 !important;
       outline: none;
-      transform: translateY(-1px);
     }
 
     &.is-invalid {
       border-color: #ef4444;
-      background-color: color-mix(in srgb, #ef4444 5%, transparent) !important;
+      background-color: #ffffff !important;
       
       &:focus {
         box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
@@ -155,8 +132,8 @@
 
     // Opciones del select
     option {
-      background-color: var(--user-card-bg, #ffffff);
-      color: var(--user-card-text-color, #111827);
+      background-color: #ffffff !important;
+      color: #111827 !important;
       padding: 0.5rem;
     }
   }
@@ -315,29 +292,31 @@
 
     .form-control,
     .form-select {
-      color: var(--user-card-text-color, #ffffff) !important;
-      background-color: rgba(255, 255, 255, 0.05) !important;
-      border-color: rgba(255, 255, 255, 0.15);
+      background-color: #ffffff !important;
+      color: #111827 !important;
+      border-color: color-mix(in srgb, var(--user-border-color, #0B7285) 30%, transparent);
 
       &::placeholder {
-        color: rgba(255, 255, 255, 0.5) !important;
+        color: #9ca3af !important;
+        opacity: 1;
       }
 
       &:focus {
         border-color: var(--user-border-color, #0B7285);
-        background-color: rgba(255, 255, 255, 0.08) !important;
+        background-color: #ffffff !important;
+        color: #111827 !important;
         box-shadow: 0 0 0 4px color-mix(in srgb, var(--user-border-color, #0B7285) 20%, transparent);
       }
 
       &.is-invalid {
         border-color: #f87171;
-        background-color: rgba(239, 68, 68, 0.1) !important;
+        background-color: #ffffff !important;
       }
 
-      // Opciones del select en modo oscuro
+      // Opciones del select
       option {
-        background-color: #1f2937;
-        color: #ffffff;
+        background-color: #ffffff !important;
+        color: #111827 !important;
         padding: 0.5rem;
       }
     }

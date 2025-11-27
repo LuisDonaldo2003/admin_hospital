@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ContractTypesService } from '../service/contract-types.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-contract',
@@ -33,6 +34,8 @@ export class AddContractComponent {
   constructor(
     public contractService: ContractTypesService,
     private translate: TranslateService
+    ,
+    private router: Router
   ) {}
 
   /**
@@ -62,6 +65,9 @@ export class AddContractComponent {
         this.name = '';
         this.state = true; // Resetear a activo
         this.valid_form_success = true;
+          setTimeout(() => {
+            this.router.navigateByUrl('/contract-types/list_contract');
+          }, 2000);
       }
     });
   }

@@ -26,14 +26,14 @@
       <div class="col-12">
         <div class="card shadow-sm border-0">
           <div class="card-body p-4">
-            
+
             <!-- Sección superior: Información del rol -->
             <div class="role-header mb-4">
               <h4 class="card-title mb-4">
                 <i class="fas fa-user-shield me-2"></i>
                 {{ 'ROLES.ADD_ROLE.CREATE_ROLE' | translate }}
               </h4>
-              
+
               <div class="row g-3">
                 <!-- Campo nombre del rol -->
                 <div class="col-md-6">
@@ -41,28 +41,20 @@
                     <i class="fas fa-tag me-2"></i>
                     {{ 'ROLES.ADD_ROLE.NAME' | translate }}
                   </label>
-                  <input 
-                    type="text" 
-                    id="roleName"
-                    [(ngModel)]="name" 
-                    name="name" 
-                    class="form-control form-control-lg" 
+                  <input type="text" id="roleName" [(ngModel)]="name" name="name" class="form-control form-control-lg"
                     [placeholder]="'ROLES.ADD_ROLE.PLACEHOLDER_NAME' | translate">
                 </div>
-                
+
                 <!-- Contador de permisos seleccionados -->
                 <div class="col-md-6 d-flex align-items-end">
                   <div class="permissions-counter w-100">
                     <div class="alert alert-info mb-0 d-flex align-items-center justify-content-between">
                       <div>
                         <i class="fas fa-check-circle me-2"></i>
-                        <strong>{{ 'ROLES.ADD_ROLE.PERMISSIONS_SELECTED' | translate }}:</strong> 
+                        <strong>{{ 'ROLES.ADD_ROLE.PERMISSIONS_SELECTED' | translate }}:</strong>
                         <span class="badge bg-primary fs-6 ms-2">{{ permission.length }}</span>
                       </div>
-                      <button 
-                        *ngIf="permission.length > 0"
-                        type="button" 
-                        class="btn btn-sm btn-outline-danger"
+                      <button *ngIf="permission.length > 0" type="button" class="btn btn-sm btn-outline-danger"
                         (click)="permission = []">
                         <i class="fas fa-times me-1"></i>
                         {{ 'ROLES.ADD_ROLE.CLEAR_ALL' | translate }}
@@ -92,40 +84,28 @@
                       <span class="input-group-text">
                         <i class="fas fa-search"></i>
                       </span>
-                      <input 
-                        type="text" 
-                        class="form-control" 
-                        [(ngModel)]="searchText"
+                      <input type="text" class="form-control" [(ngModel)]="searchText"
                         placeholder="{{ 'ROLES.ADD_ROLE.SEARCH_PERMISSIONS' | translate }}">
-                      <button 
-                        *ngIf="searchText"
-                        class="btn btn-outline-secondary" 
-                        type="button"
+                      <button *ngIf="searchText" class="btn btn-outline-secondary" type="button"
                         (click)="searchText = ''">
                         <i class="fas fa-times"></i>
                       </button>
                     </div>
                   </div>
-                  
+
                   <!-- Tabs de categorías -->
                   <div class="col-md-8">
                     <ul class="nav nav-pills category-tabs flex-wrap" role="tablist">
                       <li class="nav-item" role="presentation">
-                        <button 
-                          class="nav-link" 
-                          [class.active]="activeTab === 'all'"
-                          (click)="setActiveTab('all')"
+                        <button class="nav-link" [class.active]="activeTab === 'all'" (click)="setActiveTab('all')"
                           type="button">
                           <i class="fas fa-th-large me-1"></i>
                           {{ 'ROLES.ADD_ROLE.ALL_CATEGORIES' | translate }}
                         </button>
                       </li>
                       <li class="nav-item" role="presentation" *ngFor="let category of getCategories()">
-                        <button 
-                          class="nav-link" 
-                          [class.active]="activeTab === category"
-                          (click)="setActiveTab(category)"
-                          type="button">
+                        <button class="nav-link" [class.active]="activeTab === category"
+                          (click)="setActiveTab(category)" type="button">
                           {{ ('SIDEBAR.' + category + '.TITLE') | translate }}
                         </button>
                       </li>
@@ -136,7 +116,7 @@
 
               <!-- Contenido de permisos según la pestaña activa -->
               <div class="permissions-content">
-                
+
                 <!-- Vista: Todos los permisos -->
                 <div *ngIf="activeTab === 'all'" class="all-permissions-view">
                   <div class="row g-3">
@@ -144,10 +124,7 @@
                       <div class="category-card">
                         <div class="category-header">
                           <div class="form-check">
-                            <input 
-                              class="form-check-input" 
-                              type="checkbox" 
-                              [id]="'category-' + category"
+                            <input class="form-check-input" type="checkbox" [id]="'category-' + category"
                               [checked]="isCategoryFullySelected(category)"
                               (change)="toggleCategoryPermissions(category, $event)">
                             <label class="form-check-label fw-bold" [for]="'category-' + category">
@@ -156,39 +133,39 @@
                             </label>
                           </div>
                         </div>
-                        
+
                         <div class="category-permissions">
                           <ng-container *ngFor="let item of getFilteredPermissions(category)">
                             <!-- Item con submenús -->
                             <div *ngIf="item.subMenus && item.subMenus.length > 0" class="permission-group mb-2">
                               <div class="permission-group-title">
-                                {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.TITLE') | translate }}
+                                {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.TITLE') | translate
+                                }}
                               </div>
                               <div class="permission-items">
                                 <div class="form-check" *ngFor="let subMenu of item.subMenus; let idx = index">
-                                  <input 
-                                    class="form-check-input" 
-                                    type="checkbox" 
+                                  <input class="form-check-input" type="checkbox"
                                     [checked]="isPermissionSelected(subMenu.permision)"
-                                    (change)="addPermission(subMenu)" 
+                                    (change)="addPermission(subMenu)"
                                     [id]="'perm-' + item.menuValue + '-' + subMenu.menuValue + '-' + idx">
-                                  <label class="form-check-label" [for]="'perm-' + item.menuValue + '-' + subMenu.menuValue + '-' + idx">
-                                    {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.' + subMenu.menuValue) | translate }}
+                                  <label class="form-check-label"
+                                    [for]="'perm-' + item.menuValue + '-' + subMenu.menuValue + '-' + idx">
+                                    {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.' +
+                                    subMenu.menuValue) | translate }}
                                   </label>
                                 </div>
                               </div>
                             </div>
-                            
+
                             <!-- Item sin submenús -->
                             <div *ngIf="!item.subMenus || item.subMenus.length === 0" class="form-check mb-2">
-                              <input 
-                                class="form-check-input" 
-                                type="checkbox" 
-                                [checked]="isPermissionSelected(item.permision)"
-                                (change)="addPermission(item)" 
+                              <input class="form-check-input" type="checkbox"
+                                [checked]="isPermissionSelected(item.permision)" (change)="addPermission(item)"
                                 [id]="'perm-single-' + item.menuValue + '-' + item.permision">
-                              <label class="form-check-label fw-semibold" [for]="'perm-single-' + item.menuValue + '-' + item.permision">
-                                {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.TITLE') | translate }}
+                              <label class="form-check-label fw-semibold"
+                                [for]="'perm-single-' + item.menuValue + '-' + item.permision">
+                                {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.TITLE') | translate
+                                }}
                               </label>
                             </div>
                           </ng-container>
@@ -203,10 +180,7 @@
                   <div class="category-card large">
                     <div class="category-header mb-3">
                       <div class="form-check">
-                        <input 
-                          class="form-check-input" 
-                          type="checkbox" 
-                          [id]="'select-all-' + activeTab"
+                        <input class="form-check-input" type="checkbox" [id]="'select-all-' + activeTab"
                           [checked]="isCategoryFullySelected(activeTab)"
                           (change)="toggleCategoryPermissions(activeTab, $event)">
                         <label class="form-check-label fw-bold fs-5" [for]="'select-all-' + activeTab">
@@ -215,7 +189,7 @@
                         </label>
                       </div>
                     </div>
-                    
+
                     <div class="row g-3">
                       <div class="col-md-6 col-lg-4" *ngFor="let item of getFilteredPermissions(activeTab)">
                         <div class="permission-card">
@@ -227,31 +201,29 @@
                             </div>
                             <div class="permission-card-items">
                               <div class="form-check" *ngFor="let subMenu of item.subMenus; let idx = index">
-                                <input 
-                                  class="form-check-input" 
-                                  type="checkbox" 
-                                  [checked]="isPermissionSelected(subMenu.permision)"
-                                  (change)="addPermission(subMenu)" 
+                                <input class="form-check-input" type="checkbox"
+                                  [checked]="isPermissionSelected(subMenu.permision)" (change)="addPermission(subMenu)"
                                   [id]="'perm-detail-' + item.menuValue + '-' + subMenu.menuValue + '-' + idx">
-                                <label class="form-check-label" [for]="'perm-detail-' + item.menuValue + '-' + subMenu.menuValue + '-' + idx">
-                                  {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.' + subMenu.menuValue) | translate }}
+                                <label class="form-check-label"
+                                  [for]="'perm-detail-' + item.menuValue + '-' + subMenu.menuValue + '-' + idx">
+                                  {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.' +
+                                  subMenu.menuValue) | translate }}
                                 </label>
                               </div>
                             </div>
                           </div>
-                          
+
                           <!-- Item sin submenús -->
                           <div *ngIf="!item.subMenus || item.subMenus.length === 0">
                             <div class="form-check">
-                              <input 
-                                class="form-check-input" 
-                                type="checkbox" 
-                                [checked]="isPermissionSelected(item.permision)"
-                                (change)="addPermission(item)" 
+                              <input class="form-check-input" type="checkbox"
+                                [checked]="isPermissionSelected(item.permision)" (change)="addPermission(item)"
                                 [id]="'perm-detail-single-' + item.menuValue + '-' + item.permision">
-                              <label class="form-check-label fw-semibold" [for]="'perm-detail-single-' + item.menuValue + '-' + item.permision">
+                              <label class="form-check-label fw-semibold"
+                                [for]="'perm-detail-single-' + item.menuValue + '-' + item.permision">
                                 <i class="fas fa-cog me-2"></i>
-                                {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.TITLE') | translate }}
+                                {{ ('SIDEBAR.' + cleanGroup(item.group) + '.' + item.menuValue + '.TITLE') | translate
+                                }}
                               </label>
                             </div>
                           </div>
@@ -260,10 +232,11 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- Mensaje cuando no hay resultados de búsqueda -->
-                <div *ngIf="searchText && getFilteredPermissions(activeTab !== 'all' ? activeTab : undefined).length === 0" 
-                     class="text-center py-5">
+                <div
+                  *ngIf="searchText && getFilteredPermissions(activeTab !== 'all' ? activeTab : undefined).length === 0"
+                  class="text-center py-5">
                   <i class="fas fa-search fa-3x text-muted mb-3"></i>
                   <p class="text-muted">{{ 'ROLES.ADD_ROLE.NO_PERMISSIONS_FOUND' | translate }} "{{ searchText }}"</p>
                 </div>
@@ -279,7 +252,7 @@
                 <i class="fas fa-arrow-left me-2"></i>
                 {{ 'ROLES.ADD_ROLE.CANCEL' | translate }}
               </a>
-              
+
               <button class="btn btn-primary btn-lg" (click)="save($event)">
                 <i class="fas fa-save me-2"></i>
                 {{ 'ROLES.ADD_ROLE.SAVE' | translate }}
@@ -298,22 +271,5 @@
             <div class="mt-3" *ngIf="valid_form_succes">
               <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <i class="fas fa-check-circle me-2"></i>
-                <strong>{{ 'ROLES.ADD_ROLE.GREAT' | translate }}:</strong> {{ 'ROLES.ADD_ROLE.GREAT_ROLE' | translate }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
             </div>
-
-            <div class="mt-3" *ngIf="text_validation">
-              <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <i class="fas fa-exclamation-triangle me-2"></i>
-                <strong>{{ 'ROLES.ADD_ROLE.ATTENTION' | translate }}:</strong> {{ text_validation }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>

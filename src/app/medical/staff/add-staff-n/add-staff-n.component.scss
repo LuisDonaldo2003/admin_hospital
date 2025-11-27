@@ -156,6 +156,12 @@
       .btn-close {
         filter: brightness(0.6);
       }
+      // Forzar contraste en el contenido interno (evita que temas globales lo oculten)
+      .flex-grow-1,
+      .flex-grow-1 *,
+      strong {
+        color: #92400e !important;
+      }
     }
 
     &.alert-success {
@@ -169,6 +175,12 @@
 
       .btn-close {
         filter: brightness(0.6);
+      }
+      // Forzar contraste en el contenido interno
+      .flex-grow-1,
+      .flex-grow-1 *,
+      strong {
+        color: #065f46 !important;
       }
     }
 
@@ -265,6 +277,11 @@
         .btn-close {
           filter: brightness(2);
         }
+        .flex-grow-1,
+        .flex-grow-1 *,
+        strong {
+          color: #fef3c7 !important;
+        }
       }
 
       &.alert-success {
@@ -274,6 +291,11 @@
 
         .btn-close {
           filter: brightness(2);
+        }
+        .flex-grow-1,
+        .flex-grow-1 *,
+        strong {
+          color: #d1fae5 !important;
         }
       }
     }

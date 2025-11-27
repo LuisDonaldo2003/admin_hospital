@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { DataService } from 'src/app/shared/data/data.service';
 import { RolesService } from '../service/roles.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -47,24 +48,27 @@ export class AddRoleUserComponent implements OnInit {
    */
   valid_form_succes: boolean = false;
   /**
-   * Mensaje de validación personalizado
+   * Banderas para mostrar errores específicos
    */
-  text_validation:any = null;
+  error_403: boolean = false;
+  error_422: boolean = false;
+  error_500: boolean = false;
+  error_general: boolean = false;
   /**
    * Idioma seleccionado actualmente
    */
   public selectedLang: string;
-  
+
   /**
    * Pestaña activa actualmente
    */
   activeTab: string = 'all';
-  
+
   /**
    * Texto de búsqueda/filtro de permisos
    */
   searchText: string = '';
-  
+
   /**
    * Permisos agrupados por categoría
    */
@@ -76,7 +80,8 @@ export class AddRoleUserComponent implements OnInit {
   constructor(
     public DataService: DataService,
     public RoleService: RolesService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router
   ) {
     // Establece el idioma inicial
     this.selectedLang = localStorage.getItem('language') || 'en';
@@ -122,13 +127,13 @@ export class AddRoleUserComponent implements OnInit {
       this.groupPermissionsByCategory();
     }
   }
-  
+
   /**
    * Agrupa los permisos por categoría/grupo
    */
   groupPermissionsByCategory(): void {
     this.groupedPermissions = {};
-    
+
     this.sideBar.forEach((item: any) => {
       const group = this.cleanGroup(item.group);
       if (!this.groupedPermissions[group]) {
@@ -137,24 +142,24 @@ export class AddRoleUserComponent implements OnInit {
       this.groupedPermissions[group].push(item);
     });
   }
-  
+
   /**
    * Obtiene las categorías de permisos
    */
   getCategories(): string[] {
     return Object.keys(this.groupedPermissions);
   }
-  
+
   /**
    * Filtra los permisos según el texto de búsqueda
    */
   getFilteredPermissions(category?: string): any[] {
     let items = category ? this.groupedPermissions[category] : this.sideBar;
-    
+
     if (!this.searchText) {
       return items;
     }
-    
+
     const search = this.searchText.toLowerCase();
     return items.filter((item: any) => {
       const titleKey = `SIDEBAR.${this.cleanGroup(item.group)}.${item.menuValue}.TITLE`;
@@ -162,21 +167,21 @@ export class AddRoleUserComponent implements OnInit {
       return title.includes(search) || item.menuValue.toLowerCase().includes(search);
     });
   }
-  
+
   /**
    * Cambia la pestaña activa
    */
   setActiveTab(tab: string): void {
     this.activeTab = tab;
   }
-  
+
   /**
    * Selecciona o deselecciona todos los permisos de una categoría
    */
   toggleCategoryPermissions(category: string, event: any): void {
     const items = this.groupedPermissions[category];
     const isChecked = event.target.checked;
-    
+
     items.forEach((item: any) => {
       if (item.subMenus && item.subMenus.length > 0) {
         item.subMenus.forEach((subMenu: any) => {
@@ -187,29 +192,29 @@ export class AddRoleUserComponent implements OnInit {
       }
     });
   }
-  
+
   /**
    * Establece un permiso (agregar o quitar)
    */
   setPermission(item: any, add: boolean): void {
     if (!item.permision) return;
-    
+
     const index = this.permission.indexOf(item.permision);
-    
+
     if (add && index === -1) {
       this.permission.push(item.permision);
     } else if (!add && index !== -1) {
       this.permission.splice(index, 1);
     }
   }
-  
+
   /**
    * Verifica si todos los permisos de una categoría están seleccionados
    */
   isCategoryFullySelected(category: string): boolean {
     const items = this.groupedPermissions[category];
     let allSelected = true;
-    
+
     items.forEach((item: any) => {
       if (item.subMenus && item.subMenus.length > 0) {
         item.subMenus.forEach((subMenu: any) => {
@@ -223,10 +228,10 @@ export class AddRoleUserComponent implements OnInit {
         }
       }
     });
-    
+
     return allSelected;
   }
-  
+
   /**
    * Verifica si un permiso está seleccionado
    */
@@ -275,12 +280,17 @@ export class AddRoleUserComponent implements OnInit {
       permissions: this.permission,
     };
 
+    // Resetear todas las banderas de error
     this.valid_form_succes = false;
-    this.text_validation = null;
+    this.error_403 = false;
+    this.error_422 = false;
+    this.error_500 = false;
+    this.error_general = false;
+
     this.RoleService.storeRoles(data).subscribe({
       next: (resp: any) => {
-        if (resp.message  == 403) {
-          this.text_validation = resp.message_text;
+        if (resp.message == 403) {
+          this.error_403 = true;
         } else {
           this.name = '';
           this.permission = [];
@@ -291,18 +301,23 @@ export class AddRoleUserComponent implements OnInit {
           setTimeout(() => {
             this.sideBar = SIDE_BAR;
           }, 50);
+
+          // Esperar 2 segundos antes de redirigir
+          setTimeout(() => {
+            this.router.navigate(['/roles/list']);
+          }, 2000);
         }
       },
       error: (error: any) => {
         console.error('Error al crear rol:', error);
         if (error.status === 403) {
-          this.text_validation = error.error?.message_text || "EL NOMBRE DEL ROL YA EXISTE";
+          this.error_403 = true;
         } else if (error.status === 422) {
-          this.text_validation = error.error?.message || 'Datos de entrada inválidos';
+          this.error_422 = true;
         } else if (error.status === 500) {
-          this.text_validation = 'Error interno del servidor. Intenta nuevamente.';
+          this.error_500 = true;
         } else {
-          this.text_validation = "Error al crear el rol. Verifica tu conexión e intenta nuevamente.";
+          this.error_general = true;
         }
       }
     });

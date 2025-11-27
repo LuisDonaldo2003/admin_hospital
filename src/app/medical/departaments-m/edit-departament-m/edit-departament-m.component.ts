@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { DepartamentMService } from '../service/departament-m.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -41,6 +41,8 @@ export class EditDepartamentMComponent {
     public departamentService: DepartamentMService,
     public activedRoute: ActivatedRoute,
     private translate: TranslateService
+    ,
+    private router: Router
   ) {}
 
   /**
@@ -85,6 +87,9 @@ export class EditDepartamentMComponent {
         return;
       }
       this.valid_form_success = true;
+      setTimeout(() => {
+        this.router.navigateByUrl('/departaments-m/list-departament');
+      }, 2000);
     })
   }
 }

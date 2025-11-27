@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { routes } from 'src/app/shared/routes/routes';
 import { ArchiveService } from '../../archive/service/archive.service';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import {ApexAxisChartSeries,ApexChart,ApexDataLabels,ApexStroke,ApexXAxis,ApexYAxis,ApexGrid,ApexTooltip,ApexFill} from 'ng-apexcharts';
-import { TranslateModule,TranslateService } from '@ngx-translate/core';
+import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexStroke, ApexXAxis, ApexYAxis, ApexGrid, ApexTooltip, ApexFill } from 'ng-apexcharts';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-archive-dashboard',
@@ -67,13 +68,16 @@ export class ArchiveDashboardComponent implements OnInit {
   yearlyCounts: Array<{ year: number; count: number }> = [];
   yearlyMax = 0;
 
+  // Servicio de permisos
+  public permissionService = inject(PermissionService);
+
   /**
    * Inyecta el servicio de archivos y traducción
    */
   constructor(
     private archiveService: ArchiveService,
     private translate: TranslateService,
-  ) {}
+  ) { }
 
   /**
    * Inicializa el dashboard cargando las estadísticas
@@ -100,10 +104,10 @@ export class ArchiveDashboardComponent implements OnInit {
         const rawDaily = res?.dailySeries || res?.dailyTrend || res?.last7Days || res?.daily || null;
         this.prepareWeeklyChart(rawDaily);
 
-  // Nuevos datos: mensual y anual
-  this.prepareMonthlyChart(res?.monthlyCounts || res?.perMonth || null);
-  this.yearlyCounts = Array.isArray(res?.yearlyCounts) ? [...res.yearlyCounts].sort((a:any,b:any)=>a.year-b.year) : [];
-  this.yearlyMax = this.yearlyCounts.length ? Math.max(...this.yearlyCounts.map(y=>Number(y.count||0))) : 0;
+        // Nuevos datos: mensual y anual
+        this.prepareMonthlyChart(res?.monthlyCounts || res?.perMonth || null);
+        this.yearlyCounts = Array.isArray(res?.yearlyCounts) ? [...res.yearlyCounts].sort((a: any, b: any) => a.year - b.year) : [];
+        this.yearlyMax = this.yearlyCounts.length ? Math.max(...this.yearlyCounts.map(y => Number(y.count || 0))) : 0;
         this.loading = false;
       },
       error: (err) => {
@@ -179,7 +183,7 @@ export class ArchiveDashboardComponent implements OnInit {
       });
     }
     const counts = months.map((m) => dataMap.get(m) ?? 0);
-    const labels = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    const labels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
     this.monthlyChart = {
       series: [{ name: 'Pacientes', data: counts }],
       chart: { type: 'bar', height: 240, toolbar: { show: false }, animations: { enabled: true } },
@@ -196,7 +200,7 @@ export class ArchiveDashboardComponent implements OnInit {
   // Porcentaje de un conteo respecto al máximo anual (para barra visual)
   yearPercent(count: number) {
     const max = this.yearlyMax || 1;
-    const pct = Math.round((Number(count||0) / max) * 100);
+    const pct = Math.round((Number(count || 0) / max) * 100);
     return Math.max(0, Math.min(100, pct));
   }
 
@@ -206,5 +210,26 @@ export class ArchiveDashboardComponent implements OnInit {
   private formatShortDate(iso: string) {
     const d = new Date(iso + 'T00:00:00');
     return d.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit' });
+  }
+
+  /**
+   * Verifica si el usuario puede agregar expedientes
+   */
+  canAdd(): boolean {
+    return this.permissionService.hasPermission('add_archive');
+  }
+
+  /**
+   * Verifica si el usuario puede exportar expedientes
+   */
+  canExport(): boolean {
+    return this.permissionService.hasPermission('export_archive');
+  }
+
+  /**
+   * Verifica si el usuario puede hacer respaldos
+   */
+  canBackup(): boolean {
+    return this.permissionService.hasPermission('backup_archive');
   }
 }

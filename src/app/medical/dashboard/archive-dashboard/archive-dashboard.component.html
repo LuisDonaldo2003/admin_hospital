@@ -10,7 +10,8 @@
     <section class="hero mb-4">
       <div class="hero-inner">
         <div class="hero-text">
-          <h1><span>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.ARCHIVE' | translate }}</span> | {{ 'DASHBOARD.DASHBOARD_ARCHIVE.SUMMARY' | translate }}</h1>
+          <h1><span>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.ARCHIVE' | translate }}</span> | {{
+            'DASHBOARD.DASHBOARD_ARCHIVE.SUMMARY' | translate }}</h1>
           <p>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.VISION' | translate }}</p>
         </div>
         <div class="hero-meta">
@@ -39,111 +40,126 @@
     <div class="grid-panels mb-4">
       <!-- Género -->
       <div class="panel panel-gender">
-        <header class="panel-hd"><h3>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.DISTRIBUTION_BY_GENDER' | translate }}</h3></header>
+        <header class="panel-hd">
+          <h3>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.DISTRIBUTION_BY_GENDER' | translate }}</h3>
+        </header>
         <div class="gender-wrap" *ngIf="(byGender.male + byGender.female) > 0; else noGender">
           <div class="gender-bars">
-            <div class="bar" aria-label="Masculino" [style.width]="(byGender.male/(byGender.male+byGender.female))*100 + '%'" ></div>
-            <div class="bar female" aria-label="Femenino" [style.width]="(byGender.female/(byGender.male+byGender.female))*100 + '%'" ></div>
+            <div class="bar" aria-label="Masculino"
+              [style.width]="(byGender.male/(byGender.male+byGender.female))*100 + '%'"></div>
+            <div class="bar female" aria-label="Femenino"
+              [style.width]="(byGender.female/(byGender.male+byGender.female))*100 + '%'"></div>
           </div>
           <ul class="legend">
-            <li><span class="dot male"></span> {{ 'DASHBOARD.DASHBOARD_ARCHIVE.MAN' | translate }}: {{byGender.male}}</li>
-            <li><span class="dot female"></span> {{ 'DASHBOARD.DASHBOARD_ARCHIVE.WOMAN' | translate }}: {{byGender.female}}</li>
+            <li><span class="dot male"></span> {{ 'DASHBOARD.DASHBOARD_ARCHIVE.MAN' | translate }}: {{byGender.male}}
+            </li>
+            <li><span class="dot female"></span> {{ 'DASHBOARD.DASHBOARD_ARCHIVE.WOMAN' | translate }}:
+              {{byGender.female}}</li>
           </ul>
         </div>
-        <ng-template #noGender><div class="empty">{{ 'DASHBOARD.DASHBOARD_ARCHIVE.NOT_DATES' | translate }}</div></ng-template>
+        <ng-template #noGender>
+          <div class="empty">{{ 'DASHBOARD.DASHBOARD_ARCHIVE.NOT_DATES' | translate }}</div>
+        </ng-template>
       </div>
 
       <!-- Ubicaciones -->
       <div class="panel panel-locations">
-        <header class="panel-hd"><h3>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.TOP_LOCATIONS' | translate }}</h3></header>
+        <header class="panel-hd">
+          <h3>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.TOP_LOCATIONS' | translate }}</h3>
+        </header>
         <div *ngIf="byState.length; else noLocations" class="locations-list">
           <div *ngFor="let l of byState; let i = index" class="loc-item">
             <div class="loc-rank">{{i+1}}</div>
             <div class="loc-body">
               <div class="loc-name" [title]="l.state">{{l.state}}</div>
-              <div class="loc-meter"><span class="meter-fill" [style.width]="(l.count / byState[0].count)*100 + '%'" ></span></div>
+              <div class="loc-meter"><span class="meter-fill"
+                  [style.width]="(l.count / byState[0].count)*100 + '%'"></span></div>
             </div>
             <div class="loc-count">{{l.count}}</div>
           </div>
         </div>
-        <ng-template #noLocations><div class="empty">{{ 'DASHBOARD.DASHBOARD_ARCHIVE.NOT_REGISTERS' | translate }}</div></ng-template>
+        <ng-template #noLocations>
+          <div class="empty">{{ 'DASHBOARD.DASHBOARD_ARCHIVE.NOT_REGISTERS' | translate }}</div>
+        </ng-template>
       </div>
 
       <!-- Acciones -->
-  <div class="panel actions panel-actions">
-        <header class="panel-hd"><h3>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.ACTIONS' | translate }}</h3></header>
+      <div class="panel actions panel-actions">
+        <header class="panel-hd">
+          <h3>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.ACTIONS' | translate }}</h3>
+        </header>
         <div class="actions-grid">
-          <button class="action" routerLink='/archives/add_archive'><i class="fa fa-plus"></i><span>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.NEW' | translate }}</span></button>
-          <button class="action" routerLink='/archives/list_archive'><i class="fa fa-list"></i><span>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.LIST' | translate }}</span></button>
-          <button class="action" routerLink='/archives/export_archive'><i class="fa fa-file-export"></i><span>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.EXPORT' | translate }}</span></button>
-          <button class="action" routerLink='/archives/backup_archive'><i class="fa fa-database"></i><span>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.BACKUP' | translate }}</span></button>
+          <button *ngIf="canAdd()" class="action" routerLink='/archives/add_archive'><i class="fa fa-plus"></i><span>{{
+              'DASHBOARD.DASHBOARD_ARCHIVE.NEW' | translate }}</span></button>
+          <button class="action" routerLink='/archives/list_archive'><i class="fa fa-list"></i><span>{{
+              'DASHBOARD.DASHBOARD_ARCHIVE.LIST' | translate }}</span></button>
+          <button *ngIf="canExport()" class="action" routerLink='/archives/export_archive'><i
+              class="fa fa-file-export"></i><span>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.EXPORT' | translate }}</span></button>
+          <button *ngIf="canBackup()" class="action" routerLink='/archives/backup_archive'><i
+              class="fa fa-database"></i><span>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.BACKUP' | translate }}</span></button>
         </div>
       </div>
     </div>
 
-  <!-- (Sección de gráfico eliminada a petición del usuario) -->
-  <!-- Gráfico últimos 7 días -->
-  <section class="weekly-chart" *ngIf="weeklyChart">
-    <div class="panel panel-chart">
-      <header class="panel-hd"><h3>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.RECENT_REGISTERS' | translate }}</h3></header>
-      <div class="chart-wrapper">
-        <apx-chart
-          *ngIf="weeklyChart"
-          [series]="weeklyChart.series"
-          [chart]="weeklyChart.chart"
-          [xaxis]="weeklyChart.xaxis"
-          [yaxis]="weeklyChart.yaxis"
-          [dataLabels]="weeklyChart.dataLabels"
-          [stroke]="weeklyChart.stroke"
-          [grid]="weeklyChart.grid"
-          [tooltip]="weeklyChart.tooltip"
-          [fill]="weeklyChart.fill"
-        ></apx-chart>
+    <!-- (Sección de gráfico eliminada a petición del usuario) -->
+    <!-- Gráfico últimos 7 días -->
+    <section class="weekly-chart" *ngIf="weeklyChart">
+      <div class="panel panel-chart">
+        <header class="panel-hd">
+          <h3>{{ 'DASHBOARD.DASHBOARD_ARCHIVE.RECENT_REGISTERS' | translate }}</h3>
+        </header>
+        <div class="chart-wrapper">
+          <apx-chart *ngIf="weeklyChart" [series]="weeklyChart.series" [chart]="weeklyChart.chart"
+            [xaxis]="weeklyChart.xaxis" [yaxis]="weeklyChart.yaxis" [dataLabels]="weeklyChart.dataLabels"
+            [stroke]="weeklyChart.stroke" [grid]="weeklyChart.grid" [tooltip]="weeklyChart.tooltip"
+            [fill]="weeklyChart.fill"></apx-chart>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Gráfico por mes del año actual -->
-  <section class="monthly-chart" *ngIf="monthlyChart">
-    <div class="panel panel-chart">
-      <header class="panel-hd"><h3>Pacientes por mes (año actual)</h3></header>
-      <div class="chart-wrapper">
-        <apx-chart
-          *ngIf="monthlyChart"
-          [series]="monthlyChart.series"
-          [chart]="monthlyChart.chart"
-          [xaxis]="monthlyChart.xaxis"
-          [yaxis]="monthlyChart.yaxis"
-          [dataLabels]="monthlyChart.dataLabels"
-          [stroke]="monthlyChart.stroke"
-          [grid]="monthlyChart.grid"
-          [tooltip]="monthlyChart.tooltip"
-          [fill]="monthlyChart.fill"
-        ></apx-chart>
+    <!-- Gráfico por mes del año actual -->
+    <section class="monthly-chart" *ngIf="monthlyChart">
+      <div class="panel panel-chart">
+        <header class="panel-hd">
+          <h3>Pacientes por mes (año actual)</h3>
+        </header>
+        <div class="chart-wrapper">
+          <apx-chart *ngIf="monthlyChart" [series]="monthlyChart.series" [chart]="monthlyChart.chart"
+            [xaxis]="monthlyChart.xaxis" [yaxis]="monthlyChart.yaxis" [dataLabels]="monthlyChart.dataLabels"
+            [stroke]="monthlyChart.stroke" [grid]="monthlyChart.grid" [tooltip]="monthlyChart.tooltip"
+            [fill]="monthlyChart.fill"></apx-chart>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Resumen anual -->
-  <section class="yearly-summary" *ngIf="yearlyCounts?.length">
-    <div class="panel panel-yearly">
-      <header class="panel-hd"><h3>Pacientes por año</h3></header>
-      <div class="yearly-list">
-  <div class="year-row" *ngFor="let y of yearlyCounts" [class.is-current]="y.year === currentYear">
-          <div class="col-year">{{ y.year }}</div>
-          <div class="col-bar">
-            <div class="bar-outer"><div class="bar-inner" [style.width]="yearPercent(y.count) + '%'"></div></div>
+    <!-- Resumen anual -->
+    <section class="yearly-summary" *ngIf="yearlyCounts?.length">
+      <div class="panel panel-yearly">
+        <header class="panel-hd">
+          <h3>Pacientes por año</h3>
+        </header>
+        <div class="yearly-list">
+          <div class="year-row" *ngFor="let y of yearlyCounts" [class.is-current]="y.year === currentYear">
+            <div class="col-year">{{ y.year }}</div>
+            <div class="col-bar">
+              <div class="bar-outer">
+                <div class="bar-inner" [style.width]="yearPercent(y.count) + '%'"></div>
+              </div>
+            </div>
+            <div class="col-count">{{ y.count }}</div>
           </div>
-          <div class="col-count">{{ y.count }}</div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
     <div *ngIf="error" class="alert alert-danger py-2 px-3 small mb-0">{{error}}</div>
   </div>
 </div>
 
 <ng-template #loadingTpl>
-  <div class="page-wrapper"><div class="content"><div class="text-center py-5 text-muted">{{ 'DASHBOARD.DASHBOARD_ARCHIVE.STATISTICS_LOADING' | translate }}</div></div></div>
+  <div class="page-wrapper">
+    <div class="content">
+      <div class="text-center py-5 text-muted">{{ 'DASHBOARD.DASHBOARD_ARCHIVE.STATISTICS_LOADING' | translate }}</div>
+    </div>
+  </div>
 </ng-template>

@@ -82,10 +82,10 @@ export class ListModalitiesComponent implements OnInit {
     const search = this.searchDataValue?.trim().toLowerCase() || '';
     const source: CatalogItem[] = search
       ? this.modalidadesAll.filter(a => (
-          (a.nombre || '').toLowerCase().includes(search) ||
-          (a.codigo || '').toLowerCase().includes(search) ||
-          (a.descripcion || '').toLowerCase().includes(search)
-        ))
+        (a.nombre || '').toLowerCase().includes(search) ||
+        (a.codigo || '').toLowerCase().includes(search) ||
+        (a.descripcion || '').toLowerCase().includes(search)
+      ))
       : this.modalidadesAll;
 
     this.totalData = source.length;

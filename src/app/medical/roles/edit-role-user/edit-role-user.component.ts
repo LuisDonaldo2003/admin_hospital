@@ -1,6 +1,6 @@
 // Importación de módulos y servicios necesarios para el componente de edición de rol de usuario
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RolesService } from '../service/roles.service';
 import { DataService } from 'src/app/shared/data/data.service';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-edit-role-user',
   standalone: true,
-  imports: [FormsModule,CommonModule,TranslateModule],
+  imports: [FormsModule, CommonModule, TranslateModule],
   templateUrl: './edit-role-user.component.html',
   styleUrls: ['./edit-role-user.component.scss']
 })
@@ -23,15 +23,15 @@ export class EditRoleUserComponent implements OnInit {
   /**
    * Menú lateral con las secciones y permisos disponibles
    */
-  sideBar:any = [];
+  sideBar: any = [];
   /**
    * Nombre del rol a editar
    */
-  name:string = '';
+  name: string = '';
   /**
    * Permisos seleccionados para el rol
    */
-  permissions:any = [];
+  permissions: any = [];
   /**
    * Bandera para mostrar error de formulario inválido
    */
@@ -43,7 +43,7 @@ export class EditRoleUserComponent implements OnInit {
   /**
    * Mensaje de validación personalizado
    */
-  text_validation:any = null;
+  text_validation: any = null;
   /**
    * Idioma seleccionado actualmente
    */
@@ -52,15 +52,16 @@ export class EditRoleUserComponent implements OnInit {
   /**
    * Identificador del rol a editar
    */
-  role_id:any;
+  role_id: any;
 
   /**
-   * Constructor que inyecta los servicios de datos, roles, ruta activa y traducción
+   * Constructor que inyecta los servicios de datos, roles, ruta activa, router y traducción
    */
   constructor(
-    public DataService: DataService ,
+    public DataService: DataService,
     public RoleService: RolesService,
     public activedRoute: ActivatedRoute,
+    private router: Router,
     private translate: TranslateService
 
   ) {
@@ -90,10 +91,10 @@ export class EditRoleUserComponent implements OnInit {
    * Alterna el idioma entre español e inglés y actualiza las traducciones dinámicas
    */
   toggleLanguage(): void {
-  // Simpler language toggle: translate pipe updates the template automatically
-  this.selectedLang = this.selectedLang === 'es' ? 'en' : 'es';
-  this.translate.use(this.selectedLang);
-  localStorage.setItem('language', this.selectedLang);
+    // Simpler language toggle: translate pipe updates the template automatically
+    this.selectedLang = this.selectedLang === 'es' ? 'en' : 'es';
+    this.translate.use(this.selectedLang);
+    localStorage.setItem('language', this.selectedLang);
   }
 
   /**
@@ -109,12 +110,12 @@ export class EditRoleUserComponent implements OnInit {
   /**
    * Agrega o elimina un permiso del arreglo de permisos seleccionados
    */
-  addPermission(subMenu:any){
-    if(subMenu.permision){
-      let INDEX = this.permissions.findIndex((item:any) => item == subMenu.permision);
-      if(INDEX != -1){
-        this.permissions.splice(INDEX,1);
-      }else{
+  addPermission(subMenu: any) {
+    if (subMenu.permision) {
+      let INDEX = this.permissions.findIndex((item: any) => item == subMenu.permision);
+      if (INDEX != -1) {
+        this.permissions.splice(INDEX, 1);
+      } else {
         this.permissions.push(subMenu.permision);
       }
     }
@@ -151,37 +152,41 @@ export class EditRoleUserComponent implements OnInit {
    * Guarda los cambios del rol y sus permisos si el formulario es válido
    * Muestra mensajes de error, éxito o advertencia según la respuesta
    */
-  save(){
+  save() {
     this.valid_form = false;
-    if(!this.name  || this.permissions.length == 0){
+    if (!this.name || this.permissions.length == 0) {
       this.valid_form = true;
       return;
     }
     let data = {
       name: this.name,
-      permissions:this.permissions,
+      permissions: this.permissions,
     };
     this.valid_form_success = false;
     this.text_validation = null;
-    
-    this.RoleService.editRoles(data,this.role_id).subscribe({
-      next: (resp:any) => {
-        if(resp.message == 403){
+
+    this.RoleService.editRoles(data, this.role_id).subscribe({
+      next: (resp: any) => {
+        if (resp.message == 403) {
           this.text_validation = resp.message_text;
           return;
         }
-        if(resp.message == 200){
+        if (resp.message == 200) {
           this.valid_form_success = true;
           this.text_validation = null;
+          // Redirigir al listado de roles después de 1 segundo para mostrar el mensaje de éxito
+          setTimeout(() => {
+            this.router.navigate(['/roles/list'], { relativeTo: this.activedRoute });
+          }, 2000);
         }
       },
-      error: (error:any) => {
+      error: (error: any) => {
         console.error('Error al editar rol:', error);
-        if(error.status === 403){
+        if (error.status === 403) {
           this.text_validation = error.error?.message_text || 'No tienes permisos para realizar esta acción';
-        } else if(error.status === 422){
+        } else if (error.status === 422) {
           this.text_validation = error.error?.message || 'Datos de entrada inválidos';
-        } else if(error.status === 500){
+        } else if (error.status === 500) {
           this.text_validation = 'Error interno del servidor. Intenta nuevamente.';
         } else {
           this.text_validation = 'Error al actualizar el rol. Verifica tu conexión e intenta nuevamente.';

@@ -78,9 +78,9 @@ export class ListAreasComponent implements OnInit {
     const search = this.searchDataValue?.trim().toLowerCase() || '';
     const source: CatalogItem[] = search
       ? this.areasAll.filter(a => (
-          (a.nombre || '').toLowerCase().includes(search) ||
-          (a.descripcion || '').toLowerCase().includes(search)
-        ))
+        (a.nombre || '').toLowerCase().includes(search) ||
+        (a.descripcion || '').toLowerCase().includes(search)
+      ))
       : this.areasAll;
 
     this.totalData = source.length;

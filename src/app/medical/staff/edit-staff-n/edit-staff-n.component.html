@@ -35,7 +35,7 @@
                 <i class="fa fa-user-edit"></i>
               </div>
               <h3 class="fw-bold mb-2">{{ 'STAFF.EDIT_STAFF.TITLE' | translate }}</h3>
-              <p class="text-muted small">Actualice la información necesaria</p>
+              <p class="text-muted small">{{ 'STAFF.EDIT_STAFF.DESCRIPTION' | translate }}</p>
             </div>
 
             <!-- Formulario para editar staff -->
@@ -44,41 +44,42 @@
               <div class="form-section">
                 <div class="section-header mb-3">
                   <h5 class="section-title">
-                    <i class="fa fa-user me-2"></i>Información Personal
+                    <i class="fa fa-user me-2"></i>{{ 'STAFF.EDIT_STAFF.PERSONAL_INFORMATION' | translate }}
                   </h5>
                 </div>
                 <div class="row g-3">
                   <!-- Campo para el nombre -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-id-card me-1"></i>{{ 'STAFF.EDIT_STAFF.FIRST_NAME' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-id-card me-1"></i>{{ 'STAFF.EDIT_STAFF.FIRST_NAME' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control" [(ngModel)]="name" name="name" required
-                           placeholder="Ingrese el nombre"
-                           [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
+                      placeholder="Ingrese el nombre" [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
                     <div class="invalid-feedback" *ngIf="submitted && !name.trim()">El nombre es requerido</div>
                   </div>
 
                   <!-- Campo para el apellido -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-id-card me-1"></i>{{ 'STAFF.EDIT_STAFF.SURNAME' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-id-card me-1"></i>{{ 'STAFF.EDIT_STAFF.SURNAME' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control" [(ngModel)]="surname" name="surname" required
-                           placeholder="Ingrese el apellido"
-                           [ngClass]="{ 'is-invalid': submitted && !surname.trim() }" />
+                      placeholder="Ingrese el apellido" [ngClass]="{ 'is-invalid': submitted && !surname.trim() }" />
                     <div class="invalid-feedback" *ngIf="submitted && !surname.trim()">El apellido es requerido</div>
                   </div>
 
                   <!-- Campo para el correo electrónico -->
                   <div class="col-12">
                     <label class="form-label">
-                      <i class="fa fa-envelope me-1"></i>{{ 'STAFF.EDIT_STAFF.EMAIL' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-envelope me-1"></i>{{ 'STAFF.EDIT_STAFF.EMAIL' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
                     <input type="email" class="form-control" [(ngModel)]="email" name="email" required
-                           placeholder="correo@ejemplo.com"
-                           [ngClass]="{ 'is-invalid': submitted && !email.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !email.trim()">El correo electrónico es requerido</div>
+                      placeholder="correo@ejemplo.com" [ngClass]="{ 'is-invalid': submitted && !email.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !email.trim()">{{
+                      'STAFF.EDIT_STAFF.EMAIL_REQUIRED' | translate }}</div>
                   </div>
                 </div>
               </div>
@@ -90,17 +91,18 @@
               <div class="form-section">
                 <div class="section-header mb-3">
                   <h5 class="section-title">
-                    <i class="fa fa-shield-alt me-2"></i>Rol del Usuario
+                    <i class="fa fa-shield-alt me-2"></i>{{ 'STAFF.EDIT_STAFF.ROLE_SECURITY' | translate }}
                   </h5>
                 </div>
                 <div class="row g-3">
                   <!-- Selección de rol para el staff -->
                   <div class="col-12">
                     <label class="form-label">
-                      <i class="fa fa-user-tag me-1"></i>{{ 'STAFF.EDIT_STAFF.ROLE_SELECT' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-user-tag me-1"></i>{{ 'STAFF.EDIT_STAFF.ROLE_SELECT' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
                     <select class="form-control form-select" [(ngModel)]="selectedValue" name="role" required
-                            [ngClass]="{ 'is-invalid': submitted && !selectedValue }">
+                      [ngClass]="{ 'is-invalid': submitted && !selectedValue }">
                       <!-- Opción por defecto -->
                       <option value="" disabled>{{ 'STAFF.EDIT_STAFF.SELECT_ROLE_PLACEHOLDER' | translate }}</option>
                       <!-- Opciones de roles disponibles -->
@@ -111,32 +113,41 @@
                 </div>
               </div>
 
-              <!-- Mensaje de validación si hay advertencias -->
-              <div class="mt-4" *ngIf="text_validation">
+              <!-- Mensaje de validación si hay advertencias (controlado desde la plantilla) -->
+              <div class="mt-4" *ngIf="showValidation">
                 <div class="alert alert-modern alert-warning d-flex align-items-center">
                   <i class="fa fa-exclamation-triangle me-3"></i>
                   <div class="flex-grow-1">
-                    <strong>{{ 'STAFF.EDIT_STAFF.WARNING' | translate }}:</strong> {{ text_validation }}
+                    <strong>{{ 'STAFF.EDIT_STAFF.WARNING' | translate }}:</strong>
+                    <ng-container [ngSwitch]="validationType">
+                      <span *ngSwitchCase="'missing'">
+                        <span *ngFor="let f of missingFields; let last = last">
+                          {{ f | translate }}<span *ngIf="!last">, </span>
+                        </span>
+                      </span>
+                      <span *ngSwitchCase="'permission'">{{ backendErrorText }}</span>
+                      <span *ngSwitchDefault>{{ 'STAFF.EDIT_STAFF.UNKNOWN_VALIDATION' | translate }}</span>
+                    </ng-container>
                   </div>
-                  <button type="button" class="btn-close" (click)="text_validation = ''"></button>
+                  <button type="button" class="btn-close" (click)="showValidation = false; validationType = 'none'"></button>
                 </div>
               </div>
 
-              <!-- Mensaje de éxito si la operación fue exitosa -->
-              <div class="mt-4" *ngIf="text_success">
+              <!-- Mensaje de éxito si la operación fue exitosa (controlado desde la plantilla) -->
+              <div class="mt-4" *ngIf="showSuccess">
                 <div class="alert alert-modern alert-success d-flex align-items-center">
                   <i class="fa fa-check-circle me-3"></i>
                   <div class="flex-grow-1">
-                    <strong>{{ 'STAFF.EDIT_STAFF.SUCCESS' | translate }}:</strong> {{ text_success }}
+                    <strong>{{ 'STAFF.EDIT_STAFF.SUCCESS' | translate }}:</strong> {{ 'STAFF.EDIT_STAFF.USER_UPDATED_SUCCESS' | translate }}
                   </div>
-                  <button type="button" class="btn-close" (click)="text_success = ''"></button>
+                  <button type="button" class="btn-close" (click)="showSuccess = false"></button>
                 </div>
               </div>
 
               <!-- Botones de acción -->
               <div class="form-actions d-flex justify-content-end gap-2 mt-4">
                 <button type="button" class="btn btn-cancel" routerLink="/staffs/list-staff">
-                  <i class="fa fa-times me-2"></i>Cancelar
+                  <i class="fa fa-times me-2"></i>{{ 'STAFF.EDIT_STAFF.CANCEL' | translate }}
                 </button>
                 <button type="button" class="btn btn-save" (click)="save()">
                   <i class="fa fa-save me-2"></i>{{ 'STAFF.EDIT_STAFF.SAVE' | translate }}

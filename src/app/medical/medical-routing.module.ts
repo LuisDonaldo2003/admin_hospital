@@ -5,7 +5,7 @@ import { AuthGuard } from '../shared/gaurd/auth.guard';
 
 const routes: Routes = [
   {
-    path:'',
+    path: '',
     component: MedicalComponent,
     canActivate: [AuthGuard],
     children: [
@@ -36,37 +36,42 @@ const routes: Routes = [
       },
       {
         path: 'archives',
-        loadChildren: () => 
+        loadChildren: () =>
           import('./archive/archive.module').then(m => m.ArchiveModule)
       },
       {
         path: 'organization-chart',
-        loadChildren: () => 
+        loadChildren: () =>
           import('./organization-chart/organization-chart.module').then(m => m.OrganizationChartModule)
       },
       {
+        path: 'role-families',
+        loadChildren: () =>
+          import('./role-families/role-families.module').then(m => m.RoleFamiliesModule)
+      },
+      {
         path: 'dashboard',
-        loadChildren: () => 
+        loadChildren: () =>
           import('./dashboard/dashboard.module').then(m => m.DashboardModule)
       },
       {
         path: 'credits',
-        loadChildren: () => 
+        loadChildren: () =>
           import('./credits/credits.module').then(m => m.CreditsModule)
       },
       {
         path: 'personal',
-        loadChildren: () => 
+        loadChildren: () =>
           import('./personal/personal.module').then(m => m.PersonalModule),
       },
       {
         path: 'pdf-compressor',
-        loadComponent: () => 
+        loadComponent: () =>
           import('./pdf-compressor/pdf-compressor.component').then(m => m.PdfCompressorComponent)
       },
       {
         path: 'teaching',
-        loadChildren: () => 
+        loadChildren: () =>
           import('./teaching/teaching.module').then(m => m.TeachingModule),
       },
 

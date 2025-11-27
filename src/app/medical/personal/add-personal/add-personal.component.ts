@@ -37,8 +37,11 @@ export class AddPersonalComponent implements OnInit {
   documentos = new Map<string, File>();
   
   // Mensajes
-  text_success = '';
-  text_validation = '';
+  // Flags y datos para mostrar alertas desde el HTML
+  showSuccess: boolean = false;
+  showValidation: boolean = false;
+  serverValidationMessage: string = '';
+  uploadedDocsCount: number = 0;
 
   // Lista de documentos requeridos
   documentosRequeridos = [
@@ -93,20 +96,23 @@ export class AddPersonalComponent implements OnInit {
    */
   processFile(file: File, tipoDocumento: string): void {
     // Limpiar mensajes previos
-    this.text_validation = '';
+    this.serverValidationMessage = '';
+    this.showValidation = false;
     
     // Validar extensión del archivo
     const fileName = file.name.toLowerCase();
     const hasValidExtension = this.ALLOWED_FILE_EXTENSIONS.some(ext => fileName.endsWith(ext));
     
     if (!hasValidExtension) {
-      this.text_validation = `Solo se permiten archivos PDF. Archivo seleccionado: ${file.name}`;
+      this.serverValidationMessage = `Solo se permiten archivos PDF. Archivo seleccionado: ${file.name}`;
+      this.showValidation = true;
       return;
     }
     
     // Validar tipo MIME
     if (file.type !== this.ALLOWED_FILE_TYPE) {
-      this.text_validation = `Tipo de archivo no válido. Solo se permiten archivos PDF.`;
+      this.serverValidationMessage = `Tipo de archivo no válido. Solo se permiten archivos PDF.`;
+      this.showValidation = true;
       return;
     }
     
@@ -114,19 +120,22 @@ export class AddPersonalComponent implements OnInit {
     if (file.size > this.MAX_FILE_SIZE) {
       const sizeInKB = (file.size / 1024).toFixed(0);
       const maxSizeInKB = (this.MAX_FILE_SIZE / 1024).toFixed(0);
-      this.text_validation = `El archivo es demasiado grande (${sizeInKB}KB). Tamaño máximo permitido: ${maxSizeInKB}KB para documentos PDF.`;
+      this.serverValidationMessage = `El archivo es demasiado grande (${sizeInKB}KB). Tamaño máximo permitido: ${maxSizeInKB}KB para documentos PDF.`;
+      this.showValidation = true;
       return;
     }
     
     // Validar tamaño mínimo (evitar archivos corruptos o vacíos)
     if (file.size < 1024) { // 1KB mínimo
-      this.text_validation = `El archivo parece estar dañado o vacío. Tamaño mínimo: 1KB.`;
+      this.serverValidationMessage = `El archivo parece estar dañado o vacío. Tamaño mínimo: 1KB.`;
+      this.showValidation = true;
       return;
     }
     
     // Validar que no se exceda el límite total de archivos
     if (this.documentos.size >= this.documentosRequeridos.length && !this.documentos.has(tipoDocumento)) {
-      this.text_validation = `Ya has subido el máximo de ${this.documentosRequeridos.length} documentos permitidos.`;
+      this.serverValidationMessage = `Ya has subido el máximo de ${this.documentosRequeridos.length} documentos permitidos.`;
+      this.showValidation = true;
       return;
     }
     
@@ -186,7 +195,8 @@ export class AddPersonalComponent implements OnInit {
    */
   removeDocument(tipoDocumento: string): void {
     this.documentos.delete(tipoDocumento);
-    this.text_validation = ''; // Limpiar mensajes de error al eliminar
+    this.serverValidationMessage = ''; // Limpiar mensajes de error al eliminar
+    this.showValidation = false;
   }
 
   /**
@@ -249,64 +259,75 @@ export class AddPersonalComponent implements OnInit {
    * Validar formulario
    */
   validateForm(): boolean {
-    this.text_validation = '';
+    this.serverValidationMessage = '';
+    this.showValidation = false;
 
     // Validar campos básicos
     if (!this.nombre?.trim()) {
-      this.text_validation = 'El nombre es requerido';
+      this.serverValidationMessage = 'El nombre es requerido';
+      this.showValidation = true;
       return false;
     }
 
     if (this.nombre.trim().length < 2) {
-      this.text_validation = 'El nombre debe tener al menos 2 caracteres';
+      this.serverValidationMessage = 'El nombre debe tener al menos 2 caracteres';
+      this.showValidation = true;
       return false;
     }
 
     if (!this.apellidos?.trim()) {
-      this.text_validation = 'Los apellidos son requeridos';
+      this.serverValidationMessage = 'Los apellidos son requeridos';
+      this.showValidation = true;
       return false;
     }
 
     if (this.apellidos.trim().length < 2) {
-      this.text_validation = 'Los apellidos deben tener al menos 2 caracteres';
+      this.serverValidationMessage = 'Los apellidos deben tener al menos 2 caracteres';
+      this.showValidation = true;
       return false;
     }
 
     if (!this.tipo) {
-      this.text_validation = 'El tipo de personal es requerido';
+      this.serverValidationMessage = 'El tipo de personal es requerido';
+      this.showValidation = true;
       return false;
     }
 
   // Validar RFC
   console.log('Validando RFC:', this.rfc, 'Longitud:', this.rfc?.length);
   if (!this.rfc || !this.rfc.trim()) {
-    this.text_validation = 'El RFC es requerido';
+    this.serverValidationMessage = 'El RFC es requerido';
+    this.showValidation = true;
     return false;
   }
 
   const rfcTrimmed = this.rfc.trim();
   console.log('RFC trimmed:', rfcTrimmed, 'Longitud:', rfcTrimmed.length);
   if (rfcTrimmed.length < 10 || rfcTrimmed.length > 13) {
-    this.text_validation = 'El RFC debe tener entre 10 y 13 caracteres';
+    this.serverValidationMessage = 'El RFC debe tener entre 10 y 13 caracteres';
+    this.showValidation = true;
     return false;
   }
 
   // Validar RFC formato básico (letras/números)
   const rfcPattern = /^[A-Z0-9]+$/;
-  if (!rfcPattern.test(rfcTrimmed.toUpperCase()) || rfcTrimmed.length > 13) {
-    this.text_validation = 'El RFC solo puede contener letras y números (máximo 13 caracteres)';
-    return false;
+    if (!rfcPattern.test(rfcTrimmed.toUpperCase()) || rfcTrimmed.length > 13) {
+      this.serverValidationMessage = 'El RFC solo puede contener letras y números (máximo 13 caracteres)';
+      this.showValidation = true;
+      return false;
   }
 
   // Validar número de checador
   console.log('Validando número de checador:', this.numeroChecador, 'Longitud:', this.numeroChecador?.length);
   if (!this.numeroChecador || !this.numeroChecador.trim()) {
-    this.text_validation = 'El número de checador es requerido';
+    this.serverValidationMessage = 'El número de checador es requerido';
+    this.showValidation = true;
     return false;
   }
 
   if (!/^[0-9]{1,4}$/.test(this.numeroChecador.trim())) {
-    this.text_validation = 'El número de checador debe tener entre 1 y 4 dígitos';
+    this.serverValidationMessage = 'El número de checador debe tener entre 1 y 4 dígitos';
+    this.showValidation = true;
     return false;
   }    // Validar archivos cargados
     if (this.documentos.size > 0) {
@@ -315,18 +336,21 @@ export class AddPersonalComponent implements OnInit {
         if (file.size > this.MAX_FILE_SIZE) {
           const sizeInKB = (file.size / 1024).toFixed(0);
           const maxSizeInKB = (this.MAX_FILE_SIZE / 1024).toFixed(0);
-          this.text_validation = `El archivo "${tipoDoc}" es demasiado grande (${sizeInKB}KB). Máximo permitido: ${maxSizeInKB}KB`;
+          this.serverValidationMessage = `El archivo "${tipoDoc}" es demasiado grande (${sizeInKB}KB). Máximo permitido: ${maxSizeInKB}KB`;
+          this.showValidation = true;
           return false;
         }
         
         if (file.type !== this.ALLOWED_FILE_TYPE) {
-          this.text_validation = `El archivo "${tipoDoc}" no es un PDF válido`;
+          this.serverValidationMessage = `El archivo "${tipoDoc}" no es un PDF válido`;
+          this.showValidation = true;
           return false;
         }
 
         // Advertencia para archivos muy pequeños (posible corrupción)
         if (file.size < 1024) {
-          this.text_validation = `El archivo "${tipoDoc}" parece estar dañado o vacío (tamaño: ${file.size} bytes)`;
+          this.serverValidationMessage = `El archivo "${tipoDoc}" parece estar dañado o vacío (tamaño: ${file.size} bytes)`;
+          this.showValidation = true;
           return false;
         }
       }
@@ -343,8 +367,9 @@ export class AddPersonalComponent implements OnInit {
    */
   save(): void {
     this.submitted = true;
-    this.text_success = '';
-    this.text_validation = '';
+    this.showSuccess = false;
+    this.serverValidationMessage = '';
+    this.showValidation = false;
 
     // Validar formulario
     if (!this.validateForm()) {
@@ -369,18 +394,18 @@ export class AddPersonalComponent implements OnInit {
           this.loading = false;
           if (response.success) {
             // Mensaje personalizado según el estado de documentos
-            if (this.documentos.size === 7) {
-              this.text_success = 'Personal guardado exitosamente con todos los documentos completos.';
-            } else {
-              this.text_success = `Personal guardado exitosamente. Documentos subidos: ${this.documentos.size}/7. Se marcará como "documentos incompletos".`;
-            }
-            
-            // Opcional: redirigir después de unos segundos
-            setTimeout(() => {
-              this.goToList();
-            }, 3000);
+              // Guardar datos necesarios para la vista y mostrar alerta desde el HTML
+              this.uploadedDocsCount = this.documentos.size;
+              this.showSuccess = true;
+              this.showValidation = false;
+
+              // Opcional: redirigir después de unos segundos
+              setTimeout(() => {
+                this.goToList();
+              }, 3000);
           } else {
-            this.text_validation = response.message || 'Error al guardar el personal';
+              this.serverValidationMessage = response.message || 'Error al guardar el personal';
+              this.showValidation = true;
           }
         },
         error: (error) => {
@@ -398,11 +423,14 @@ export class AddPersonalComponent implements OnInit {
               }
             }
             
-            this.text_validation = mensajesError.join('. ');
+            this.serverValidationMessage = mensajesError.join('. ');
+            this.showValidation = true;
           } else if (error.error && error.error.message) {
-            this.text_validation = error.error.message;
+            this.serverValidationMessage = error.error.message;
+            this.showValidation = true;
           } else {
-            this.text_validation = 'Error de conexión. Intente nuevamente.';
+            this.serverValidationMessage = 'Error de conexión. Intente nuevamente.';
+            this.showValidation = true;
           }
         }
       });

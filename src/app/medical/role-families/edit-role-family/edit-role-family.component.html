@@ -1,0 +1,121 @@
+<!-- Contenedor principal de la página de editar familia de roles -->
+<div class="page-wrapper">
+    <!-- Sección del contenido principal y formulario -->
+    <div class="content edit-role-family-form">
+        <!-- Encabezado de la página con breadcrumb de navegación -->
+        <div class="page-header mb-4">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Breadcrumb para mostrar la ruta de navegación -->
+                    <ol class="breadcrumb bg-light p-2 rounded">
+                        <li class="breadcrumb-item">
+                            <!-- Enlace al listado de familias de roles -->
+                            <a routerLink="/role-families/list">{{ 'ROLE_FAMILIES.EDIT_ROLE_FAMILY.BREADCRUMB_FAMILIES'
+                                | translate }} ></a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <!-- Texto del breadcrumb para editar familia -->
+                            {{ 'ROLE_FAMILIES.EDIT_ROLE_FAMILY.BREADCRUMB_EDIT' | translate }}
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección central del formulario -->
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-8">
+                <!-- Card que contiene el formulario -->
+                <div class="card card-form shadow border-0">
+                    <div class="card-body p-4">
+                        <!-- Encabezado del formulario con icono -->
+                        <div class="form-header text-center mb-4">
+                            <div class="form-icon mb-3">
+                                <i class="fa fa-edit"></i>
+                            </div>
+                            <h3 class="fw-bold mb-2">{{ 'ROLE_FAMILIES.EDIT_ROLE_FAMILY.TITLE' | translate }}</h3>
+                            <p class="text-muted small">{{ 'ROLE_FAMILIES.EDIT_ROLE_FAMILY.DESCRIPTION' | translate }}
+                            <p class="text-muted small">{{ 'ROLE_FAMILIES.EDIT_ROLE_FAMILY.DESCRIPTION2' | translate }}
+
+                            </p>
+                        </div>
+
+                        <!-- Formulario para editar familia de roles -->
+                        <form>
+                            <!-- Sección: Información de la Familia -->
+                            <div class="form-section">
+                                <div class="section-header mb-3">
+                                    <h5 class="section-title">
+                                        <i class="fa fa-info-circle me-2"></i>{{
+                                        'ROLE_FAMILIES.EDIT_ROLE_FAMILY.NAME_HINT' | translate }}
+                                    </h5>
+                                </div>
+                                <div class="row g-3">
+                                    <!-- Campo para el nombre -->
+                                    <div class="col-12">
+                                        <label class="form-label">
+                                            <i class="fa fa-tag me-1"></i>{{ 'ROLE_FAMILIES.EDIT_ROLE_FAMILY.NAME_LABEL' |
+                                            translate }} <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" [(ngModel)]="name" name="name" required
+                                            placeholder="{{ 'ROLE_FAMILIES.EDIT_ROLE_FAMILY.NAME_PLACEHOLDER' | translate }}"
+                                            [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
+                                        <div class="invalid-feedback" *ngIf="submitted && !name.trim()">{{
+                                            'ROLE_FAMILIES.EDIT_ROLE_FAMILY.NAME_REQUIRED' | translate }}</div>
+                                    </div>
+
+                                    <!-- Campo para la descripción -->
+                                    <div class="col-12">
+                                        <label class="form-label">
+                                            <i class="fa fa-align-left me-1"></i>{{
+                                            'ROLE_FAMILIES.EDIT_ROLE_FAMILY.DESCRIPTION' | translate }}
+                                        </label>
+                                        <textarea class="form-control" [(ngModel)]="description" name="description"
+                                            rows="4"
+                                            placeholder="{{ 'ROLE_FAMILIES.EDIT_ROLE_FAMILY.DESCRIPTION_PLACEHOLDER' | translate }}"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mensaje de validación si hay advertencias -->
+                            <div class="mt-4" *ngIf="text_validation">
+                                <div class="alert alert-modern alert-warning d-flex align-items-center">
+                                    <i class="fa fa-exclamation-triangle me-3"></i>
+                                    <div class="flex-grow-1">
+                                        <strong>{{ 'ROLE_FAMILIES.EDIT_ROLE_FAMILY.ATTENTION' | translate }}:</strong> {{
+                                        text_validation }}
+                                    </div>
+                                    <button type="button" class="btn-close" (click)="text_validation = ''"></button>
+                                </div>
+                            </div>
+
+                            <!-- Mensaje de éxito si la operación fue exitosa -->
+                            <div class="mt-4" *ngIf="text_success">
+                                <div class="alert alert-modern alert-success d-flex align-items-center">
+                                    <i class="fa fa-check-circle me-3"></i>
+                                    <div class="flex-grow-1">
+                                        <strong>{{ 'ROLE_FAMILIES.EDIT_ROLE_FAMILY.SUCCESS' | translate }}:</strong> {{
+                                        text_success }}
+                                    </div>
+                                    <button type="button" class="btn-close" (click)="text_success = ''"></button>
+                                </div>
+                            </div>
+
+                            <!-- Botones de acción -->
+                            <div class="form-actions d-flex justify-content-end gap-2 mt-4">
+                                <button type="button" class="btn btn-cancel" routerLink="/role-families/list">
+                                    <i class="fa fa-times me-2"></i>{{ 'ROLE_FAMILIES.EDIT_ROLE_FAMILY.CANCEL' |
+                                    translate }}
+                                </button>
+                                <button type="button" class="btn btn-save" (click)="update()">
+                                    <i class="fa fa-save me-2"></i>{{ 'ROLE_FAMILIES.EDIT_ROLE_FAMILY.UPDATE' | translate
+                                    }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

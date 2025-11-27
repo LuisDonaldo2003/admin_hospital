@@ -137,7 +137,7 @@ export class routes {
   public static get userActivitiesDashboard(): string {
     return this.baseUrl + '/dashboard/user-activities';
   }
-  
+
   public static get editDepartment(): string {
     return this.baseUrl + '/department/edit';
   }
@@ -318,7 +318,7 @@ export class routes {
   public static get addLeave(): string {
     return this.baseUrl + '/staff/add-leave';
   }
-  
+
   public static get editLeave(): string {
     return this.baseUrl + '/staff/edit-leave';
   }
@@ -334,7 +334,7 @@ export class routes {
   public static get staffLeave(): string {
     return this.baseUrl + '/staff/staff-leave';
   }
-  
+
   public static get staffProfile(): string {
     return this.baseUrl + '/staff/staff-profile';
   }
@@ -374,9 +374,23 @@ export class routes {
     return this.baseUrl + '/staffs/add-staff';
   }
 
-   //Organigrama
+  //Organigrama
   public static get listOrganization(): string {
     return this.baseUrl + '/organization-chart/list-organization';
+  }
+
+  //Role Families
+  public static get roleFamiliesList(): string {
+    return this.baseUrl + '/role-families/list';
+  }
+  public static get addRoleFamily(): string {
+    return this.baseUrl + '/role-families/register';
+  }
+  public static get assignRolesRoleFamily(): string {
+    return this.baseUrl + '/role-families/assign';
+  }
+  public static get editRoleFamily(): string {
+    return this.baseUrl + '/role-families/list/edit';
   }
 
   //Contract
@@ -395,113 +409,113 @@ export class routes {
     return this.baseUrl + '/profile-m/list_profile-m';
   }
 
-    //Department
+  //Department
   public static get addDepartment(): string {
-      return this.baseUrl + '/departaments-m/add-departament';
-    }
-    public static get departmentList(): string {
-      return this.baseUrl + '/departaments-m/list-departament';
-    }
+    return this.baseUrl + '/departaments-m/add-departament';
+  }
+  public static get departmentList(): string {
+    return this.baseUrl + '/departaments-m/list-departament';
+  }
 
-        //Archive
-    public static get addArchive(): string {
-      return this.baseUrl + '/archives/add_archive';
-    }
+  //Archive
+  public static get addArchive(): string {
+    return this.baseUrl + '/archives/add_archive';
+  }
 
-    public static get backupArchive(): string {
-      return this.baseUrl + '/archives/backup_archive';
-    }
+  public static get backupArchive(): string {
+    return this.baseUrl + '/archives/backup_archive';
+  }
 
-    public static get archiveList(): string {
-      return this.baseUrl + '/archives/list_archive';
-    }
-     public static get exportArchive(): string {
-      return this.baseUrl + '/archives/export_archive';
-    }
+  public static get archiveList(): string {
+    return this.baseUrl + '/archives/list_archive';
+  }
+  public static get exportArchive(): string {
+    return this.baseUrl + '/archives/export_archive';
+  }
 
-    //Farmacia
-    public static get addAntibiotics(): string {
-      return this.baseUrl + '/pharmacy/add_antibiotics';
-    }
-    public static get antibioticsList(): string {
-      return this.baseUrl + '/pharmacy/list_antibiotics';
-    }
+  //Farmacia
+  public static get addAntibiotics(): string {
+    return this.baseUrl + '/pharmacy/add_antibiotics';
+  }
+  public static get antibioticsList(): string {
+    return this.baseUrl + '/pharmacy/list_antibiotics';
+  }
 
-    //Credits
-    public static get credits(): string {
-      return this.baseUrl + '/credits';
-    }
+  //Credits
+  public static get credits(): string {
+    return this.baseUrl + '/credits';
+  }
 
-    //Pulse Access Management
-    public static get pulseAccessManagement(): string {
-      return this.baseUrl + '/pulse-access/management';
-    }
+  //Pulse Access Management
+  public static get pulseAccessManagement(): string {
+    return this.baseUrl + '/pulse-access/management';
+  }
 
-    //Personal
-    public static get personalList(): string {
-      return this.baseUrl + '/personal/list_personal';
-    }
-    public static get addPersonal(): string {
-      return this.baseUrl + '/personal/add_personal';
-    }
-    public static get editPersonal(): string {
-      return this.baseUrl + '/personal/edit_personal';
-    }
+  //Personal
+  public static get personalList(): string {
+    return this.baseUrl + '/personal/list_personal';
+  }
+  public static get addPersonal(): string {
+    return this.baseUrl + '/personal/add_personal';
+  }
+  public static get editPersonal(): string {
+    return this.baseUrl + '/personal/edit_personal';
+  }
 
-    //PDF Compressor
-    public static get pdfCompressor(): string {
-      return this.baseUrl + '/pdf-compressor';
-    }
+  //PDF Compressor
+  public static get pdfCompressor(): string {
+    return this.baseUrl + '/pdf-compressor';
+  }
 
-    //Teaching (Enseñanzas) - Assistants
-    public static get assistantsList(): string {
-      return this.baseUrl + '/teaching/list_teaching';
-    }
-    public static get addAssistant(): string {
-      return this.baseUrl + '/teaching/add_teaching';
-    }
-    public static get editAssistant(): string {
-      return this.baseUrl + '/teaching/edit_teaching';
-    }
-    
-    // Evaluations
-    public static get evaluations(): string {
-      return this.baseUrl + '/teaching/list_evaluation';
-    }
-    public static get addEvaluation(): string {
-      return this.baseUrl + '/teaching/add_evaluation';
-    }
-    public static get editEvaluation(): string {
-      return this.baseUrl + '/teaching/edit_evaluation';
-    }
-    
-    // Catalogs
-    public static get modalities(): string {
-      return this.baseUrl + '/teaching/list_modality';
-    }
-    public static get addModality(): string {
-      return this.baseUrl + '/teaching/add_modality';
-    }
-    public static get editModality(): string {
-      return this.baseUrl + '/teaching/edit_modality';
-    }
-    public static get stakeholdings(): string {
-      return this.baseUrl + '/teaching/list_stakeholding';
-    }
-    public static get addStakeholding(): string {
-      return this.baseUrl + '/teaching/add_stakeholding';
-    }
-    public static get editStakeholding(): string {
-      return this.baseUrl + '/teaching/edit_stakeholding';
-    }
-    public static get teachingAreas(): string {
-      return this.baseUrl + '/teaching/list_area';
-    }
-    public static get addArea(): string {
-      return this.baseUrl + '/teaching/add_area';
-    }
-    public static get editArea(): string {
-      return this.baseUrl + '/teaching/edit_area';
-    }
+  //Teaching (Enseñanzas) - Assistants
+  public static get assistantsList(): string {
+    return this.baseUrl + '/teaching/list_teaching';
+  }
+  public static get addAssistant(): string {
+    return this.baseUrl + '/teaching/add_teaching';
+  }
+  public static get editAssistant(): string {
+    return this.baseUrl + '/teaching/edit_teaching';
+  }
+
+  // Evaluations
+  public static get evaluations(): string {
+    return this.baseUrl + '/teaching/list_evaluation';
+  }
+  public static get addEvaluation(): string {
+    return this.baseUrl + '/teaching/add_evaluation';
+  }
+  public static get editEvaluation(): string {
+    return this.baseUrl + '/teaching/edit_evaluation';
+  }
+
+  // Catalogs
+  public static get modalities(): string {
+    return this.baseUrl + '/teaching/list_modality';
+  }
+  public static get addModality(): string {
+    return this.baseUrl + '/teaching/add_modality';
+  }
+  public static get editModality(): string {
+    return this.baseUrl + '/teaching/edit_modality';
+  }
+  public static get stakeholdings(): string {
+    return this.baseUrl + '/teaching/list_stakeholding';
+  }
+  public static get addStakeholding(): string {
+    return this.baseUrl + '/teaching/add_stakeholding';
+  }
+  public static get editStakeholding(): string {
+    return this.baseUrl + '/teaching/edit_stakeholding';
+  }
+  public static get teachingAreas(): string {
+    return this.baseUrl + '/teaching/list_area';
+  }
+  public static get addArea(): string {
+    return this.baseUrl + '/teaching/add_area';
+  }
+  public static get editArea(): string {
+    return this.baseUrl + '/teaching/edit_area';
+  }
 
 }
