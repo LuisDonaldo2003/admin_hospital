@@ -7,6 +7,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TeachingService } from '../../services/teaching.service';
 import { Evaluacion, EvaluacionStats } from '../../models/teaching.interface';
 import { PermissionService } from 'src/app/shared/services/permission.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 /**
  * Componente para seguimiento de evaluaciones pendientes
@@ -60,12 +61,20 @@ export class ListEvaluationsComponent implements OnInit {
   private translate = inject(TranslateService);
   private teachingService = inject(TeachingService);
   public permissionService = inject(PermissionService);
+  private driverTourService = inject(DriverTourService);
 
   public selectedLang: string = 'es';
 
   constructor() {
     this.selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(this.selectedLang);
+  }
+
+  /**
+   * Inicia el tour guiado de la lista de evaluaciones
+   */
+  public startEvaluationsListTour(): void {
+    this.driverTourService.startEvaluationsListTour();
   }
   
   ngOnInit(): void {

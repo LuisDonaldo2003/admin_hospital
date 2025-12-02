@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { RoleFamilyService } from '../service/role-family.service'
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-list-role-family',
@@ -23,8 +24,16 @@ export class ListRoleFamilyComponent implements OnInit {
 
   constructor(
     public roleFamilyService: RoleFamilyService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private driverTourService: DriverTourService
   ) { }
+
+  /**
+   * Inicia el tour guiado de la lista de familias de roles
+   */
+  public startRoleFamiliesListTour(): void {
+    this.driverTourService.startRoleFamiliesListTour();
+  }
 
   ngOnInit(): void {
     this.loadFamilies();

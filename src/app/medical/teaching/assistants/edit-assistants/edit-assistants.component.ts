@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TeachingService } from '../../services/teaching.service';
 import { Teaching, Modalidad, Participacion } from '../../models/teaching.interface';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-edit-assistants',
@@ -37,17 +38,26 @@ export class EditAssistantsComponent implements OnInit {
   public loading = false;
   public text_success: string = '';
   public text_validation: string = '';
+  public submitted = false;
   
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
   private teachingService = inject(TeachingService);
+  private driverTourService = inject(DriverTourService);
 
   public selectedLang: string = 'es';
 
   constructor() {
     this.selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(this.selectedLang);
+  }
+
+  /**
+   * Inicia el tour guiado del formulario de editar asistente
+   */
+  public startEditAssistantTour(): void {
+    this.driverTourService.startEditAssistantTour();
   }
   
   ngOnInit(): void {
@@ -125,6 +135,27 @@ export class EditAssistantsComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+  
+  /**
+   * Validar campos antes de guardar y mostrar alertas específicas
+   */
+  validateAndSave(): void {
+    this.submitted = true;
+    this.text_validation = '';
+    this.text_success = '';
+    
+    // Validar campos requeridos
+    if (!this.teaching.profesion || !this.teaching.nombre || !this.teaching.area || 
+        !this.teaching.nombre_evento || !this.teaching.fecha || !this.teaching.modalidad_id || 
+        !this.teaching.participacion_id || !this.teaching.horas || !this.teaching.adscripcion || 
+        !this.teaching.foja) {
+      // Los mensajes se mostrarán debajo de cada campo gracias a las clases is-invalid
+      return;
+    }
+    
+    // Si todo está completo, proceder a guardar
+    this.save();
   }
   
   save(): void {

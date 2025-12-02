@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PersonalService, Personal, PersonalDocument } from '../service/personal.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-edit-personal',
@@ -62,6 +63,8 @@ export class EditPersonalComponent implements OnInit {
     private route: ActivatedRoute,
     private translate: TranslateService,
     private personalService: PersonalService
+    ,
+    private driverTourService: DriverTourService
   ) {
     const selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(selectedLang);
@@ -72,7 +75,7 @@ export class EditPersonalComponent implements OnInit {
     if (this.personalId) {
       this.cargarDatosPersonal();
     } else {
-      this.text_validation = 'ID de personal no válido';
+      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.INVALID_ID');
       this.loadingPersonal = false;
     }
   }
@@ -99,13 +102,13 @@ export class EditPersonalComponent implements OnInit {
           // Cargar documentos existentes
           this.cargarDocumentos();
         } else {
-          this.text_validation = 'Error al cargar los datos del personal';
+          this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.LOAD_ERROR');
         }
       },
       error: (error) => {
         this.loadingPersonal = false;
         console.error('Error al cargar personal:', error);
-        this.text_validation = 'Error al cargar los datos del personal';
+        this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.LOAD_ERROR');
       }
     });
   }
@@ -116,13 +119,13 @@ export class EditPersonalComponent implements OnInit {
   private addNewFile(file: File, tipoDocumento: string): void {
     // Validar que sea PDF
     if (file.type !== 'application/pdf') {
-      this.text_validation = 'Solo se permiten archivos PDF';
+      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.PDF_ONLY');
       return;
     }
 
     // Validar tamaño máximo (10MB)
     if (file.size > 10 * 1024 * 1024) {
-      this.text_validation = 'El archivo no puede superar los 10MB';
+      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.FILE_SIZE_LIMIT');
       return;
     }
 
@@ -202,14 +205,14 @@ export class EditPersonalComponent implements OnInit {
     if (file) {
       // Validar que sea PDF
       if (file.type !== 'application/pdf') {
-        this.text_validation = 'Solo se permiten archivos PDF';
+        this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.PDF_ONLY');
         event.target.value = '';
         return;
       }
       
       // Validar tamaño máximo (10MB)
       if (file.size > 10 * 1024 * 1024) {
-        this.text_validation = 'El archivo no puede superar los 10MB';
+        this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.FILE_SIZE_LIMIT');
         event.target.value = '';
         return;
       }
@@ -236,15 +239,15 @@ export class EditPersonalComponent implements OnInit {
         next: (response) => {
           if (response.success) {
             this.documentosExistentes = this.documentosExistentes.filter(d => d.id !== documento.id);
-            this.text_success = 'Documento eliminado exitosamente';
+            this.text_success = this.translate.instant('PERSONAL.EDIT_PERSONAL.DELETE_DOCUMENT_SUCCESS');
             setTimeout(() => this.text_success = '', 3000);
           } else {
-            this.text_validation = 'Error al eliminar el documento';
+            this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.DELETE_DOCUMENT_ERROR');
           }
         },
         error: (error) => {
           console.error('Error al eliminar documento:', error);
-          this.text_validation = 'Error al eliminar el documento';
+          this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.DELETE_DOCUMENT_ERROR');
         }
       });
     }
@@ -275,7 +278,7 @@ export class EditPersonalComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al descargar documento:', error);
-        this.text_validation = 'Error al descargar el documento';
+        this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.DOWNLOAD_ERROR');
       }
     });
   }
@@ -324,56 +327,56 @@ export class EditPersonalComponent implements OnInit {
 
     // Validar campos básicos
     if (!this.nombre.trim()) {
-      this.text_validation = 'El nombre es requerido';
+      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.NAME_REQUIRED');
       return false;
     }
 
     if (this.nombre.trim().length < 2) {
-      this.text_validation = 'El nombre debe tener al menos 2 caracteres';
+      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.NAME_MIN_LENGTH');
       return false;
     }
 
     if (!this.apellidos.trim()) {
-      this.text_validation = 'Los apellidos son requeridos';
+      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.LAST_NAME_REQUIRED');
       return false;
     }
 
     if (this.apellidos.trim().length < 2) {
-      this.text_validation = 'Los apellidos deben tener al menos 2 caracteres';
+      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.LAST_NAME_MIN_LENGTH');
       return false;
     }
 
     if (!this.tipo) {
-      this.text_validation = 'El tipo de personal es requerido';
+      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.TYPE_REQUIRED');
       return false;
     }
 
     // Validar RFC
     if (!this.rfc.trim()) {
-      this.text_validation = 'El RFC es requerido';
+      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.RFC_REQUIRED');
       return false;
     }
 
     if (this.rfc.trim().length < 10 || this.rfc.trim().length > 13) {
-      this.text_validation = 'El RFC debe tener entre 10 y 13 caracteres';
+      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.RFC_LENGTH');
       return false;
     }
 
     // Validar RFC formato básico (letras/números)
     const rfcPattern = /^[A-Z0-9]+$/;
     if (!rfcPattern.test(this.rfc.trim().toUpperCase()) || this.rfc.trim().length > 13) {
-      this.text_validation = 'El RFC solo puede contener letras y números (máximo 13 caracteres)';
+      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.RFC_FORMAT');
       return false;
     }
 
     // Validar número de checador
     if (!this.numeroChecador.trim()) {
-      this.text_validation = 'El número de checador es requerido';
+      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.CHECADOR_REQUIRED');
       return false;
     }
 
     if (!/^[0-9]{1,4}$/.test(this.numeroChecador.trim())) {
-      this.text_validation = 'El número de checador debe tener entre 1 y 4 dígitos';
+      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.CHECADOR_FORMAT');
       return false;
     }
 
@@ -415,20 +418,20 @@ export class EditPersonalComponent implements OnInit {
               this.subirDocumentosNuevos();
             } else {
               this.loading = false;
-              this.text_success = 'Personal actualizado exitosamente';
+              this.text_success = this.translate.instant('PERSONAL.EDIT_PERSONAL.UPDATE_SUCCESS');
               setTimeout(() => {
                 this.goToList();
               }, 2000);
             }
           } else {
             this.loading = false;
-            this.text_validation = response.message || 'Error al actualizar el personal';
+            this.text_validation = response.message || this.translate.instant('PERSONAL.EDIT_PERSONAL.UPDATE_ERROR');
           }
         },
         error: (error) => {
           this.loading = false;
           console.error('Error al actualizar personal:', error);
-          this.text_validation = 'Error al actualizar el personal';
+          this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.UPDATE_ERROR');
         }
       });
   }
@@ -454,7 +457,7 @@ export class EditPersonalComponent implements OnInit {
             if (documentosSubidos === totalDocumentos) {
               this.loading = false;
               this.documentosNuevos.clear();
-              this.text_success = 'Personal y documentos actualizados exitosamente';
+              this.text_success = this.translate.instant('PERSONAL.EDIT_PERSONAL.UPDATE_WITH_DOCS_SUCCESS');
               setTimeout(() => {
                 this.goToList();
               }, 2000);
@@ -466,7 +469,7 @@ export class EditPersonalComponent implements OnInit {
             
             if (documentosSubidos === totalDocumentos) {
               this.loading = false;
-              this.text_validation = 'Personal actualizado, pero algunos documentos no se pudieron subir';
+              this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.UPDATE_DOCS_PARTIAL_ERROR');
             }
           }
         });
@@ -478,5 +481,12 @@ export class EditPersonalComponent implements OnInit {
    */
   goToList(): void {
     this.router.navigate(['/personal/list']);
+  }
+
+  /**
+   * Inicia el tour del formulario de edición de personal
+   */
+  public startEditPersonalTour(): void {
+    this.driverTourService.startEditPersonalTour();
   }
 }

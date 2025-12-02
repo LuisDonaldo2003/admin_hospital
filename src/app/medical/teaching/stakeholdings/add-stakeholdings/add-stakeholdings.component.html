@@ -17,18 +17,34 @@
           <div class="card-body">
             <h4 class="mb-4">{{ 'TEACHING_MODULE.STAKEHOLDINGS.ADD_TITLE' | translate }}</h4>
 
-            <div *ngIf="text_success" class="mb-3">
-              <div class="alert alert-success">{{ text_success }}</div>
-            </div>
-            <div *ngIf="text_validation" class="mb-3">
-              <div class="alert alert-danger">{{ text_validation }}</div>
-            </div>
+            <!-- Alerta de éxito -->
+            @if (text_success) {
+              <div class="mb-4">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong><i class="fa fa-check-circle me-2"></i>{{ 'TEACHING_MODULE.STAKEHOLDINGS.SUCCESS' | translate }}!</strong> {{ text_success }}
+                  <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
+                </div>
+              </div>
+            }
+
+            <!-- Alerta de validación/error -->
+            @if (text_validation) {
+              <div class="mb-4">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'TEACHING_MODULE.STAKEHOLDINGS.WARNING' | translate }}:</strong> {{ text_validation }}
+                  <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+                </div>
+              </div>
+            }
 
             <form>
               <div class="row">
                 <div class="col-12 mb-3">
                   <label class="form-label">{{ 'TEACHING_MODULE.STAKEHOLDINGS.NAME_LABEL' | translate }} <span class="text-danger">{{ 'TEACHING_MODULE.STAKEHOLDINGS.NAME_REQUIRED' | translate }}</span></label>
-                  <input type="text" class="form-control" [(ngModel)]="stakeholding.nombre" name="nombre" required />
+                  <input type="text" class="form-control" [(ngModel)]="stakeholding.nombre" name="nombre" required [ngClass]="{'is-invalid': submitted && !stakeholding.nombre?.trim()}" />
+                  <div class="invalid-feedback" *ngIf="submitted && !stakeholding.nombre?.trim()">
+                    El nombre es requerido
+                  </div>
                 </div>
               </div>
 
@@ -49,7 +65,7 @@
               </div>
 
               <div class="text-end">
-                <button type="button" class="btn btn-primary px-4" (click)="save()" [disabled]="saving || !stakeholding.nombre">
+                <button type="button" class="btn btn-primary px-4" (click)="save()" [disabled]="saving">
                   {{ saving ? ('TEACHING_MODULE.STAKEHOLDINGS.SAVING' | translate) : ('TEACHING_MODULE.STAKEHOLDINGS.SAVE' | translate) }}
                 </button>
                 <button type="button" class="btn btn-secondary ms-2" (click)="cancel()" [disabled]="saving">{{ 'TEACHING_MODULE.STAKEHOLDINGS.CANCEL' | translate }}</button>
@@ -62,3 +78,11 @@
     </div>
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startStakeholdingsFormTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

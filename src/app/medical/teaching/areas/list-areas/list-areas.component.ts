@@ -3,9 +3,10 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CatalogsService, CatalogItem } from '../../services/catalogs.service';
 import { PermissionService } from 'src/app/shared/services/permission.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-list-areas',
@@ -19,6 +20,15 @@ export class ListAreasComponent implements OnInit {
   private catalogsService = inject(CatalogsService);
   private router = inject(Router);
   public permissionService = inject(PermissionService);
+  private driverTourService = inject(DriverTourService);
+  private translate = inject(TranslateService);
+
+  /**
+   * Inicia el tour guiado de la lista de áreas
+   */
+  public startAreasListTour(): void {
+    this.driverTourService.startAreasListTour();
+  }
 
   public areas: CatalogItem[] = [];
   public loading = false;
@@ -64,8 +74,8 @@ export class ListAreasComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error('Error cargando áreas:', err);
-        this.text_validation = 'No se pudieron cargar las áreas';
+        console.error('Error al cargar áreas:', err);
+        this.text_validation = this.translate.instant('TEACHING_MODULE.AREAS.LOAD_ERROR');
         this.loading = false;
       }
     });
@@ -181,7 +191,9 @@ export class ListAreasComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al cambiar estado:', err);
-        alert('Error al cambiar estado');
+        this.translate.get('TEACHING_MODULE.AREAS.STATUS_ERROR').subscribe((text: string) => {
+          alert(text);
+        });
       }
     });
   }

@@ -24,22 +24,41 @@
               </div>
             }
             @if (!loading) {
+              <!-- Alerta de éxito -->
               @if (text_success) {
-                <div class="alert alert-success">{{ text_success }}</div>
+                <div class="mb-4">
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-check-circle me-2"></i>{{ 'TEACHING_MODULE.MODALITIES.SUCCESS' | translate }}!</strong> {{ text_success }}
+                    <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
+                  </div>
+                </div>
               }
+
+              <!-- Alerta de validación/error -->
               @if (text_validation) {
-                <div class="alert alert-danger">{{ text_validation }}</div>
+                <div class="mb-4">
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'TEACHING_MODULE.MODALITIES.WARNING' | translate }}:</strong> {{ text_validation }}
+                    <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+                  </div>
+                </div>
               }
 
               <form>
                 <div class="row">
                   <div class="col-12 col-md-6 mb-3">
                     <label class="form-label">Código <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" [(ngModel)]="modality.codigo" name="codigo" placeholder="Ej: CAP.LOC.M" required />
+                    <input type="text" class="form-control" [(ngModel)]="modality.codigo" name="codigo" placeholder="Ej: CAP.LOC.M" required [ngClass]="{'is-invalid': submitted && !modality.codigo?.trim()}" />
+                    <div class="invalid-feedback" *ngIf="submitted && !modality.codigo?.trim()">
+                      El código es requerido
+                    </div>
                   </div>
                   <div class="col-12 col-md-6 mb-3">
                     <label class="form-label">{{ 'TEACHING_MODULE.MODALITIES.NAME_LABEL' | translate }} <span class="text-danger">{{ 'TEACHING_MODULE.MODALITIES.NAME_REQUIRED' | translate }}</span></label>
-                    <input type="text" class="form-control" [(ngModel)]="modality.nombre" name="nombre" required />
+                    <input type="text" class="form-control" [(ngModel)]="modality.nombre" name="nombre" required [ngClass]="{'is-invalid': submitted && !modality.nombre?.trim()}" />
+                    <div class="invalid-feedback" *ngIf="submitted && !modality.nombre?.trim()">
+                      El nombre es requerido
+                    </div>
                   </div>
 
                   <div class="col-12">
@@ -62,7 +81,7 @@
                 </div>
                 <div class="row mt-3">
                   <div class="col-12">
-                    <button type="button" class="btn btn-primary" (click)="save()" [disabled]="saving || !modality.nombre || !modality.codigo">
+                    <button type="button" class="btn btn-primary" (click)="save()" [disabled]="saving">
                       {{ saving ? ('TEACHING_MODULE.MODALITIES.SAVING' | translate) : ('TEACHING_MODULE.MODALITIES.SAVE' | translate) }}
                     </button>
                     <button type="button" class="btn btn-secondary ms-2" (click)="cancel()" [disabled]="saving">{{ 'TEACHING_MODULE.MODALITIES.CANCEL' | translate }}</button>
@@ -76,3 +95,11 @@
     </div>
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startEditModalityTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

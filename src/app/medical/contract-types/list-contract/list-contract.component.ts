@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { ContractTypesService } from '../service/contract-types.service';
 import { TranslateModule } from '@ngx-translate/core'; // <-- IMPORTA ESTO
 import { PermissionService } from 'src/app/shared/services/permission.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-list-contract',
@@ -63,7 +64,9 @@ export class ListContractComponent {
    */
   constructor(
     public contractService: ContractTypesService,
-    public permissionService: PermissionService
+    public permissionService: PermissionService,
+    private driverTourService: DriverTourService,
+    
   ) {}
 
   /**
@@ -113,6 +116,15 @@ export class ListContractComponent {
   selectDepartament(rol: any) {
     this.contract_selected = rol;
   }
+
+
+   /**
+   * Inicia el tour completo de la lista de contratos
+   */
+  public startContractTypesListTour(): void {
+    this.driverTourService.startContractTypesListTour();
+  }
+
 
   /**
    * Elimina el contrato seleccionado y actualiza la tabla

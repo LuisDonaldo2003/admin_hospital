@@ -247,48 +247,56 @@
       }
     }
 
-    // Estilos modernos para alertas
-    .alert-modern {
-      border-radius: 0.5rem;
+    // Alertas con gradientes sólidos
+    .alert {
+      border-radius: 10px;
+      border: none;
       padding: 1rem 1.25rem;
-      margin-bottom: 1rem;
-      border-left: 4px solid;
+      font-size: 0.95rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
-      &.alert-info {
-        background: linear-gradient(135deg, #e7f3ff 0%, #f0f8ff 100%);
-        border-left-color: #17a2b8;
-        color: #0c5460 !important;
+      &.alert-success {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 
-        i {
-          color: #17a2b8 !important;
-        }
+        .btn-close {
+          filter: brightness(0) invert(1);
+          opacity: 0.8;
 
-        p, strong {
-          color: #0c5460 !important;
-        }
-
-        small {
-          color: #0a4552 !important;
+          &:hover {
+            opacity: 1;
+          }
         }
       }
 
       &.alert-warning {
-        background: linear-gradient(135deg, #fff3cd 0%, #fffbea 100%);
-        border-left-color: #ffc107;
-        color: #856404;
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 
-        i {
-          color: #ffc107;
+        .btn-close {
+          filter: brightness(0) invert(1);
+          opacity: 0.8;
+
+          &:hover {
+            opacity: 1;
+          }
         }
       }
 
-      &.alert-success {
-        background: linear-gradient(135deg, #d4edda 0%, #e8f5e9 100%);
-        border-left-color: #28a745;
-        color: #155724;
+      &.alert-danger {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 
-        i {
-          color: #28a745;
+        .btn-close {
+          filter: brightness(0) invert(1);
+          opacity: 0.8;
+
+          &:hover {
+            opacity: 1;
+          }
         }
       }
     }
@@ -440,20 +448,50 @@
         }
       }
 
-      .alert-modern {
-        &.alert-info {
-          background: linear-gradient(135deg, #1a3a52 0%, #244d67 100%);
-          color: #a8d5e2;
-        }
-
+      .alert {
         &.alert-warning {
-          background: linear-gradient(135deg, #5c4d03 0%, #6e5c1a 100%);
-          color: #f6e58d;
+          background: linear-gradient(135deg, #f59e0b, #d97706);
+          color: white;
+          box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+
+          .btn-close {
+            filter: brightness(0) invert(1);
+            opacity: 0.8;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
         }
 
         &.alert-success {
-          background: linear-gradient(135deg, #1d4d37 0%, #2a6049 100%);
-          color: #a8e6cf;
+          background: linear-gradient(135deg, #10b981, #059669);
+          color: white;
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+
+          .btn-close {
+            filter: brightness(0) invert(1);
+            opacity: 0.8;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+
+        &.alert-danger {
+          background: linear-gradient(135deg, #ef4444, #dc2626);
+          color: white;
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+
+          .btn-close {
+            filter: brightness(0) invert(1);
+            opacity: 0.8;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
         }
       }
 

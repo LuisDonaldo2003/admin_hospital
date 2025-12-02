@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 /**
  * Componente para editar los datos de un miembro del staff.
@@ -79,8 +80,16 @@ export class EditStaffNComponent {
     public staffService: StaffService,
     public activedRoute: ActivatedRoute,
     private translate: TranslateService,
-    private router: Router
+    private router: Router,
+    private driverTourService: DriverTourService
   ) {}
+
+  /**
+   * Inicia el tour guiado del formulario de editar staff
+   */
+  public startEditStaffTour(): void {
+    this.driverTourService.startEditStaffTour();
+  }
 
   /**
    * Método del ciclo de vida que se ejecuta al inicializar el componente

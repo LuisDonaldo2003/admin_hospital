@@ -22,95 +22,217 @@
       </div>
     </div>
 
-    <!-- Cabecera del perfil -->
-    <div class="card-box profile-header text-center">
-      <div class="profile-identity">
-        <img
-          class="rounded-circle profile-avatar"
-          [src]="profileData?.avatar || 'assets/img/default-avatar.png'"
-          alt="Avatar del usuario"
-        />
-        <div class="mt-3">
-          <h2 class="profile-name mb-1">{{ profileData?.name }} {{ profileData?.surname }}</h2>
-          <span class="role-badge">{{ roles[0] }}</span>
+    <!-- Cabecera del perfil con foto destacada -->
+    <div class="card-box profile-header">
+      <!-- Foto de perfil destacada en el centro -->
+      <div class="profile-avatar-container">
+        <div class="avatar-wrapper">
+          <img
+            class="profile-avatar"
+            [src]="profileData?.avatar || 'assets/img/default-avatar.png'"
+            alt="Avatar del usuario"
+          />
+          <div class="avatar-glow"></div>
+        </div>
+        <div class="profile-name-section">
+          <h1 class="profile-name">{{ profileData?.name }} {{ profileData?.surname }}</h1>
+          <div class="profile-role">
+            <i class="fa fa-briefcase"></i>
+            <span>{{ roles[0] }}</span>
+          </div>
+          <div class="profile-id">
+            <i class="fa fa-id-badge"></i>
+            <span>ID: {{ profileData?.id }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información de contacto debajo -->
+      <div class="profile-contact-grid">
+        <div class="contact-card" *ngIf="profileData?.email">
+          <div class="contact-icon">
+            <i class="fa fa-envelope"></i>
+          </div>
+          <div class="contact-details">
+            <span class="contact-label">Correo electrónico</span>
+            <span class="contact-value">{{ profileData.email }}</span>
+          </div>
+        </div>
+        
+        <div class="contact-card" *ngIf="profileData?.mobile">
+          <div class="contact-icon">
+            <i class="fa fa-phone"></i>
+          </div>
+          <div class="contact-details">
+            <span class="contact-label">Teléfono</span>
+            <span class="contact-value">{{ profileData.mobile }}</span>
+          </div>
+        </div>
+        
+        <div class="contact-card" *ngIf="profileData?.birth_date">
+          <div class="contact-icon">
+            <i class="fa fa-calendar"></i>
+          </div>
+          <div class="contact-details">
+            <span class="contact-label">Fecha de nacimiento</span>
+            <span class="contact-value">{{ profileData.birth_date }}</span>
+          </div>
+        </div>
+        
+        <div class="contact-card" *ngIf="profileData?.gender !== undefined || profileData?.gender_id !== undefined">
+          <div class="contact-icon">
+            <i class="fa fa-user"></i>
+          </div>
+          <div class="contact-details">
+            <span class="contact-label">Género</span>
+            <span class="contact-value">{{ profileData?.gender ? profileData.gender : (profileData?.gender_id === 1 ? 'Masculino' : (profileData?.gender_id === 2 ? 'Femenino' : '—')) }}</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Datos básicos del usuario -->
-    <div class="card-box mt-4">
-      <h4 class="card-title">{{ 'PROFILE.PROFILES.BASIC_DATES' | translate }}</h4>
-      <ul class="data-list">
-        <li>
-          <strong>{{ 'PROFILE.PROFILES.EMAIL' | translate }}:</strong>
-          <span class="value">{{ profileData?.email || '—' }}</span>
-        </li>
-        <li *ngIf="profileData?.mobile">
-          <strong>{{ 'PROFILE.PROFILES.PHONE' | translate }}:</strong>
-          <span class="value">{{ profileData.mobile }}</span>
-        </li>
-        <li *ngIf="profileData?.birth_date">
-          <strong>{{ 'PROFILE.PROFILES.BIRTHDAY' | translate }}:</strong>
-          <span class="value">{{ profileData.birth_date }}</span>
-        </li>
-        <li *ngIf="profileData?.gender !== undefined || profileData?.gender_id !== undefined">
-          <strong>{{ 'PROFILE.PROFILES.GENDER' | translate }}:</strong>
-          <span class="value">
-            {{ profileData?.gender ? profileData.gender : (profileData?.gender_id === 1 ? 'Masculino' : (profileData?.gender_id === 2 ? 'Femenino' : '—')) }}
-          </span>
-        </li>
-        <li>
-          <strong>{{ 'PROFILE.PROFILES.ROLES' | translate }}:</strong>
-          <span class="value">{{ roles[0] }}</span>
-        </li>
-        <li>
-          <strong>{{ 'PROFILE.PROFILES.ID_USER' | translate }}:</strong>
-          <span class="value">{{ profileData?.id }}</span>
-        </li>
-      </ul>
-    </div>
 
-    <!-- Información profesional del usuario -->
-    <div class="card-box mt-4">
-      <h4 class="card-title">{{ 'PROFILE.PROFILES.INFORMATION_PROFESSIONAL' | translate }}</h4>
-      <ul class="data-list">
-        <li *ngIf="profileData?.curp">
-          <strong>CURP:</strong>
-          <span class="value">{{ profileData.curp }}</span>
-        </li>
-        <li *ngIf="profileData?.rfc">
-          <strong>RFC:</strong>
-          <span class="value">{{ profileData.rfc }}</span>
-        </li>
-        <li *ngIf="profileData?.ine">
-          <strong>INE:</strong>
-          <span class="value">{{ profileData.ine }}</span>
-        </li>
-        <li *ngIf="profileData?.attendance_number">
-          <strong>{{ 'PROFILE.PROFILES.ASSISTANCE' | translate }}:</strong>
-          <span class="value">{{ profileData.attendance_number }}</span>
-        </li>
-        <li *ngIf="profileData?.professional_license">
-          <strong>{{ 'PROFILE.PROFILES.PROFESSIONAL_LICENSE' | translate }}:</strong>
-          <span class="value">{{ profileData.professional_license }}</span>
-        </li>
-        <li *ngIf="profileData?.funcion_real">
-          <strong>{{ 'PROFILE.PROFILES.FUNCTION_REAL' | translate }}:</strong>
-          <span class="value">{{ profileData.funcion_real }}</span>
-        </li>
-        <li *ngIf="profileData?.departament">
-          <strong>{{ 'PROFILE.PROFILES.DEPARTAMENT' | translate }}:</strong>
-          <span class="value">{{ profileData.departament }}</span>
-        </li>
-        <li *ngIf="profileData?.profile_relation">
-          <strong>{{ 'PROFILE.PROFILES.RELATION_PROFILE' | translate }}:</strong>
-          <span class="value">{{ profileData.profile_relation }}</span>
-        </li>
-        <li *ngIf="profileData?.contract_type">
-          <strong>{{ 'PROFILE.PROFILES.CONTRACT_TYPE' | translate }}:</strong>
-          <span class="value">{{ profileData.contract_type }}</span>
-        </li>
-      </ul>
+    <!-- Información de la licencia del sistema -->
+    <div class="card-box license-card mt-4">
+      <div class="license-header">
+        <div class="license-icon">
+          <i class="fa fa-key"></i>
+        </div>
+        <div class="license-title-section">
+          <h4 class="card-title mb-0">Licencia del Sistema</h4>
+          <p class="license-subtitle">Información sobre la licencia de uso del software</p>
+        </div>
+      </div>
+      
+      <div *ngIf="loadingLicense" class="license-loading">
+        <i class="fa fa-spinner fa-spin"></i>
+        <span>Cargando información de licencia...</span>
+      </div>
+
+      <div *ngIf="!loadingLicense && licenseInfo" class="license-content">
+        <!-- Estado destacado -->
+        <div class="license-status-card" [ngClass]="{
+          'status-active': licenseInfo.is_valid && licenseInfo.days_remaining > 30,
+          'status-warning': licenseInfo.is_valid && licenseInfo.days_remaining <= 30,
+          'status-danger': !licenseInfo.is_valid || licenseInfo.days_remaining <= 0
+        }">
+          <div class="status-icon">
+            <i class="fa" [ngClass]="{
+              'fa-check-circle': licenseInfo.is_valid && licenseInfo.days_remaining > 30,
+              'fa-exclamation-triangle': licenseInfo.is_valid && licenseInfo.days_remaining <= 30,
+              'fa-times-circle': !licenseInfo.is_valid || licenseInfo.days_remaining <= 0
+            }"></i>
+          </div>
+          <div class="status-info">
+            <span class="status-label">Estado de la Licencia</span>
+            <span class="status-value">
+              {{ licenseInfo.is_valid && licenseInfo.days_remaining > 0 ? 'Activa' : 'Inválida/Expirada' }}
+            </span>
+          </div>
+          <div class="status-days" *ngIf="licenseInfo.days_remaining > 0">
+            <span class="days-number">{{ licenseInfo.days_remaining }}</span>
+            <span class="days-label">días restantes</span>
+          </div>
+        </div>
+
+        <!-- Información en grid -->
+        <div class="license-info-grid">
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fa fa-building"></i>
+            </div>
+            <div class="info-content">
+              <span class="info-label">Institución</span>
+              <span class="info-value">{{ licenseInfo.institution }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fa fa-calendar"></i>
+            </div>
+            <div class="info-content">
+              <span class="info-label">Vence el</span>
+              <span class="info-value">{{ formatDate(licenseInfo.valid_until) }}</span>
+            </div>
+          </div>
+
+          <div class="info-item" *ngIf="licenseInfo.allowed_domain && licenseInfo.allowed_domain !== '*'">
+            <div class="info-icon">
+              <i class="fa fa-globe"></i>
+            </div>
+            <div class="info-content">
+              <span class="info-label">Dominio autorizado</span>
+              <span class="info-value">{{ licenseInfo.allowed_domain }}</span>
+            </div>
+          </div>
+
+          <div class="info-item" *ngIf="licenseInfo.allowed_domain === '*'">
+            <div class="info-icon">
+              <i class="fa fa-globe"></i>
+            </div>
+            <div class="info-content">
+              <span class="info-label">Dominio autorizado</span>
+              <span class="info-value">Cualquier dominio</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alertas según días restantes -->
+        <div class="license-alerts">
+          <div *ngIf="licenseInfo.days_remaining <= 7 && licenseInfo.days_remaining > 0" 
+               class="license-alert alert-critical">
+            <i class="fa fa-exclamation-triangle"></i>
+            <div class="alert-content">
+              <strong>¡Atención Urgente!</strong>
+              <p>Su licencia vencerá en menos de una semana. Contacte al proveedor de inmediato.</p>
+            </div>
+          </div>
+
+          <div *ngIf="licenseInfo.days_remaining > 7 && licenseInfo.days_remaining <= 30" 
+               class="license-alert alert-warning">
+            <i class="fa fa-exclamation-circle"></i>
+            <div class="alert-content">
+              <strong>Renovación Próxima</strong>
+              <p>Su licencia vencerá pronto. Le recomendamos contactar al proveedor para renovarla.</p>
+            </div>
+          </div>
+
+          <div *ngIf="licenseInfo.days_remaining <= 0" 
+               class="license-alert alert-expired">
+            <i class="fa fa-times-circle"></i>
+            <div class="alert-content">
+              <strong>Licencia Expirada</strong>
+              <p>Su licencia ha vencido. Contacte al proveedor para obtener una nueva licencia y continuar usando el sistema.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información de contacto -->
+        <div class="license-contact">
+          <div class="contact-header">
+            <i class="fa fa-headset"></i>
+            <span>¿Necesita renovar su licencia?</span>
+          </div>
+          <div class="contact-info">
+            <div class="contact-item">
+              <i class="fa fa-envelope"></i>
+              <span>soporte@sistemahospital.com</span>
+            </div>
+            <div class="contact-item">
+              <i class="fa fa-phone"></i>
+              <span>+52 (xxx) xxx-xxxx</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!loadingLicense && !licenseInfo" class="license-error">
+        <i class="fa fa-exclamation-circle"></i>
+        <div class="error-content">
+          <strong>Error al cargar la licencia</strong>
+          <p>No se pudo obtener la información de la licencia. Por favor, contacte al administrador.</p>
+        </div>
+      </div>
     </div>
   </div>
-</div>

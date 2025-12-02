@@ -260,16 +260,34 @@
             </div>
 
             <!-- Alertas de validación y éxito -->
-            <div class="mt-3" *ngIf="valid_form">
-              <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="fas fa-exclamation-circle me-2"></i>
-                <strong>{{ 'ROLES.ADD_ROLE.ERROR' | translate }}:</strong> {{ 'ROLES.ADD_ROLE.ALERT1' | translate }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            @if (valid_form_succes) {
+              <div class="mt-4">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong><i class="fas fa-check-circle me-2"></i>{{ 'ROLES.ADD_ROLE.SUCCESS' | translate }}!</strong> {{ 'ROLES.ADD_ROLE.ROLE_CREATED' | translate }}
+                  <button type="button" class="btn-close" (click)="valid_form_succes = false" aria-label="Cerrar"></button>
+                </div>
               </div>
-            </div>
+            }
 
-            <div class="mt-3" *ngIf="valid_form_succes">
-              <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="fas fa-check-circle me-2"></i>
+            @if (valid_form) {
+              <div class="mt-4">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong><i class="fas fa-exclamation-triangle me-2"></i>{{ 'ROLES.ADD_ROLE.ERROR' | translate }}:</strong> {{ 'ROLES.ADD_ROLE.ALERT1' | translate }}
+                  <button type="button" class="btn-close" (click)="valid_form = false" aria-label="Cerrar"></button>
+                </div>
               </div>
-            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startRolesFormTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

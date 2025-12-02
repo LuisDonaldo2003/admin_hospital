@@ -620,6 +620,14 @@
                 </div>
               </div>
 
+                    <!-- Botón flotante de ayuda para iniciar el tour del formulario de editar personal -->
+                    <button class="tour-help-button" 
+                            (click)="startEditPersonalTour()" 
+                            title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+                            type="button">
+                      <i class="fa fa-question"></i>
+                    </button>
+
               <!-- Estado general de documentos -->
               <div class="form-section mt-4">
                 <h6 class="mb-3">

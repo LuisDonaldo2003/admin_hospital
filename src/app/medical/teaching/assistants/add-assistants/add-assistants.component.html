@@ -45,17 +45,25 @@
                     <label class="form-label">
                       <i class="fa fa-user-md me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.PROFESSION' | translate }} <span class="text-danger">*</span>
                     </label>
-                    <select class="form-control form-select" [(ngModel)]="teaching.profesion" name="profesion" required>
+                    <select class="form-control form-select" [(ngModel)]="teaching.profesion" name="profesion" required
+                            [ngClass]="{ 'is-invalid': submitted && !teaching.profesion }">
                       <option value="">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT' | translate }}</option>
                       <option *ngFor="let prof of profesiones" [value]="prof">{{ prof }}</option>
                     </select>
+                    <div class="invalid-feedback" *ngIf="submitted && !teaching.profesion">
+                      La profesión es requerida
+                    </div>
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">
                       <i class="fa fa-id-card me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.FULL_NAME' | translate }} <span class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control" [(ngModel)]="teaching.nombre" name="nombre" required
+                           [ngClass]="{ 'is-invalid': submitted && !teaching.nombre }"
                            placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.FULL_NAME_PLACEHOLDER' | translate }}">
+                    <div class="invalid-feedback" *ngIf="submitted && !teaching.nombre">
+                      El nombre completo es requerido
+                    </div>
                   </div>
                   <div class="col-md-3">
                     <label class="form-label">
@@ -71,10 +79,14 @@
                     <label class="form-label">
                       <i class="fa fa-hospital me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.AREA' | translate }} <span class="text-danger">*</span>
                     </label>
-                    <select class="form-control form-select" [(ngModel)]="teaching.area" name="area" required>
+                    <select class="form-control form-select" [(ngModel)]="teaching.area" name="area" required
+                            [ngClass]="{ 'is-invalid': submitted && !teaching.area }">
                       <option value="">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_AREA' | translate }}</option>
                       <option *ngFor="let area of areas" [value]="area">{{ area }}</option>
                     </select>
+                    <div class="invalid-feedback" *ngIf="submitted && !teaching.area">
+                      El área es requerida
+                    </div>
                   </div>
                   <div class="col-md-3">
                     <label class="form-label">
@@ -110,7 +122,11 @@
                     </label>
                     <input type="text" class="form-control" [(ngModel)]="teaching.nombre_evento" 
                            name="nombre_evento" required
+                           [ngClass]="{ 'is-invalid': submitted && !teaching.nombre_evento }"
                            placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.EVENT_NAME_PLACEHOLDER' | translate }}">
+                    <div class="invalid-feedback" *ngIf="submitted && !teaching.nombre_evento">
+                      El nombre del evento es requerido
+                    </div>
                   </div>
                 </div>
 
@@ -126,7 +142,11 @@
                     <label class="form-label">
                       <i class="fa fa-calendar me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.DATE' | translate }} <span class="text-danger">*</span>
                     </label>
-                    <input type="date" class="form-control" [(ngModel)]="teaching.fecha" name="fecha" required>
+                    <input type="date" class="form-control" [(ngModel)]="teaching.fecha" name="fecha" required
+                           [ngClass]="{ 'is-invalid': submitted && !teaching.fecha }">
+                    <div class="invalid-feedback" *ngIf="submitted && !teaching.fecha">
+                      La fecha es requerida
+                    </div>
                   </div>
                 </div>
 
@@ -135,30 +155,42 @@
                     <label class="form-label">
                       <i class="fa fa-desktop me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_MODALITY' | translate }} <span class="text-danger">*</span>
                     </label>
-                    <select class="form-control form-select" [(ngModel)]="teaching.modalidad_id" name="modalidad_id" required>
+                    <select class="form-control form-select" [(ngModel)]="teaching.modalidad_id" name="modalidad_id" required
+                            [ngClass]="{ 'is-invalid': submitted && !teaching.modalidad_id }">
                       <option [ngValue]="undefined">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_MODALITY' | translate }}</option>
                       <option *ngFor="let modalidad of modalidades" [ngValue]="modalidad.id">
                         {{ modalidad.nombre }}
                       </option>
                     </select>
+                    <div class="invalid-feedback" *ngIf="submitted && !teaching.modalidad_id">
+                      La modalidad es requerida
+                    </div>
                   </div>
                   <div class="col-md-4">
                     <label class="form-label">
                       <i class="fa fa-users me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_PARTICIPATION' | translate }} <span class="text-danger">*</span>
                     </label>
-                    <select class="form-control form-select" [(ngModel)]="teaching.participacion_id" name="participacion_id" required>
+                    <select class="form-control form-select" [(ngModel)]="teaching.participacion_id" name="participacion_id" required
+                            [ngClass]="{ 'is-invalid': submitted && !teaching.participacion_id }">
                       <option [ngValue]="undefined">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_PARTICIPATION' | translate }}</option>
                       <option *ngFor="let participacion of participaciones" [ngValue]="participacion.id">
                         {{ participacion.nombre }}
                       </option>
                     </select>
+                    <div class="invalid-feedback" *ngIf="submitted && !teaching.participacion_id">
+                      La participación es requerida
+                    </div>
                   </div>
                   <div class="col-md-4">
                     <label class="form-label">
                       <i class="fa fa-clock me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.HOURS' | translate }} <span class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control" [(ngModel)]="teaching.horas" 
-                           name="horas" placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.HOURS_PLACEHOLDER' | translate }}" required>
+                           name="horas" placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.HOURS_PLACEHOLDER' | translate }}" required
+                           [ngClass]="{ 'is-invalid': submitted && !teaching.horas }">
+                    <div class="invalid-feedback" *ngIf="submitted && !teaching.horas">
+                      Las horas son requeridas
+                    </div>
                   </div>
                 </div>
               </div>
@@ -180,46 +212,52 @@
                     </label>
                     <input type="text" class="form-control" [(ngModel)]="teaching.adscripcion" 
                            name="adscripcion" required 
+                           [ngClass]="{ 'is-invalid': submitted && !teaching.adscripcion }"
                            placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.ADSCRIPTION_PLACEHOLDER' | translate }}">
+                    <div class="invalid-feedback" *ngIf="submitted && !teaching.adscripcion">
+                      La adscripción es requerida
+                    </div>
                   </div>
                   <div class="col-md-3">
                     <label class="form-label">
                       <i class="fa fa-file-invoice me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.FOJA' | translate }} <span class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control" [(ngModel)]="teaching.foja" 
-                           name="foja" placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.FOJA_PLACEHOLDER' | translate }}" required>
+                           name="foja" placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.FOJA_PLACEHOLDER' | translate }}" required
+                           [ngClass]="{ 'is-invalid': submitted && !teaching.foja }">
+                    <div class="invalid-feedback" *ngIf="submitted && !teaching.foja">
+                      La foja es requerida
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Mensaje de validación -->
-              <div class="mt-4" *ngIf="text_validation">
-                <div class="alert alert-modern alert-warning d-flex align-items-center">
-                  <i class="fa fa-exclamation-triangle me-3"></i>
-                  <div class="flex-grow-1">
-                    <strong>{{ 'TEACHING_MODULE.ASSISTANTS.WARNING' | translate }}:</strong> {{ text_validation }}
+              <!-- Alerta de éxito -->
+              @if (text_success) {
+                <div class="mb-4">
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-check-circle me-2"></i>{{ 'TEACHING_MODULE.ASSISTANTS.SUCCESS' | translate }}!</strong> {{ text_success }}
+                    <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
                   </div>
-                  <button type="button" class="btn-close" (click)="text_validation = ''"></button>
                 </div>
-              </div>
+              }
 
-              <!-- Mensaje de éxito -->
-              <div class="mt-4" *ngIf="text_success">
-                <div class="alert alert-modern alert-success d-flex align-items-center">
-                  <i class="fa fa-check-circle me-3"></i>
-                  <div class="flex-grow-1">
-                    <strong>{{ 'TEACHING_MODULE.ASSISTANTS.SUCCESS' | translate }}!</strong> {{ text_success }}
+              <!-- Alerta de validación/error -->
+              @if (text_validation) {
+                <div class="mb-4">
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'TEACHING_MODULE.ASSISTANTS.WARNING' | translate }}:</strong> {{ text_validation }}
+                    <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
                   </div>
-                  <button type="button" class="btn-close" (click)="text_success = ''"></button>
                 </div>
-              </div>
+              }
 
               <!-- Botones de acción -->
               <div class="form-actions d-flex justify-content-end gap-2 mt-4">
-                <button type="button" class="btn btn-cancel" (click)="goToList()">
+                <button type="button" class="btn btn-cancel" (click)="goToList()" [disabled]="loading">
                   <i class="fa fa-times me-2"></i>{{ 'TEACHING_MODULE.ASSISTANTS.CANCEL' | translate }}
                 </button>
-                <button type="button" class="btn btn-save" (click)="save()" [disabled]="!teachingForm.valid || loading">
+                <button type="button" class="btn btn-save" (click)="validateAndSave()" [disabled]="loading">
                   <i class="fa fa-save me-2"></i>{{ loading ? ('TEACHING_MODULE.ASSISTANTS.SAVING' | translate) : (isEditMode ? ('TEACHING_MODULE.ASSISTANTS.UPDATE' | translate) : ('TEACHING_MODULE.ASSISTANTS.SAVE' | translate)) }}
                 </button>
               </div>
@@ -237,3 +275,11 @@
     </div>
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startAssistantsFormTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

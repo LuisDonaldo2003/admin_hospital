@@ -31,11 +31,13 @@
             <div class="card-body">
               <h4 class="mb-4"><i class="fas fa-building me-2"></i>{{ 'TEACHING_MODULE.AREAS.EDIT_TITLE' | translate }}</h4>
 
-              <!-- Alerta de error (mantener patrón original) -->
+              <!-- Alerta de validación/error -->
               @if (text_validation) {
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                  <i class="fa fa-exclamation-circle me-2"></i>{{ text_validation }}
-                  <button type="button" class="btn-close" (click)="text_validation = ''"></button>
+                <div class="mb-4">
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'TEACHING_MODULE.AREAS.WARNING' | translate }}:</strong> {{ text_validation }}
+                    <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+                  </div>
                 </div>
               }
 
@@ -44,7 +46,10 @@
                 <div class="row">
                   <div class="col-12 col-md-6 mb-3">
                     <label class="form-label">{{ 'TEACHING_MODULE.AREAS.NAME_LABEL' | translate }} <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" [(ngModel)]="area.nombre" name="nombre" placeholder="Ej: MEDICINA, ENFERMERÍA" required />
+                    <input type="text" class="form-control" [(ngModel)]="area.nombre" name="nombre" placeholder="Ej: MEDICINA, ENFERMERÍA" required [ngClass]="{'is-invalid': submitted && !area.nombre?.trim()}" />
+                    <div class="invalid-feedback" *ngIf="submitted && !area.nombre?.trim()">
+                      El nombre es requerido
+                    </div>
                   </div>
                   <div class="col-12 col-md-6 mb-3">
                     <label class="form-label">Descripción</label>
@@ -73,7 +78,7 @@
                     <i class="fa fa-times me-2"></i>
                     {{ 'TEACHING_MODULE.AREAS.CANCEL' | translate }}
                   </button>
-                  <button type="submit" class="btn btn-primary ms-2" [disabled]="!areaForm.valid || saving">
+                  <button type="submit" class="btn btn-primary ms-2" [disabled]="saving">
                     {{ saving ? ('TEACHING_MODULE.AREAS.SAVING' | translate) : ('TEACHING_MODULE.AREAS.UPDATE' | translate) }}
                   </button>
                 </div>
@@ -85,3 +90,11 @@
     }
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startEditAreaTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

@@ -133,12 +133,21 @@
                 </div>
               </div>
 
-              <!-- Mensaje de validación si hay advertencias (controlado desde la plantilla) -->
-              <div class="mt-4" *ngIf="showValidation">
-                <div class="alert alert-modern alert-warning d-flex align-items-center">
-                  <i class="fa fa-exclamation-triangle me-3"></i>
-                  <div class="flex-grow-1">
-                    <strong>{{ 'STAFF.ADD_STAFF.WARNING' | translate }}:</strong>
+              <!-- Alerta de éxito -->
+              @if (showSuccess) {
+                <div class="mt-4">
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-check-circle me-2"></i>{{ 'STAFF.ADD_STAFF.SUCCESS' | translate }}!</strong> {{ 'STAFF.ADD_STAFF.USER_CREATED_SUCCESS' | translate }}
+                    <button type="button" class="btn-close" (click)="showSuccess = false" aria-label="Cerrar"></button>
+                  </div>
+                </div>
+              }
+
+              <!-- Alerta de validación/error -->
+              @if (showValidation) {
+                <div class="mt-4">
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'STAFF.ADD_STAFF.WARNING' | translate }}:</strong>
                     <ng-container [ngSwitch]="validationType">
                       <span *ngSwitchCase="'missing'">
                         <span *ngFor="let f of missingFields; let last = last">
@@ -149,21 +158,10 @@
                       <span *ngSwitchCase="'permission'">{{ backendErrorText }}</span>
                       <span *ngSwitchDefault>{{ 'STAFF.ADD_STAFF.UNKNOWN_VALIDATION' | translate }}</span>
                     </ng-container>
+                    <button type="button" class="btn-close" (click)="showValidation = false; validationType = 'none'" aria-label="Cerrar"></button>
                   </div>
-                  <button type="button" class="btn-close" (click)="showValidation = false; validationType = 'none'"></button>
                 </div>
-              </div>
-
-              <!-- Mensaje de éxito si la operación fue exitosa (controlado desde la plantilla) -->
-              <div class="mt-4" *ngIf="showSuccess">
-                <div class="alert alert-modern alert-success d-flex align-items-center">
-                  <i class="fa fa-check-circle me-3"></i>
-                  <div class="flex-grow-1">
-                    <strong>{{ 'STAFF.ADD_STAFF.SUCCESS' | translate }}:</strong> {{ 'STAFF.ADD_STAFF.USER_CREATED_SUCCESS' | translate }}
-                  </div>
-                  <button type="button" class="btn-close" (click)="showSuccess = false"></button>
-                </div>
-              </div>
+              }
 
               <!-- Botones de acción -->
               <div class="form-actions d-flex justify-content-end gap-2 mt-4">
@@ -181,3 +179,11 @@
     </div>
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startStaffFormTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

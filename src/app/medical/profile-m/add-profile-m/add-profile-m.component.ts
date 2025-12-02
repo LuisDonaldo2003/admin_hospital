@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ProfileMService } from '../service/profile-m.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 /**
  * Componente para agregar un nuevo perfil médico.
@@ -50,8 +51,16 @@ export class AddProfileMComponent {
     public profileService: ProfileMService,
     private translate: TranslateService
     ,
-    private router: Router
+    private router: Router,
+    private driverTourService: DriverTourService
   ) {}
+
+  /**
+   * Inicia el tour guiado del formulario de agregar perfil
+   */
+  public startProfilesFormTour(): void {
+    this.driverTourService.startProfilesFormTour();
+  }
 
   /**
    * Método del ciclo de vida que se ejecuta al inicializar el componente

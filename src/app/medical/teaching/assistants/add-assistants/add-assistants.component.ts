@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TeachingService } from '../../services/teaching.service';
 import { Teaching, Modalidad, Participacion } from '../../models/teaching.interface';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-add-assistants',
@@ -37,17 +38,26 @@ export class AddAssistantsComponent implements OnInit {
   public loading = false;
   public text_success: string = '';
   public text_validation: string = '';
+  public submitted = false;
   
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
   private teachingService = inject(TeachingService);
+  private driverTourService = inject(DriverTourService);
 
   public selectedLang: string = 'es';
 
   constructor() {
     this.selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(this.selectedLang);
+  }
+
+  /**
+   * Inicia el tour guiado del formulario de agregar asistente
+   */
+  public startAssistantsFormTour(): void {
+    this.driverTourService.startAssistantsFormTour();
   }
   
   ngOnInit(): void {
@@ -127,6 +137,27 @@ export class AddAssistantsComponent implements OnInit {
     });
   }
   
+  /**
+   * Validar campos antes de guardar y mostrar alertas específicas
+   */
+  validateAndSave(): void {
+    this.submitted = true;
+    this.text_validation = '';
+    this.text_success = '';
+    
+    // Validar campos requeridos
+    if (!this.teaching.profesion || !this.teaching.nombre || !this.teaching.area || 
+        !this.teaching.nombre_evento || !this.teaching.fecha || !this.teaching.modalidad_id || 
+        !this.teaching.participacion_id || !this.teaching.horas || !this.teaching.adscripcion || 
+        !this.teaching.foja) {
+      // Los mensajes se mostrarán debajo de cada campo gracias a las clases is-invalid
+      return;
+    }
+    
+    // Si todo está completo, proceder a guardar
+    this.save();
+  }
+  
   save(): void {
     this.loading = true;
     this.text_success = '';
@@ -146,9 +177,9 @@ export class AddAssistantsComponent implements OnInit {
         }
         this.loading = false;
       },
-      error: (error) => {
-        console.error('Error al guardar:', error);
-        this.text_validation = 'Error al guardar el registro';
+      error: (err) => {
+        console.error('Error al guardar:', err);
+        this.text_validation = this.translate.instant('TEACHING_MODULE.ASSISTANTS.SAVE_ERROR');
         this.loading = false;
       }
     });

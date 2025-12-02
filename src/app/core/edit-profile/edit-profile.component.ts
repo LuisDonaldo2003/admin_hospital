@@ -25,10 +25,6 @@ export class EditProfileComponent implements OnInit {
   avatarFileName: string = '';
   // Datos del perfil del usuario
   profileData: any = {};
-  // Catálogos para los selectores del formulario
-  departamentos: any[] = [];
-  perfiles: any[] = [];
-  contratos: any[] = [];
 
   // Mensajes de éxito y validación
   text_success = '';
@@ -74,17 +70,7 @@ export class EditProfileComponent implements OnInit {
       }
     });
 
-    // Obtiene los catálogos para los selectores
-    this.editProfileService.getCatalogos().subscribe({
-      next: (resp: any) => {
-        this.departamentos = resp.departaments || [];
-        this.perfiles = resp.profiles || [];
-        this.contratos = resp.contractTypes || [];
-      },
-      error: err => {
-        // Se elimina el log, solo se mantiene el fallo silencioso
-      }
-    });
+
   }
 
   /**

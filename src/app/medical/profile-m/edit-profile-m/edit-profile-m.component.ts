@@ -6,6 +6,7 @@ import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ProfileMService } from '../service/profile-m.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 /**
  * Componente para editar un perfil médico.
@@ -59,8 +60,16 @@ export class EditProfileMComponent {
     public activedRoute: ActivatedRoute,
     private translate: TranslateService
     ,
-    private router: Router
+    private router: Router,
+    private driverTourService: DriverTourService
   ) {}
+
+  /**
+   * Inicia el tour guiado del formulario de editar perfil
+   */
+  public startEditProfileTour(): void {
+    this.driverTourService.startEditProfileTour();
+  }
 
   /**
    * Método del ciclo de vida que se ejecuta al inicializar el componente

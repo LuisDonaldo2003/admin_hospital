@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PdfCompressionService } from './services/pdf-compression.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-pdf-compressor',
@@ -17,33 +18,50 @@ import { PdfCompressionService } from './services/pdf-compression.service';
   templateUrl: './pdf-compressor.component.html',
   styleUrls: ['./pdf-compressor.component.scss']
 })
-export class PdfCompressorComponent {
+export class PdfCompressorComponent implements OnInit {
   // Archivos
   selectedFiles: File[] = [];
   compressedFiles: { original: File; compressed: Blob; name: string; originalSize: number; compressedSize: number; }[] = [];
-  
+
   // Estados
   isProcessing = false;
   isDragOver = false;
-  
+
   // Configuración
   readonly MAX_FILE_SIZE = 500 * 1024; // 500KB límite objetivo
   readonly ALLOWED_FILE_TYPE = 'application/pdf';
-  
+
   // Mensajes
   text_validation = '';
   text_success = '';
-  
+
   // Estadísticas
   totalOriginalSize = 0;
   totalCompressedSize = 0;
-  
+
   constructor(
     private translate: TranslateService,
-    private pdfCompressionService: PdfCompressionService
+    private pdfCompressionService: PdfCompressionService,
+    private driverTourService: DriverTourService
   ) {
     const selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(selectedLang);
+  }
+
+  ngOnInit(): void {
+    // Iniciar tour si es la primera vez
+    if (!this.driverTourService.isTourCompleted('pdf-compressor')) {
+      setTimeout(() => {
+        this.driverTourService.startPdfCompressorTour();
+      }, 500);
+    }
+  }
+
+  /**
+   * Inicia el tour guiado manualmente
+   */
+  startPdfCompressorTour(): void {
+    this.driverTourService.startPdfCompressorTour();
   }
 
   /**
@@ -93,7 +111,7 @@ export class PdfCompressorComponent {
         this.text_validation = `El archivo "${file.name}" no es un PDF válido`;
         return false;
       }
-      
+
       // Validar tamaño mínimo
       if (file.size < 1024) {
         this.text_validation = `El archivo "${file.name}" parece estar dañado o vacío`;
@@ -137,7 +155,7 @@ export class PdfCompressorComponent {
     try {
       for (const file of this.selectedFiles) {
         const compressedBlob = await this.pdfCompressionService.compressPdf(file, this.MAX_FILE_SIZE);
-        
+
         this.compressedFiles.push({
           original: file,
           compressed: compressedBlob,
@@ -152,7 +170,7 @@ export class PdfCompressorComponent {
 
       const reductionPercent = ((this.totalOriginalSize - this.totalCompressedSize) / this.totalOriginalSize * 100).toFixed(1);
       this.text_success = `Archivos comprimidos exitosamente. Reducción del ${reductionPercent}%`;
-      
+
     } catch (error) {
       console.error('Error al comprimir PDFs:', error);
       this.text_validation = 'Error al comprimir los archivos. Por favor, intenta nuevamente.';
@@ -201,11 +219,11 @@ export class PdfCompressorComponent {
    */
   formatFileSize(bytes: number): string {
     if (bytes === 0) return '0 Bytes';
-    
+
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
+
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   }
 

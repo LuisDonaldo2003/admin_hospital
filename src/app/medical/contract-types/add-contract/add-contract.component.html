@@ -62,30 +62,34 @@
                 </div>
               </div>
 
-              <!-- Mensajes de validación y éxito -->
-              <div class="mb-3" *ngIf="valid_form">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                  <strong>{{ 'CONTRACT.ADD_CONTRACT.ERROR' | translate }}:</strong>
-                  {{ 'CONTRACT.ADD_CONTRACT.REQUIRED' | translate }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              <!-- Alerta de éxito -->
+              @if (valid_form_success) {
+                <div class="mb-4">
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-check-circle me-2"></i>{{ 'CONTRACT.ADD_CONTRACT.SUCCESS' | translate }}!</strong> {{ 'CONTRACT.ADD_CONTRACT.CREATED' | translate }}
+                    <button type="button" class="btn-close" (click)="valid_form_success = false" aria-label="Cerrar"></button>
+                  </div>
                 </div>
-              </div>
+              }
 
-              <div class="mb-3" *ngIf="valid_form_success">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong>{{ 'CONTRACT.ADD_CONTRACT.SUCCESS' | translate }}:</strong>
-                  {{ 'CONTRACT.ADD_CONTRACT.CREATED' | translate }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              <!-- Alerta de validación/error -->
+              @if (valid_form) {
+                <div class="mb-4">
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'CONTRACT.ADD_CONTRACT.ERROR' | translate }}:</strong> {{ 'CONTRACT.ADD_CONTRACT.REQUIRED' | translate }}
+                    <button type="button" class="btn-close" (click)="valid_form = false" aria-label="Cerrar"></button>
+                  </div>
                 </div>
-              </div>
+              }
 
-              <!-- Mensaje de validación personalizada -->
-              <div class="mb-3" *ngIf="text_validation">
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  <strong>{{ 'CONTRACT.ADD_CONTRACT.ATTENTION' | translate }}:</strong> {{ text_validation }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              @if (text_validation) {
+                <div class="mb-4">
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'CONTRACT.ADD_CONTRACT.ATTENTION' | translate }}:</strong> {{ text_validation }}
+                    <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+                  </div>
                 </div>
-              </div>
+              }
 
               <!-- Botón para guardar el contrato -->
               <div class="text-end">
@@ -101,3 +105,11 @@
     </div>
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startContractTypesFormTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

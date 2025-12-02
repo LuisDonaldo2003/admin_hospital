@@ -15,6 +15,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthInterceptor } from './medical/interceptor/auth.interceptor';
 import { MaintenanceInterceptor } from './shared/interceptors/maintenance.interceptor';
+import { LicenseInterceptor } from './core/interceptors/license.interceptor';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -32,7 +33,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SharedModule,
     HttpClientModule, 
     SessionTimeoutWarningComponent, 
-    MaintenanceComponent, 
+    MaintenanceComponent,
     TranslateModule.forRoot({
       defaultLanguage: 'en', 
       loader: {
@@ -43,6 +44,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     })
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LicenseInterceptor,
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

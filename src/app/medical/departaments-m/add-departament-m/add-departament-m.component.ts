@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { DepartamentMService } from '../service/departament-m.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-add-departament-m',
@@ -34,15 +35,22 @@ export class AddDepartamentMComponent {
    */
   constructor(
     public departamentService: DepartamentMService,
-    private translate: TranslateService
-    ,
-    private router: Router
+    private translate: TranslateService,
+    private router: Router,
+    private driverTourService: DriverTourService
   ) {}
 
   /**
    * Inicializa el componente (sin lógica en este caso)
    */
   ngOnInit(): void {}
+
+  /**
+   * Inicia el tour guiado para el formulario de agregar departamento
+   */
+  public startDepartamentsFormTour(): void {
+    this.driverTourService.startDepartamentsFormTour();
+  }
 
   /**
    * Guarda el nuevo departamento en el backend

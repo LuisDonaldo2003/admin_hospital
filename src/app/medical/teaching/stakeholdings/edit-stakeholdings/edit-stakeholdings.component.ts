@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CatalogsService, CatalogItem } from '../../services/catalogs.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-edit-stakeholdings',
@@ -18,18 +19,27 @@ export class EditStakeholdingsComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
+  private driverTourService = inject(DriverTourService);
   public selectedLang: string = 'en';
 
   public stakeholding: Partial<CatalogItem> = {};
   public stakeholdingId: number | null = null;
   public loading = false;
   public saving = false;
+  public submitted = false;
   public text_success: string = '';
   public text_validation: string = '';
 
   constructor() {
     this.selectedLang = localStorage.getItem('language') || 'en';
     this.translate.use(this.selectedLang);
+  }
+
+  /**
+   * Inicia el tour guiado del formulario de editar participación
+   */
+  public startEditStakeholdingTour(): void {
+    this.driverTourService.startEditStakeholdingTour();
   }
 
   ngOnInit(): void {
@@ -52,7 +62,7 @@ export class EditStakeholdingsComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al cargar:', err);
-        this.text_validation = 'Error al cargar participación';
+        this.text_validation = this.translate.instant('TEACHING_MODULE.STAKEHOLDINGS.LOAD_ERROR');
         this.loading = false;
       }
     });
@@ -60,15 +70,22 @@ export class EditStakeholdingsComponent implements OnInit {
 
   save(): void {
     if (!this.stakeholdingId) return;
-
-    this.saving = true;
+    
+    this.submitted = true;
     this.text_success = '';
     this.text_validation = '';
+    
+    if (!this.stakeholding.nombre?.trim()) {
+      this.text_validation = this.translate.instant('TEACHING_MODULE.STAKEHOLDINGS.REQUIRED_FIELDS');
+      return;
+    }
+
+    this.saving = true;
 
     this.catalogsService.updateParticipacion(this.stakeholdingId, this.stakeholding).subscribe({
       next: (response) => {
         if (response.success) {
-          this.text_success = 'Participación actualizada correctamente';
+          this.text_success = this.translate.instant('TEACHING_MODULE.STAKEHOLDINGS.UPDATE_SUCCESS');
           setTimeout(() => {
             this.router.navigate(['/teaching/list_stakeholding']);
           }, 2000);

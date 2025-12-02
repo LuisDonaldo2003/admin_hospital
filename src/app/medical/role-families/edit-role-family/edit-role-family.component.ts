@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { RoleFamilyService } from '../service/role-family.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-edit-role-family',
@@ -34,8 +35,16 @@ export class EditRoleFamilyComponent implements OnInit {
     public roleFamilyService: RoleFamilyService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private driverTourService: DriverTourService
   ) { }
+
+  /**
+   * Inicia el tour guiado del formulario de editar familia de roles
+   */
+  public startEditRoleFamilyTour(): void {
+    this.driverTourService.startEditRoleFamilyTour();
+  }
 
   ngOnInit(): void {
     this.familyId = this.activatedRoute.snapshot.params['id'];

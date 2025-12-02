@@ -7,6 +7,7 @@ import { StaffService } from '../service/staff.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 /**
  * Componente para agregar un nuevo miembro del staff.
@@ -76,8 +77,16 @@ export class AddStaffNComponent {
   constructor(
     public staffservice: StaffService,
     private router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private driverTourService: DriverTourService
   ) {}
+
+  /**
+   * Inicia el tour guiado del formulario de agregar staff
+   */
+  public startStaffFormTour(): void {
+    this.driverTourService.startStaffFormTour();
+  }
 
   /**
    * Método del ciclo de vida que se ejecuta al inicializar el componente

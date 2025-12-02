@@ -5,6 +5,7 @@ import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ContractTypesService } from '../service/contract-types.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-edit-contract',
@@ -41,8 +42,8 @@ export class EditContractComponent {
   constructor(
     public contractService: ContractTypesService,
     public activedRoute: ActivatedRoute,
-    private translate: TranslateService
-    ,
+    private translate: TranslateService,
+    private driverTourService: DriverTourService,
     private router: Router
   ) {}
 
@@ -54,6 +55,13 @@ export class EditContractComponent {
       this.contract_id = resp.id;
     })
     this.showContract();
+  }
+
+  /**
+   * Inicia el tour completo del formulario de edición de contratos
+   */
+  public startEditContractTypeTour(): void {
+    this.driverTourService.startEditContractTypeTour();
   }
 
   /**

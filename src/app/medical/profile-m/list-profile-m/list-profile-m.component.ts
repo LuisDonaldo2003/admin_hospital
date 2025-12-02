@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { ProfileMService } from '../service/profile-m.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PermissionService } from 'src/app/shared/services/permission.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 /**
  * Componente para listar perfiles médicos con paginación, búsqueda y acciones.
@@ -101,7 +102,8 @@ export class ListProfileMComponent {
   constructor(
     public profileService: ProfileMService,
     private translate: TranslateService,
-    public permissionService: PermissionService
+    public permissionService: PermissionService,
+    private driverTourService: DriverTourService
   ) {}
 
   /**
@@ -152,6 +154,13 @@ export class ListProfileMComponent {
    */
   selectProfile(rol: any) {
     this.profile_selected = rol;
+  }
+
+  /**
+   * Inicia el tour completo de la lista de perfiles
+   */
+  public startProfilesListTour(): void {
+    this.driverTourService.startProfilesListTour();
   }
 
   /**

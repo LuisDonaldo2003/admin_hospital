@@ -1,0 +1,66 @@
+<div class="upload-license-container">
+  <div class="upload-card">
+    <div class="card-header">
+      <i class="fas fa-key"></i>
+      <h1>Activar Licencia del Sistema</h1>
+      <p class="subtitle">Sistema de Gestión Hospitalaria</p>
+    </div>
+
+    <div class="card-body">
+      <div class="info-box">
+        <i class="fas fa-info-circle"></i>
+        <p>Para activar el sistema, suba el archivo de licencia proporcionado por el proveedor.</p>
+      </div>
+
+      <div class="upload-section">
+        <label for="fileInput" class="file-label">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <span *ngIf="!selectedFile">Seleccionar archivo de licencia</span>
+          <span *ngIf="selectedFile">{{ selectedFile.name }}</span>
+        </label>
+        <input 
+          type="file" 
+          id="fileInput"
+          accept=".license,.key"
+          (change)="onFileSelected($event)"
+          [disabled]="uploading"
+          style="display: none;">
+
+        <button 
+          class="btn-upload"
+          [disabled]="!selectedFile || uploading"
+          (click)="uploadLicense()">
+          <i class="fas" [ngClass]="{
+            'fa-spinner fa-spin': uploading,
+            'fa-check-circle': !uploading
+          }"></i>
+          {{ uploading ? 'Activando licencia...' : 'Activar Licencia' }}
+        </button>
+      </div>
+
+      <div *ngIf="message" class="message" [ngClass]="{
+        'message-success': messageType === 'success',
+        'message-error': messageType === 'error'
+      }">
+        <i class="fas" [ngClass]="{
+          'fa-check-circle': messageType === 'success',
+          'fa-exclamation-circle': messageType === 'error'
+        }"></i>
+        {{ message }}
+      </div>
+
+      <div class="help-text">
+        <p><strong>Formatos aceptados:</strong> .license, .key</p>
+        <p><strong>¿No tiene un archivo de licencia?</strong></p>
+        <p>Contacte al proveedor:</p>
+        <p><i class="fas fa-envelope"></i> soporte@sistemahospital.com</p>
+        <p><i class="fas fa-phone"></i> +52 (xxx) xxx-xxxx</p>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <p>&copy; 2025 Sistema Hospital. Todos los derechos reservados.</p>
+      <p class="small">Este software es propiedad intelectual protegida por ley.</p>
+    </div>
+  </div>
+</div>

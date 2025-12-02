@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { DataService } from 'src/app/shared/data/data.service';
 import { RolesService } from '../service/roles.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 
 /**
@@ -81,11 +82,19 @@ export class AddRoleUserComponent implements OnInit {
     public DataService: DataService,
     public RoleService: RolesService,
     private translate: TranslateService,
-    private router: Router
+    private router: Router,
+    private driverTourService: DriverTourService
   ) {
     // Establece el idioma inicial
     this.selectedLang = localStorage.getItem('language') || 'en';
     this.translate.use(this.selectedLang);
+  }
+
+  /**
+   * Inicia el tour guiado del formulario de agregar rol
+   */
+  public startRolesFormTour(): void {
+    this.driverTourService.startRolesFormTour();
   }
 
   /**

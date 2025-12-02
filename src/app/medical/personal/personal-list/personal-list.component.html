@@ -21,6 +21,13 @@
       </div>
     </div>
 
+      <!-- Botón flotante de ayuda para iniciar el tour de la lista de personal -->
+      <button class="tour-help-button" 
+              (click)="startPersonalListTour()" 
+              title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+              type="button">
+        <i class="fa fa-question"></i>
+      </button>
     <!-- Sección principal del contenido -->
     <div class="row">
       <div class="col-sm-12">

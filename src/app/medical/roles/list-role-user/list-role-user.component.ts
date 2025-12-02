@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PermissionService } from 'src/app/shared/services/permission.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 // Interfaces para tipado
 interface Role {
@@ -115,11 +116,19 @@ export class ListRoleUserComponent implements OnInit {
   public roleService = inject(RolesService);
   private translate = inject(TranslateService);
   public permissionService = inject(PermissionService);
+  private driverTourService = inject(DriverTourService);
 
   constructor() {
     // Establece el idioma inicial
     this.selectedLang = localStorage.getItem('language') || 'en';
     this.translate.use(this.selectedLang);
+  }
+
+  /**
+   * Inicia el tour guiado de la lista de roles
+   */
+  public startRolesListTour(): void {
+    this.driverTourService.startRolesListTour();
   }
 
   /**

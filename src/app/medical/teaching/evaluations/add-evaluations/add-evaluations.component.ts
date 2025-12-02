@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TeachingService } from '../../services/teaching.service';
 import { Evaluacion } from '../../models/teaching.interface';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 /**
  * Componente para agregar evaluaciones
@@ -25,6 +26,7 @@ export class AddEvaluationsComponent implements OnInit {
   public saving = false;
   public loading = false;
   public profesiones: string[] = [];
+  public submitted = false;
   
   // Notificaciones
   public text_success: string = '';
@@ -34,12 +36,20 @@ export class AddEvaluationsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
   private teachingService = inject(TeachingService);
+  private driverTourService = inject(DriverTourService);
 
   public selectedLang: string = 'es';
 
   constructor() {
     this.selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(this.selectedLang);
+  }
+
+  /**
+   * Inicia el tour guiado del formulario de agregar evaluación
+   */
+  public startEvaluationsFormTour(): void {
+    this.driverTourService.startEvaluationsFormTour();
   }
   
   ngOnInit(): void {
@@ -83,18 +93,26 @@ export class AddEvaluationsComponent implements OnInit {
         }
         this.loading = false;
       },
-      error: (error) => {
-        console.error('Error al cargar evaluación:', error);
-        this.text_validation = 'Error al cargar la evaluación';
+      error: (err) => {
+        console.error('Error al cargar evaluación:', err);
+        this.text_validation = this.translate.instant('TEACHING_MODULE.EVALUATIONS.LOAD_ERROR');
         this.loading = false;
       }
     });
   }
   
   saveEvaluacion(): void {
-    this.saving = true;
+    this.submitted = true;
     this.text_success = '';
     this.text_validation = '';
+    
+    // Validar campos requeridos
+    if (!this.isFormValid()) {
+      this.text_validation = 'Por favor, completa todos los campos requeridos';
+      return;
+    }
+    
+    this.saving = true;
     
     const request = this.isEditMode && this.evaluacionId
       ? this.teachingService.updateEvaluacion(this.evaluacionId, this.evaluacion)

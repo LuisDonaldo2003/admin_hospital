@@ -4,8 +4,9 @@ import { RouterModule } from '@angular/router';
 import { routes } from 'src/app/shared/routes/routes';
 import { UserActivityLogsService } from 'src/app/shared/services/user-activity-logs.service';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import {ApexAxisChartSeries,ApexChart,ApexDataLabels,ApexStroke,ApexXAxis,ApexYAxis,ApexGrid,ApexTooltip,ApexFill,ApexPlotOptions} from 'ng-apexcharts';
+import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexStroke, ApexXAxis, ApexYAxis, ApexGrid, ApexTooltip, ApexFill, ApexPlotOptions } from 'ng-apexcharts';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -22,7 +23,7 @@ export class UserActivityDashboardComponent implements OnInit {
   // Fecha actual para mostrar en dashboard
   todayDate = new Date();
   currentYear = new Date().getFullYear();
-  
+
   // Estadísticas principales (KPI)
   stats = {
     todayActivities: 0,
@@ -32,7 +33,7 @@ export class UserActivityDashboardComponent implements OnInit {
     activeUsers: 0,
     mostActiveUser: ''
   };
-  
+
   // Estado de carga de datos
   loading = true;
   // Mensaje de error si ocurre
@@ -40,16 +41,16 @@ export class UserActivityDashboardComponent implements OnInit {
 
   // Actividades recientes
   recentActivities: any[] = [];
-  
+
   // Estadísticas por usuario
   activitiesByUser: Array<{ user_name: string; count: number; role: string }> = [];
-  
+
   // Estadísticas por módulo
   activitiesByModule: Array<{ module: string; count: number }> = [];
-  
+
   // Estadísticas por tipo de acción
   activitiesByAction: Array<{ action_type: string; count: number; color: string }> = [];
-  
+
   // Actividades separadas por tipo
   separatedActivities = {
     CREATE: [] as any[],
@@ -57,7 +58,7 @@ export class UserActivityDashboardComponent implements OnInit {
     UPDATE: [] as any[],
     DELETE: [] as any[]
   };
-  
+
   // Estadísticas de tipos de actividad
   activityTypeStats = {
     CREATE: { count: 0, percentage: 0, color: '#28a745' },
@@ -80,14 +81,14 @@ export class UserActivityDashboardComponent implements OnInit {
   // Datos de actividades por hora del día (calculados)
   get hourlyStats() {
     const hourlyData = this.calculateHourlyActivities();
-    
 
-    
+
+
     return [
-      {h: '00-06', label: 'Madrugada', count: hourlyData.dawn, icon: 'fa-moon'},
-      {h: '06-12', label: 'Mañana', count: hourlyData.morning, icon: 'fa-sun'},
-      {h: '12-18', label: 'Tarde', count: hourlyData.afternoon, icon: 'fa-cloud-sun'},
-      {h: '18-24', label: 'Noche', count: hourlyData.night, icon: 'fa-moon'}
+      { h: '00-06', label: 'Madrugada', count: hourlyData.dawn, icon: 'fa-moon' },
+      { h: '06-12', label: 'Mañana', count: hourlyData.morning, icon: 'fa-sun' },
+      { h: '12-18', label: 'Tarde', count: hourlyData.afternoon, icon: 'fa-cloud-sun' },
+      { h: '18-24', label: 'Noche', count: hourlyData.night, icon: 'fa-moon' }
     ];
   }
 
@@ -95,27 +96,27 @@ export class UserActivityDashboardComponent implements OnInit {
   calculateHourlyActivities() {
     const counts = { dawn: 0, morning: 0, afternoon: 0, night: 0 };
     const today = new Date();
-    
+
     // Analizar actividades recientes para obtener las horas, pero solo las de hoy
     this.recentActivities.forEach(activity => {
       try {
         const activityDate = new Date(activity.created_at);
-        
+
         // Verificar si es una fecha válida
         if (isNaN(activityDate.getTime())) {
           console.warn('Fecha inválida:', activity.created_at);
           return;
         }
-        
+
         // Comparar solo año, mes y día (ignorar hora para la comparación de fecha)
         const isToday = activityDate.getFullYear() === today.getFullYear() &&
-                       activityDate.getMonth() === today.getMonth() &&
-                       activityDate.getDate() === today.getDate();
-        
+          activityDate.getMonth() === today.getMonth() &&
+          activityDate.getDate() === today.getDate();
+
         // Solo contar actividades del día de hoy
         if (isToday) {
           const hour = activityDate.getHours();
-          
+
           if (hour >= 0 && hour < 6) {
             counts.dawn++;
           } else if (hour >= 6 && hour < 12) {
@@ -130,7 +131,7 @@ export class UserActivityDashboardComponent implements OnInit {
         console.error('Error procesando actividad:', activity, error);
       }
     });
-    
+
     return counts;
   }
 
@@ -186,7 +187,53 @@ export class UserActivityDashboardComponent implements OnInit {
   // Opciones de módulos
   moduleOptions = [
     { value: '', label: 'Todos los módulos' },
+    // Módulos principales del sistema
+    { value: 'Staff', label: 'Personal (Staff)' },
+    { value: 'ContractType', label: 'Tipos de Contrato' },
+    { value: 'Personal', label: 'Personal' },
+    { value: 'Archive', label: 'Archivo Médico' },
+    { value: 'Role', label: 'Roles' },
+    { value: 'RoleFamily', label: 'Familias de Roles' },
+    { value: 'Profile', label: 'Perfiles' },
+    { value: 'Departament', label: 'Departamentos' },
+    { value: 'Credit', label: 'Créditos' },
+    { value: 'OrganizationChart', label: 'Organigrama' },
+    { value: 'PDFCompressor', label: 'Compresor de PDF' },
+    // Módulos de Enseñanza (Teaching) - Singular
+    { value: 'Assistant', label: 'Asistentes' },
+    { value: 'Area', label: 'Áreas' },
+    { value: 'Evaluation', label: 'Evaluaciones' },
+    { value: 'Modality', label: 'Modalidades' },
+    { value: 'Stakeholding', label: 'Participaciones' },
+    // Módulos de Enseñanza - Plurales (probablemente los que usa el backend)
+    { value: 'Assistants', label: 'Asistentes' },
+    { value: 'Areas', label: 'Áreas' },
+    { value: 'Evaluations', label: 'Evaluaciones' },
+    { value: 'Modalities', label: 'Modalidades' },
+    { value: 'Stakeholdings', label: 'Participaciones' },
+    { value: 'Teachings', label: 'Enseñanza' },
+    // Variantes en minúsculas (compatibilidad backend)
+    { value: 'staff', label: 'Personal (Staff)' },
+    { value: 'contractType', label: 'Tipos de Contrato' },
+    { value: 'personal', label: 'Personal' },
     { value: 'archive', label: 'Archivo' },
+    { value: 'role', label: 'Roles' },
+    { value: 'roleFamily', label: 'Familias de Roles' },
+    { value: 'profile', label: 'Perfiles' },
+    { value: 'departament', label: 'Departamentos' },
+    { value: 'credit', label: 'Créditos' },
+    { value: 'organizationChart', label: 'Organigrama' },
+    { value: 'assistant', label: 'Asistentes' },
+    { value: 'assistants', label: 'Asistentes' },
+    { value: 'area', label: 'Áreas' },
+    { value: 'areas', label: 'Áreas' },
+    { value: 'evaluation', label: 'Evaluaciones' },
+    { value: 'evaluations', label: 'Evaluaciones' },
+    { value: 'modality', label: 'Modalidades' },
+    { value: 'modalities', label: 'Modalidades' },
+    { value: 'stakeholding', label: 'Participaciones' },
+    { value: 'stakeholdings', label: 'Participaciones' },
+    // Módulos adicionales
     { value: 'users', label: 'Usuarios' },
     { value: 'reports', label: 'Reportes' },
     { value: 'config', label: 'Configuración' },
@@ -196,10 +243,15 @@ export class UserActivityDashboardComponent implements OnInit {
   constructor(
     private userActivityService: UserActivityLogsService,
     private translate: TranslateService,
-  ) {}
+    private driverTourService: DriverTourService
+  ) { }
 
-  ngOnInit(): void { 
-    this.loadStats(); 
+  public startUserActivityDashboardTour(): void {
+    this.driverTourService.startUserActivityDashboardTour();
+  }
+
+  ngOnInit(): void {
+    this.loadStats();
     this.loadRecentActivities();
   }
 
@@ -213,16 +265,16 @@ export class UserActivityDashboardComponent implements OnInit {
         if (res?.stats) {
           this.stats = res.stats;
         }
-        
+
         // Cargar datos adicionales
         this.loadActivitiesByUser();
         this.loadActivitiesByModule();
         this.loadActivitiesByAction();
         this.loadMostActiveUsers();
-        
+
         // Preparar gráficos
         this.prepareDailyChart(res?.dailySeries || []);
-        
+
         this.loading = false;
       },
       error: (err) => {
@@ -313,14 +365,14 @@ export class UserActivityDashboardComponent implements OnInit {
   private prepareDailyChart(rawData: any[]) {
     const today = new Date();
     const last7: { date: string; count: number }[] = [];
-    
+
     for (let i = 6; i >= 0; i--) {
       const d = new Date(today);
       d.setDate(today.getDate() - i);
       const iso = d.toISOString().substring(0, 10);
       last7.push({ date: iso, count: 0 });
     }
-    
+
     if (Array.isArray(rawData)) {
       rawData.forEach((r: any) => {
         const key = (r.date || r.day || r.fecha || '').toString().substring(0, 10);
@@ -330,93 +382,93 @@ export class UserActivityDashboardComponent implements OnInit {
         }
       });
     }
-    
+
     const categories = last7.map(d => this.formatShortDate(d.date));
     const counts = last7.map(d => d.count);
-    
+
     this.dailyChart = {
       series: [{
         name: 'Actividades',
         data: counts
       }],
-      chart: { 
-        type: 'area', 
-        height: 280, 
-        sparkline: { enabled: false }, 
-        toolbar: { show: false }, 
-        animations: { 
+      chart: {
+        type: 'area',
+        height: 280,
+        sparkline: { enabled: false },
+        toolbar: { show: false },
+        animations: {
           enabled: true,
           speed: 600
         },
         background: 'transparent',
         foreColor: '#495057'
       },
-      dataLabels: { 
+      dataLabels: {
         enabled: false
       },
-      stroke: { 
-        curve: 'smooth', 
+      stroke: {
+        curve: 'smooth',
         width: 3,
         colors: ['#3498db']
       },
       xaxis: {
         categories: categories,
-        labels: { 
-          style: { 
-            colors: Array(categories.length).fill('#6c757d'), 
+        labels: {
+          style: {
+            colors: Array(categories.length).fill('#6c757d'),
             fontSize: '12px',
             fontWeight: 400
-          } 
+          }
         },
-        axisBorder: { 
+        axisBorder: {
           show: true,
           color: '#dee2e6'
         },
-        axisTicks: { 
+        axisTicks: {
           show: true,
           color: '#dee2e6'
         }
       },
-      yaxis: { 
-        labels: { 
-          style: { 
-            colors: ['#6c757d'], 
+      yaxis: {
+        labels: {
+          style: {
+            colors: ['#6c757d'],
             fontSize: '12px',
             fontWeight: 400
-          } 
-        }, 
-        forceNiceScale: true, 
-        min: 0 
+          }
+        },
+        forceNiceScale: true,
+        min: 0
       },
-      grid: { 
-        borderColor: '#e9ecef', 
-        strokeDashArray: 2, 
+      grid: {
+        borderColor: '#e9ecef',
+        strokeDashArray: 2,
         xaxis: { lines: { show: true } },
         yaxis: { lines: { show: true } }
       },
-      tooltip: { 
+      tooltip: {
         theme: 'light',
         style: {
           fontSize: '12px',
           fontFamily: 'Segoe UI, sans-serif'
         },
-        x: { show: true }, 
+        x: { show: true },
         y: { formatter: (v) => v + ' actividades' },
         marker: {
           show: true
         }
       },
-      fill: { 
-        type: 'gradient', 
-        gradient: { 
+      fill: {
+        type: 'gradient',
+        gradient: {
           shade: 'light',
           type: 'vertical',
-          shadeIntensity: 0.3, 
+          shadeIntensity: 0.3,
           gradientToColors: ['rgba(52, 152, 219, 0.1)'],
-          opacityFrom: 0.5, 
-          opacityTo: 0.1, 
+          opacityFrom: 0.5,
+          opacityTo: 0.1,
           stops: [0, 100]
-        } 
+        }
       }
     };
   }
@@ -426,20 +478,21 @@ export class UserActivityDashboardComponent implements OnInit {
    */
   private prepareModuleChart() {
     if (!this.activitiesByModule.length) return;
-    
-    const moduleNames = this.activitiesByModule.map(m => m.module);
+
+    // Traducir los nombres de módulos al español usando getModuleLabel
+    const moduleNames = this.activitiesByModule.map(m => this.getModuleLabel(m.module));
     const moduleCounts = this.activitiesByModule.map(m => m.count);
-    
+
     this.moduleChart = {
       series: [{
         name: 'Actividades',
         data: moduleCounts
       }],
-      chart: { 
-        type: 'bar', 
-        height: 320, 
-        toolbar: { show: false }, 
-        animations: { 
+      chart: {
+        type: 'bar',
+        height: 320,
+        toolbar: { show: false },
+        animations: {
           enabled: true,
           speed: 600
         },
@@ -457,7 +510,7 @@ export class UserActivityDashboardComponent implements OnInit {
           }
         }
       },
-      dataLabels: { 
+      dataLabels: {
         enabled: true,
         style: {
           colors: ['#ffffff'],
@@ -465,43 +518,43 @@ export class UserActivityDashboardComponent implements OnInit {
           fontSize: '11px'
         }
       },
-      stroke: { 
+      stroke: {
         width: 0
       },
       xaxis: {
         categories: moduleNames,
-        labels: { 
-          style: { 
-            colors: Array(moduleNames.length).fill('#6c757d'), 
+        labels: {
+          style: {
+            colors: Array(moduleNames.length).fill('#6c757d'),
             fontSize: '12px',
             fontWeight: 400
-          } 
+          }
         },
-        axisBorder: { 
+        axisBorder: {
           show: true,
           color: '#dee2e6'
         },
-        axisTicks: { 
+        axisTicks: {
           show: true,
           color: '#dee2e6'
         }
       },
-      yaxis: { 
-        labels: { 
-          style: { 
-            colors: ['#6c757d'], 
+      yaxis: {
+        labels: {
+          style: {
+            colors: ['#6c757d'],
             fontSize: '12px',
             fontWeight: 400
-          } 
+          }
         }
       },
-      grid: { 
-        borderColor: '#e9ecef', 
+      grid: {
+        borderColor: '#e9ecef',
         strokeDashArray: 2,
         xaxis: { lines: { show: true } },
         yaxis: { lines: { show: true } }
       },
-      tooltip: { 
+      tooltip: {
         theme: 'light',
         style: {
           fontSize: '12px',
@@ -512,15 +565,15 @@ export class UserActivityDashboardComponent implements OnInit {
           show: true
         }
       },
-      fill: { 
-        type: 'gradient', 
-        gradient: { 
+      fill: {
+        type: 'gradient',
+        gradient: {
           shade: 'light',
           type: 'horizontal',
           shadeIntensity: 0.2,
-          gradientToColors: ['#2980b9'], 
-          opacityFrom: 0.8, 
-          opacityTo: 0.6, 
+          gradientToColors: ['#2980b9'],
+          opacityFrom: 0.8,
+          opacityTo: 0.6,
           stops: [0, 100]
         },
         colors: ['#3498db']
@@ -671,7 +724,7 @@ export class UserActivityDashboardComponent implements OnInit {
     if (total > 0) {
       Object.keys(this.activityTypeStats).forEach(key => {
         const typedKey = key as keyof typeof this.activityTypeStats;
-        this.activityTypeStats[typedKey].percentage = 
+        this.activityTypeStats[typedKey].percentage =
           Math.round((this.activityTypeStats[typedKey].count / total) * 100);
       });
     }
@@ -700,7 +753,7 @@ export class UserActivityDashboardComponent implements OnInit {
         userCounts[userName].count++;
       });
 
-      this.mostActiveUsersByAction[actionType as keyof typeof this.mostActiveUsersByAction] = 
+      this.mostActiveUsersByAction[actionType as keyof typeof this.mostActiveUsersByAction] =
         Object.values(userCounts)
           .sort((a, b) => b.count - a.count)
           .slice(0, 5);

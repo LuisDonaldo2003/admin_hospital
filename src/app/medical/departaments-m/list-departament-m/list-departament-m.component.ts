@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { DepartamentMService } from '../service/departament-m.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PermissionService } from 'src/app/shared/services/permission.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-list-departament-m',
@@ -64,7 +65,8 @@ export class ListDepartamentMComponent {
   constructor(
     public departamentsService: DepartamentMService,
     private translate: TranslateService,
-    public permissionService: PermissionService
+    public permissionService: PermissionService,
+    private driverTourService: DriverTourService
   ) {}
 
   /**
@@ -113,6 +115,13 @@ export class ListDepartamentMComponent {
    */
   selectDepartament(rol: any) {
     this.departament_selected = rol;
+  }
+
+  /**
+   * Inicia el tour completo de la lista de departamentos
+   */
+  public startDepartamentsListTour(): void {
+    this.driverTourService.startDepartamentsListTour();
   }
 
   /**

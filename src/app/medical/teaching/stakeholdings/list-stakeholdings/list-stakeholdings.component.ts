@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CatalogsService, CatalogItem } from '../../services/catalogs.service';
 import { PermissionService } from 'src/app/shared/services/permission.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-list-stakeholdings',
@@ -18,7 +19,15 @@ export class ListStakeholdingsComponent implements OnInit {
   private router = inject(Router);
   private translate = inject(TranslateService);
   public permissionService = inject(PermissionService);
+  private driverTourService = inject(DriverTourService);
   public selectedLang: string = 'en';
+
+  /**
+   * Inicia el tour guiado de la lista de participaciones
+   */
+  public startStakeholdingsListTour(): void {
+    this.driverTourService.startStakeholdingsListTour();
+  }
 
   public participaciones: CatalogItem[] = [];
   public loading = false;
@@ -183,7 +192,9 @@ export class ListStakeholdingsComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al cambiar estado:', err);
-        alert('Error al cambiar estado');
+        this.translate.get('TEACHING_MODULE.STAKEHOLDINGS.STATUS_ERROR').subscribe((text: string) => {
+          alert(text);
+        });
       }
     });
   }

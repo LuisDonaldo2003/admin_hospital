@@ -142,8 +142,8 @@
               </div>
             </div>
 
-            <!-- Sección de Documentos -->
-            <div class="form-section mt-4">
+              <!-- Sección de Documentos -->
+              <div class="form-section mt-4" data-tour="personal-documents">
               <h5 class="section-title">
                 <i class="fa fa-cloud-upload me-2"></i>
                 {{ 'PERSONAL.ADD_PERSONAL.DOCUMENTS_SECTION' | translate }}
@@ -218,7 +218,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                      </div>
 
                   <!-- Comprobante de Domicilio -->
                   <div class="col-md-6">
@@ -544,23 +544,27 @@
                 </div>
               </div>
 
-              <!-- Alerta de éxito (controlada desde HTML) -->
-              <div class="mt-4" *ngIf="showSuccess">
-                <div class="alert-modern alert-success alert-dismissible" role="alert">
-                  <strong>{{ 'PERSONAL.ADD_PERSONAL.SUCCESS_TITLE' | translate }}</strong>
-                  <span *ngIf="uploadedDocsCount === 7">{{ 'PERSONAL.ADD_PERSONAL.SUCCESS_ALL_DOCS' | translate }}</span>
-                  <span *ngIf="uploadedDocsCount !== 7">{{ 'PERSONAL.ADD_PERSONAL.SUCCESS_PARTIAL' | translate:{count: uploadedDocsCount} }}</span>
-                  <button type="button" class="btn-close" (click)="showSuccess = false" [attr.aria-label]="'PERSONAL.ADD_PERSONAL.CLOSE' | translate"></button>
+              <!-- Alerta de éxito -->
+              @if (showSuccess) {
+                <div class="mt-4">
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-check-circle me-2"></i>{{ 'PERSONAL.ADD_PERSONAL.SUCCESS_TITLE' | translate }}!</strong>
+                    <span *ngIf="uploadedDocsCount === 7">{{ 'PERSONAL.ADD_PERSONAL.SUCCESS_ALL_DOCS' | translate }}</span>
+                    <span *ngIf="uploadedDocsCount !== 7">{{ 'PERSONAL.ADD_PERSONAL.SUCCESS_PARTIAL' | translate:{count: uploadedDocsCount} }}</span>
+                    <button type="button" class="btn-close" (click)="showSuccess = false" aria-label="Cerrar"></button>
+                  </div>
                 </div>
-              </div>
+              }
 
-              <!-- Alerta de validación/error (controlada desde HTML) -->
-              <div class="mt-4" *ngIf="showValidation">
-                <div class="alert-modern alert-warning alert-dismissible">
-                  <strong>Advertencia:</strong> {{ serverValidationMessage }}
-                  <button type="button" class="btn-close" (click)="showValidation = false; serverValidationMessage = ''" aria-label="Cerrar"></button>
+              <!-- Alerta de validación/error -->
+              @if (showValidation) {
+                <div class="mt-4">
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'PERSONAL.ADD_PERSONAL.WARNING' | translate }}:</strong> {{ serverValidationMessage }}
+                    <button type="button" class="btn-close" (click)="showValidation = false; serverValidationMessage = ''" aria-label="Cerrar"></button>
+                  </div>
                 </div>
-              </div>
+              }
 
               <!-- Botones de acción: guardar y ver lista -->
               <div class="text-end mt-4 d-flex gap-2 justify-content-end form-actions">
@@ -576,4 +580,12 @@
       </div>
     </div>
   </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour del formulario de agregar personal -->
+<button class="tour-help-button" 
+        (click)="startPersonalFormTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>
 </div>

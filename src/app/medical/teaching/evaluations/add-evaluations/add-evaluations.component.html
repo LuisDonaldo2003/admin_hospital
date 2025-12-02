@@ -88,7 +88,11 @@
                   name="nombre"
                   placeholder="{{ 'TEACHING_MODULE.EVALUATIONS.FULL_NAME_PLACEHOLDER' | translate }}"
                   required
+                  [ngClass]="{'is-invalid': submitted && !evaluacion.nombre}"
                   [disabled]="saving">
+                <div class="invalid-feedback" *ngIf="submitted && !evaluacion.nombre">
+                  El nombre completo es requerido
+                </div>
               </div>
 
               <!-- Especialidad/Profesión (ahora select poblado desde backend) -->
@@ -99,10 +103,14 @@
                   [(ngModel)]="evaluacion.especialidad"
                   name="especialidad"
                   required
+                  [ngClass]="{'is-invalid': submitted && !evaluacion.especialidad}"
                   [disabled]="saving || profesiones.length === 0">
                   <option value="" disabled selected>{{ 'TEACHING_MODULE.EVALUATIONS.SPECIALTY_PLACEHOLDER' | translate }}</option>
                   <option *ngFor="let prof of profesiones" [value]="prof">{{ prof }}</option>
                 </select>
+                <div class="invalid-feedback" *ngIf="submitted && !evaluacion.especialidad">
+                  La especialidad es requerida
+                </div>
               </div>
             </div>
           </div>
@@ -135,7 +143,11 @@
                   [(ngModel)]="evaluacion.fecha_limite" 
                   name="fecha_limite"
                   required
+                  [ngClass]="{'is-invalid': submitted && !evaluacion.fecha_limite}"
                   [disabled]="saving">
+                <div class="invalid-feedback" *ngIf="submitted && !evaluacion.fecha_limite">
+                  La fecha límite es requerida
+                </div>
               </div>
             </div>
           </div>
@@ -156,11 +168,15 @@
                   [(ngModel)]="evaluacion.estado" 
                   name="estado"
                   required
+                  [ngClass]="{'is-invalid': submitted && !evaluacion.estado}"
                   [disabled]="saving">
                   <option value="PENDIENTE">{{ 'TEACHING_MODULE.EVALUATIONS.STATUS_PENDING' | translate }}</option>
                   <option value="APROBADO">{{ 'TEACHING_MODULE.EVALUATIONS.STATUS_APPROVED_VALUE' | translate }}</option>
                   <option value="REPROBADO">{{ 'TEACHING_MODULE.EVALUATIONS.STATUS_FAILED_VALUE' | translate }}</option>
                 </select>
+                <div class="invalid-feedback" *ngIf="submitted && !evaluacion.estado">
+                  El estado es requerido
+                </div>
               </div>
 
               <!-- Observaciones -->
@@ -191,8 +207,8 @@
               type="submit" 
               class="btn btn-save" 
               (click)="saveEvaluacion()" 
-              [disabled]="!isFormValid() || saving">
-              <i class="fa" [class.fa-save]="!saving" [class.fa-spinner]="saving" [class.fa-spin]="saving" class="me-2"></i>
+              [disabled]="saving">
+              <i class="fa me-2" [ngClass]="saving ? 'fa-spinner fa-spin' : 'fa-save'"></i>
               {{ saving ? ('TEACHING_MODULE.EVALUATIONS.SAVING' | translate) : (isEditMode ? ('TEACHING_MODULE.EVALUATIONS.UPDATE' | translate) : ('TEACHING_MODULE.EVALUATIONS.SAVE' | translate)) }}
             </button>
           </div>
@@ -205,3 +221,11 @@
 
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startEvaluationsFormTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

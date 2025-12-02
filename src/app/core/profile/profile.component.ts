@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { routes } from 'src/app/shared/routes/routes';
 import { ProfileService } from './service/profile.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { URL_SERVICIOS } from 'src/app/config/config';
 
 @Component({
     selector: 'app-profile',
@@ -17,6 +19,9 @@ export class ProfileComponent implements OnInit {
   public profileData: any;
   // Roles del usuario
   public roles: string[] = [];
+  // Información de la licencia
+  public licenseInfo: any = null;
+  public loadingLicense = true;
   // Rutas disponibles para navegación
   public routes = routes;
   // Idioma seleccionado
@@ -25,7 +30,8 @@ export class ProfileComponent implements OnInit {
   // Inyecta el servicio de perfil y el de traducción
   constructor(
     public profileService: ProfileService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private http: HttpClient
   ) {
     // Recupera el idioma guardado en localStorage y lo establece
     this.selectedLang = localStorage.getItem('language') || 'en';
@@ -37,7 +43,7 @@ export class ProfileComponent implements OnInit {
    */
   ngOnInit() {
     this.getProfileData();
-    // Se elimina el log de perfil completo
+    this.getLicenseInfo();
   }
 
   /**
@@ -57,6 +63,43 @@ export class ProfileComponent implements OnInit {
       // Se elimina el log de respuesta del perfil
       this.profileData = resp.data;
       this.roles = resp.roles;
+    });
+  }
+
+  /**
+   * Obtiene la información de la licencia del sistema
+   */
+  private getLicenseInfo(): void {
+    this.loadingLicense = true;
+    this.http.get(`${URL_SERVICIOS}/license/info`).subscribe({
+      next: (response: any) => {
+        this.licenseInfo = response;
+        this.loadingLicense = false;
+      },
+      error: () => {
+        this.loadingLicense = false;
+      }
+    });
+  }
+
+  /**
+   * Obtiene el color según los días restantes
+   */
+  getDaysColor(days: number): string {
+    if (days <= 7) return 'text-danger';
+    if (days <= 30) return 'text-warning';
+    return 'text-success';
+  }
+
+  /**
+   * Formatea la fecha
+   */
+  formatDate(date: string): string {
+    if (!date) return 'N/A';
+    return new Date(date).toLocaleDateString('es-MX', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
   }
 }

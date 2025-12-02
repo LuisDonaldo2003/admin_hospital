@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { HasPermissionDirective } from 'src/app/shared/directives/has-permission.directive';
 import { PermissionService } from 'src/app/shared/services/permission.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 /**
  * Componente para listar los usuarios del staff con paginación, búsqueda y acciones.
@@ -121,11 +122,19 @@ export class ListStaffNComponent {
    */
   constructor(
     public staffService: StaffService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private driverTourService: DriverTourService
   ) {
     // Establece el idioma inicial
     this.selectedLang = localStorage.getItem('language') || 'en';
     this.translate.use(this.selectedLang);
+  }
+
+  /**
+   * Inicia el tour guiado de la lista de staff
+   */
+  public startStaffListTour(): void {
+    this.driverTourService.startStaffListTour();
   }
 
   /**

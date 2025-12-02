@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CatalogsService, CatalogItem } from '../../services/catalogs.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-edit-modalities',
@@ -18,18 +19,27 @@ export class EditModalitiesComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
+  private driverTourService = inject(DriverTourService);
   public selectedLang: string = 'en';
 
   public modality: Partial<CatalogItem> = {};
   public modalityId: number | null = null;
   public loading = false;
   public saving = false;
+  public submitted = false;
   public text_success: string = '';
   public text_validation: string = '';
 
   constructor() {
     this.selectedLang = localStorage.getItem('language') || 'en';
     this.translate.use(this.selectedLang);
+  }
+
+  /**
+   * Inicia el tour guiado del formulario de editar modalidad
+   */
+  public startEditModalityTour(): void {
+    this.driverTourService.startEditModalityTour();
   }
 
   ngOnInit(): void {
@@ -52,7 +62,7 @@ export class EditModalitiesComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al cargar:', err);
-        this.text_validation = 'Error al cargar modalidad';
+        this.text_validation = this.translate.instant('TEACHING_MODULE.MODALITIES.LOAD_ERROR');
         this.loading = false;
       }
     });
@@ -60,15 +70,22 @@ export class EditModalitiesComponent implements OnInit {
 
   save(): void {
     if (!this.modalityId) return;
-
-    this.saving = true;
+    
+    this.submitted = true;
     this.text_success = '';
     this.text_validation = '';
+    
+    if (!this.modality.nombre?.trim() || !this.modality.codigo?.trim()) {
+      this.text_validation = 'Por favor, completa todos los campos requeridos';
+      return;
+    }
+
+    this.saving = true;
 
     this.catalogsService.updateModalidad(this.modalityId, this.modality).subscribe({
       next: (response) => {
         if (response.success) {
-          this.text_success = 'Modalidad actualizada correctamente';
+          this.text_success = this.translate.instant('TEACHING_MODULE.MODALITIES.UPDATE_SUCCESS');
           setTimeout(() => {
             this.router.navigate(['/teaching/list_modality']);
           }, 2000);

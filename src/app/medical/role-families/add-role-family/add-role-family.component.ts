@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { RoleFamilyService } from '../service/role-family.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-add-role-family',
@@ -32,8 +33,16 @@ export class AddRoleFamilyComponent {
   constructor(
     public roleFamilyService: RoleFamilyService,
     public router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private driverTourService: DriverTourService
   ) { }
+
+  /**
+   * Inicia el tour guiado del formulario de agregar familia de roles
+   */
+  public startRoleFamiliesFormTour(): void {
+    this.driverTourService.startRoleFamiliesFormTour();
+  }
 
   save() {
     this.submitted = true;

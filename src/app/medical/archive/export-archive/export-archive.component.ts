@@ -485,7 +485,8 @@ export class ExportArchiveComponent implements OnInit {
     const filteredData = this.getAllFilteredArchives(); // USAR TODOS LOS REGISTROS FILTRADOS
     
     if (filteredData.length === 0) {
-      alert('No hay datos para exportar con los filtros aplicados');
+      const message = this.translate.instant('ARCHIVE.COMMON.NO_DATA_TO_EXPORT');
+      alert(message);
       return;
     }
 

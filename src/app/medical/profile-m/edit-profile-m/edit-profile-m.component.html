@@ -61,29 +61,34 @@
                 </div>
               </div>
 
-              <!-- Mensaje de error si el formulario no es válido -->
-              <div class="mb-3" *ngIf="valid_form">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                  <strong>{{ 'PROFILE_M.EDIT_PROFILE.ERROR' | translate }}:</strong> {{ 'PROFILE_M.EDIT_PROFILE.REQUIRED' | translate }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              <!-- Alerta de éxito -->
+              @if (valid_form_success) {
+                <div class="mb-4">
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-check-circle me-2"></i>{{ 'PROFILE_M.EDIT_PROFILE.SUCCESS' | translate }}!</strong> {{ 'PROFILE_M.EDIT_PROFILE.SUCCESS_MESSAGE' | translate }}
+                    <button type="button" class="btn-close" (click)="valid_form_success = false" aria-label="Cerrar"></button>
+                  </div>
                 </div>
-              </div>
+              }
 
-              <!-- Mensaje de éxito si la edición fue exitosa -->
-              <div class="mb-3" *ngIf="valid_form_success">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong>{{ 'PROFILE_M.EDIT_PROFILE.SUCCESS' | translate }}:</strong> {{ 'PROFILE_M.EDIT_PROFILE.SUCCESS_MESSAGE' | translate }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              <!-- Alerta de validación/error -->
+              @if (valid_form) {
+                <div class="mb-4">
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'PROFILE_M.EDIT_PROFILE.ERROR' | translate }}:</strong> {{ 'PROFILE_M.EDIT_PROFILE.REQUIRED' | translate }}
+                    <button type="button" class="btn-close" (click)="valid_form = false" aria-label="Cerrar"></button>
+                  </div>
                 </div>
-              </div>
+              }
 
-              <!-- Mensaje de advertencia si hay alguna validación de texto -->
-              <div class="mb-3" *ngIf="text_validation">
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  <strong>{{ 'PROFILE_M.EDIT_PROFILE.ATTENTION' | translate }}:</strong> {{ text_validation }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              @if (text_validation) {
+                <div class="mb-4">
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'PROFILE_M.EDIT_PROFILE.ATTENTION' | translate }}:</strong> {{ text_validation }}
+                    <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+                  </div>
                 </div>
-              </div>
+              }
 
               <!-- Botón para guardar los cambios del perfil -->
               <div class="text-end">
@@ -97,3 +102,11 @@
     </div>
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startEditProfileTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

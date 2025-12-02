@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ContractTypesService } from '../service/contract-types.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-add-contract',
@@ -33,8 +34,9 @@ export class AddContractComponent {
    */
   constructor(
     public contractService: ContractTypesService,
-    private translate: TranslateService
-    ,
+    private translate: TranslateService,
+    private driverTourService: DriverTourService,
+    
     private router: Router
   ) {}
 
@@ -42,6 +44,14 @@ export class AddContractComponent {
    * Inicializa el componente (sin lógica en este caso)
    */
   ngOnInit(): void {}
+
+
+    /**
+   * Inicia el tour completo de la lista de contratos
+   */
+  public startContractTypesFormTour(): void {
+    this.driverTourService.startContractTypesFormTour();
+  }
 
   /**
    * Guarda el nuevo contrato en el backend

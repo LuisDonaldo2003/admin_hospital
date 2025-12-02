@@ -201,32 +201,57 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-    /* Mejorar la apariencia del alert de éxito */
-    .alert-success {
-      border-left: 4px solid #28a745;
-      background-color: #d4edda;
-      border-color: #c3e6cb;
-      color: #155724;
-      animation: slideInDown 0.5s ease-out;
-      
-      .fas {
-        color: #28a745;
-      }
-    }
+    /* Alertas con gradientes sólidos */
+    .alert {
+      border-radius: 10px;
+      border: none;
+      padding: 1rem 1.25rem;
+      font-size: 0.95rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
-    .alert-info {
-      border-left: 4px solid #17a2b8;
-    }
+      &.alert-success {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 
-    /* Animación para la alerta de éxito */
-    @keyframes slideInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
+        .btn-close {
+          filter: brightness(0) invert(1);
+          opacity: 0.8;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+
+      &.alert-warning {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+
+        .btn-close {
+          filter: brightness(0) invert(1);
+          opacity: 0.8;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+
+      &.alert-danger {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+
+        .btn-close {
+          filter: brightness(0) invert(1);
+          opacity: 0.8;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
       }
     }
   }

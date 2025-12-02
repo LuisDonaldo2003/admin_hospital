@@ -13,6 +13,7 @@ import {
   TeachingFilters 
 } from '../../models/teaching.interface';
 import { PermissionService } from 'src/app/shared/services/permission.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 /**
  * Componente para listar registros de enseñanza del hospital
@@ -77,12 +78,20 @@ export class ListAssistantsComponent implements OnInit {
   private translate = inject(TranslateService);
   private teachingService = inject(TeachingService);
   public permissionService = inject(PermissionService);
+  private driverTourService = inject(DriverTourService);
 
   public selectedLang: string = 'es';
 
   constructor() {
     this.selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(this.selectedLang);
+  }
+
+  /**
+   * Inicia el tour guiado de la lista de asistentes
+   */
+  public startAssistantsListTour(): void {
+    this.driverTourService.startAssistantsListTour();
   }
   
   ngOnInit(): void {
@@ -332,7 +341,9 @@ export class ListAssistantsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al exportar:', error);
-        alert('Error al exportar a Excel');
+        this.translate.get('TEACHING_MODULE.ASSISTANTS.EXCEL_EXPORT_ERROR').subscribe((text: string) => {
+          alert(text);
+        });
       }
     });
   }
@@ -353,6 +364,52 @@ export class ListAssistantsComponent implements OnInit {
     if (!id) return 'N/A';
     const participacion = this.participaciones.find(p => p.id === id);
     return participacion?.nombre || 'N/A';
+  }
+  
+  /**
+   * Calcular el total de horas de los registros visibles
+   */
+  public getTotalHoras(): number {
+    if (!this.teachingList || this.teachingList.length === 0) {
+      return 0;
+    }
+    
+    return this.teachingList.reduce((total, teaching) => {
+      if (!teaching.horas) return total;
+      
+      // Extraer el número de horas
+      const horasStr = teaching.horas.toString().replace(/[^0-9.]/g, '');
+      const horasNum = parseFloat(horasStr);
+      
+      return total + (isNaN(horasNum) ? 0 : horasNum);
+    }, 0);
+  }
+  
+  /**
+   * Formatear horas para mostrar correctamente
+   */
+  public formatHoras(horas: string | undefined): string {
+    if (!horas) return 'N/A';
+    
+    // Si ya viene formateado correctamente, devolverlo
+    if (horas.includes('HRA') || horas.includes('HR')) {
+      return horas;
+    }
+    
+    // Intentar extraer el número
+    const numero = parseFloat(horas);
+    if (isNaN(numero)) {
+      return horas; // Devolver el valor original si no es un número
+    }
+    
+    // Formatear según el número
+    if (numero === 1) {
+      return '1 HRA.';
+    } else if (numero > 1) {
+      return `${numero} HRS.`;
+    } else {
+      return `${numero} HRA.`;
+    }
   }
   
   /**

@@ -1,6 +1,6 @@
 <div class="page-wrapper pdf-compressor-modern">
   <div class="content">
-    
+
     <!-- Page Header -->
     <div class="modern-header">
       <div class="header-content">
@@ -14,13 +14,12 @@
             <p class="subtitle">{{ 'PERSONAL.PDF_COMPRESSOR.SUBTITLE' | translate }}</p>
           </div>
         </div>
-        <button 
-          type="button" 
-          class="btn-back"
-          [routerLink]="['/personal/list_personal']">
-          <i class="fa fa-arrow-left"></i>
-          <span>{{ 'PERSONAL.PDF_COMPRESSOR.GO_TO_LIST' | translate }}</span>
-        </button>
+        <div class="header-actions" style="display: flex; gap: 0.75rem;">
+          <button type="button" class="btn-back" [routerLink]="['/personal/list_personal']">
+            <i class="fa fa-arrow-left"></i>
+            <span>{{ 'PERSONAL.PDF_COMPRESSOR.GO_TO_LIST' | translate }}</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -51,38 +50,28 @@
 
     <!-- Main Content -->
     <div class="main-container">
-      
+
       <!-- Upload Zone -->
       <div class="upload-container">
-        <div 
-          class="dropzone"
-          [class.drag-active]="isDragOver"
-          (dragover)="onDragOver($event)"
-          (dragleave)="onDragLeave($event)"
-          (drop)="onDrop($event)">
-          
+        <div class="dropzone" [class.drag-active]="isDragOver" (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+
           <div class="dropzone-icon">
             <div class="icon-circle">
               <i class="fa fa-cloud-upload"></i>
             </div>
           </div>
-          
+
           <h3 class="dropzone-title">{{ 'PERSONAL.PDF_COMPRESSOR.DRAG_DROP_FILES' | translate }}</h3>
           <p class="dropzone-text">{{ 'PERSONAL.PDF_COMPRESSOR.OR_SELECT_FROM_COMPUTER' | translate }}</p>
-          
-          <input 
-            type="file" 
-            id="pdfFiles" 
-            class="file-input"
-            accept=".pdf"
-            multiple
-            (change)="onFileSelected($event)">
-          
+
+          <input type="file" id="pdfFiles" class="file-input" accept=".pdf" multiple (change)="onFileSelected($event)">
+
           <label for="pdfFiles" class="btn-select">
             <i class="fa fa-folder-open me-2"></i>
             {{ 'PERSONAL.PDF_COMPRESSOR.BROWSE_FILES' | translate }}
           </label>
-          
+
           <div class="dropzone-info">
             <span><i class="fa fa-info-circle"></i> {{ 'PERSONAL.PDF_COMPRESSOR.FORMAT_PDF' | translate }}</span>
             <span><i class="fa fa-hdd-o"></i> {{ 'PERSONAL.PDF_COMPRESSOR.MAX_10MB' | translate }}</span>
@@ -99,11 +88,7 @@
             <span class="count-badge">{{ selectedFiles.length }}</span>
           </div>
           <div class="title-actions">
-            <button 
-              type="button" 
-              class="btn-action btn-compress"
-              [disabled]="isProcessing"
-              (click)="compressAll()">
+            <button type="button" class="btn-action btn-compress" [disabled]="isProcessing" (click)="compressAll()">
               <i class="fa fa-compress"></i>
               <span *ngIf="!isProcessing">{{ 'PERSONAL.PDF_COMPRESSOR.COMPRESS_ALL' | translate }}</span>
               <span *ngIf="isProcessing">
@@ -111,11 +96,7 @@
                 {{ 'PERSONAL.PDF_COMPRESSOR.PROCESSING' | translate }}
               </span>
             </button>
-            <button 
-              type="button" 
-              class="btn-action btn-clear"
-              [disabled]="isProcessing"
-              (click)="clearAll()">
+            <button type="button" class="btn-action btn-clear" [disabled]="isProcessing" (click)="clearAll()">
               <i class="fa fa-trash-o"></i>
               <span>{{ 'PERSONAL.PDF_COMPRESSOR.CLEAR' | translate }}</span>
             </button>
@@ -130,20 +111,15 @@
             <div class="file-details">
               <h4 class="file-name" [title]="file.name">{{ file.name }}</h4>
               <div class="file-meta">
-                <span class="file-size"
-                      [class.size-danger]="file.size > MAX_FILE_SIZE"
-                      [class.size-warning]="file.size <= MAX_FILE_SIZE && file.size > MAX_FILE_SIZE * 0.8"
-                      [class.size-success]="file.size <= MAX_FILE_SIZE * 0.8">
+                <span class="file-size" [class.size-danger]="file.size > MAX_FILE_SIZE"
+                  [class.size-warning]="file.size <= MAX_FILE_SIZE && file.size > MAX_FILE_SIZE * 0.8"
+                  [class.size-success]="file.size <= MAX_FILE_SIZE * 0.8">
                   <i class="fa fa-database"></i>
                   {{ formatFileSize(file.size) }}
                 </span>
               </div>
             </div>
-            <button 
-              type="button" 
-              class="btn-remove"
-              [disabled]="isProcessing"
-              (click)="removeFile(i)"
+            <button type="button" class="btn-remove" [disabled]="isProcessing" (click)="removeFile(i)"
               title="{{ 'PERSONAL.PDF_COMPRESSOR.DELETE' | translate }}">
               <i class="fa fa-times"></i>
             </button>
@@ -159,10 +135,7 @@
             <h3>{{ 'PERSONAL.PDF_COMPRESSOR.COMPRESSED_FILES' | translate }}</h3>
             <span class="count-badge success">{{ compressedFiles.length }}</span>
           </div>
-          <button 
-            type="button" 
-            class="btn-action btn-download-all"
-            (click)="downloadAll()">
+          <button type="button" class="btn-action btn-download-all" (click)="downloadAll()">
             <i class="fa fa-download"></i>
             <span>{{ 'PERSONAL.PDF_COMPRESSOR.DOWNLOAD_ALL' | translate }}</span>
           </button>
@@ -209,30 +182,28 @@
                 <i class="fa fa-file-pdf-o"></i>
                 <span>{{ file.name }}</span>
               </div>
-              <button 
-                type="button" 
-                class="btn-download"
-                (click)="downloadCompressed(file)">
+              <button type="button" class="btn-download" (click)="downloadCompressed(file)">
                 <i class="fa fa-download"></i>
               </button>
             </div>
-            
+
             <div class="compressed-data">
               <div class="data-col">
                 <span class="data-label">{{ 'PERSONAL.PDF_COMPRESSOR.ORIGINAL' | translate }}</span>
                 <span class="data-value">{{ formatFileSize(file.originalSize) }}</span>
               </div>
-              
+
               <div class="data-col">
                 <span class="data-label">{{ 'PERSONAL.PDF_COMPRESSOR.COMPRESSED' | translate }}</span>
                 <span class="data-value compressed">{{ formatFileSize(file.compressedSize) }}</span>
               </div>
-              
+
               <div class="data-col">
                 <span class="data-label">{{ 'PERSONAL.PDF_COMPRESSOR.REDUCTION' | translate }}</span>
-                <span class="data-value reduction">-{{ getReductionPercent(file.originalSize, file.compressedSize) }}%</span>
+                <span class="data-value reduction">-{{ getReductionPercent(file.originalSize, file.compressedSize)
+                  }}%</span>
               </div>
-              
+
               <div class="data-col">
                 <span *ngIf="meetsLimit(file.compressedSize)" class="status-badge success">
                   <i class="fa fa-check"></i>
@@ -253,7 +224,8 @@
             <i class="fa fa-exclamation-triangle"></i>
           </div>
           <div class="alert-content">
-            <strong>{{ 'PERSONAL.PDF_COMPRESSOR.ATTENTION' | translate }}:</strong> {{ 'PERSONAL.PDF_COMPRESSOR.FILES_OVER_LIMIT_MESSAGE' | translate }}
+            <strong>{{ 'PERSONAL.PDF_COMPRESSOR.ATTENTION' | translate }}:</strong> {{
+            'PERSONAL.PDF_COMPRESSOR.FILES_OVER_LIMIT_MESSAGE' | translate }}
           </div>
         </div>
       </div>
@@ -279,8 +251,10 @@
             <h4>{{ 'PERSONAL.PDF_COMPRESSOR.RECOMMENDATIONS' | translate }}</h4>
           </div>
           <ul class="info-list">
-            <li>{{ 'PERSONAL.PDF_COMPRESSOR.REC1' | translate }} <strong>{{ 'PERSONAL.PDF_COMPRESSOR.BLACK_WHITE' | translate }}</strong> {{ 'PERSONAL.PDF_COMPRESSOR.FOR_COMPRESSION' | translate }}</li>
-            <li>{{ 'PERSONAL.PDF_COMPRESSOR.REC2' | translate }} <strong>150-200 DPI</strong> {{ 'PERSONAL.PDF_COMPRESSOR.FOR_TEXT_DOCS' | translate }}</li>
+            <li>{{ 'PERSONAL.PDF_COMPRESSOR.REC1' | translate }} <strong>{{ 'PERSONAL.PDF_COMPRESSOR.BLACK_WHITE' |
+                translate }}</strong> {{ 'PERSONAL.PDF_COMPRESSOR.FOR_COMPRESSION' | translate }}</li>
+            <li>{{ 'PERSONAL.PDF_COMPRESSOR.REC2' | translate }} <strong>150-200 DPI</strong> {{
+              'PERSONAL.PDF_COMPRESSOR.FOR_TEXT_DOCS' | translate }}</li>
             <li>{{ 'PERSONAL.PDF_COMPRESSOR.REC3' | translate }}</li>
             <li>{{ 'PERSONAL.PDF_COMPRESSOR.REC4' | translate }}</li>
           </ul>
@@ -291,3 +265,9 @@
 
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" (click)="startPdfCompressorTour()" title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+  type="button">
+  <i class="fa fa-question"></i>
+</button>

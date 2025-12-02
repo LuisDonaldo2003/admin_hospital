@@ -6,6 +6,7 @@ import { DataService } from 'src/app/shared/data/data.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 
 /**
@@ -62,12 +63,19 @@ export class EditRoleUserComponent implements OnInit {
     public RoleService: RolesService,
     public activedRoute: ActivatedRoute,
     private router: Router,
-    private translate: TranslateService
-
+    private translate: TranslateService,
+    private driverTourService: DriverTourService
   ) {
     // Establece el idioma inicial
     this.selectedLang = localStorage.getItem('language') || 'en';
     this.translate.use(this.selectedLang);
+  }
+
+  /**
+   * Inicia el tour guiado del formulario de editar rol
+   */
+  public startEditRoleTour(): void {
+    this.driverTourService.startEditRoleTour();
   }
 
   /**

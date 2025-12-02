@@ -144,7 +144,7 @@
                 <div class="stat-item">
                   <i class="fa fa-clock me-2"></i>
                   <span class="stat-label">{{ 'TEACHING_MODULE.ASSISTANTS.TOTAL_HOURS' | translate }}:</span>
-                  <span class="stat-value">{{ stats.total_horas || 0 }}</span>
+                  <span class="stat-value">{{ getTotalHoras() }}</span>
                 </div>
                 <div *ngIf="loading" class="spinner-border spinner-border-sm text-primary" role="status">
                   <span class="visually-hidden">{{ 'TEACHING_MODULE.ASSISTANTS.LOADING' | translate }}...</span>
@@ -361,7 +361,7 @@
                         <i class="fa fa-clock"></i>
                         <div class="info-details">
                           <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.HOURS' | translate }}</span>
-                          <span class="info-value-main">{{ teaching.horas || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
+                          <span class="info-value-main">{{ formatHoras(teaching.horas) }}</span>
                         </div>
                       </div>
 
@@ -465,3 +465,11 @@
     </div>
   </div>
 </div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startAssistantsListTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

@@ -2,16 +2,17 @@
   <div class="content activity-dash-new">
     <!-- Breadcrumb -->
     <ul class="breadcrumb mb-3">
-      <li class="breadcrumb-item"><a>Dashboard ></a></li>
-      <li class="breadcrumb-item active">Actividades de Usuarios</li>
+      <li class="breadcrumb-item"><a>{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.TITLE' | translate}} ></a></li>
+      <li class="breadcrumb-item active">{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.SUBTITLE' | translate}}</li>
     </ul>
 
     <!-- Hero -->
     <section class="hero mb-4">
       <div class="hero-inner">
         <div class="hero-text">
-          <h1><span>Actividades</span> | Historial de Usuarios</h1>
-          <p>Monitoreo completo de todas las actividades realizadas en la plataforma</p>
+          <h1><span>{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.DASHBOARD' | translate}}</span> |
+            {{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.HISTORY' | translate}}</h1>
+          <p>{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.DESCRIPTION' | translate}}</p>
         </div>
         <div class="hero-meta">
           <button class="btn btn-refresh" (click)="loadStats()"><i class="fa fa-rotate"></i></button>
@@ -22,15 +23,15 @@
     <!-- KPIs -->
     <section class="kpi-grid mb-4">
       <div class="kpi-card" *ngFor="let k of [
-        {t:'Hoy', s:'Actividades', v: stats.todayActivities, ic:'fa-calendar-day'},
-        {t:'Esta Semana', s:'Acumuladas', v: stats.weekActivities, ic:'fa-layer-group'},
-        {t:'Este Mes', s:'Acumuladas', v: stats.monthActivities, ic:'fa-chart-column'},
-        {t:'Total', s:'Histórico', v: stats.totalActivities, ic:'fa-database'},
-        {t:'Usuarios', s:'Activos', v: stats.activeUsers, ic:'fa-users'}
+        {tKey: 'DASHBOARD.DASHBOARD_USER_ACTIVITIES.TODAY_ACTIVITIES', v: stats.todayActivities, ic:'fa-calendar-day'},
+        {tKey: 'DASHBOARD.DASHBOARD_USER_ACTIVITIES.WEEK_ACTIVITIES', v: stats.weekActivities, ic:'fa-layer-group'},
+        {tKey: 'DASHBOARD.DASHBOARD_USER_ACTIVITIES.MONTH_ACTIVITIES', v: stats.monthActivities, ic:'fa-chart-column'},
+        {tKey: 'DASHBOARD.DASHBOARD_USER_ACTIVITIES.TOTAL_ACTIVITIES', v: stats.totalActivities, ic:'fa-database'},
+        {tKey: 'DASHBOARD.DASHBOARD_USER_ACTIVITIES.ACTIVE_USERS', v: stats.activeUsers, ic:'fa-users'}
       ]">
         <div class="kpi-icon"><i class="fa" [ngClass]="k.ic"></i></div>
         <div class="kpi-body">
-          <div class="kpi-label">{{k.t}} <small>{{k.s}}</small></div>
+          <div class="kpi-label">{{ k.tKey | translate }}</div>
           <div class="kpi-value">{{k.v}}</div>
         </div>
       </div>
@@ -39,14 +40,16 @@
     <div class="grid-panels mb-4">
       <!-- Estadísticas de Tipos de Actividad -->
       <div class="panel panel-activity-stats">
-        <header class="panel-hd"><h3>Resumen de Actividades por Tipo</h3></header>
+        <header class="panel-hd">
+          <h3>{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.ACTIVITY_TYPES' | translate}} </h3>
+        </header>
         <div class="activity-types-grid">
           <div class="activity-type-card create-card">
             <div class="activity-type-icon">
               <i class="fa fa-plus"></i>
             </div>
             <div class="activity-type-body">
-              <div class="activity-type-label">Crear</div>
+              <div class="activity-type-label">{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.CREATE' | translate}}</div>
               <div class="activity-type-count">{{activityTypeStats.CREATE.count}}</div>
               <div class="activity-type-percentage">{{activityTypeStats.CREATE.percentage}}%</div>
             </div>
@@ -56,7 +59,7 @@
               <i class="fa fa-eye"></i>
             </div>
             <div class="activity-type-body">
-              <div class="activity-type-label">Ver</div>
+              <div class="activity-type-label">{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.READ' | translate}}</div>
               <div class="activity-type-count">{{activityTypeStats.READ.count}}</div>
               <div class="activity-type-percentage">{{activityTypeStats.READ.percentage}}%</div>
             </div>
@@ -66,7 +69,7 @@
               <i class="fa fa-edit"></i>
             </div>
             <div class="activity-type-body">
-              <div class="activity-type-label">Editar</div>
+              <div class="activity-type-label">{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.UPDATE' | translate}}</div>
               <div class="activity-type-count">{{activityTypeStats.UPDATE.count}}</div>
               <div class="activity-type-percentage">{{activityTypeStats.UPDATE.percentage}}%</div>
             </div>
@@ -76,7 +79,7 @@
               <i class="fa fa-trash"></i>
             </div>
             <div class="activity-type-body">
-              <div class="activity-type-label">Eliminar</div>
+              <div class="activity-type-label">{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.DELETE' | translate}}</div>
               <div class="activity-type-count">{{activityTypeStats.DELETE.count}}</div>
               <div class="activity-type-percentage">{{activityTypeStats.DELETE.percentage}}%</div>
             </div>
@@ -86,7 +89,9 @@
 
       <!-- Módulos -->
       <div class="panel panel-modules">
-        <header class="panel-hd"><h3>Actividad por Módulo</h3></header>
+        <header class="panel-hd">
+          <h3>{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.MOST_ACTIVE_MODULES' | translate}}</h3>
+        </header>
         <div *ngIf="activitiesByModule.length; else noModules" class="modules-list">
           <div *ngFor="let module of activitiesByModule; let i = index" class="module-item">
             <div class="module-rank">{{i+1}}</div>
@@ -99,30 +104,39 @@
             <div class="module-count">{{module.count}}</div>
           </div>
         </div>
-        <ng-template #noModules><div class="empty">Sin datos de módulos</div></ng-template>
+        <ng-template #noModules>
+          <div class="empty">Sin datos de módulos</div>
+        </ng-template>
       </div>
 
       <!-- Usuarios Más Activos -->
       <div class="panel panel-top-users">
-        <header class="panel-hd"><h3>Usuarios Más Activos</h3></header>
+        <header class="panel-hd">
+          <h3>{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.MOST_ACTIVE_USERS' | translate}}</h3>
+        </header>
         <div *ngIf="mostActiveUsers && mostActiveUsers.length; else noUsers" class="users-list">
           <div *ngFor="let user of mostActiveUsers; let i = index" class="user-item">
             <div class="user-rank">{{i+1}}</div>
             <div class="user-body">
               <div class="user-name" [title]="user.user_name">{{user.user_name}}</div>
               <div class="user-meter">
-                <span class="meter-fill user-fill" [style.width]="(user.count / mostActiveUsers[0].count)*100 + '%'"></span>
+                <span class="meter-fill user-fill"
+                  [style.width]="(user.count / mostActiveUsers[0].count)*100 + '%'"></span>
               </div>
             </div>
             <div class="user-count">{{user.count}}</div>
           </div>
         </div>
-        <ng-template #noUsers><div class="empty">Sin datos de usuarios</div></ng-template>
+        <ng-template #noUsers>
+          <div class="empty">Sin datos de usuarios</div>
+        </ng-template>
       </div>
 
       <!-- Actividades por Hora del Día -->
       <div class="panel panel-hourly-stats">
-        <header class="panel-hd"><h3>Actividad por Hora</h3></header>
+        <header class="panel-hd">
+          <h3>{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.HOURLY_STATS' | translate}}</h3>
+        </header>
         <div class="hourly-stats">
           <div class="hour-item" *ngFor="let hour of hourlyStats">
             <div class="hour-icon">
@@ -145,7 +159,7 @@
         <div class="col-lg-6 col-xl-3 mb-4">
           <div class="panel panel-create">
             <header class="panel-hd create-header">
-              <h4><i class="fa fa-plus me-2"></i>Creaciones</h4>
+              <h4><i class="fa fa-plus me-2"></i>{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.CREATE' | translate}}</h4>
               <span class="activity-count-badge">{{separatedActivities.CREATE.length}}</span>
             </header>
             <div class="activities-list-compact">
@@ -165,7 +179,7 @@
         <div class="col-lg-6 col-xl-3 mb-4">
           <div class="panel panel-read">
             <header class="panel-hd read-header">
-              <h4><i class="fa fa-eye me-2"></i>Visualizaciones</h4>
+              <h4><i class="fa fa-eye me-2"></i>{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.READ' | translate}}</h4>
               <span class="activity-count-badge">{{separatedActivities.READ.length}}</span>
             </header>
             <div class="activities-list-compact">
@@ -185,7 +199,7 @@
         <div class="col-lg-6 col-xl-3 mb-4">
           <div class="panel panel-update">
             <header class="panel-hd update-header">
-              <h4><i class="fa fa-edit me-2"></i>Ediciones</h4>
+              <h4><i class="fa fa-edit me-2"></i>{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.UPDATE' | translate}}</h4>
               <span class="activity-count-badge">{{separatedActivities.UPDATE.length}}</span>
             </header>
             <div class="activities-list-compact">
@@ -205,7 +219,7 @@
         <div class="col-lg-6 col-xl-3 mb-4">
           <div class="panel panel-delete">
             <header class="panel-hd delete-header">
-              <h4><i class="fa fa-trash me-2"></i>Eliminaciones</h4>
+              <h4><i class="fa fa-trash me-2"></i>{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.DELETE' | translate}}</h4>
               <span class="activity-count-badge">{{separatedActivities.DELETE.length}}</span>
             </header>
             <div class="activities-list-compact">
@@ -226,20 +240,14 @@
     <!-- Gráfico de actividades diarias -->
     <section class="daily-chart" *ngIf="dailyChart">
       <div class="panel panel-chart">
-        <header class="panel-hd"><h3>Actividades Últimos 7 Días</h3></header>
+        <header class="panel-hd">
+          <h3>{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.DAILY_CHART' | translate}}</h3>
+        </header>
         <div class="chart-wrapper">
-          <apx-chart
-            *ngIf="dailyChart"
-            [series]="dailyChart.series"
-            [chart]="dailyChart.chart"
-            [xaxis]="dailyChart.xaxis"
-            [yaxis]="dailyChart.yaxis"
-            [dataLabels]="dailyChart.dataLabels"
-            [stroke]="dailyChart.stroke"
-            [grid]="dailyChart.grid"
-            [tooltip]="dailyChart.tooltip"
-            [fill]="dailyChart.fill"
-          ></apx-chart>
+          <apx-chart *ngIf="dailyChart" [series]="dailyChart.series" [chart]="dailyChart.chart"
+            [xaxis]="dailyChart.xaxis" [yaxis]="dailyChart.yaxis" [dataLabels]="dailyChart.dataLabels"
+            [stroke]="dailyChart.stroke" [grid]="dailyChart.grid" [tooltip]="dailyChart.tooltip"
+            [fill]="dailyChart.fill"></apx-chart>
         </div>
       </div>
     </section>
@@ -247,21 +255,14 @@
     <!-- Gráfico por módulo -->
     <section class="module-chart" *ngIf="moduleChart">
       <div class="panel panel-chart">
-        <header class="panel-hd"><h3>Distribución por Módulo</h3></header>
+        <header class="panel-hd">
+          <h3>{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.MODULE_CHART' | translate}}</h3>
+        </header>
         <div class="chart-wrapper" style="height: 320px !important;">
-          <apx-chart
-            *ngIf="moduleChart"
-            [series]="moduleChart.series"
-            [chart]="moduleChart.chart"
-            [xaxis]="moduleChart.xaxis"
-            [yaxis]="moduleChart.yaxis"
-            [dataLabels]="moduleChart.dataLabels"
-            [plotOptions]="moduleChart.plotOptions"
-            [stroke]="moduleChart.stroke"
-            [grid]="moduleChart.grid"
-            [tooltip]="moduleChart.tooltip"
-            [fill]="moduleChart.fill"
-          ></apx-chart>
+          <apx-chart *ngIf="moduleChart" [series]="moduleChart.series" [chart]="moduleChart.chart"
+            [xaxis]="moduleChart.xaxis" [yaxis]="moduleChart.yaxis" [dataLabels]="moduleChart.dataLabels"
+            [plotOptions]="moduleChart.plotOptions" [stroke]="moduleChart.stroke" [grid]="moduleChart.grid"
+            [tooltip]="moduleChart.tooltip" [fill]="moduleChart.fill"></apx-chart>
         </div>
       </div>
     </section>
@@ -270,14 +271,14 @@
     <section class="recent-activities">
       <div class="panel">
         <header class="panel-hd">
-          <h3>Actividades Recientes</h3>
+          <h3> {{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.RECENT_ACTIVITIES' | translate}}</h3>
           <div class="panel-actions">
             <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
-              <i class="fa fa-times"></i> Limpiar Filtros
+              <i class="fa fa-times"></i> {{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.CLEAR_FILTERS' | translate}}
             </button>
           </div>
         </header>
-        
+
         <!-- Filtros -->
         <div class="filters-row mb-3">
           <div class="row">
@@ -292,13 +293,16 @@
               </select>
             </div>
             <div class="col-md-2">
-              <input type="date" class="form-control form-control-sm" [(ngModel)]="filters.date_from" (change)="applyFilters()" placeholder="Desde">
+              <input type="date" class="form-control form-control-sm" [(ngModel)]="filters.date_from"
+                (change)="applyFilters()" placeholder="Desde">
             </div>
             <div class="col-md-2">
-              <input type="date" class="form-control form-control-sm" [(ngModel)]="filters.date_to" (change)="applyFilters()" placeholder="Hasta">
+              <input type="date" class="form-control form-control-sm" [(ngModel)]="filters.date_to"
+                (change)="applyFilters()" placeholder="Hasta">
             </div>
             <div class="col-md-4">
-              <input type="text" class="form-control form-control-sm" [(ngModel)]="filters.search" (keyup.enter)="applyFilters()" placeholder="Buscar en descripciones...">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="filters.search"
+                (keyup.enter)="applyFilters()" placeholder="Buscar en descripciones...">
             </div>
           </div>
         </div>
@@ -325,7 +329,7 @@
           </div>
         </div>
         <ng-template #noActivities>
-          <div class="empty">No se encontraron actividades con los filtros aplicados</div>
+          <div class="empty">{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.NO_ACTIVITIES' | translate}}</div>
         </ng-template>
       </div>
     </section>
@@ -337,7 +341,13 @@
 <ng-template #loadingTpl>
   <div class="page-wrapper">
     <div class="content">
-      <div class="text-center py-5 text-muted">Cargando estadísticas de actividades...</div>
+      <div class="text-center py-5 text-muted">{{'DASHBOARD.DASHBOARD_USER_ACTIVITIES.LOADING' | translate}}</div>
     </div>
   </div>
 </ng-template>
+
+<!-- Botón flotante de ayuda para iniciar el tour del Dashboard de Actividades -->
+<button class="tour-help-button" (click)="startUserActivityDashboardTour()" title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+  type="button">
+  <i class="fa fa-question"></i>
+</button>

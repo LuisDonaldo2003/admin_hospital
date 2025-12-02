@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PersonalService, Personal } from '../service/personal.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-add-personal',
@@ -63,12 +64,21 @@ export class AddPersonalComponent implements OnInit {
     private router: Router,
     private translate: TranslateService,
     private personalService: PersonalService
+    ,
+    private driverTourService: DriverTourService
   ) {
     const selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(selectedLang);
     
     // Inicializar fecha de ingreso con fecha actual
     this.fechaIngreso = new Date().toLocaleDateString('es-ES');
+  }
+
+  /**
+   * Inicia el tour del formulario de agregar personal
+   */
+  public startPersonalFormTour(): void {
+    this.driverTourService.startPersonalFormTour();
   }
 
   ngOnInit(): void {}

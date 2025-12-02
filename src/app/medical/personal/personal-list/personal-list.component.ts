@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PersonalService, Personal, ApiResponse } from '../service/personal.service';
 import { PermissionService } from 'src/app/shared/services/permission.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 // Interfaces para mejor tipado
 interface PersonalDocument {
@@ -128,6 +129,7 @@ export class PersonalListComponent implements OnInit {
   private translate = inject(TranslateService);
   private personalService = inject(PersonalService);
   public permissionService = inject(PermissionService);
+  private driverTourService = inject(DriverTourService);
 
   constructor() { 
     const selectedLang = localStorage.getItem('language') || 'es';
@@ -468,5 +470,12 @@ export class PersonalListComponent implements OnInit {
    */
   canToggleStatus(): boolean {
     return this.permissionService.hasPermission('toggle_status_personal');
+  }
+
+  /**
+   * Inicia el tour de la lista de personal
+   */
+  public startPersonalListTour(): void {
+    this.driverTourService.startPersonalListTour();
   }
 }

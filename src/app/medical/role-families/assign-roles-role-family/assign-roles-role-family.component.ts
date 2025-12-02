@@ -5,6 +5,7 @@ import { RoleFamilyService } from '../service/role-family.service';
 import { RolesService } from '../../roles/service/roles.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RouterModule, Router } from '@angular/router';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-assign-roles-role-family',
@@ -36,8 +37,16 @@ export class AssignRolesRoleFamilyComponent implements OnInit {
     public roleFamilyService: RoleFamilyService,
     public rolesService: RolesService,
     private translate: TranslateService,
-    private router: Router
+    private router: Router,
+    private driverTourService: DriverTourService
   ) { }
+
+  /**
+   * Inicia el tour guiado para asignar roles a familia de roles
+   */
+  public startAssignRolesRoleFamilyTour(): void {
+    this.driverTourService.startAssignRolesRoleFamilyTour();
+  }
 
   ngOnInit(): void {
     this.loadFamilies();

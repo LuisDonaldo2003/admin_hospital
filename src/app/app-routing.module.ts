@@ -1,14 +1,20 @@
 import { NgModule, inject } from '@angular/core';
 import { RouterModule, Routes, Router } from '@angular/router';
 import { MaintenanceComponent } from './shared/components/maintenance/maintenance.component';
+import { UploadLicenseComponent } from './upload-license/upload-license.component';
+import { LicenseCheckGuard } from './core/guards/license-check.guard';
 import { AuthService } from './shared/auth/auth.service';
 // import { AuthGuard } from './shared/gaurd/auth.guard';
 
 const routes: Routes = [
   {
+    path: 'upload-license',
+    component: UploadLicenseComponent,
+  },
+  {
     path: '',
     pathMatch: 'full',
-    canActivate: [() => {
+    canActivate: [LicenseCheckGuard, () => {
       const authService = inject(AuthService);
       const router = inject(Router);
       // Si el usuario ya está logueado con token válido, redirigir a su dashboard
@@ -24,14 +30,17 @@ const routes: Routes = [
   {
     path: 'maintenance',
     component: MaintenanceComponent,
+    canActivate: [LicenseCheckGuard],
   },
   {
     path: '',
     loadChildren: () => import('./core/core.module').then((m) => m.CoreModule),
+    canActivate: [LicenseCheckGuard],
   },
   {
     path: '',
     loadChildren: () => import('./medical/medical.module').then((m) => m.MedicalModule),
+    canActivate: [LicenseCheckGuard],
   },
   {
     path: '',
@@ -39,6 +48,7 @@ const routes: Routes = [
       import('./authentication/authentication.module').then(
         (m) => m.AuthenticationModule
       ),
+    canActivate: [LicenseCheckGuard],
   },
   {
     path: 'error',
@@ -54,9 +64,9 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
-    enableTracing: false, // Cambia a true para debug de rutas
-    useHash: false, // Asegurar que use HTML5 pushState
-    onSameUrlNavigation: 'reload' // Recargar si se navega a la misma URL
+    enableTracing: false,
+    useHash: true, // Usar hash routing (#/)
+    onSameUrlNavigation: 'reload'
   })],
   exports: [RouterModule],
 })

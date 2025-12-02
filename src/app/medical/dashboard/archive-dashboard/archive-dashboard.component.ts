@@ -7,6 +7,7 @@ import { PermissionService } from 'src/app/shared/services/permission.service';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexStroke, ApexXAxis, ApexYAxis, ApexGrid, ApexTooltip, ApexFill } from 'ng-apexcharts';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-archive-dashboard',
@@ -77,6 +78,7 @@ export class ArchiveDashboardComponent implements OnInit {
   constructor(
     private archiveService: ArchiveService,
     private translate: TranslateService,
+    private driverTourService: DriverTourService,
   ) { }
 
   /**
@@ -115,6 +117,14 @@ export class ArchiveDashboardComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+
+   /**
+   * Inicia el tour del dashboard de archivos
+   */
+  public startArchiveDashboardTour(): void {
+    this.driverTourService.startArchiveDashboardTour();
   }
 
   /**

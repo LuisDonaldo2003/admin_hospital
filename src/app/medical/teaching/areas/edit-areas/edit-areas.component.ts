@@ -2,8 +2,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CatalogsService, CatalogItem } from '../../services/catalogs.service';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-edit-areas',
@@ -17,6 +18,15 @@ export class EditAreasComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private catalogsService = inject(CatalogsService);
+  private driverTourService = inject(DriverTourService);
+  private translate = inject(TranslateService);
+
+  /**
+   * Inicia el tour guiado del formulario de editar área
+   */
+  public startEditAreaTour(): void {
+    this.driverTourService.startEditAreaTour();
+  }
 
   public area: Partial<CatalogItem> = {
     nombre: '',
@@ -27,6 +37,7 @@ export class EditAreasComponent implements OnInit {
   public areaId: number = 0;
   public loading = false;
   public saving = false;
+  public submitted = false;
   public text_validation = '';
 
   ngOnInit(): void {
@@ -48,21 +59,23 @@ export class EditAreasComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error('Error al cargar área:', err);
-        this.text_validation = 'No se pudo cargar el área';
+        console.error('Error al cargar:', err);
+        this.text_validation = this.translate.instant('TEACHING_MODULE.AREAS.LOAD_AREA_ERROR');
         this.loading = false;
       }
     });
   }
 
   save(): void {
+    this.submitted = true;
+    this.text_validation = '';
+    
     if (!this.area.nombre?.trim()) {
-      this.text_validation = 'El nombre es requerido';
+      this.text_validation = this.translate.instant('TEACHING_MODULE.AREAS.REQUIRED_FIELDS');
       return;
     }
 
     this.saving = true;
-    this.text_validation = '';
 
     this.catalogsService.updateArea(this.areaId, this.area).subscribe({
       next: (response) => {

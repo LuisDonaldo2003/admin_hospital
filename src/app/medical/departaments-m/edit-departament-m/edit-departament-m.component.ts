@@ -5,6 +5,7 @@ import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { DepartamentMService } from '../service/departament-m.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
   selector: 'app-edit-departament-m',
@@ -40,9 +41,9 @@ export class EditDepartamentMComponent {
   constructor(
     public departamentService: DepartamentMService,
     public activedRoute: ActivatedRoute,
-    private translate: TranslateService
-    ,
-    private router: Router
+    private translate: TranslateService,
+    private router: Router,
+    private driverTourService: DriverTourService
   ) {}
 
   /**
@@ -91,5 +92,12 @@ export class EditDepartamentMComponent {
         this.router.navigateByUrl('/departaments-m/list-departament');
       }, 2000);
     })
+  }
+
+  /**
+   * Inicia el tour guiado para editar departamento
+   */
+  public startEditDepartamentTour(): void {
+    this.driverTourService.startEditDepartamentTour();
   }
 }
