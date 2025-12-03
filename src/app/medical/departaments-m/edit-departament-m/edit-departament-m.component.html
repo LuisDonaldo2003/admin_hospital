@@ -25,8 +25,11 @@
             <form>
               <!-- Campo para editar el nombre del departamento -->
               <div class="mb-3">
-                <label class="form-label">{{ 'DEPARTAMENT.EDIT_DEPARTAMENT.NAME' | translate }}</label>
-                <input type="text" name="name" [(ngModel)]="name" class="form-control" [placeholder]="'DEPARTAMENT.EDIT_DEPARTAMENT.PLACEHOLDER_NAME' | translate" />
+                <label class="form-label">{{ 'DEPARTAMENT.EDIT_DEPARTAMENT.NAME' | translate }} <span class="text-danger">*</span></label>
+                <input type="text" name="name" [(ngModel)]="name" class="form-control" [ngClass]="{ 'is-invalid': valid_form && !name.trim() }" [placeholder]="'DEPARTAMENT.EDIT_DEPARTAMENT.PLACEHOLDER_NAME' | translate" />
+                <div class="invalid-feedback" *ngIf="valid_form && !name.trim()">
+                  {{ 'DEPARTAMENT.EDIT_DEPARTAMENT.PROFILE_REQUIERED' | translate }}
+                </div>
               </div>
 
               <!-- Selección de estado del departamento (activo/inactivo) - Toggle mejorado -->

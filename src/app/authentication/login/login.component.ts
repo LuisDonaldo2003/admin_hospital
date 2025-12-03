@@ -47,9 +47,16 @@ export class LoginComponent implements OnInit {
    * Inicializa el componente de login
    */
   ngOnInit(): void {
-    // Si el usuario ya está logueado con token válido, redirigir automáticamente
+    // Si el usuario ya está logueado con token válido, redirigir a la última página visitada o al perfil
     if (this.auth.isLoggedIn()) {
-      this.redirectByRole();
+      const lastUrl = localStorage.getItem('lastVisitedUrl');
+      if (lastUrl && lastUrl !== '/login') {
+        // Restaurar la última página donde estaba
+        this.router.navigate([lastUrl]);
+      } else {
+        // Si no hay última URL, redirigir al perfil
+        this.redirectByRole();
+      }
       return;
     }
     // Si hay token pero está expirado, simplemente limpiar localStorage sin hacer logout completo

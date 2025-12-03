@@ -371,7 +371,7 @@ export class DataService {
           subMenus: [
             {
               menuValue: 'DASHBOARD',
-              route: 'http://api.sismeg.com/monitoring_dashboard_laravel',
+              route: 'http://api_imss.gob.mx/monitoring_dashboard_laravel',
               base: 'pulse-dashboard',
               permision: 'access_pulse',
               show_nav: true,

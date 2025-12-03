@@ -150,7 +150,7 @@ export class AddAssistantsComponent implements OnInit {
         !this.teaching.nombre_evento || !this.teaching.fecha || !this.teaching.modalidad_id || 
         !this.teaching.participacion_id || !this.teaching.horas || !this.teaching.adscripcion || 
         !this.teaching.foja) {
-      // Los mensajes se mostrarán debajo de cada campo gracias a las clases is-invalid
+      this.text_validation = 'Por favor, completa todos los campos requeridos';
       return;
     }
     

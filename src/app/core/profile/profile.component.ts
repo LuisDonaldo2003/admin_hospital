@@ -96,10 +96,39 @@ export class ProfileComponent implements OnInit {
    */
   formatDate(date: string): string {
     if (!date) return 'N/A';
-    return new Date(date).toLocaleDateString('es-MX', {
+    // Verificar si es una licencia permanente
+    if (date.toUpperCase() === 'PERMANENT') {
+      return 'Permanente';
+    }
+    // Agregar hora para evitar problemas de zona horaria UTC
+    const dateWithTime = date.includes('T') ? date : `${date}T00:00:00`;
+    return new Date(dateWithTime).toLocaleDateString('es-MX', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
     });
+  }
+
+  /**
+   * Verifica si la licencia es permanente
+   */
+  isPermanentLicense(): boolean {
+    return this.licenseInfo?.days_remaining === null;
+  }
+
+  /**
+   * Obtiene el tipo de licencia
+   */
+  getLicenseType(): string {
+    if (this.isPermanentLicense()) {
+      return 'Permanente';
+    }
+    if (this.licenseInfo?.days_remaining > 335) {
+      return 'Anual';
+    }
+    if (this.licenseInfo?.days_remaining <= 31) {
+      return 'Mensual';
+    }
+    return 'Limitada';
   }
 }

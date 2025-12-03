@@ -17,8 +17,15 @@ const routes: Routes = [
     canActivate: [LicenseCheckGuard, () => {
       const authService = inject(AuthService);
       const router = inject(Router);
-      // Si el usuario ya está logueado con token válido, redirigir a su dashboard
+      // Si el usuario ya está logueado con token válido
       if (authService.isLoggedIn() && !authService.isTokenExpired()) {
+        // Intentar restaurar la última URL visitada
+        const lastUrl = localStorage.getItem('lastVisitedUrl');
+        if (lastUrl && lastUrl !== '/' && lastUrl !== '/login') {
+          console.log('🔄 Restaurando última URL visitada:', lastUrl);
+          return router.parseUrl(lastUrl);
+        }
+        // Si no hay última URL, ir al dashboard por defecto
         const defaultRoute = authService.getDefaultRouteForUser();
         return router.parseUrl(defaultRoute);
       }
@@ -65,7 +72,7 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
     enableTracing: false,
-    useHash: true, // Usar hash routing (#/)
+    useHash: false, // URLs limpias sin #
     onSameUrlNavigation: 'reload'
   })],
   exports: [RouterModule],

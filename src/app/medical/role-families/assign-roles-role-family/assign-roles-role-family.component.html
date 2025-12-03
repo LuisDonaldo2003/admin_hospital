@@ -108,29 +108,25 @@
 
                         <div class="separator mt-4"></div>
 
-                        <!-- Mensaje de validación si hay advertencias -->
-                        <div class="mt-4" *ngIf="text_validation">
-                            <div class="alert alert-modern alert-warning d-flex align-items-center">
-                                <i class="fa fa-exclamation-triangle me-3"></i>
-                                <div class="flex-grow-1">
-                                    <strong>{{ 'ROLE_FAMILIES.ASSIGN_ROLES.WARNING' | translate }}:</strong> {{
-                                    text_validation }}
+                        <!-- Alerta de validación/error -->
+                        @if (text_validation) {
+                            <div class="mt-4">
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'ROLE_FAMILIES.ASSIGN_ROLES.WARNING' | translate }}:</strong> {{ text_validation }}
+                                    <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
                                 </div>
-                                <button type="button" class="btn-close" (click)="text_validation = ''"></button>
                             </div>
-                        </div>
+                        }
 
-                        <!-- Mensaje de éxito si la operación fue exitosa -->
-                        <div class="mt-4" *ngIf="text_success">
-                            <div class="alert alert-modern alert-success d-flex align-items-center">
-                                <i class="fa fa-check-circle me-3"></i>
-                                <div class="flex-grow-1">
-                                    <strong>{{ 'ROLE_FAMILIES.ASSIGN_ROLES.SUCCESS' | translate }}:</strong> {{
-                                    text_success }}
+                        <!-- Alerta de éxito -->
+                        @if (text_success) {
+                            <div class="mt-4">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong><i class="fa fa-check-circle me-2"></i>{{ 'ROLE_FAMILIES.ASSIGN_ROLES.SUCCESS' | translate }}!</strong> {{ text_success }}
+                                    <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
                                 </div>
-                                <button type="button" class="btn-close" (click)="text_success = ''"></button>
                             </div>
-                        </div>
+                        }
 
                         <!-- Botones de acción -->
                         <div class="actions-section">

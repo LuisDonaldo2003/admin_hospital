@@ -108,7 +108,7 @@ export class AssignRolesRoleFamilyComponent implements OnInit {
     this.text_success = '';
 
     if (!this.selectedFamilyId) {
-      this.text_validation = this.translate.instant('ROLE_FAMILIES.ASSIGN_ROLES.SELECT_FAMILY_ERROR');
+      this.text_validation = 'Rellena los campos solicitados';
       return;
     }
 

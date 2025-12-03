@@ -274,70 +274,47 @@ export class AddPersonalComponent implements OnInit {
 
     // Validar campos básicos
     if (!this.nombre?.trim()) {
-      this.serverValidationMessage = 'El nombre es requerido';
-      this.showValidation = true;
       return false;
     }
 
     if (this.nombre.trim().length < 2) {
-      this.serverValidationMessage = 'El nombre debe tener al menos 2 caracteres';
-      this.showValidation = true;
       return false;
     }
 
     if (!this.apellidos?.trim()) {
-      this.serverValidationMessage = 'Los apellidos son requeridos';
-      this.showValidation = true;
       return false;
     }
 
     if (this.apellidos.trim().length < 2) {
-      this.serverValidationMessage = 'Los apellidos deben tener al menos 2 caracteres';
-      this.showValidation = true;
       return false;
     }
 
     if (!this.tipo) {
-      this.serverValidationMessage = 'El tipo de personal es requerido';
-      this.showValidation = true;
       return false;
     }
 
   // Validar RFC
-  console.log('Validando RFC:', this.rfc, 'Longitud:', this.rfc?.length);
   if (!this.rfc || !this.rfc.trim()) {
-    this.serverValidationMessage = 'El RFC es requerido';
-    this.showValidation = true;
     return false;
   }
 
   const rfcTrimmed = this.rfc.trim();
-  console.log('RFC trimmed:', rfcTrimmed, 'Longitud:', rfcTrimmed.length);
   if (rfcTrimmed.length < 10 || rfcTrimmed.length > 13) {
-    this.serverValidationMessage = 'El RFC debe tener entre 10 y 13 caracteres';
-    this.showValidation = true;
     return false;
   }
 
   // Validar RFC formato básico (letras/números)
   const rfcPattern = /^[A-Z0-9]+$/;
     if (!rfcPattern.test(rfcTrimmed.toUpperCase()) || rfcTrimmed.length > 13) {
-      this.serverValidationMessage = 'El RFC solo puede contener letras y números (máximo 13 caracteres)';
-      this.showValidation = true;
       return false;
   }
 
   // Validar número de checador
-  console.log('Validando número de checador:', this.numeroChecador, 'Longitud:', this.numeroChecador?.length);
   if (!this.numeroChecador || !this.numeroChecador.trim()) {
-    this.serverValidationMessage = 'El número de checador es requerido';
-    this.showValidation = true;
     return false;
   }
 
   if (!/^[0-9]{1,4}$/.test(this.numeroChecador.trim())) {
-    this.serverValidationMessage = 'El número de checador debe tener entre 1 y 4 dígitos';
-    this.showValidation = true;
     return false;
   }    // Validar archivos cargados
     if (this.documentos.size > 0) {

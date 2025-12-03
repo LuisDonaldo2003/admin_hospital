@@ -29,13 +29,17 @@
             <form>
               <!-- Campo para ingresar el nombre del contrato -->
               <div class="mb-3">
-                <label for="name" class="form-label">{{ 'CONTRACT.ADD_CONTRACT.NAME' | translate }}</label>
+                <label for="name" class="form-label">{{ 'CONTRACT.ADD_CONTRACT.NAME' | translate }} <span class="text-danger">*</span></label>
                 <input type="text"
                        id="name"
                        name="name"
                        [(ngModel)]="name"
                        class="form-control"
+                       [ngClass]="{ 'is-invalid': valid_form && !name.trim() }"
                        [placeholder]="'CONTRACT.ADD_CONTRACT.PLACEHOLDER' | translate" />
+                <div class="invalid-feedback" *ngIf="valid_form && !name.trim()">
+                  {{ 'CONTRACT.ADD_CONTRACT.NAME_REQUIERED' | translate }}
+                </div>
               </div>
 
               <!-- Selección de estado del contrato (activo/inactivo) - Toggle mejorado -->
@@ -65,9 +69,12 @@
               <!-- Alerta de éxito -->
               @if (valid_form_success) {
                 <div class="mb-4">
-                  <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong><i class="fa fa-check-circle me-2"></i>{{ 'CONTRACT.ADD_CONTRACT.SUCCESS' | translate }}!</strong> {{ 'CONTRACT.ADD_CONTRACT.CREATED' | translate }}
-                    <button type="button" class="btn-close" (click)="valid_form_success = false" aria-label="Cerrar"></button>
+                  <div class="alert alert-modern alert-success d-flex align-items-center">
+                    <i class="fa fa-check-circle me-3"></i>
+                    <div class="flex-grow-1">
+                      <strong>{{ 'CONTRACT.ADD_CONTRACT.SUCCESS' | translate }}:</strong> {{ 'CONTRACT.ADD_CONTRACT.CREATED' | translate }}
+                    </div>
+                    <button type="button" class="btn-close" (click)="valid_form_success = false"></button>
                   </div>
                 </div>
               }
@@ -75,18 +82,24 @@
               <!-- Alerta de validación/error -->
               @if (valid_form) {
                 <div class="mb-4">
-                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'CONTRACT.ADD_CONTRACT.ERROR' | translate }}:</strong> {{ 'CONTRACT.ADD_CONTRACT.REQUIRED' | translate }}
-                    <button type="button" class="btn-close" (click)="valid_form = false" aria-label="Cerrar"></button>
+                  <div class="alert alert-modern alert-warning d-flex align-items-center">
+                    <i class="fa fa-exclamation-triangle me-3"></i>
+                    <div class="flex-grow-1">
+                      <strong>{{ 'CONTRACT.ADD_CONTRACT.ERROR' | translate }}:</strong> {{ 'CONTRACT.ADD_CONTRACT.REQUIRED' | translate }}
+                    </div>
+                    <button type="button" class="btn-close" (click)="valid_form = false"></button>
                   </div>
                 </div>
               }
 
               @if (text_validation) {
                 <div class="mb-4">
-                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'CONTRACT.ADD_CONTRACT.ATTENTION' | translate }}:</strong> {{ text_validation }}
-                    <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+                  <div class="alert alert-modern alert-warning d-flex align-items-center">
+                    <i class="fa fa-exclamation-triangle me-3"></i>
+                    <div class="flex-grow-1">
+                      <strong>{{ 'CONTRACT.ADD_CONTRACT.ATTENTION' | translate }}:</strong> {{ text_validation }}
+                    </div>
+                    <button type="button" class="btn-close" (click)="text_validation = ''"></button>
                   </div>
                 </div>
               }

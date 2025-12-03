@@ -39,29 +39,30 @@
               <p class="text-muted small">{{ 'ARCHIVE.EDIT_PATIENT.INFORMATION' | translate }}</p>
             </div>
 
-            <!-- Alertas de validación y éxito -->
-            <div *ngIf="text_validation" class="mt-4">
-              <div class="alert alert-modern alert-warning d-flex align-items-center">
-                <i class="fa fa-exclamation-triangle me-3"></i>
-                <div class="flex-grow-1">
-                  <strong>{{ 'ARCHIVE.EDIT_PATIENT.WARNING' | translate }}:</strong> {{ text_validation }}
-                </div>
-                <button type="button" class="btn-close" (click)="text_validation = ''"></button>
-              </div>
-            </div>
-
-            <div *ngIf="text_success" class="mt-4">
-              <div class="alert alert-modern alert-success d-flex align-items-center">
-                <i class="fa fa-check-circle me-3"></i>
-                <div class="flex-grow-1">
-                  <strong>{{ 'ARCHIVE.EDIT_PATIENT.SUCCESS' | translate }}:</strong> {{ text_success }}
-                </div>
-                <button type="button" class="btn-close" (click)="text_success = ''"></button>
-              </div>
-            </div>
-
             <!-- Formulario principal para editar los datos del paciente -->
             <form (ngSubmit)="update()">
+
+              <!-- Alertas de validación y éxito -->
+              <div *ngIf="text_validation" class="mb-4">
+                <div class="alert alert-modern alert-warning d-flex align-items-center">
+                  <i class="fa fa-exclamation-triangle me-3"></i>
+                  <div class="flex-grow-1">
+                    <strong>{{ 'ARCHIVE.EDIT_PATIENT.WARNING' | translate }}:</strong> {{ text_validation }}
+                  </div>
+                  <button type="button" class="btn-close" (click)="text_validation = ''"></button>
+                </div>
+              </div>
+
+              <div *ngIf="text_success" class="mb-4">
+                <div class="alert alert-modern alert-success d-flex align-items-center">
+                  <i class="fa fa-check-circle me-3"></i>
+                  <div class="flex-grow-1">
+                    <strong>{{ 'ARCHIVE.EDIT_PATIENT.SUCCESS' | translate }}:</strong> {{ text_success }}
+                  </div>
+                  <button type="button" class="btn-close" (click)="text_success = ''"></button>
+                </div>
+              </div>
+
               <!-- Sección: Información del Paciente -->
               <div class="form-section">
                 <div class="section-header mb-3">

@@ -58,7 +58,7 @@ export class AddContractComponent {
    */
   save() {
     this.valid_form = false;
-    if (!this.name) {
+    if (!this.name || !this.name.trim()) {
       this.valid_form = true;
       return;
     }

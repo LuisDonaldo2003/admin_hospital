@@ -33,8 +33,11 @@
             <form>
               <!-- Campo para el nombre del perfil -->
               <div class="mb-3">
-                <label for="name" class="form-label">{{ 'PROFILE_M.ADD_PROFILE.NAME' | translate }}</label>
-                <input type="text" id="name" name="name" [(ngModel)]="name" class="form-control" [placeholder]="'PROFILE_M.ADD_PROFILE.PLACEHOLDER_NAME' | translate" />
+                <label for="name" class="form-label">{{ 'PROFILE_M.ADD_PROFILE.NAME' | translate }} <span class="text-danger">*</span></label>
+                <input type="text" id="name" name="name" [(ngModel)]="name" class="form-control" [ngClass]="{ 'is-invalid': valid_form && !name.trim() }" [placeholder]="'PROFILE_M.ADD_PROFILE.PLACEHOLDER_NAME' | translate" />
+                <div class="invalid-feedback" *ngIf="valid_form && !name.trim()">
+                  {{ 'PROFILE_M.ADD_PROFILE.PROFILE_REQUIERED' | translate }}
+                </div>
               </div>
 
               <!-- Selección de estado del perfil (activo/inactivo) - Toggle mejorado -->

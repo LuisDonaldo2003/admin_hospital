@@ -171,6 +171,9 @@ export class AuthService {
     // 🔐 LIMPIAR SESSION_ID
     this.sessionService.clearSessionId();
     
+    // 🔄 LIMPIAR ÚLTIMA URL VISITADA
+    localStorage.removeItem('lastVisitedUrl');
+    
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem('authenticated');

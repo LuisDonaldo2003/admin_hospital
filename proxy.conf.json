@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://api.sismeg.com",
+    "target": "http://api_imss.gob.mx",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

@@ -149,11 +149,7 @@
                   <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'STAFF.ADD_STAFF.WARNING' | translate }}:</strong>
                     <ng-container [ngSwitch]="validationType">
-                      <span *ngSwitchCase="'missing'">
-                        <span *ngFor="let f of missingFields; let last = last">
-                          {{ f | translate }}<span *ngIf="!last">, </span>
-                        </span>
-                      </span>
+                      <span *ngSwitchCase="'missing'">{{ 'STAFF.ADD_STAFF.FILL_REQUIRED_FIELDS' | translate }}</span>
                       <span *ngSwitchCase="'password_mismatch'">{{ 'STAFF.ADD_STAFF.PASSWORD_MISMATCH' | translate }}</span>
                       <span *ngSwitchCase="'permission'">{{ backendErrorText }}</span>
                       <span *ngSwitchDefault>{{ 'STAFF.ADD_STAFF.UNKNOWN_VALIDATION' | translate }}</span>

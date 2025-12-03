@@ -18,7 +18,7 @@ export class LicenseInterceptor implements HttpInterceptor {
             error.error?.code === 'LICENSE_INVALID' && 
             !this.hasRedirected &&
             !req.url.includes('/license/') &&
-            window.location.hash !== '#/upload-license') {
+            !window.location.pathname.includes('/upload-license')) {
           
           this.hasRedirected = true;
           
@@ -26,8 +26,8 @@ export class LicenseInterceptor implements HttpInterceptor {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           
-          // Redirigir a la página de carga de licencia
-          window.location.href = '/#/upload-license';
+          // Redirigir a la página de carga de licencia usando Angular Router
+          this.router.navigate(['/upload-license']);
           
           setTimeout(() => this.hasRedirected = false, 2000);
         }

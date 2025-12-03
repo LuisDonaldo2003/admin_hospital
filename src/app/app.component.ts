@@ -4,6 +4,8 @@ import { AuthService } from './shared/auth/auth.service';
 import { SettingsService } from './core/settings/general-settings/service/settings.service';
 import { ActivityMonitorService } from './shared/services/activity-monitor.service';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +18,8 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'preclinic-angular';
   // Suscripción al estado de autenticación
   private authSubscription: Subscription | undefined;
+  // Suscripción a eventos de navegación
+  private routerSubscription: Subscription | undefined;
 
   /**
    * Inyecta los servicios de traducción, autenticación, configuración y monitoreo de actividad
@@ -24,12 +28,35 @@ export class AppComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private authService: AuthService,
     private settingsService: SettingsService,
-    private activityMonitor: ActivityMonitorService
+    private activityMonitor: ActivityMonitorService,
+    private router: Router
   ) {
     // Establece el idioma por defecto al iniciar la app
     const savedLang = localStorage.getItem('language') || 'en';
     this.translate.setDefaultLang(savedLang);
     this.translate.use(savedLang);
+    
+    // Rastrear la última URL visitada para restaurar la sesión
+    this.trackLastVisitedUrl();
+  }
+  
+  /**
+   * Rastrea la última URL visitada y la guarda en localStorage
+   * Esto permite restaurar la página donde estabas después de reiniciar el servidor
+   */
+  private trackLastVisitedUrl(): void {
+    this.routerSubscription = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      // Solo guardar si el usuario está autenticado
+      if (this.authService.isLoggedIn()) {
+        const url = event.urlAfterRedirects || event.url;
+        // No guardar URLs de autenticación
+        if (!url.includes('/login') && !url.includes('/register') && !url.includes('/forgot-password')) {
+          localStorage.setItem('lastVisitedUrl', url);
+        }
+      }
+    });
   }
 
   /**
@@ -90,10 +117,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Limpia la suscripción al estado de autenticación al destruir el componente
+   * Limpia las suscripciones al destruir el componente
    */
   ngOnDestroy(): void {
     this.authSubscription?.unsubscribe();
+    this.routerSubscription?.unsubscribe();
   }
 
   /**

@@ -26,9 +26,12 @@
               <!-- Alerta de éxito -->
               @if (text_success) {
                 <div class="mb-4">
-                  <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong><i class="fa fa-check-circle me-2"></i>{{ 'TEACHING_MODULE.STAKEHOLDINGS.SUCCESS' | translate }}!</strong> {{ text_success }}
-                    <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
+                  <div class="alert alert-modern alert-success d-flex align-items-center">
+                    <i class="fa fa-check-circle me-3"></i>
+                    <div class="flex-grow-1">
+                      <strong>{{ 'TEACHING_MODULE.STAKEHOLDINGS.SUCCESS' | translate }}!</strong> {{ text_success }}
+                    </div>
+                    <button type="button" class="btn-close" (click)="text_success = ''"></button>
                   </div>
                 </div>
               }
@@ -36,9 +39,12 @@
               <!-- Alerta de validación/error -->
               @if (text_validation) {
                 <div class="mb-4">
-                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'TEACHING_MODULE.STAKEHOLDINGS.WARNING' | translate }}:</strong> {{ text_validation }}
-                    <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+                  <div class="alert alert-modern alert-warning d-flex align-items-center">
+                    <i class="fa fa-exclamation-triangle me-3"></i>
+                    <div class="flex-grow-1">
+                      <strong>{{ 'TEACHING_MODULE.STAKEHOLDINGS.WARNING' | translate }}:</strong> {{ text_validation }}
+                    </div>
+                    <button type="button" class="btn-close" (click)="text_validation = ''"></button>
                   </div>
                 </div>
               }

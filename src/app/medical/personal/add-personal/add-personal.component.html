@@ -556,8 +556,18 @@
                 </div>
               }
 
-              <!-- Alerta de validación/error -->
-              @if (showValidation) {
+              <!-- Alerta de validación general -->
+              @if (submitted && (!nombre.trim() || !apellidos.trim() || !tipo || !rfc.trim() || !numeroChecador.trim())) {
+                <div class="mt-4">
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'PERSONAL.ADD_PERSONAL.WARNING' | translate }}:</strong> Rellena los campos solicitados
+                    <button type="button" class="btn-close" (click)="submitted = false" aria-label="Cerrar"></button>
+                  </div>
+                </div>
+              }
+
+              <!-- Alerta de error del servidor -->
+              @if (showValidation && serverValidationMessage) {
                 <div class="mt-4">
                   <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'PERSONAL.ADD_PERSONAL.WARNING' | translate }}:</strong> {{ serverValidationMessage }}

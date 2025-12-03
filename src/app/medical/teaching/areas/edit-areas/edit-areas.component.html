@@ -34,9 +34,12 @@
               <!-- Alerta de validación/error -->
               @if (text_validation) {
                 <div class="mb-4">
-                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'TEACHING_MODULE.AREAS.WARNING' | translate }}:</strong> {{ text_validation }}
-                    <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
+                  <div class="alert alert-modern alert-warning d-flex align-items-center">
+                    <i class="fa fa-exclamation-triangle me-3"></i>
+                    <div class="flex-grow-1">
+                      <strong>{{ 'TEACHING_MODULE.AREAS.WARNING' | translate }}:</strong> {{ text_validation }}
+                    </div>
+                    <button type="button" class="btn-close" (click)="text_validation = ''"></button>
                   </div>
                 </div>
               }

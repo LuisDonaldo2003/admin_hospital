@@ -33,8 +33,11 @@
             <form>
               <!-- Campo para el nombre del perfil -->
               <div class="mb-3">
-                <label class="form-label">{{ 'PROFILE_M.EDIT_PROFILE.NAME' | translate }}</label>
-                <input type="text" name="name" [(ngModel)]="name" class="form-control" [placeholder]="'PROFILE_M.EDIT_PROFILE.PLACEHOLDER_NAME' | translate" />
+                <label class="form-label">{{ 'PROFILE_M.EDIT_PROFILE.NAME' | translate }} <span class="text-danger">*</span></label>
+                <input type="text" name="name" [(ngModel)]="name" class="form-control" [ngClass]="{ 'is-invalid': valid_form && !name.trim() }" [placeholder]="'PROFILE_M.EDIT_PROFILE.PLACEHOLDER_NAME' | translate" />
+                <div class="invalid-feedback" *ngIf="valid_form && !name.trim()">
+                  {{ 'PROFILE_M.EDIT_PROFILE.PROFILE_REQUIERED' | translate }}
+                </div>
               </div>
 
               <!-- Campo para el estado del perfil (activo/inactivo) - Toggle mejorado -->
