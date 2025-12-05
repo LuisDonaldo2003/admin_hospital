@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { URL_SERVICIOS } from '../config/config';
+import { LicenseCheckGuard } from '../core/guards/license-check.guard';
 
 @Component({
   selector: 'app-upload-license',
@@ -19,7 +20,8 @@ export class UploadLicenseComponent {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private licenseGuard: LicenseCheckGuard
   ) {}
 
   onFileSelected(event: any): void {
@@ -60,6 +62,9 @@ export class UploadLicenseComponent {
         // Limpiar input
         const fileInput = document.getElementById('fileInput') as HTMLInputElement;
         if (fileInput) fileInput.value = '';
+
+        // Invalidar caché de licencia para que se verifique nuevamente
+        this.licenseGuard.invalidateCache();
 
         // Redirigir al login después de 2 segundos
         setTimeout(() => {

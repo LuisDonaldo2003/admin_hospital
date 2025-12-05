@@ -518,4 +518,58 @@ export class routes {
     return this.baseUrl + '/teaching/edit_area';
   }
 
+  // Appointments (Citas Médicas)
+  // Doctors
+  public static get doctorList(): string {
+    return this.baseUrl + '/appointments/list_doctor';
+  }
+  public static get addDoctors(): string {
+    return this.baseUrl + '/appointments/add_doctor';
+  }
+  public static get editDoctors(): string {
+    return this.baseUrl + '/appointments/edit_doctor';
+  }
+
+  // Appointments
+  public static get appointmentsList(): string {
+    return this.baseUrl + '/appointments/list_appointment';
+  }
+  public static get addAppointments(): string {
+    return this.baseUrl + '/appointments/add_appointment';
+  }
+  public static get editAppointments(): string {
+    return this.baseUrl + '/appointments/edit_appointment';
+  }
+  
+  // Calendar
+  public static get appointmentsCalendar(): string {
+    return this.baseUrl + '/appointments/calendar';
+  }
+
+  // Especialidades
+  public static get especialidadesList(): string {
+    return this.baseUrl + '/appointments/especialidades/list';
+  }
+  public static get addEspecialidad(): string {
+    return this.baseUrl + '/appointments/especialidades/add';
+  }
+  public static get editEspecialidad(): string {
+    return this.baseUrl + '/appointments/especialidades/edit';
+  }
+
+  // Cancelled Appointments
+  public static get cancelledAppointments(): string {
+    return this.baseUrl + '/appointments/cancelled/list';
+  }
+
+  // Completed Appointments
+  public static get completedAppointments(): string {
+    return this.baseUrl + '/appointments/completed/list';
+  }
+
+  // No-Show Appointments
+  public static get noShowAppointments(): string {
+    return this.baseUrl + '/appointments/no-show/list';
+  }
+
 }

@@ -55,7 +55,8 @@ const routes: Routes = [
       import('./authentication/authentication.module').then(
         (m) => m.AuthenticationModule
       ),
-    canActivate: [LicenseCheckGuard],
+    // No aplicar LicenseCheckGuard a rutas de autenticación
+    // La licencia se verifica antes de llegar aquí y en el interceptor
   },
   {
     path: 'error',

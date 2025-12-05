@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 @Injectable()
 export class LicenseInterceptor implements HttpInterceptor {
   private hasRedirected = false;
+  private readonly REDIRECT_COOLDOWN = 5000; // 5 segundos
 
   constructor(private router: Router) {}
 
@@ -18,18 +19,22 @@ export class LicenseInterceptor implements HttpInterceptor {
             error.error?.code === 'LICENSE_INVALID' && 
             !this.hasRedirected &&
             !req.url.includes('/license/') &&
-            !window.location.pathname.includes('/upload-license')) {
+            !window.location.pathname.includes('/upload-license') &&
+            !window.location.pathname.includes('/login') &&
+            !window.location.pathname.includes('/register') &&
+            !window.location.pathname.includes('/forgot-password')) {
           
           this.hasRedirected = true;
           
-          // Limpiar localStorage para evitar loops
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
+          console.warn('⚠️ Licencia inválida detectada. Redirigiendo a página de activación.');
+          
+          // NO limpiar token aquí - el usuario puede tener sesión válida
+          // Solo redirigir para que un administrador suba la licencia
           
           // Redirigir a la página de carga de licencia usando Angular Router
           this.router.navigate(['/upload-license']);
           
-          setTimeout(() => this.hasRedirected = false, 2000);
+          setTimeout(() => this.hasRedirected = false, this.REDIRECT_COOLDOWN);
         }
         
         return throwError(() => error);

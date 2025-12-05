@@ -1,0 +1,168 @@
+<div class="page-wrapper">
+  <div class="content">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="row">
+        <div class="col-sm-12">
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="javascript:void(0)">{{ 'APPOINTMENTS.TITLE' | translate }}</a>
+            </li>
+            <li class="breadcrumb-item">
+              <i class="feather-chevron-right"></i>
+            </li>
+            <li class="breadcrumb-item active">{{ 'APPOINTMENTS.CALENDAR.TITLE' | translate }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Calendar Column -->
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <button class="btn btn-sm btn-outline-primary" (click)="previousMonth()">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <h4 class="mb-0">{{ monthNames[currentMonth] }} {{ currentYear }}</h4>
+              <button class="btn btn-sm btn-outline-primary" (click)="nextMonth()">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="calendar-grid">
+              <!-- Day Headers -->
+              <div class="calendar-header">
+                @for (dayName of dayNames; track dayName) {
+                  <div class="calendar-day-name">{{ dayName }}</div>
+                }
+              </div>
+
+              <!-- Calendar Days -->
+              @for (week of weeks; track week) {
+                <div class="calendar-week">
+                  @for (day of week; track day) {
+                    <div 
+                      class="calendar-day"
+                      [class.today]="day.isToday"
+                      [class.selected]="day.isSelected"
+                      [class.has-appointments]="day.appointments?.length > 0"
+                      [class.no-appointments]="day.date && day.appointments?.length === 0"
+                      [class.disabled]="!day.date"
+                      (click)="selectDate(day)">
+                      @if (day.day) {
+                        <div class="day-number">{{ day.day }}</div>
+                        @if (day.appointments?.length > 0) {
+                          <div class="appointments-count">
+                            <span class="badge bg-primary text-white fw-bold">{{ day.appointments.length }}</span>
+                          </div>
+                        }
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Leyenda de colores -->
+            <div class="calendar-legend mt-4">
+              <div class="legend-item">
+                <div class="legend-color with-appointments"></div>
+                <span>{{ 'APPOINTMENTS.CALENDAR.WITH_APPOINTMENTS' | translate }}</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color without-appointments"></div>
+                <span>{{ 'APPOINTMENTS.CALENDAR.WITHOUT_APPOINTMENTS' | translate }}</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color today-mark"></div>
+                <span>{{ 'APPOINTMENTS.CALENDAR.TODAY' | translate }}</span>
+              </div>
+            </div>
+
+            <div class="mt-3 text-center">
+              <button class="btn btn-outline-secondary btn-sm" (click)="goToToday()">
+                <i class="fas fa-calendar-day me-1"></i> {{ 'APPOINTMENTS.CALENDAR.GO_TODAY' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Appointments List Column -->
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              @if (selectedDate) {
+                {{ 'APPOINTMENTS.CALENDAR.APPOINTMENTS_FOR' | translate }} {{ selectedDate | date: 'dd/MM/yyyy' }}
+              } @else {
+                {{ 'APPOINTMENTS.CALENDAR.SELECT_DATE' | translate }}
+              }
+            </h5>
+            <button class="btn btn-sm btn-primary" (click)="addNewAppointment()">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+            @if (isLoading) {
+              <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">{{ 'COMMON.LOADING' | translate }}...</span>
+                </div>
+              </div>
+            } @else if (filteredAppointments.length > 0) {
+              @for (appointment of filteredAppointments; track appointment.id) {
+                <div class="appointment-card mb-3" (click)="viewAppointment(appointment)">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <h6 class="mb-1">
+                        <i class="fas fa-clock text-muted me-1"></i>
+                        {{ formatTime(appointment.hora) }}
+                      </h6>
+                      <p class="mb-1">
+                        <i class="fas fa-user-injured text-primary me-1"></i>
+                        <strong>{{ getPacienteNombre(appointment) }}</strong>
+                      </p>
+                      <p class="mb-1">
+                        <i class="fas fa-user-md text-info me-1"></i>
+                        {{ getDoctorNombre(appointment) }}
+                      </p>
+                      <p class="mb-0 text-muted small">
+                        {{ appointment.motivo_consulta || appointment.motivo || 'Sin motivo' }}
+                      </p>
+                    </div>
+                    <span [class]="'badge ' + getStatusClass(appointment.estado)">
+                      {{ getStatusText(appointment.estado) }}
+                    </span>
+                  </div>
+                </div>
+              }
+            } @else if (selectedDate) {
+              <div class="text-center py-5">
+                <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                <p class="text-muted">{{ 'APPOINTMENTS.CALENDAR.NO_APPOINTMENTS' | translate }}</p>
+              </div>
+            } @else {
+              <div class="text-center py-5">
+                <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
+                <p class="text-muted">{{ 'APPOINTMENTS.CALENDAR.SELECT_DATE_MESSAGE' | translate }}</p>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startAppointmentsCalendarTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

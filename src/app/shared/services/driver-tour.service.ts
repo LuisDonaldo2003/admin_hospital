@@ -4123,6 +4123,950 @@ export class DriverTourService {
   }
 
   /**
+   * Tour para Lista de Citas
+   */
+  startAppointmentsListTour(): void {
+    const steps: DriveStep[] = [
+      {
+        element: '.breadcrumb',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_LIST.BREADCRUMB_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_LIST.BREADCRUMB_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.search-box',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_LIST.SEARCH_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_LIST.SEARCH_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.form-select',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_LIST.FILTER_STATUS_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_LIST.FILTER_STATUS_DESC'),
+          side: 'bottom',
+          align: 'center'
+        }
+      },
+      {
+        element: '.form-select2',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_LIST.FILTER_DOCTOR_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_LIST.FILTER_DOCTOR_DESC'),
+          side: 'bottom',
+          align: 'center'
+        }
+      },
+      {
+        element: '.btn-options',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_LIST.ADD_BUTTON_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_LIST.ADD_BUTTON_DESC'),
+          side: 'left',
+          align: 'center'
+        }
+      },
+      {
+        element: '.modern-table',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_LIST.TABLE_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_LIST.TABLE_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      },
+      {
+        element: '.action-buttons',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_LIST.ACTIONS_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_LIST.ACTIONS_DESC'),
+          side: 'left',
+          align: 'center'
+        }
+      },
+      {
+        element: '.pagination',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_LIST.PAGINATION_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_LIST.PAGINATION_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      }
+    ];
+
+    const config: Config = {
+      showProgress: true,
+      showButtons: ['next', 'previous', 'close'],
+      nextBtnText: this.translate.instant('TOUR.NEXT'),
+      prevBtnText: this.translate.instant('TOUR.PREVIOUS'),
+      doneBtnText: this.translate.instant('TOUR.DONE'),
+      progressText: this.translate.instant('TOUR.PROGRESS'),
+      stagePadding: 12,
+      stageRadius: 12,
+      popoverClass: 'driver-popover-custom',
+      allowClose: true,
+      smoothScroll: true,
+      animate: true,
+      overlayColor: 'rgba(0, 0, 0, 0.4)',
+      onDestroyed: () => {
+        this.saveTourCompleted('appointments-list');
+      }
+    };
+
+    this.driverInstance = driver(config);
+    this.driverInstance.setSteps(steps);
+    this.driverInstance.drive();
+  }
+
+  /**
+   * Tour para Agregar Cita
+   */
+  startAddAppointmentTour(): void {
+    const steps: DriveStep[] = [
+      {
+        element: '.breadcrumb',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_APPOINTMENT.BREADCRUMB_TITLE'),
+          description: this.translate.instant('TOUR.ADD_APPOINTMENT.BREADCRUMB_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.form-icon',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_APPOINTMENT.FORM_TITLE'),
+          description: this.translate.instant('TOUR.ADD_APPOINTMENT.FORM_DESC'),
+          side: 'bottom',
+          align: 'center'
+        }
+      },
+      {
+        element: 'input[name="nombre_paciente"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_APPOINTMENT.PATIENT_NAME_TITLE'),
+          description: this.translate.instant('TOUR.ADD_APPOINTMENT.PATIENT_NAME_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: 'select[name="especialidad_id"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_APPOINTMENT.SPECIALTY_TITLE'),
+          description: this.translate.instant('TOUR.ADD_APPOINTMENT.SPECIALTY_DESC'),
+          side: 'bottom',
+          align: 'center'
+        }
+      },
+      {
+        element: 'select[name="doctor_id"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_APPOINTMENT.DOCTOR_TITLE'),
+          description: this.translate.instant('TOUR.ADD_APPOINTMENT.DOCTOR_DESC'),
+          side: 'bottom',
+          align: 'center'
+        }
+      },
+      {
+        element: 'input[name="fecha"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_APPOINTMENT.DATE_TITLE'),
+          description: this.translate.instant('TOUR.ADD_APPOINTMENT.DATE_DESC'),
+          side: 'bottom',
+          align: 'center'
+        }
+      },
+      {
+        element: 'select[name="hora_inicio"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_APPOINTMENT.TIME_TITLE'),
+          description: this.translate.instant('TOUR.ADD_APPOINTMENT.TIME_DESC'),
+          side: 'bottom',
+          align: 'center'
+        }
+      },
+      {
+        element: 'textarea[name="motivo_consulta"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_APPOINTMENT.REASON_TITLE'),
+          description: this.translate.instant('TOUR.ADD_APPOINTMENT.REASON_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: 'select[name="estado"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_APPOINTMENT.STATUS_TITLE'),
+          description: this.translate.instant('TOUR.ADD_APPOINTMENT.STATUS_DESC'),
+          side: 'bottom',
+          align: 'center'
+        }
+      },
+      {
+        element: 'textarea[name="notas"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_APPOINTMENT.NOTES_TITLE'),
+          description: this.translate.instant('TOUR.ADD_APPOINTMENT.NOTES_DESC'),
+          side: 'top',
+          align: 'start'
+        }
+      },
+      {
+        element: '.btn-save',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_APPOINTMENT.SAVE_BUTTON_TITLE'),
+          description: this.translate.instant('TOUR.ADD_APPOINTMENT.SAVE_BUTTON_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      }
+    ];
+
+    const config: Config = {
+      showProgress: true,
+      showButtons: ['next', 'previous', 'close'],
+      nextBtnText: this.translate.instant('TOUR.NEXT'),
+      prevBtnText: this.translate.instant('TOUR.PREVIOUS'),
+      doneBtnText: this.translate.instant('TOUR.DONE'),
+      progressText: this.translate.instant('TOUR.PROGRESS'),
+      stagePadding: 12,
+      stageRadius: 12,
+      popoverClass: 'driver-popover-custom',
+      allowClose: true,
+      smoothScroll: true,
+      animate: true,
+      overlayColor: 'rgba(0, 0, 0, 0.4)',
+      onDestroyed: () => {
+        this.saveTourCompleted('add-appointment');
+      }
+    };
+
+    this.driverInstance = driver(config);
+    this.driverInstance.setSteps(steps);
+    this.driverInstance.drive();
+  }
+
+  /**
+   * Tour para Editar Cita
+   */
+  startEditAppointmentTour(): void {
+    const steps: DriveStep[] = [
+      {
+        element: '.breadcrumb',
+        popover: {
+          title: this.translate.instant('TOUR.EDIT_APPOINTMENT.BREADCRUMB_TITLE'),
+          description: this.translate.instant('TOUR.EDIT_APPOINTMENT.BREADCRUMB_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: 'input[name="nombre_paciente"]',
+        popover: {
+          title: this.translate.instant('TOUR.EDIT_APPOINTMENT.PATIENT_NAME_TITLE'),
+          description: this.translate.instant('TOUR.EDIT_APPOINTMENT.PATIENT_NAME_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: 'select[name="estado"]',
+        popover: {
+          title: this.translate.instant('TOUR.EDIT_APPOINTMENT.STATUS_TITLE'),
+          description: this.translate.instant('TOUR.EDIT_APPOINTMENT.STATUS_DESC'),
+          side: 'bottom',
+          align: 'center'
+        }
+      },
+      {
+        element: 'textarea[name="motivoCancelacion"]',
+        popover: {
+          title: this.translate.instant('TOUR.EDIT_APPOINTMENT.CANCEL_REASON_TITLE'),
+          description: this.translate.instant('TOUR.EDIT_APPOINTMENT.CANCEL_REASON_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.btn-save',
+        popover: {
+          title: this.translate.instant('TOUR.EDIT_APPOINTMENT.SAVE_BUTTON_TITLE'),
+          description: this.translate.instant('TOUR.EDIT_APPOINTMENT.SAVE_BUTTON_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      }
+    ];
+
+    const config: Config = {
+      showProgress: true,
+      showButtons: ['next', 'previous', 'close'],
+      nextBtnText: this.translate.instant('TOUR.NEXT'),
+      prevBtnText: this.translate.instant('TOUR.PREVIOUS'),
+      doneBtnText: this.translate.instant('TOUR.DONE'),
+      progressText: this.translate.instant('TOUR.PROGRESS'),
+      stagePadding: 12,
+      stageRadius: 12,
+      popoverClass: 'driver-popover-custom',
+      allowClose: true,
+      smoothScroll: true,
+      animate: true,
+      overlayColor: 'rgba(0, 0, 0, 0.4)',
+      onDestroyed: () => {
+        this.saveTourCompleted('edit-appointment');
+      }
+    };
+
+    this.driverInstance = driver(config);
+    this.driverInstance.setSteps(steps);
+    this.driverInstance.drive();
+  }
+
+  /**
+   * Tour para Calendario de Citas
+   */
+  startAppointmentsCalendarTour(): void {
+    const steps: DriveStep[] = [
+      {
+        element: '.breadcrumb',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.BREADCRUMB_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.BREADCRUMB_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.card-header .btn-outline-primary:first-of-type',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.PREV_MONTH_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.PREV_MONTH_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.card-header h4',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.CURRENT_MONTH_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.CURRENT_MONTH_DESC'),
+          side: 'bottom',
+          align: 'center'
+        }
+      },
+      {
+        element: '.card-header .btn-outline-primary:last-of-type',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.NEXT_MONTH_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.NEXT_MONTH_DESC'),
+          side: 'bottom',
+          align: 'end'
+        }
+      },
+      {
+        element: '.calendar-grid',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.CALENDAR_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.CALENDAR_DESC'),
+          side: 'right',
+          align: 'center'
+        }
+      },
+      {
+        element: '.calendar-legend',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.LEGEND_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.LEGEND_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      },
+      {
+        element: '.btn-outline-secondary',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.TODAY_BUTTON_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.TODAY_BUTTON_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      },
+      {
+        element: '.col-lg-4 .card',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.APPOINTMENTS_LIST_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.APPOINTMENTS_LIST_DESC'),
+          side: 'left',
+          align: 'center'
+        }
+      },
+      {
+        element: '.col-lg-4 .btn-primary',
+        popover: {
+          title: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.ADD_BUTTON_TITLE'),
+          description: this.translate.instant('TOUR.APPOINTMENTS_CALENDAR.ADD_BUTTON_DESC'),
+          side: 'left',
+          align: 'end'
+        }
+      }
+    ];
+
+    const config: Config = {
+      showProgress: true,
+      showButtons: ['next', 'previous', 'close'],
+      nextBtnText: this.translate.instant('TOUR.NEXT'),
+      prevBtnText: this.translate.instant('TOUR.PREVIOUS'),
+      doneBtnText: this.translate.instant('TOUR.DONE'),
+      progressText: this.translate.instant('TOUR.PROGRESS'),
+      stagePadding: 12,
+      stageRadius: 12,
+      popoverClass: 'driver-popover-custom',
+      allowClose: true,
+      smoothScroll: true,
+      animate: true,
+      overlayColor: 'rgba(0, 0, 0, 0.4)',
+      onDestroyed: () => {
+        this.saveTourCompleted('appointments-calendar');
+      }
+    };
+
+    this.driverInstance = driver(config);
+    this.driverInstance.setSteps(steps);
+    this.driverInstance.drive();
+  }
+
+  /**
+   * Tour para la lista de citas canceladas
+   */
+  startCancelledAppointmentsTour(): void {
+    const steps: DriveStep[] = [
+      {
+        element: '.breadcrumb',
+        popover: {
+          title: this.translate.instant('TOUR.CANCELLED_APPOINTMENTS.BREADCRUMB_TITLE'),
+          description: this.translate.instant('TOUR.CANCELLED_APPOINTMENTS.BREADCRUMB_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.search-box',
+        popover: {
+          title: this.translate.instant('TOUR.CANCELLED_APPOINTMENTS.SEARCH_TITLE'),
+          description: this.translate.instant('TOUR.CANCELLED_APPOINTMENTS.SEARCH_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.table',
+        popover: {
+          title: this.translate.instant('TOUR.CANCELLED_APPOINTMENTS.TABLE_TITLE'),
+          description: this.translate.instant('TOUR.CANCELLED_APPOINTMENTS.TABLE_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      },
+      {
+        element: '.pagination',
+        popover: {
+          title: this.translate.instant('TOUR.CANCELLED_APPOINTMENTS.PAGINATION_TITLE'),
+          description: this.translate.instant('TOUR.CANCELLED_APPOINTMENTS.PAGINATION_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      }
+    ];
+
+    const config: Config = {
+      showProgress: true,
+      showButtons: ['next', 'previous', 'close'],
+      nextBtnText: this.translate.instant('TOUR.NEXT'),
+      prevBtnText: this.translate.instant('TOUR.PREVIOUS'),
+      doneBtnText: this.translate.instant('TOUR.DONE'),
+      progressText: this.translate.instant('TOUR.PROGRESS'),
+      stagePadding: 12,
+      stageRadius: 12,
+      popoverClass: 'driver-popover-custom',
+      allowClose: true,
+      smoothScroll: true,
+      animate: true,
+      overlayColor: 'rgba(0, 0, 0, 0.4)',
+      onDestroyed: () => {
+        this.saveTourCompleted('cancelled-appointments');
+      }
+    };
+
+    this.driverInstance = driver(config);
+    this.driverInstance.setSteps(steps);
+    this.driverInstance.drive();
+  }
+
+  /**
+   * Tour para la lista de citas completadas
+   */
+  startCompletedAppointmentsTour(): void {
+    const steps: DriveStep[] = [
+      {
+        element: '.breadcrumb',
+        popover: {
+          title: this.translate.instant('TOUR.COMPLETED_APPOINTMENTS.BREADCRUMB_TITLE'),
+          description: this.translate.instant('TOUR.COMPLETED_APPOINTMENTS.BREADCRUMB_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.search-box',
+        popover: {
+          title: this.translate.instant('TOUR.COMPLETED_APPOINTMENTS.SEARCH_TITLE'),
+          description: this.translate.instant('TOUR.COMPLETED_APPOINTMENTS.SEARCH_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.table',
+        popover: {
+          title: this.translate.instant('TOUR.COMPLETED_APPOINTMENTS.TABLE_TITLE'),
+          description: this.translate.instant('TOUR.COMPLETED_APPOINTMENTS.TABLE_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      },
+      {
+        element: '.pagination',
+        popover: {
+          title: this.translate.instant('TOUR.COMPLETED_APPOINTMENTS.PAGINATION_TITLE'),
+          description: this.translate.instant('TOUR.COMPLETED_APPOINTMENTS.PAGINATION_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      }
+    ];
+
+    const config: Config = {
+      showProgress: true,
+      showButtons: ['next', 'previous', 'close'],
+      nextBtnText: this.translate.instant('TOUR.NEXT'),
+      prevBtnText: this.translate.instant('TOUR.PREVIOUS'),
+      doneBtnText: this.translate.instant('TOUR.DONE'),
+      progressText: this.translate.instant('TOUR.PROGRESS'),
+      stagePadding: 12,
+      stageRadius: 12,
+      popoverClass: 'driver-popover-custom',
+      allowClose: true,
+      smoothScroll: true,
+      animate: true,
+      overlayColor: 'rgba(0, 0, 0, 0.4)',
+      onDestroyed: () => {
+        this.saveTourCompleted('completed-appointments');
+      }
+    };
+
+    this.driverInstance = driver(config);
+    this.driverInstance.setSteps(steps);
+    this.driverInstance.drive();
+  }
+
+  /**
+   * Tour para la lista de citas no asistidas
+   */
+  startNoShowAppointmentsTour(): void {
+    const steps: DriveStep[] = [
+      {
+        element: '.breadcrumb',
+        popover: {
+          title: this.translate.instant('TOUR.NO_SHOW_APPOINTMENTS.BREADCRUMB_TITLE'),
+          description: this.translate.instant('TOUR.NO_SHOW_APPOINTMENTS.BREADCRUMB_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.search-box',
+        popover: {
+          title: this.translate.instant('TOUR.NO_SHOW_APPOINTMENTS.SEARCH_TITLE'),
+          description: this.translate.instant('TOUR.NO_SHOW_APPOINTMENTS.SEARCH_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.table',
+        popover: {
+          title: this.translate.instant('TOUR.NO_SHOW_APPOINTMENTS.TABLE_TITLE'),
+          description: this.translate.instant('TOUR.NO_SHOW_APPOINTMENTS.TABLE_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      },
+      {
+        element: '.pagination',
+        popover: {
+          title: this.translate.instant('TOUR.NO_SHOW_APPOINTMENTS.PAGINATION_TITLE'),
+          description: this.translate.instant('TOUR.NO_SHOW_APPOINTMENTS.PAGINATION_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      }
+    ];
+
+    const config: Config = {
+      showProgress: true,
+      showButtons: ['next', 'previous', 'close'],
+      nextBtnText: this.translate.instant('TOUR.NEXT'),
+      prevBtnText: this.translate.instant('TOUR.PREVIOUS'),
+      doneBtnText: this.translate.instant('TOUR.DONE'),
+      progressText: this.translate.instant('TOUR.PROGRESS'),
+      stagePadding: 12,
+      stageRadius: 12,
+      popoverClass: 'driver-popover-custom',
+      allowClose: true,
+      smoothScroll: true,
+      animate: true,
+      overlayColor: 'rgba(0, 0, 0, 0.4)',
+      onDestroyed: () => {
+        this.saveTourCompleted('no-show-appointments');
+      }
+    };
+
+    this.driverInstance = driver(config);
+    this.driverInstance.setSteps(steps);
+    this.driverInstance.drive();
+  }
+
+  /**
+   * Tour para la lista de doctores
+   */
+  startDoctorsListTour(): void {
+    const steps: DriveStep[] = [
+      {
+        element: '.breadcrumb',
+        popover: {
+          title: this.translate.instant('TOUR.DOCTORS_LIST.BREADCRUMB_TITLE'),
+          description: this.translate.instant('TOUR.DOCTORS_LIST.BREADCRUMB_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.search-box',
+        popover: {
+          title: this.translate.instant('TOUR.DOCTORS_LIST.SEARCH_TITLE'),
+          description: this.translate.instant('TOUR.DOCTORS_LIST.SEARCH_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.role-filter-box',
+        popover: {
+          title: this.translate.instant('TOUR.DOCTORS_LIST.SPECIALTY_FILTER_TITLE'),
+          description: this.translate.instant('TOUR.DOCTORS_LIST.SPECIALTY_FILTER_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.btn-options',
+        popover: {
+          title: this.translate.instant('TOUR.DOCTORS_LIST.ADD_BUTTON_TITLE'),
+          description: this.translate.instant('TOUR.DOCTORS_LIST.ADD_BUTTON_DESC'),
+          side: 'left',
+          align: 'end'
+        }
+      },
+      {
+        element: '.table',
+        popover: {
+          title: this.translate.instant('TOUR.DOCTORS_LIST.TABLE_TITLE'),
+          description: this.translate.instant('TOUR.DOCTORS_LIST.TABLE_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      },
+      {
+        element: '.pagination',
+        popover: {
+          title: this.translate.instant('TOUR.DOCTORS_LIST.PAGINATION_TITLE'),
+          description: this.translate.instant('TOUR.DOCTORS_LIST.PAGINATION_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      }
+    ];
+
+    const config: Config = {
+      showProgress: true,
+      showButtons: ['next', 'previous', 'close'],
+      nextBtnText: this.translate.instant('TOUR.NEXT'),
+      prevBtnText: this.translate.instant('TOUR.PREVIOUS'),
+      doneBtnText: this.translate.instant('TOUR.DONE'),
+      progressText: this.translate.instant('TOUR.PROGRESS'),
+      stagePadding: 12,
+      stageRadius: 12,
+      popoverClass: 'driver-popover-custom',
+      allowClose: true,
+      smoothScroll: true,
+      animate: true,
+      overlayColor: 'rgba(0, 0, 0, 0.4)',
+      onDestroyed: () => {
+        this.saveTourCompleted('doctors-list');
+      }
+    };
+
+    this.driverInstance = driver(config);
+    this.driverInstance.setSteps(steps);
+    this.driverInstance.drive();
+  }
+
+  /**
+   * Tour para la lista de especialidades
+   */
+  startEspecialidadesListTour(): void {
+    const steps: DriveStep[] = [
+      {
+        element: '.breadcrumb',
+        popover: {
+          title: this.translate.instant('TOUR.ESPECIALIDADES_LIST.BREADCRUMB_TITLE'),
+          description: this.translate.instant('TOUR.ESPECIALIDADES_LIST.BREADCRUMB_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.search-box',
+        popover: {
+          title: this.translate.instant('TOUR.ESPECIALIDADES_LIST.SEARCH_TITLE'),
+          description: this.translate.instant('TOUR.ESPECIALIDADES_LIST.SEARCH_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.btn-primary',
+        popover: {
+          title: this.translate.instant('TOUR.ESPECIALIDADES_LIST.ADD_BUTTON_TITLE'),
+          description: this.translate.instant('TOUR.ESPECIALIDADES_LIST.ADD_BUTTON_DESC'),
+          side: 'left',
+          align: 'end'
+        }
+      },
+      {
+        element: '.table',
+        popover: {
+          title: this.translate.instant('TOUR.ESPECIALIDADES_LIST.TABLE_TITLE'),
+          description: this.translate.instant('TOUR.ESPECIALIDADES_LIST.TABLE_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      },
+      {
+        element: '.pagination',
+        popover: {
+          title: this.translate.instant('TOUR.ESPECIALIDADES_LIST.PAGINATION_TITLE'),
+          description: this.translate.instant('TOUR.ESPECIALIDADES_LIST.PAGINATION_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      }
+    ];
+
+    const config: Config = {
+      showProgress: true,
+      showButtons: ['next', 'previous', 'close'],
+      nextBtnText: this.translate.instant('TOUR.NEXT'),
+      prevBtnText: this.translate.instant('TOUR.PREVIOUS'),
+      doneBtnText: this.translate.instant('TOUR.DONE'),
+      progressText: this.translate.instant('TOUR.PROGRESS'),
+      stagePadding: 12,
+      stageRadius: 12,
+      popoverClass: 'driver-popover-custom',
+      allowClose: true,
+      smoothScroll: true,
+      animate: true,
+      overlayColor: 'rgba(0, 0, 0, 0.4)',
+      onDestroyed: () => {
+        this.saveTourCompleted('especialidades-list');
+      }
+    };
+
+    this.driverInstance = driver(config);
+    this.driverInstance.setSteps(steps);
+    this.driverInstance.drive();
+  }
+
+  /**
+   * Tour para formulario de agregar doctor
+   */
+  startAddDoctorTour(): void {
+    const steps: DriveStep[] = [
+      {
+        element: '.breadcrumb',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_DOCTOR.BREADCRUMB_TITLE'),
+          description: this.translate.instant('TOUR.ADD_DOCTOR.BREADCRUMB_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: 'input[name="nombre_completo"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_DOCTOR.NAME_TITLE'),
+          description: this.translate.instant('TOUR.ADD_DOCTOR.NAME_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: 'select[name="especialidad_id"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_DOCTOR.SPECIALTY_TITLE'),
+          description: this.translate.instant('TOUR.ADD_DOCTOR.SPECIALTY_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: 'select[name="turno"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_DOCTOR.SHIFT_TITLE'),
+          description: this.translate.instant('TOUR.ADD_DOCTOR.SHIFT_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: 'input[name="hora_inicio_matutino"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_DOCTOR.SCHEDULE_TITLE'),
+          description: this.translate.instant('TOUR.ADD_DOCTOR.SCHEDULE_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.btn-save',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_DOCTOR.SAVE_TITLE'),
+          description: this.translate.instant('TOUR.ADD_DOCTOR.SAVE_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      }
+    ];
+
+    const config: Config = {
+      showProgress: true,
+      showButtons: ['next', 'previous', 'close'],
+      nextBtnText: this.translate.instant('TOUR.NEXT'),
+      prevBtnText: this.translate.instant('TOUR.PREVIOUS'),
+      doneBtnText: this.translate.instant('TOUR.DONE'),
+      progressText: this.translate.instant('TOUR.PROGRESS'),
+      stagePadding: 12,
+      stageRadius: 12,
+      popoverClass: 'driver-popover-custom',
+      allowClose: true,
+      smoothScroll: true,
+      animate: true,
+      overlayColor: 'rgba(0, 0, 0, 0.4)',
+      onDestroyed: () => {
+        this.saveTourCompleted('add-doctor');
+      }
+    };
+
+    this.driverInstance = driver(config);
+    this.driverInstance.setSteps(steps);
+    this.driverInstance.drive();
+  }
+
+  /**
+   * Tour para formulario de agregar especialidad
+   */
+  startAddEspecialidadTour(): void {
+    const steps: DriveStep[] = [
+      {
+        element: '.breadcrumb',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_ESPECIALIDAD.BREADCRUMB_TITLE'),
+          description: this.translate.instant('TOUR.ADD_ESPECIALIDAD.BREADCRUMB_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: 'input[name="nombre"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_ESPECIALIDAD.NAME_TITLE'),
+          description: this.translate.instant('TOUR.ADD_ESPECIALIDAD.NAME_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: 'textarea[name="descripcion"]',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_ESPECIALIDAD.DESCRIPTION_TITLE'),
+          description: this.translate.instant('TOUR.ADD_ESPECIALIDAD.DESCRIPTION_DESC'),
+          side: 'bottom',
+          align: 'start'
+        }
+      },
+      {
+        element: '.toggle-wrapper',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_ESPECIALIDAD.STATUS_TITLE'),
+          description: this.translate.instant('TOUR.ADD_ESPECIALIDAD.STATUS_DESC'),
+          side: 'left',
+          align: 'center'
+        }
+      },
+      {
+        element: '.btn-primary',
+        popover: {
+          title: this.translate.instant('TOUR.ADD_ESPECIALIDAD.SAVE_TITLE'),
+          description: this.translate.instant('TOUR.ADD_ESPECIALIDAD.SAVE_DESC'),
+          side: 'top',
+          align: 'center'
+        }
+      }
+    ];
+
+    const config: Config = {
+      showProgress: true,
+      showButtons: ['next', 'previous', 'close'],
+      nextBtnText: this.translate.instant('TOUR.NEXT'),
+      prevBtnText: this.translate.instant('TOUR.PREVIOUS'),
+      doneBtnText: this.translate.instant('TOUR.DONE'),
+      progressText: this.translate.instant('TOUR.PROGRESS'),
+      stagePadding: 12,
+      stageRadius: 12,
+      popoverClass: 'driver-popover-custom',
+      allowClose: true,
+      smoothScroll: true,
+      animate: true,
+      overlayColor: 'rgba(0, 0, 0, 0.4)',
+      onDestroyed: () => {
+        this.saveTourCompleted('add-especialidad');
+      }
+    };
+
+    this.driverInstance = driver(config);
+    this.driverInstance.setSteps(steps);
+    this.driverInstance.drive();
+  }
+
+  /**
    * Destruye la instancia actual del driver
    */
   destroy(): void {

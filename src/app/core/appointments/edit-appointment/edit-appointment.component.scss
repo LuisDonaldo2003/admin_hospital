@@ -1,0 +1,129 @@
+// ========================================
+// EDIT APPOINTMENT - ESTILOS MODERNOS
+// Basado en el diseño de add-appointment
+// ========================================
+
+// Reutilizamos los estilos de add-appointment
+// Esta clase mantiene consistencia visual con el formulario de creación
+.edit-staff-form {
+  // ===== CARD PRINCIPAL DEL FORMULARIO =====
+  .card-form {
+    border-radius: 1rem;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    border: 4px solid var(--user-border-color, #0B7285) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .form-header {
+    .form-icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, 
+        var(--user-border-color, #0B7285),
+        color-mix(in srgb, var(--user-border-color, #0B7285) 80%, #000));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      border: 2px solid var(--user-border-color, #0B7285);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  // ===== ALERTAS MODERNAS =====
+  .alert-modern {
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    border: none;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    &.alert-success {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    &.alert-warning {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+    &.alert-danger {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+  }
+
+  // ===== BOTONES =====
+  .form-footer {
+    .btn {
+      padding: 0.65rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      border: none;
+
+      &:active {
+        transform: scale(0.98);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    .btn-cancel {
+      background: linear-gradient(135deg, #6b7280, #4b5563);
+      color: white;
+      box-shadow: 0 2px 6px rgba(107, 114, 128, 0.3);
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);
+        filter: brightness(1.1);
+      }
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, 
+        var(--user-border-color, #0B7285),
+        color-mix(in srgb, var(--user-border-color, #0B7285) 85%, #000));
+      color: white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        filter: brightness(1.1);
+      }
+    }
+  }
+}
+
+// ===== MODO OSCURO =====
+:host-context(.dark-mode) {
+  .edit-staff-form {
+    .card-form {
+      background-color: var(--user-card-bg, #23221c) !important;
+      border-color: var(--user-border-color, #0B7285) !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+  }
+}
+
+// ===== IMPORTAR ESTILOS COMPARTIDOS =====
+// Reutilizamos los estilos completos de add-appointment para mantener consistencia
+@import '../../../medical/appointments/appointments-manage/add-appointment/add-appointment.component.scss';

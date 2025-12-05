@@ -1,0 +1,231 @@
+<div class="page-wrapper">
+  <div class="content doctor-form">
+    <!-- Encabezado y breadcrumb -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item">{{ 'DOCTORS' | translate }} ></li>
+            <li class="breadcrumb-item active">{{ 'APPOINTMENTS.ADD_DOCTOR.BREADCRUMB' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-xl-8">
+        <!-- Tarjeta principal del formulario -->
+        <div class="card card-form shadow border-0">
+          <div class="card-body p-4">
+            <!-- Encabezado del formulario -->
+            <div class="form-header text-center mb-4">
+              <div class="form-icon mb-3">
+                <i class="fa fa-user-md"></i>
+              </div>
+              <h3 class="fw-bold mb-2">{{ 'APPOINTMENTS.ADD_DOCTOR.TITLE' | translate }}</h3>
+              <p class="text-muted small">{{ 'APPOINTMENTS.ADD_DOCTOR.SUBTITLE' | translate }}</p>
+            </div>
+
+            <!-- Formulario -->
+            <form (keydown.enter)="$event.preventDefault()">
+              <!-- Sección: Información del Doctor -->
+              <div class="form-section">
+                <div class="section-header mb-3">
+                  <h5 class="section-title">
+                    <i class="fa fa-user me-2"></i>{{ 'APPOINTMENTS.ADD_DOCTOR.PERSONAL_INFO' | translate }}
+                  </h5>
+                </div>
+                <div class="row g-3">
+                  <!-- Nombre Completo -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-id-card me-1"></i>{{ 'APPOINTMENTS.ADD_DOCTOR.FULL_NAME' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      class="form-control"
+                      [class.is-invalid]="submitted && !nombre_completo.trim()"
+                      [(ngModel)]="nombre_completo" 
+                      name="nombre_completo"
+                      (keypress)="onNameKeyPress($event)"
+                      placeholder="Ej: Dr. Juan Pérez García"
+                      required />
+                    <div class="invalid-feedback d-block" *ngIf="submitted && !nombre_completo.trim()">
+                      {{ 'APPOINTMENTS.ADD_DOCTOR.FULL_NAME_REQUIRED' | translate }}
+                    </div>
+                  </div>
+
+                  <!-- Especialidad -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-stethoscope me-1"></i>{{ 'APPOINTMENTS.ADD_DOCTOR.SPECIALTY' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <select 
+                      class="form-select form-control"
+                      [class.is-invalid]="submitted && (!especialidad_id || especialidad_id === 0)"
+                      [(ngModel)]="especialidad_id" 
+                      name="especialidad_id"
+                      required>
+                      <option [value]="0">{{ 'APPOINTMENTS.ADD_DOCTOR.SELECT_SPECIALTY' | translate }}</option>
+                      <option *ngFor="let esp of especialidades" [value]="esp.id">{{ esp.nombre }}</option>
+                    </select>
+                    <div class="invalid-feedback d-block" *ngIf="submitted && (!especialidad_id || especialidad_id === 0)">
+                      {{ 'APPOINTMENTS.ADD_DOCTOR.SPECIALTY_REQUIRED' | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Separador -->
+              <div class="form-divider my-4"></div>
+
+              <!-- Sección: Horarios de Atención -->
+              <div class="form-section">
+                <div class="section-header mb-3">
+                  <h5 class="section-title">
+                    <i class="fa fa-clock me-2"></i>{{ 'APPOINTMENTS.ADD_DOCTOR.SCHEDULE_INFO' | translate }}
+                  </h5>
+                </div>
+                <div class="row g-3">
+                  <!-- Turno -->
+                  <div class="col-md-12">
+                    <label class="form-label">
+                      <i class="fa fa-calendar-alt me-1"></i>{{ 'APPOINTMENTS.ADD_DOCTOR.SHIFT' | translate }} <span class="text-danger">*</span>
+                    </label>
+                    <select 
+                      class="form-select form-control" 
+                      [(ngModel)]="turno" 
+                      name="turno"
+                      (change)="onTurnoChange()"
+                      required>
+                      <option *ngFor="let t of turnosDisponibles" [value]="t">{{ t }}</option>
+                    </select>
+                  </div>
+
+                  <!-- Horario Matutino -->
+                  @if (turno === 'Matutino' || turno === 'Mixto') {
+                    <div class="col-12">
+                      <div class="schedule-section">
+                        <h6 class="schedule-subtitle">
+                          <i class="fa fa-sun me-2"></i>{{ 'APPOINTMENTS.ADD_DOCTOR.MORNING_SHIFT' | translate }}
+                        </h6>
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                            <label class="form-label">{{ 'APPOINTMENTS.ADD_DOCTOR.START_TIME' | translate }}</label>
+                            <input 
+                              type="time" 
+                              class="form-control" 
+                              [(ngModel)]="hora_inicio_matutino" 
+                              name="hora_inicio_matutino"
+                              required />
+                          </div>
+                          <div class="col-md-6">
+                            <label class="form-label">{{ 'APPOINTMENTS.ADD_DOCTOR.END_TIME' | translate }}</label>
+                            <input 
+                              type="time" 
+                              class="form-control" 
+                              [(ngModel)]="hora_fin_matutino" 
+                              name="hora_fin_matutino"
+                              required />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+
+                  <!-- Horario Vespertino -->
+                  @if (turno === 'Vespertino' || turno === 'Mixto') {
+                    <div class="col-12">
+                      <div class="schedule-section">
+                        <h6 class="schedule-subtitle">
+                          <i class="fa fa-moon me-2"></i>{{ 'APPOINTMENTS.ADD_DOCTOR.EVENING_SHIFT' | translate }}
+                        </h6>
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                            <label class="form-label">{{ 'APPOINTMENTS.ADD_DOCTOR.START_TIME' | translate }}</label>
+                            <input 
+                              type="time" 
+                              class="form-control" 
+                              [(ngModel)]="hora_inicio_vespertino" 
+                              name="hora_inicio_vespertino"
+                              required />
+                          </div>
+                          <div class="col-md-6">
+                            <label class="form-label">{{ 'APPOINTMENTS.ADD_DOCTOR.END_TIME' | translate }}</label>
+                            <input 
+                              type="time" 
+                              class="form-control" 
+                              [(ngModel)]="hora_fin_vespertino" 
+                              name="hora_fin_vespertino"
+                              required />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+
+                  <!-- Información de citas -->
+                  <div class="col-12">
+                    <div class="alert alert-info d-flex align-items-center">
+                      <i class="fa fa-info-circle me-3"></i>
+                      <div>{{ 'APPOINTMENTS.ADD_DOCTOR.APPOINTMENT_INFO' | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Alerta de éxito -->
+              @if (text_success) {
+                <div class="mt-4">
+                  <div class="alert alert-modern alert-success d-flex align-items-center">
+                    <i class="fa fa-check-circle me-3"></i>
+                    <div class="flex-grow-1">
+                      <strong>{{ 'COMMON.SUCCESS' | translate }}:</strong> {{ text_success }}
+                    </div>
+                    <button type="button" class="btn-close" (click)="text_success = ''"></button>
+                  </div>
+                </div>
+              }
+
+              <!-- Alerta de validación -->
+              @if (text_validation) {
+                <div class="mt-4">
+                  <div class="alert alert-modern alert-warning d-flex align-items-center">
+                    <i class="fa fa-exclamation-triangle me-3"></i>
+                    <div class="flex-grow-1">
+                      <strong>{{ 'COMMON.WARNING' | translate }}:</strong> {{ text_validation }}
+                    </div>
+                    <button type="button" class="btn-close" (click)="text_validation = ''"></button>
+                  </div>
+                </div>
+              }
+
+              <!-- Botones de acción -->
+              <div class="form-actions d-flex justify-content-end gap-2 mt-4">
+                <button type="button" class="btn btn-cancel" (click)="goToList()" [disabled]="loading">
+                  <i class="fa fa-times me-2"></i>{{ 'COMMON.CANCEL' | translate }}
+                </button>
+                <button type="button" class="btn btn-save" (click)="save()" [disabled]="loading">
+                  @if (loading) {
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                  } @else {
+                    <i class="fa fa-save me-2"></i>
+                  }
+                  {{ 'COMMON.SAVE' | translate }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>

@@ -22,7 +22,7 @@ import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
     TranslateModule
   ],
   templateUrl: './list-profile-m.component.html',
-  styleUrl: './list-profile-m.component.scss'
+  styleUrls: ['./list-profile-m.component.scss']
 })
 export class ListProfileMComponent {
   /**

@@ -1,0 +1,195 @@
+<div class="page-wrapper">
+  <div class="content list-staff">
+    <!-- Breadcrumb -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item">{{ 'APPOINTMENTS.TITLE' | translate }}</li>
+            <li class="breadcrumb-item active">{{ 'APPOINTMENTS.NO_SHOW.LIST.TITLE' | translate }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Principal -->
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card card-list shadow border-0">
+          <div class="card-body">
+            <!-- Header con búsqueda -->
+            <div class="d-flex justify-content-between align-items-start flex-wrap mb-3 header-bar">
+              <h4 class="mb-0 fw-semibold">{{ 'APPOINTMENTS.NO_SHOW.LIST.TITLE' | translate }}</h4>
+              <div class="filter-controls-wrapper">
+                <div class="filters-section d-flex gap-2 mb-2">
+                  <!-- Búsqueda -->
+                  <div class="search-box">
+                    <input 
+                      type="text" 
+                      class="form-control white-input"
+                      [(ngModel)]="searchDataValue"
+                      (ngModelChange)="searchData(searchDataValue)"
+                      placeholder="{{ 'APPOINTMENTS.NO_SHOW.LIST.SEARCH_PLACEHOLDER' | translate }}">
+                    <i class="fa fa-search search-icon"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabla de citas no asistidas -->
+            <div class="table-responsive">
+              <table class="table table-hover align-middle modern-table">
+                <thead class="table-light">
+                  <tr>
+                    <th style="width: 20%;"><i class="fa fa-user me-2"></i>{{ 'APPOINTMENTS.NO_SHOW.LIST.PATIENT' | translate }}</th>
+                    <th style="width: 20%;"><i class="fa fa-user-md me-2"></i>{{ 'APPOINTMENTS.NO_SHOW.LIST.DOCTOR' | translate }}</th>
+                    <th style="width: 15%;"><i class="fa fa-calendar me-2"></i>{{ 'APPOINTMENTS.NO_SHOW.LIST.DATE' | translate }}</th>
+                    <th style="width: 10%;"><i class="fa fa-clock me-2"></i>{{ 'APPOINTMENTS.NO_SHOW.LIST.TIME' | translate }}</th>
+                    <th style="width: 25%;"><i class="fa fa-stethoscope me-2"></i>{{ 'APPOINTMENTS.NO_SHOW.LIST.REASON' | translate }}</th>
+                    <th style="width: 10%;" class="text-center"><i class="fa fa-cog me-2"></i>{{ 'COMMON.ACTIONS' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Empty state -->
+                  @if (appointmentList.length === 0) {
+                    <tr>
+                      <td colspan="6" class="text-center py-5">
+                        <i class="fa fa-user-times fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">{{ 'APPOINTMENTS.NO_SHOW.LIST.NO_DATA' | translate }}</p>
+                      </td>
+                    </tr>
+                  }
+                  
+                  <!-- Filas de datos -->
+                  @for (data of appointmentList; track data.id) {
+                    <tr>
+                      <td>
+                        <div class="user-name-cell">
+                          <i class="fa fa-user-circle text-primary me-2"></i>
+                          <strong>{{ getPacienteNombre(data) }}</strong>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="specialty-cell">
+                          <span class="badge badge-role">
+                            <i class="fa fa-user-md me-1"></i>
+                            {{ getDoctorNombre(data) }}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <small class="text-muted">
+                          <i class="fa fa-calendar me-1"></i>
+                          {{ formatDate(data.fecha) }}
+                        </small>
+                      </td>
+                      <td>
+                        <small class="text-muted">
+                          <i class="fa fa-clock me-1"></i>
+                          {{ data.hora }}
+                        </small>
+                      </td>
+                      <td>
+                        <small class="text-muted">
+                          <i class="fa fa-stethoscope me-1"></i>
+                          {{ data.motivo || '-' }}
+                        </small>
+                      </td>
+                      <td class="text-center">
+                        <div class="action-buttons">
+                          <button 
+                            class="btn btn-sm btn-delete" 
+                            (click)="selectAppointment(data)"
+                            data-bs-toggle="modal"
+                            data-bs-target="#delete_appointment"
+                            title="{{ 'COMMON.DELETE' | translate }}">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Paginación -->
+            <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+              <div class="pagination-info small">
+                {{ 'COMMON.SHOWING' | translate }} 
+                {{ serialNumberArray[0] || 0 }} 
+                {{ 'COMMON.TO' | translate }} 
+                {{ serialNumberArray[serialNumberArray.length - 1] || 0 }} 
+                {{ 'COMMON.OF' | translate }} 
+                {{ totalData }} 
+                {{ 'COMMON.RECORDS' | translate }}
+              </div>
+              <nav>
+                <ul class="pagination mb-0">
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" (click)="getMoreData('previous')" style="cursor: pointer;">
+                      {{ 'COMMON.PREVIOUS' | translate }}
+                    </a>
+                  </li>
+                  @for (item of pageNumberArray; track item) {
+                    <li class="page-item" [class.active]="item === currentPage">
+                      <a class="page-link" (click)="moveToPage(item)" style="cursor: pointer;">{{ item }}</a>
+                    </li>
+                  }
+                  <li class="page-item" [class.disabled]="currentPage === pageNumberArray[pageNumberArray.length - 1]">
+                    <a class="page-link" (click)="getMoreData('next')" style="cursor: pointer;">
+                      {{ 'COMMON.NEXT' | translate }}
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal: Eliminar Cita No Asistida -->
+<div class="modal fade" id="delete_appointment" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center p-4">
+        <img 
+          src="assets/img/sent.png" 
+          alt="Eliminar" 
+          class="img-fluid mb-3" 
+          style="max-width: 120px;">
+        <h3 class="mb-3">{{ 'APPOINTMENTS.NO_SHOW.LIST.CONFIRM_DELETE_TITLE' | translate }}</h3>
+        <p class="text-muted mb-4">
+          {{ 'APPOINTMENTS.NO_SHOW.LIST.CONFIRM_DELETE_MESSAGE' | translate }}
+          @if (appointment_selected) {
+            <strong>{{ getPacienteNombre(appointment_selected) }}</strong>
+          }
+        </p>
+        <div class="d-flex gap-2 justify-content-center">
+          <button type="button" class="btn btn-cancel px-4" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>{{ 'COMMON.NO' | translate }}
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-save px-4" 
+            (click)="deleteAppointment()" 
+            data-bs-dismiss="modal">
+            <i class="fas fa-check me-2"></i>{{ 'COMMON.YES_DELETE' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Botón flotante de ayuda para iniciar el tour -->
+<button class="tour-help-button" 
+        (click)="startTour()" 
+        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+        type="button">
+  <i class="fa fa-question"></i>
+</button>
