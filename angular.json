@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "preclinic-angular": {
+    "IMSS_Bienestar": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -18,7 +18,7 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": {
-              "base": "dist/preclinic-angular"
+              "base": "dist/IMSS_Bienestar"
             },
             "index": "src/index.html",
             "polyfills": [
