@@ -188,7 +188,6 @@ export class EditPersonalComponent implements OnInit {
         if (response.success) {
           // Filtrar solo documentos que pertenezcan a este personal
           this.documentosExistentes = response.data.filter(doc => doc.personal_id === this.personalId);
-          console.log('Documentos cargados para personal ID:', this.personalId, this.documentosExistentes);
         }
       },
       error: (error) => {

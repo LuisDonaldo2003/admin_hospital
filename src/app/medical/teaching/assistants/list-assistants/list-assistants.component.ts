@@ -163,7 +163,7 @@ export class ListAssistantsComponent implements OnInit {
       participacion_id: this.filtroParticipacion
     };
     
-    console.log('Filtros aplicados:', filters);
+    
     
     this.teachingService.getTeachings(this.currentPage, this.pageSize, filters).subscribe({
       next: (response) => {

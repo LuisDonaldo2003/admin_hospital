@@ -192,8 +192,7 @@ export class EditDoctorComponent implements OnInit {
       doctorData.hora_fin_vespertino = this.formatTimeToHi(this.hora_fin_vespertino);
     }
 
-    console.log('Datos a enviar:', doctorData);
-    console.log('Turno seleccionado:', this.turno);
+    
 
     const request = this.isEditMode && this.doctorId
       ? this.appointmentsService.updateDoctor(this.doctorId, doctorData)

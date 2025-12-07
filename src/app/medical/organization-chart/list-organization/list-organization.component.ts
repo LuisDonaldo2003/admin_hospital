@@ -184,14 +184,12 @@ export class ListOrganizationComponent implements OnInit, OnDestroy {
   /** Maneja click en usuario */
   public onUserClick(user: any): void {
     // Aquí puedes agregar lógica para mostrar más detalles del usuario
-    console.log('Usuario seleccionado:', user);
     // Ejemplo: mostrar modal, navegar a perfil, etc.
   }
 
   /** Maneja errores de imagen */
   public onImageError(event: any): void {
     // Fallback cuando la imagen no carga
-    console.log('Error loading image for user');
   }
 
   /** Obtiene la hora de última actualización */

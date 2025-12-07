@@ -24,7 +24,7 @@ export class ThemeService {
     const user = JSON.parse(localStorage.getItem('user') || 'null');
     const userId = user ? user.id : null;
 
-    console.log('🎨 ThemeService: Aplicando tema para usuario:', userId);
+    
 
     // Obtener colores personalizados del usuario actual
     const borderColor = this.getUserSetting('borderColor', this.DEFAULT_BORDER_COLOR, userId);
@@ -34,7 +34,7 @@ export class ThemeService {
     // Obtener modo oscuro
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
 
-    console.log('🎨 Colores cargados:', { borderColor, cardBgColorLight, cardBgColorDark, isDarkMode });
+    
 
     // Aplicar tema al DOM
     this.applyThemeToDOM(borderColor, cardBgColorLight, cardBgColorDark, isDarkMode);
@@ -69,7 +69,7 @@ export class ThemeService {
       root.style.setProperty('--user-card-text-color', textColor);
       body.style.setProperty('--user-card-text-color', textColor);
       
-      console.log('🌙 Modo Oscuro aplicado');
+      
     } else {
       // Modo claro
       body.classList.remove('dark-mode');
@@ -83,10 +83,10 @@ export class ThemeService {
       root.style.setProperty('--user-card-text-color', textColor);
       body.style.setProperty('--user-card-text-color', textColor);
       
-      console.log('☀️ Modo Claro aplicado');
+      
     }
 
-    console.log('✅ Tema aplicado exitosamente');
+    
   }
 
   /**
@@ -98,7 +98,7 @@ export class ThemeService {
       return defaultValue;
     }
     const value = localStorage.getItem(`${key}_${userId}`) || defaultValue;
-    console.log(`📦 ${key}_${userId} = ${value}`);
+    
     return value;
   }
 
@@ -118,7 +118,6 @@ export class ThemeService {
    * Limpia los colores del usuario actual (útil al cerrar sesión)
    */
   clearUserTheme(): void {
-    console.log('🧹 Limpiando tema del usuario y aplicando valores por defecto');
     
     // Aplicar valores por defecto
     this.applyThemeToDOM(

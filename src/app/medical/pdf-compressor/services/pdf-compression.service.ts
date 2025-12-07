@@ -22,19 +22,17 @@ export class PdfCompressionService {
     try {
       const arrayBuffer = await file.arrayBuffer();
       
-      console.log(`🔍 Tamaño original: ${this.formatFileSize(arrayBuffer.byteLength)}`);
+      
       
       // Intentar primero con compresión estándar de pdf-lib
       let result = await this.tryStandardCompression(arrayBuffer, targetSize);
       
       // Si no es suficiente, usar compresión con renderizado (más potente)
       if (result.length > targetSize) {
-        console.log('📊 Compresión estándar insuficiente, usando renderizado...');
         result = await this.compressWithRendering(arrayBuffer, targetSize);
       }
       
-      console.log(`✅ Tamaño final: ${this.formatFileSize(result.length)}`);
-      console.log(`📉 Reducción: ${this.calculateReduction(arrayBuffer.byteLength, result.length).toFixed(1)}%`);
+      
       
       const buffer = new Uint8Array(result);
       return new Blob([buffer], { type: 'application/pdf' });
@@ -56,16 +54,13 @@ export class PdfCompressionService {
 
     // Nivel 1: Compresión básica
     let result = await this.basicCompression(pdfDoc);
-    console.log(`  📦 Básica: ${this.formatFileSize(result.length)}`);
     
     if (result.length > targetSize) {
       result = await this.advancedCompression(pdfDoc);
-      console.log(`  📦 Avanzada: ${this.formatFileSize(result.length)}`);
     }
     
     if (result.length > targetSize) {
       result = await this.aggressiveCompression(pdfDoc);
-      console.log(`  📦 Agresiva: ${this.formatFileSize(result.length)}`);
     }
     
     return result;
@@ -84,7 +79,7 @@ export class PdfCompressionService {
       const newPdfDoc = await PDFDocument.create();
       
       const numPages = pdfDocument.numPages;
-      console.log(`  📄 Procesando ${numPages} página(s)...`);
+      
       
       // Calcular calidad basada en tamaño objetivo
       let quality = 0.5; // Calidad inicial (50%)
@@ -96,7 +91,7 @@ export class PdfCompressionService {
       else if (bytesPerPage < 200 * 1024) quality = 0.5; // Balanceado
       else quality = 0.6; // Buena calidad
       
-      console.log(`  🎨 Calidad de compresión: ${(quality * 100).toFixed(0)}%`);
+      
       
       // Renderizar cada página y agregarla al nuevo PDF
       for (let pageNum = 1; pageNum <= numPages; pageNum++) {
@@ -132,7 +127,7 @@ export class PdfCompressionService {
             height: viewport.height
           });
           
-          console.log(`  ✔ Página ${pageNum}/${numPages} procesada`);
+          
         } catch (pageError) {
           console.warn(`  ⚠ Error en página ${pageNum}:`, pageError);
         }
@@ -155,7 +150,6 @@ export class PdfCompressionService {
       
       // Si aún supera el tamaño, intentar con menor calidad
       if (result.length > targetSize && quality > 0.3) {
-        console.log(`  🔄 Reintentando con menor calidad...`);
         return await this.compressWithLowerQuality(arrayBuffer, targetSize, quality - 0.1);
       }
       
@@ -178,7 +172,7 @@ export class PdfCompressionService {
     const newPdfDoc = await PDFDocument.create();
     const numPages = pdfDocument.numPages;
     
-    console.log(`  🎨 Comprimiendo con calidad: ${(quality * 100).toFixed(0)}%`);
+    
     
     for (let pageNum = 1; pageNum <= numPages; pageNum++) {
       try {

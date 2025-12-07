@@ -73,7 +73,6 @@ export class ListNoShowComponent implements OnInit {
     // Filtrar solo citas no asistidas
     this.appointmentsService.listAppointments({ estado: 'no_asistio' }).subscribe({
       next: (resp: any) => {
-        console.log('Citas no asistidas recibidas:', resp.data);
         this.totalData = resp.data.length;
         this.appointment_generals = resp.data;
         this.getTableDataGeneral();

@@ -305,8 +305,6 @@ export class PersonalListComponent implements OnInit {
             
             // Solo recargar estadísticas
             this.getEstadisticas();
-            
-            console.log('Personal eliminado exitosamente');
           } else {
             console.error('Error al eliminar personal:', response.message);
           }
@@ -415,9 +413,8 @@ export class PersonalListComponent implements OnInit {
       const nuevoEstado = !personal.activo;
       this.personalService.updatePersonal(personal.id, { activo: nuevoEstado }).subscribe({
         next: (response: ApiResponse<Personal>) => {
-          if (response.success) {
+            if (response.success) {
             personal.activo = nuevoEstado;
-            console.log(`Personal ${nuevoEstado ? 'activado' : 'desactivado'} exitosamente`);
           } else {
             console.error('Error al cambiar estado:', response.message);
           }

@@ -73,7 +73,6 @@ export class ListCompletedComponent implements OnInit {
     // Filtrar solo citas completadas
     this.appointmentsService.listAppointments({ estado: 'completada' }).subscribe({
       next: (resp: any) => {
-        console.log('Citas completadas recibidas:', resp.data);
         this.totalData = resp.data.length;
         this.appointment_generals = resp.data;
         this.getTableDataGeneral();

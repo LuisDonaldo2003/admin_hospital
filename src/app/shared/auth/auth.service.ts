@@ -113,7 +113,6 @@ export class AuthService {
       // 🔐 GUARDAR SESSION_ID DEL SERVIDOR
       if (auth.session_id) {
         this.sessionService.setSessionId(auth.session_id);
-        console.log('🔐 Session ID guardado:', auth.session_id);
       }
       
       this.userSubject.next(auth.user);
@@ -122,9 +121,7 @@ export class AuthService {
       // Refrescar permisos en el servicio de permisos
       this.permissionService.refreshUser();
       
-      // ✨ APLICAR TEMA DEL USUARIO DESPUÉS DEL LOGIN ✨
-      // Esto carga los colores personalizados del usuario que acaba de iniciar sesión
-      console.log('🎨 Aplicando tema del usuario después del login');
+      // Aplicar tema del usuario después del login
       setTimeout(() => {
         this.themeService.applyUserTheme();
       }, 100); // Pequeño delay para asegurar que el userId esté disponible
@@ -165,7 +162,6 @@ export class AuthService {
     this.stopUserActivityTracking(); // Detener heartbeat
     
     // ✨ LIMPIAR TEMA AL CERRAR SESIÓN ✨
-    console.log('🧹 Limpiando tema al cerrar sesión');
     this.themeService.clearUserTheme();
     
     // 🔐 LIMPIAR SESSION_ID

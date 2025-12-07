@@ -81,7 +81,6 @@ export class GeneralSettingsComponent implements OnInit {
     // Sincroniza con el backend para obtener los colores del usuario logueado
     this.settingsService.getSettings().subscribe({
       next: (settings: any) => {
-        console.log('🎨 Configuración cargada desde backend:', settings);
 
         if (settings && (settings.borderColor || settings.cardBgColorLight || settings.cardBgColorDark)) {
           // Actualiza localStorage con los valores del backend
@@ -146,7 +145,7 @@ export class GeneralSettingsComponent implements OnInit {
    * 4. Inyecta variable CSS --user-border-color
    */
   updateBorderColor(): void {
-    console.log('🎨 Actualizando color de borde:', this.borderColor);
+    
 
     // 1. Guardar en localStorage
     this.setUserSetting('borderColor', this.borderColor);
@@ -158,7 +157,6 @@ export class GeneralSettingsComponent implements OnInit {
       cardBgColorDark: this.cardBgColorDark
     }).subscribe({
       next: () => {
-        console.log('✅ Color de borde guardado exitosamente');
         // 3. Aplicar el tema al DOM
         this.applyTheme();
       },
@@ -177,7 +175,7 @@ export class GeneralSettingsComponent implements OnInit {
    * 4. Aplica cambios al DOM si está en modo claro
    */
   updateCardBgColorLight(): void {
-    console.log('☀️ Actualizando color de fondo claro:', this.cardBgColorLight);
+    
 
     this.setUserSetting('cardBgColorLight', this.cardBgColorLight);
 
@@ -187,7 +185,6 @@ export class GeneralSettingsComponent implements OnInit {
       cardBgColorDark: this.cardBgColorDark
     }).subscribe({
       next: () => {
-        console.log('✅ Color de fondo claro guardado exitosamente');
         // Recalcula el color de texto según el nuevo fondo
         const textColor = this.getContrastYIQ(this.cardBgColorLight);
         localStorage.setItem('cardTextColorLight', textColor);
@@ -208,7 +205,7 @@ export class GeneralSettingsComponent implements OnInit {
    * 4. Aplica cambios al DOM si está en modo oscuro
    */
   updateCardBgColorDark(): void {
-    console.log('🌙 Actualizando color de fondo oscuro:', this.cardBgColorDark);
+    
 
     this.setUserSetting('cardBgColorDark', this.cardBgColorDark);
 
@@ -218,7 +215,6 @@ export class GeneralSettingsComponent implements OnInit {
       cardBgColorDark: this.cardBgColorDark
     }).subscribe({
       next: () => {
-        console.log('✅ Color de fondo oscuro guardado exitosamente');
         // Recalcula el color de texto según el nuevo fondo
         const textColor = this.getContrastYIQ(this.cardBgColorDark);
         localStorage.setItem('cardTextColorDark', textColor);
@@ -253,7 +249,7 @@ export class GeneralSettingsComponent implements OnInit {
     // Calcula la luminosidad percibida
     const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
 
-    console.log(`🔍 Contraste calculado para ${hexcolor}: YIQ=${yiq.toFixed(2)} → ${yiq >= 128 ? 'Texto Negro' : 'Texto Blanco'}`);
+    
 
     return (yiq >= 128) ? '#000000' : '#ffffff';
   }
@@ -272,7 +268,7 @@ export class GeneralSettingsComponent implements OnInit {
    * mediante var(--user-card-bg, fallback)
    */
   applyTheme(): void {
-    console.log(`🎨 Aplicando tema: ${this.isDarkMode ? 'Oscuro' : 'Claro'}`);
+    
 
     if (this.isDarkMode) {
       // MODO OSCURO
@@ -293,7 +289,7 @@ export class GeneralSettingsComponent implements OnInit {
       document.body.style.setProperty('--user-btn-border-color', btnBorder);
       document.documentElement.style.setProperty('--user-btn-border-color', btnBorder);
 
-      console.log(`🌙 Modo Oscuro - Fondo: ${this.cardBgColorDark}, Texto: ${textColor}`);
+      
     } else {
       // MODO CLARO
       document.body.classList.remove('dark-mode');
@@ -313,14 +309,14 @@ export class GeneralSettingsComponent implements OnInit {
       document.body.style.setProperty('--user-btn-border-color', btnBorder);
       document.documentElement.style.setProperty('--user-btn-border-color', btnBorder);
 
-      console.log(`☀️ Modo Claro - Fondo: ${this.cardBgColorLight}, Texto: ${textColor}`);
+      
     }
 
     // Inyecta color de borde global (aplicado en ambos modos)
     document.body.style.setProperty('--user-border-color', this.borderColor);
     document.documentElement.style.setProperty('--user-border-color', this.borderColor);
 
-    console.log(`🖌️ Color de borde aplicado: ${this.borderColor}`);
+    
   }
 
   /**
@@ -396,7 +392,7 @@ export class GeneralSettingsComponent implements OnInit {
    * 5. Aplica el tema restaurado al DOM
    */
   resetColorsToDefault(): void {
-    console.log('🔄 Restaurando colores por defecto...');
+    
 
     const defaults = {
       borderColor: this.DEFAULT_BORDER_COLOR,       // #0B7285 - Azul médico
@@ -418,7 +414,7 @@ export class GeneralSettingsComponent implements OnInit {
     // Envía al backend
     this.settingsService.updateSettings(defaults).subscribe({
       next: () => {
-        console.log('✅ Colores restaurados exitosamente');
+        
 
         // Actualiza variables locales
         this.borderColor = defaults.borderColor;

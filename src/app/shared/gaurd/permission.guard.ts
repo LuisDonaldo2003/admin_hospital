@@ -48,7 +48,6 @@ export class PermissionGuard implements CanActivate {
     }
 
     // Si no tiene permisos, redirigir al perfil o dashboard
-    console.log('🚫 Acceso denegado. Permisos insuficientes para acceder a esta ruta');
     return this.router.parseUrl(routes.profile);
   }
 }

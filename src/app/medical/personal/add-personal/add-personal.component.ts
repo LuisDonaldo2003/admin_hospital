@@ -151,7 +151,7 @@ export class AddPersonalComponent implements OnInit {
     
     // Si ya existe un documento de este tipo, mostramos mensaje de reemplazo
     if (this.documentos.has(tipoDocumento)) {
-      console.log(`Reemplazando documento existente: ${tipoDocumento}`);
+      // Reemplazo de documento existente
     }
     
     // Agregar archivo al mapa
@@ -159,7 +159,6 @@ export class AddPersonalComponent implements OnInit {
     
     // Mostrar mensaje de éxito temporal
     const sizeInKB = (file.size / 1024).toFixed(1);
-    console.log(`Documento "${tipoDocumento}" cargado exitosamente (${sizeInKB}KB)`);
   }
 
   /**

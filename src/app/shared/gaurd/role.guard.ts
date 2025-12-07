@@ -23,7 +23,6 @@ export class RoleGuard implements CanActivate {
     }
 
     // Si no tiene acceso, redirigir al perfil donde puede ver sus opciones disponibles
-    console.log('🚫 Acceso denegado. Redirigiendo al perfil para ver opciones disponibles');
     return this.router.parseUrl(routes.profile);
   }
 }

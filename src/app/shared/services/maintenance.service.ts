@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, timer } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { URL_SERVICIOS } from 'src/app/config/config';
 import { AuthService } from '../auth/auth.service';
@@ -44,40 +44,30 @@ export class MaintenanceService {
     // Hacer una verificación inicial inmediata
     const currentUrl = this.router.url;
     const isOnMaintenancePage = currentUrl.includes('/maintenance');
-    
-    console.log('Inicializando servicio de mantenimiento:', {
-      currentUrl,
-      isOnMaintenancePage
-    });
-    
+
     this.checkMaintenanceStatus().subscribe(status => {
-      console.log('Estado inicial del mantenimiento:', status.maintenance_mode);
       this.maintenanceStatus.next(status.maintenance_mode);
       this.maintenanceMessage.next(status.message);
-      
+
       if (status.maintenance_mode) {
         // Sistema está en mantenimiento
         this.wasInMaintenance = true;
-        console.log('⚠️ Sistema en mantenimiento detectado en inicialización');
-        
+
         if (status.maintenance_info) {
           localStorage.setItem('maintenance_info', JSON.stringify(status.maintenance_info));
         }
-        
+
         // Si NO estamos en la página de mantenimiento, forzar redirección inmediata
         if (!isOnMaintenancePage) {
-          console.log('🔄 Forzando redirección inmediata a maintenance');
-          
           // Si hay usuario logueado, cerrar sesión
           if (this.isUserLoggedIn()) {
-            console.log('👤 Cerrando sesión del usuario logueado');
             this.authService.logout();
           }
-          
+
           // Limpiar storage
           localStorage.clear();
           sessionStorage.clear();
-          
+
           // Redirección forzada inmediata
           window.location.href = '/maintenance';
           return; // No continuar con inicialización normal
@@ -85,12 +75,11 @@ export class MaintenanceService {
       } else {
         // Sistema NO está en mantenimiento
         if (isOnMaintenancePage && this.wasInMaintenance) {
-          console.log('✅ Sistema reactivado detectado en inicialización');
           this.maintenanceMessage.next('¡Sistema reactivado! Redirigiendo al login...');
           this.scheduleRedirection();
         }
       }
-      
+
       this.isInitialized = true;
       this.startPeriodicCheck();
     });
@@ -156,20 +145,13 @@ export class MaintenanceService {
       this.checkMaintenanceStatus().subscribe(status => {
         const previousMaintenanceState = this.maintenanceStatus.value;
         const currentMaintenanceState = status.maintenance_mode;
-        
-        console.log('Verificación periódica:', {
-          anterior: previousMaintenanceState,
-          actual: currentMaintenanceState,
-          wasInMaintenance: this.wasInMaintenance
-        });
-        
+
         // Actualizar el estado
         this.maintenanceStatus.next(currentMaintenanceState);
         this.maintenanceMessage.next(status.message);
-        
+
         // Detectar cambio de NO-mantenimiento a mantenimiento
         if (!previousMaintenanceState && currentMaintenanceState) {
-          console.log('🔧 Entrando en modo mantenimiento');
           this.wasInMaintenance = true;
           if (status.maintenance_info) {
             localStorage.setItem('maintenance_info', JSON.stringify(status.maintenance_info));
@@ -179,12 +161,11 @@ export class MaintenanceService {
             this.saveCurrentLocation();
           }
         }
-        
+
         // Detectar cambio de mantenimiento a NO-mantenimiento
         if (previousMaintenanceState && !currentMaintenanceState && this.wasInMaintenance) {
-          console.log('✅ Saliendo del modo mantenimiento');
           localStorage.removeItem('maintenance_info');
-          
+
           // Solo manejar la redirección si estamos en la página de mantenimiento
           const currentRoute = this.router.url;
           if (currentRoute.includes('/maintenance')) {
@@ -194,7 +175,7 @@ export class MaintenanceService {
             this.scheduleRedirection();
           }
         }
-        
+
         // Si no está en mantenimiento, asegurar que wasInMaintenance sea false
         if (!currentMaintenanceState) {
           // Solo resetear si ya manejamos la transición
@@ -211,7 +192,6 @@ export class MaintenanceService {
    * Simplificado: ya no necesitamos guardar rutas porque siempre redirigimos al login
    */
   private saveCurrentLocation(): void {
-    console.log('Guardando estado para redirección posterior al login');
     // Ya no guardamos rutas específicas, siempre vamos al login
   }
 
@@ -219,8 +199,6 @@ export class MaintenanceService {
    * Programa la redirección automática después de mostrar el mensaje
    */
   private scheduleRedirection(): void {
-    console.log('Programando redirección automática al login...');
-    
     setTimeout(() => {
       this.executeRedirection();
     }, 2000); // 2 segundos para mostrar el mensaje
@@ -230,20 +208,18 @@ export class MaintenanceService {
    * Ejecuta la redirección y limpieza final
    */
   private executeRedirection(): void {
-    console.log('Ejecutando redirección al login desde servicio...');
-    
     // Cerrar sesión y limpiar datos
     if (this.isUserLoggedIn()) {
       this.authService.logout();
     }
-    
+
     // Limpiar completamente localStorage y sessionStorage
     localStorage.clear();
     sessionStorage.clear();
-    
+
     // Redirección forzada usando la ruta correcta
     window.location.href = '/login';
-    
+
     // Resetear estado
     this.wasInMaintenance = false;
   }
@@ -252,7 +228,6 @@ export class MaintenanceService {
    * Maneja el final del modo mantenimiento (versión simplificada)
    */
   private handleMaintenanceEnd(): void {
-    console.log('Manejando fin de mantenimiento - ejecución directa...');
     this.executeRedirection();
   }
 
@@ -275,26 +250,18 @@ export class MaintenanceService {
    * Fuerza una verificación inmediata del estado
    */
   forceCheck(): void {
-    console.log('🔍 Forzando verificación del estado de mantenimiento...');
     this.checkMaintenanceStatus().subscribe(status => {
       const previousMaintenanceState = this.maintenanceStatus.value;
       const currentMaintenanceState = status.maintenance_mode;
-      
-      console.log('ForceCheck - Estados:', {
-        anterior: previousMaintenanceState,
-        actual: currentMaintenanceState,
-        wasInMaintenance: this.wasInMaintenance
-      });
-      
+
       // Actualizar el estado inmediatamente
       this.maintenanceStatus.next(currentMaintenanceState);
       this.maintenanceMessage.next(status.message);
-      
+
       // Detectar transición de mantenimiento a NO-mantenimiento
       if (previousMaintenanceState && !currentMaintenanceState && this.wasInMaintenance) {
-        console.log('✅ Transición detectada en forceCheck: saliendo del mantenimiento');
         localStorage.removeItem('maintenance_info');
-        
+
         // Solo redirigir si estamos en la página de mantenimiento
         const currentRoute = this.router.url;
         if (currentRoute.includes('/maintenance')) {
@@ -306,7 +273,7 @@ export class MaintenanceService {
           this.handleMaintenanceEnd();
         }
       }
-      
+
       // Si está en mantenimiento, guardar info
       if (currentMaintenanceState && status.maintenance_info) {
         localStorage.setItem('maintenance_info', JSON.stringify(status.maintenance_info));
@@ -314,7 +281,7 @@ export class MaintenanceService {
           this.wasInMaintenance = true;
         }
       }
-      
+
       // Si no está en mantenimiento y no hay transición pendiente
       if (!currentMaintenanceState && !previousMaintenanceState) {
         this.wasInMaintenance = false;

@@ -423,7 +423,6 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
   }
 
   showSystemActiveMessage(): void {
-    console.log('Sistema detectado como activo - mostrando mensaje de reactivación');
     // Mostrar mensaje de que el sistema está activo
     this.maintenanceMessage = '¡Sistema reactivado! El sistema está listo para usar.';
     this.isSystemReactivated = true;
@@ -437,7 +436,6 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
     const redirectTimer = timer(0, 1000).subscribe(() => {
       this.redirectCountdown--;
       if (this.redirectCountdown <= 0) {
-        console.log('Redirigiendo automáticamente al login...');
         redirectTimer.unsubscribe();
         this.router.navigate(['/login']);
       }
@@ -447,11 +445,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
   isSystemActive(): boolean {
     // Solo mostrar como activo si específicamente hemos detectado la reactivación
     const isActive = this.isSystemReactivated && this.maintenanceMessage.includes('reactivado');
-    console.log('isSystemActive():', {
-      isSystemReactivated: this.isSystemReactivated,
-      messageIncludes: this.maintenanceMessage.includes('reactivado'),
-      result: isActive
-    });
+    
     return isActive;
   }
 

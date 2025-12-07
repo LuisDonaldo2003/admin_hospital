@@ -22,7 +22,6 @@ const routes: Routes = [
         // Intentar restaurar la última URL visitada
         const lastUrl = localStorage.getItem('lastVisitedUrl');
         if (lastUrl && lastUrl !== '/' && lastUrl !== '/login') {
-          console.log('🔄 Restaurando última URL visitada:', lastUrl);
           return router.parseUrl(lastUrl);
         }
         // Si no hay última URL, ir al dashboard por defecto

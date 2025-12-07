@@ -73,7 +73,6 @@ export class ListCancelledComponent implements OnInit {
     // Filtrar solo citas canceladas (el backend usa 'cancelada' en minúscula)
     this.appointmentsService.listAppointments({ estado: 'cancelada' }).subscribe({
       next: (resp: any) => {
-        console.log('Citas canceladas recibidas:', resp.data);
         this.totalData = resp.data.length;
         this.appointment_generals = resp.data;
         this.getTableDataGeneral();
