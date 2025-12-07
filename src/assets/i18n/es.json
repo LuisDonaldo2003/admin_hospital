@@ -1698,12 +1698,13 @@
       "CLEAR_ALL": "Limpiar todo",
       "SEARCH_PERMISSIONS": "Buscar permisos...",
       "ALL_CATEGORIES": "Todos",
+      "ROLE_CREATED": "Rol creado exitosamente",
       "SELECT_ALL_CATEGORY": "Seleccionar todos los permisos de esta categoría",
       "NO_PERMISSIONS_FOUND": "No se encontraron permisos que coincidan con",
       "CANCEL": "Cancelar",
-      "SAVE_CHANGES": "Save Changes",
-      "WARNING": "Warning",
-      "SUCCESS": "Success"
+      "SAVE_CHANGES": "Guardar Cambios",
+      "WARNING": "Advertencia",
+      "SUCCESS": "Éxito"
     },
     "EDIT_ROLE": {
       "BREADCRUMB_ROLES": "Roles",

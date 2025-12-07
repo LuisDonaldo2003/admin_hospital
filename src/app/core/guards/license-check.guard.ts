@@ -9,7 +9,11 @@ import { URL_SERVICIOS } from '../../config/config';
   providedIn: 'root'
 })
 export class LicenseCheckGuard implements CanActivate {
-  private licenseCheckCache: { valid: boolean; timestamp: number } | null = null;
+  private licenseCheckCache: { 
+    valid: boolean; 
+    hasLicense: boolean;
+    timestamp: number 
+  } | null = null;
   private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutos en milisegundos
 
   constructor(
@@ -18,17 +22,25 @@ export class LicenseCheckGuard implements CanActivate {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    // Si ya estamos en upload-license, permitir acceso siempre
-    if (state.url.includes('/upload-license')) {
+    // Rutas públicas que no requieren verificación de licencia
+    const publicRoutes = ['/upload-license', '/login', '/register', '/forgot-password', '/reset-password'];
+    
+    // Si estamos en una ruta pública, permitir acceso siempre
+    if (publicRoutes.some(publicRoute => state.url.includes(publicRoute))) {
       return of(true);
     }
 
     // Verificar si tenemos un caché válido (menos de 5 minutos)
     if (this.licenseCheckCache && 
         (Date.now() - this.licenseCheckCache.timestamp) < this.CACHE_DURATION) {
-      if (this.licenseCheckCache.valid) {
+      
+      // Si hay licencia activa en el sistema, permitir acceso
+      if (this.licenseCheckCache.hasLicense && this.licenseCheckCache.valid) {
         return of(true);
-      } else {
+      } 
+      
+      // Si no hay licencia en el sistema, redirigir a upload-license
+      if (!this.licenseCheckCache.hasLicense) {
         this.router.navigate(['/upload-license']);
         return of(false);
       }
@@ -40,27 +52,49 @@ export class LicenseCheckGuard implements CanActivate {
         // Almacenar resultado en caché
         this.licenseCheckCache = {
           valid: response.valid,
+          hasLicense: response.has_license ?? false,
           timestamp: Date.now()
         };
       }),
       map((response: any) => {
-        if (response.valid) {
+        // Si hay licencia activa y es válida, permitir acceso
+        if (response.has_license && response.valid) {
           return true;
-        } else {
-          // Si la licencia no es válida, redirigir a upload-license
+        }
+        
+        // Si no hay licencia o es inválida/expirada, redirigir a upload-license solo si no hay licencia
+        if (!response.has_license) {
           this.router.navigate(['/upload-license']);
           return false;
         }
+
+        // Si hay licencia pero expiró, mostrar mensaje y permitir acceso (el middleware del backend bloqueará operaciones)
+        // Esto permite que administradores puedan subir nueva licencia
+        if (response.has_license && !response.valid) {
+          console.warn('⚠️ La licencia del sistema ha expirado. Contacte al administrador.');
+          this.router.navigate(['/upload-license']);
+          return false;
+        }
+
+        return true;
       }),
-      catchError(() => {
-        // Si hay error (incluyendo 403), redirigir a upload-license
-        // y marcar como inválido en caché
+      catchError((error) => {
+        // Si hay error de red o servidor, almacenar en caché como inválido
         this.licenseCheckCache = {
           valid: false,
+          hasLicense: false,
           timestamp: Date.now()
         };
-        this.router.navigate(['/upload-license']);
-        return of(false);
+        
+        // Solo redirigir si el error es 404 (no hay licencia)
+        if (error.status === 404) {
+          this.router.navigate(['/upload-license']);
+          return of(false);
+        }
+        
+        // Para otros errores, permitir acceso (podría ser error temporal)
+        console.error('Error al verificar licencia:', error);
+        return of(true);
       })
     );
   }
