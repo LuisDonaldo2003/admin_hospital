@@ -12,24 +12,43 @@
         <p>Para activar el sistema, suba el archivo de licencia proporcionado por el proveedor.</p>
       </div>
 
+      <!-- Información del Servidor -->
+      <div class="hardware-info" *ngIf="hardwareInfo">
+        <h3><i class="fas fa-server"></i> Información del Servidor</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Servidor:</label>
+            <span>{{ hardwareInfo.server_identifier }}</span>
+          </div>
+          <div class="info-item">
+            <label>Hostname:</label>
+            <span>{{ hardwareInfo.hardware_info.hostname }}</span>
+          </div>
+          <div class="info-item">
+            <label>Sistema Operativo:</label>
+            <span>{{ hardwareInfo.hardware_info.os }}</span>
+          </div>
+          <div class="info-item">
+            <label>MAC Address:</label>
+            <span>{{ hardwareInfo.hardware_info.mac_address }}</span>
+          </div>
+          <div class="info-item full-width">
+            <label>Firma del Servidor:</label>
+            <span class="signature">{{ getFormattedSignature() }}</span>
+          </div>
+        </div>
+      </div>
+
       <div class="upload-section">
         <label for="fileInput" class="file-label">
           <i class="fas fa-cloud-upload-alt"></i>
           <span *ngIf="!selectedFile">Seleccionar archivo de licencia</span>
           <span *ngIf="selectedFile">{{ selectedFile.name }}</span>
         </label>
-        <input 
-          type="file" 
-          id="fileInput"
-          accept=".license,.key"
-          (change)="onFileSelected($event)"
-          [disabled]="uploading"
-          style="display: none;">
+        <input type="file" id="fileInput" accept=".license,.key" (change)="onFileSelected($event)"
+          [disabled]="uploading" style="display: none;">
 
-        <button 
-          class="btn-upload"
-          [disabled]="!selectedFile || uploading"
-          (click)="uploadLicense()">
+        <button class="btn-upload" [disabled]="!selectedFile || uploading" (click)="uploadLicense()">
           <i class="fas" [ngClass]="{
             'fa-spinner fa-spin': uploading,
             'fa-check-circle': !uploading
@@ -47,6 +66,47 @@
           'fa-exclamation-circle': messageType === 'error'
         }"></i>
         {{ message }}
+      </div>
+
+      <!-- Información del Hospital (después de activación exitosa) -->
+      <div *ngIf="hospitalInfo" class="hospital-info">
+        <h3><i class="fas fa-hospital"></i> Información del Hospital</h3>
+        <div class="info-grid">
+          <div class="info-item" *ngIf="hospitalInfo.name">
+            <label>Hospital:</label>
+            <span>{{ hospitalInfo.name }}</span>
+          </div>
+          <div class="info-item" *ngIf="hospitalInfo.address">
+            <label>Dirección:</label>
+            <span>{{ hospitalInfo.address }}</span>
+          </div>
+          <div class="info-item" *ngIf="hospitalInfo.city">
+            <label>Ciudad:</label>
+            <span>{{ hospitalInfo.city }}, {{ hospitalInfo.state }}</span>
+          </div>
+          <div class="info-item" *ngIf="hospitalInfo.contact_name">
+            <label>Contacto:</label>
+            <span>{{ hospitalInfo.contact_name }}</span>
+          </div>
+          <div class="info-item" *ngIf="hospitalInfo.contact_email">
+            <label>Email:</label>
+            <span>{{ hospitalInfo.contact_email }}</span>
+          </div>
+          <div class="info-item" *ngIf="hospitalInfo.contact_phone">
+            <label>Teléfono:</label>
+            <span>{{ hospitalInfo.contact_phone }}</span>
+          </div>
+        </div>
+        <div class="redirect-section">
+          <p class="redirect-notice">
+            <i class="fas fa-clock"></i>
+            Redirigiendo automáticamente al login en 3 segundos...
+          </p>
+          <button class="btn-login" (click)="goToLogin()">
+            <i class="fas fa-sign-in-alt"></i>
+            Ir al Login Ahora
+          </button>
+        </div>
       </div>
 
       <div class="help-text">
