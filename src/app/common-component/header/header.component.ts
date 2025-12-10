@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ProfileService } from 'src/app/core/profile/service/profile.service';
@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // Datos del usuario
   public user: any = null;
   public profileData: any = {};
-  public avatarUrl = 'assets/img/user-06.jpg';
+  public avatarUrl = 'assets/img/default.png';
   public roles: string[] = [];
 
   // Configuración de idioma
@@ -46,7 +46,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public auth: AuthService,
     public profileService: ProfileService,
     private translate: TranslateService,
-    private roleConfigService: RoleConfigService
+    private roleConfigService: RoleConfigService,
+    private cdr: ChangeDetectorRef
   ) {
     this.selectedLang = localStorage.getItem('language') || 'en';
     this.translate.use(this.selectedLang);
@@ -60,6 +61,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.initializeUser();
     this.subscribeSidebarChanges();
     this.loadProfileData();
+
+    // Suscribirse a cambios de avatar
+    this.profileService.avatarUpdate.subscribe((url: string) => {
+      console.log('Header recibió actualización de avatar:', url);
+      if (url) {
+        this.avatarUrl = url;
+        // Actualizar caché también
+        if (this.user?.id) localStorage.setItem(`avatarUrl_${this.user.id}`, url);
+        // Forzar detección de cambios
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   /**
@@ -134,7 +147,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (resp.data?.avatar) {
       this.updateAvatar(resp.data.avatar);
     } else {
-      this.avatarUrl = 'assets/img/user-06.jpg';
+      this.avatarUrl = 'assets/img/default.png';
     }
 
     this.avatarLoading = false;

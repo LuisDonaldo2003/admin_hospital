@@ -27,11 +27,8 @@
       <!-- Foto de perfil destacada en el centro -->
       <div class="profile-avatar-container">
         <div class="avatar-wrapper">
-          <img
-            class="profile-avatar"
-            [src]="profileData?.avatar || 'assets/img/default-avatar.png'"
-            alt="Avatar del usuario"
-          />
+          <img class="profile-avatar" [src]="profileData?.avatar || 'assets/img/default.png'"
+            alt="Avatar del usuario" />
           <div class="avatar-glow"></div>
         </div>
         <div class="profile-name-section">
@@ -58,7 +55,7 @@
             <span class="contact-value">{{ profileData.email }}</span>
           </div>
         </div>
-        
+
         <div class="contact-card" *ngIf="profileData?.mobile">
           <div class="contact-icon">
             <i class="fa fa-phone"></i>
@@ -68,7 +65,7 @@
             <span class="contact-value">{{ profileData.mobile }}</span>
           </div>
         </div>
-        
+
         <div class="contact-card" *ngIf="profileData?.birth_date">
           <div class="contact-icon">
             <i class="fa fa-calendar"></i>
@@ -78,14 +75,15 @@
             <span class="contact-value">{{ profileData.birth_date }}</span>
           </div>
         </div>
-        
+
         <div class="contact-card" *ngIf="profileData?.gender !== undefined || profileData?.gender_id !== undefined">
           <div class="contact-icon">
             <i class="fa fa-user"></i>
           </div>
           <div class="contact-details">
             <span class="contact-label">{{ 'PROFILE.PROFILES.GENDER' | translate }}</span>
-            <span class="contact-value">{{ profileData?.gender ? profileData.gender : (profileData?.gender_id === 1 ? 'Masculino' : (profileData?.gender_id === 2 ? 'Femenino' : '—')) }}</span>
+            <span class="contact-value">{{ profileData?.gender ? profileData.gender : (profileData?.gender_id === 1 ?
+              'Masculino' : (profileData?.gender_id === 2 ? 'Femenino' : '—')) }}</span>
           </div>
         </div>
       </div>
@@ -103,7 +101,7 @@
           <p class="license-subtitle">{{ 'PROFILE.PROFILES.SOFTWARE_LICENSE_INFO' | translate }}</p>
         </div>
       </div>
-      
+
       <div *ngIf="loadingLicense" class="license-loading">
         <i class="fa fa-spinner fa-spin"></i>
         <span>{{ 'PROFILE.PROFILES.LOADING_LICENSE_INFO' | translate }}</span>
@@ -126,7 +124,8 @@
           <div class="status-info">
             <span class="status-label">{{ 'PROFILE.PROFILES.LICENSE_STATUS' | translate }}</span>
             <span class="status-value">
-              {{ licenseInfo.is_valid && (isPermanentLicense() || licenseInfo.days_remaining > 0) ? 'Activa' : 'Inválida/Expirada' }}
+              {{ licenseInfo.is_valid && (isPermanentLicense() || licenseInfo.days_remaining > 0) ? 'Activa' :
+              'Inválida/Expirada' }}
             </span>
             <span class="status-type" *ngIf="licenseInfo.is_valid">
               ({{ getLicenseType() }})
@@ -154,107 +153,83 @@
             </div>
           </div>
 
-          <div class="info-item">
-            <div class="info-icon">
-              <i class="fa fa-calendar"></i>
-            </div>
-            <div class="info-content">
-              <span class="info-label">{{ 'PROFILE.PROFILES.EXPIRES_ON' | translate }}</span>
-              <span class="info-value">{{ formatDate(licenseInfo.valid_until) }}</span>
-            </div>
-          </div>
-
-
-
-          <div class="info-item" *ngIf="licenseInfo.allowed_domain === '*'">
-            <div class="info-icon">
-              <i class="fa fa-globe"></i>
-            </div>
-            <div class="info-content">
-              <span class="info-label">{{ 'PROFILE.PROFILES.AUTHORIZED_DOMAIN' | translate }}</span>
-              <span class="info-value">{{ 'PROFILE.PROFILES.ANY_DOMAIN' | translate }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Alertas según días restantes -->
-        <div class="license-alerts" *ngIf="!isPermanentLicense()">
-          <div *ngIf="licenseInfo.days_remaining <= 7 && licenseInfo.days_remaining > 0" 
-               class="license-alert alert-critical">
-            <i class="fa fa-exclamation-triangle"></i>
-            <div class="alert-content">
-              <strong>{{ 'PROFILE.PROFILES.ALERTS.URGENT_ATTENTION' | translate }}</strong>
-              <p>{{ 'PROFILE.PROFILES.ALERTS.LICENSE_EXPIRING_SOON' | translate }}</p>
-              <div class="alert-contact">
-                <div class="contact-item">
-                  <i class="fa fa-envelope"></i>
-                  <span>soporte@sismeg.gob.mx</span>
+          <!-- Alertas según días restantes -->
+          <div class="license-alerts" *ngIf="!isPermanentLicense()">
+            <div *ngIf="licenseInfo.days_remaining <= 7 && licenseInfo.days_remaining > 0"
+              class="license-alert alert-critical">
+              <i class="fa fa-exclamation-triangle"></i>
+              <div class="alert-content">
+                <strong>{{ 'PROFILE.PROFILES.ALERTS.URGENT_ATTENTION' | translate }}</strong>
+                <p>{{ 'PROFILE.PROFILES.ALERTS.LICENSE_EXPIRING_SOON' | translate }}</p>
+                <div class="alert-contact">
+                  <div class="contact-item">
+                    <i class="fa fa-envelope"></i>
+                    <span>soporte@sismeg.gob.mx</span>
+                  </div>
+                  <div class="contact-item">
+                    <i class="fa fa-phone"></i>
+                    <span>+52 (999) 123-4567</span>
+                  </div>
                 </div>
-                <div class="contact-item">
-                  <i class="fa fa-phone"></i>
-                  <span>+52 (999) 123-4567</span>
+              </div>
+            </div>
+
+            <div *ngIf="licenseInfo.days_remaining > 7 && licenseInfo.days_remaining <= 30"
+              class="license-alert alert-warning">
+              <i class="fa fa-exclamation-circle"></i>
+              <div class="alert-content">
+                <strong>{{ 'PROFILE.PROFILES.ALERTS.UPCOMING_RENEWAL' | translate }}</strong>
+                <p>{{ 'PROFILE.PROFILES.ALERTS.LICENSE_EXPIRING_SOON' | translate }}</p>
+                <div class="alert-contact">
+                  <div class="contact-item">
+                    <i class="fa fa-envelope"></i>
+                    <span>soporte@sismeg.gob.mx</span>
+                  </div>
+                  <div class="contact-item">
+                    <i class="fa fa-phone"></i>
+                    <span>+52 (999) 123-4567</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="licenseInfo.days_remaining <= 0" class="license-alert alert-expired">
+              <i class="fa fa-times-circle"></i>
+              <div class="alert-content">
+                <strong>{{ 'PROFILE.PROFILES.ALERTS.EXPIRED_LICENSE' | translate }}</strong>
+                <p>{{ 'PROFILE.PROFILES.ALERTS.EXPIRED_LICENSE_MESSAGE' | translate }}</p>
+                <div class="alert-contact">
+                  <div class="contact-item">
+                    <i class="fa fa-envelope"></i>
+                    <span>soporte@sismeg.gob.mx</span>
+                  </div>
+                  <div class="contact-item">
+                    <i class="fa fa-phone"></i>
+                    <span>+52 (999) 123-4567</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div *ngIf="licenseInfo.days_remaining > 7 && licenseInfo.days_remaining <= 30" 
-               class="license-alert alert-warning">
-            <i class="fa fa-exclamation-circle"></i>
-            <div class="alert-content">
-              <strong>{{ 'PROFILE.PROFILES.ALERTS.UPCOMING_RENEWAL' | translate }}</strong>
-              <p>{{ 'PROFILE.PROFILES.ALERTS.LICENSE_EXPIRING_SOON' | translate }}</p>
-              <div class="alert-contact">
-                <div class="contact-item">
-                  <i class="fa fa-envelope"></i>
-                  <span>soporte@sismeg.gob.mx</span>
-                </div>
-                <div class="contact-item">
-                  <i class="fa fa-phone"></i>
-                  <span>+52 (999) 123-4567</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="licenseInfo.days_remaining <= 0" 
-               class="license-alert alert-expired">
-            <i class="fa fa-times-circle"></i>
-            <div class="alert-content">
-              <strong>{{ 'PROFILE.PROFILES.ALERTS.EXPIRED_LICENSE' | translate }}</strong>
-              <p>{{ 'PROFILE.PROFILES.ALERTS.EXPIRED_LICENSE_MESSAGE' | translate }}</p>
-              <div class="alert-contact">
-                <div class="contact-item">
-                  <i class="fa fa-envelope"></i>
-                  <span>soporte@sismeg.gob.mx</span>
-                </div>
-                <div class="contact-item">
-                  <i class="fa fa-phone"></i>
-                  <span>+52 (999) 123-4567</span>
-                </div>
+          <!-- Alerta para licencias permanentes -->
+          <div class="license-alerts" *ngIf="isPermanentLicense()">
+            <div class="license-alert alert-success">
+              <i class="fa fa-check-circle"></i>
+              <div class="alert-content">
+                <strong>{{ 'PROFILE.PROFILES.ALERTS.PERMANENT_LICENSE' | translate }}</strong>
+                <p>{{ 'PROFILE.PROFILES.ALERTS.PERMANENT_LICENSE_MESSAGE' | translate }}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Alerta para licencias permanentes -->
-        <div class="license-alerts" *ngIf="isPermanentLicense()">
-          <div class="license-alert alert-success">
-            <i class="fa fa-check-circle"></i>
-            <div class="alert-content">
-              <strong>{{ 'PROFILE.PROFILES.ALERTS.PERMANENT_LICENSE' | translate }}</strong>
-              <p>{{ 'PROFILE.PROFILES.ALERTS.PERMANENT_LICENSE_MESSAGE' | translate }}</p>
-            </div>
+        <div *ngIf="!loadingLicense && !licenseInfo" class="license-error">
+          <i class="fa fa-exclamation-circle"></i>
+          <div class="error-content">
+            <strong>{{ 'PROFILE.PROFILES.ERRORS.LOAD_LICENSE' | translate }}</strong>
+            <p>{{ 'PROFILE.PROFILES.ERRORS.CONTACT_ADMIN' | translate }}</p>
           </div>
-        </div>
-      </div>
-
-      <div *ngIf="!loadingLicense && !licenseInfo" class="license-error">
-        <i class="fa fa-exclamation-circle"></i>
-        <div class="error-content">
-          <strong>{{ 'PROFILE.PROFILES.ERRORS.LOAD_LICENSE' | translate }}</strong>
-          <p>{{ 'PROFILE.PROFILES.ERRORS.CONTACT_ADMIN' | translate }}</p>
         </div>
       </div>
     </div>
-  </div>

@@ -43,7 +43,7 @@
             <!-- Avatar del usuario - TAMAÑO OPTIMIZADO 65px -->
             <div class="user-avatar-wrapper">
               <img class="user-avatar" width="65" height="65" [src]="avatarUrl" [alt]="user?.name || 'Avatar'"
-                (load)="avatarLoading = false" (error)="avatarLoading = false" />
+                (load)="avatarLoading = false" (error)="avatarLoading = false; avatarUrl = 'assets/img/default.png'" />
               <!-- Spinner de carga -->
               <span *ngIf="avatarLoading" class="avatar-spinner" role="status" aria-label="Cargando avatar">
               </span>

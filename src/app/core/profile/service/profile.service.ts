@@ -1,6 +1,7 @@
 // Servicio para gestionar el perfil del usuario
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { URL_SERVICIOS } from 'src/app/config/config';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 
@@ -8,17 +9,20 @@ import { AuthService } from 'src/app/shared/auth/auth.service';
   providedIn: 'root'
 })
 export class ProfileService {
+  public closeProfile: Subject<any> = new Subject<any>();
+  public avatarUpdate: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
   // Inyecta HttpClient para peticiones HTTP y AuthService para obtener el token
   constructor(
-    public http: HttpClient, 
+    public http: HttpClient,
     public authService: AuthService
-  ) {}
+  ) { }
 
   /**
    * Obtiene el perfil del usuario autenticado
    */
   getProfile() {
-    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.token});
+    let headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.authService.token });
     let URL = URL_SERVICIOS + "/profile_avatar";
     return this.http.get(URL, { headers: headers });
   }
@@ -29,7 +33,7 @@ export class ProfileService {
    * @param data Datos a actualizar
    */
   updateProfile(userId: string, data: any) {
-    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.token});
+    let headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.authService.token });
     let URL = `${URL_SERVICIOS}/users/profile_avatar/${userId}`;
     return this.http.put(URL, data, { headers: headers });
   }

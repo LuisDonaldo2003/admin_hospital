@@ -4,6 +4,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EditProfileService } from './service/edit-profile.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
+import { routes } from 'src/app/shared/routes/routes';
+import { ProfileService } from '../profile/service/profile.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -20,6 +23,8 @@ export class EditProfileComponent implements OnInit {
   onAvatarImgError(event: any): void {
     event.target.src = this.defaultAvatar;
   }
+
+  public routes = routes;
 
   // Nombre del archivo de avatar seleccionado
   avatarFileName: string = '';
@@ -45,7 +50,12 @@ export class EditProfileComponent implements OnInit {
   selectedLang: string;
 
   // Inyecta el servicio de edición de perfil y el de traducción
-  constructor(private editProfileService: EditProfileService, private translate: TranslateService) {
+  constructor(
+    private editProfileService: EditProfileService,
+    private translate: TranslateService,
+    public router: Router,
+    private profileService: ProfileService
+  ) {
     this.selectedLang = localStorage.getItem('language') || 'en';
     this.translate.use(this.selectedLang);
   }
@@ -111,6 +121,8 @@ export class EditProfileComponent implements OnInit {
           this.avatarPreview = null; // Limpia la preview
           this.profileData.avatar = res.data.avatar; // Usa la URL real
           this.avatarFile = null;
+          // Notificar cambio de avatar
+          this.profileService.avatarUpdate.next(res.data.avatar);
           this.saveProfile();
         },
         error: err => {
@@ -132,6 +144,10 @@ export class EditProfileComponent implements OnInit {
       next: res => {
         this.text_success = 'Perfil actualizado correctamente.';
         this.text_validation = '';
+        // Redirigir al perfil después de 1 segundo para mostrar el mensaje de éxito
+        setTimeout(() => {
+          this.router.navigate([this.routes.profile]);
+        }, 1000);
       },
       error: err => {
         this.text_success = '';
