@@ -50,6 +50,7 @@ interface ArchiveData {
   contact_name?: string;
   contact_last_name_father?: string;
   contact_last_name_mother?: string;
+  is_original_search?: boolean; // Marca si este es el expediente buscado originalmente
 }
 
 // Decorador principal del componente de listado de archivos
@@ -75,7 +76,7 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
   public locationTextSearch = '';
   public municipalityTextSearch = '';
   public stateTextSearch = '';
-  
+
   // Filtros de fecha avanzados
   // Filtros avanzados de fecha
   public dateFilterType = ''; // 'year', 'month', 'day', 'range', 'specific'
@@ -150,10 +151,10 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
     private driverTourService: DriverTourService,
     public permissionService: PermissionService
   ) {
-  this.selectedLang = localStorage.getItem('language') || 'en';
-  this.translate.use(this.selectedLang);
-  // Configura el debounce para las búsquedas
-  this.setupSearchDebounce();
+    this.selectedLang = localStorage.getItem('language') || 'en';
+    this.translate.use(this.selectedLang);
+    // Configura el debounce para las búsquedas
+    this.setupSearchDebounce();
   }
 
   /**
@@ -163,7 +164,7 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
     this.loadCatalogs();
     this.initializeDateOptions();
     this.loadArchives();
-    
+
     // Verificar si mostrar el tour automáticamente
     this.checkAndShowWelcomeTour();
   }
@@ -358,7 +359,7 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
    */
   deleteArchive(): void {
     if (!this.archive_selected) return;
-    
+
     this.archiveService.deleteArchive(this.archive_selected.archive_number)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
@@ -368,12 +369,12 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
           );
           this.totalRecords--;
           this.archive_selected = null;
-          
+
           // Si quedamos sin registros en la página actual, ir a la anterior
           if (this.displayedArchives.length === 0 && this.currentPage > 1) {
             this.currentPage--;
           }
-          
+
           this.loadArchives();
         }
       });
@@ -424,7 +425,7 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
       const year = parseInt(this.specificYear);
       const month = parseInt(this.specificMonth);
       const daysInMonth = new Date(year, month, 0).getDate();
-      
+
       this.days = [];
       for (let day = 1; day <= daysInMonth; day++) {
         this.days.push(day);
@@ -450,7 +451,7 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
       this.specificDay = '';
     }
 
-  // ...log eliminado...
+    // ...log eliminado...
 
     // Aplicar filtro inmediatamente para selectores
     this.onFilterChange();
@@ -476,13 +477,13 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
     if (this.dateRangeTimeout) {
       clearTimeout(this.dateRangeTimeout);
     }
-    
+
     this.dateRangeTimeout = setTimeout(() => {
       if (this.dateFilterType === 'range' && (this.dateFrom || this.dateTo)) {
         // Solo filtrar si hay fechas válidas completas
         const fromValid = !this.dateFrom || this.dateFrom.length === 10;
         const toValid = !this.dateTo || this.dateTo.length === 10;
-        
+
         if (fromValid && toValid) {
           this.onFilterChange();
         }
@@ -501,10 +502,10 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
     this.locationTextSearch = '';
     this.municipalityTextSearch = '';
     this.stateTextSearch = '';
-  // Importante: reiniciar últimos valores buscados para permitir repetir la misma búsqueda después de limpiar
-  this.lastArchiveSearchValue = '';
-  this.lastNameSearchValue = '';
-    
+    // Importante: reiniciar últimos valores buscados para permitir repetir la misma búsqueda después de limpiar
+    this.lastArchiveSearchValue = '';
+    this.lastNameSearchValue = '';
+
     // Limpiar filtros de fecha
     this.dateFilterType = '';
     this.specificYear = '';
@@ -512,9 +513,9 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
     this.specificDay = '';
     this.dateFrom = '';
     this.dateTo = '';
-    
-  this.currentPage = 1;
-  this.loadArchives();
+
+    this.currentPage = 1;
+    this.loadArchives();
   }
 
   // Método para verificar si hay filtros activos (actualizado)
@@ -555,7 +556,7 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
     if (event) {
       event.stopPropagation();
     }
-    
+
     // Si el dropdown actual ya está abierto, cerrarlo
     if (this.openDropdownIndex === index) {
       this.openDropdownIndex = null;

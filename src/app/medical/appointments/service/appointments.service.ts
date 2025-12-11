@@ -41,12 +41,18 @@ export interface TimeSlot {
 
 export interface Appointment {
   id?: number;
+  folio_expediente: string; // Número de expediente médico
   nombre_paciente: string; // Campo de texto libre
+  fecha_nacimiento: string; // Formato: YYYY-MM-DD
+  numero_cel: string; // Número de celular
+  procedencia: string; // Procedencia u origen
+  tipo_cita: 'Primera vez' | 'Subsecuente'; // Tipo de consulta
+  turno?: TipoTurno; // Turno seleccionado
   doctor_id: number;
   doctor?: Doctor;
   fecha: string; // Formato: YYYY-MM-DD
   hora_inicio: string; // Formato: HH:mm
-  hora_fin: string; // Calculado automáticamente (hora_inicio + 20 min)
+  hora_fin: string; // Calculado automáticamente (hora_inicio + 60 min)
   motivo_consulta: string;
   estado: EstadoCita;
   notas?: string;
@@ -75,7 +81,7 @@ export interface HorariosDisponibles {
 export class AppointmentsService {
 
   // Duración de cada cita en minutos
-  private readonly DURACION_CITA = 20;
+  private readonly DURACION_CITA = 60;
 
   constructor(
     private http: HttpClient,
@@ -190,7 +196,7 @@ export class AppointmentsService {
   storeAppointment(data: any): Observable<ApiResponse<Appointment>> {
     const headers = this.getHeaders();
     const url = `${URL_SERVICIOS}/appointments/citas`;
-    
+
     return this.http.post<ApiResponse<Appointment>>(url, data, { headers });
   }
 
@@ -200,7 +206,7 @@ export class AppointmentsService {
   updateAppointment(id: number, data: any): Observable<ApiResponse<Appointment>> {
     const headers = this.getHeaders();
     const url = `${URL_SERVICIOS}/appointments/citas/${id}`;
-    
+
     return this.http.put<ApiResponse<Appointment>>(url, data, { headers });
   }
 
@@ -269,37 +275,37 @@ export class AppointmentsService {
   }
 
   /**
-   * Genera slots de tiempo de 20 minutos para un turno específico
+   * Genera slots de tiempo de 1 hora para un turno específico
    * @param horaInicio Hora de inicio del turno (formato HH:mm)
    * @param horaFin Hora de fin del turno (formato HH:mm)
    * @returns Array de TimeSlots
    */
   generarTimeSlots(horaInicio: string, horaFin: string): TimeSlot[] {
     const slots: TimeSlot[] = [];
-    
+
     const [horaInicioH, horaInicioM] = horaInicio.split(':').map(Number);
     const [horaFinH, horaFinM] = horaFin.split(':').map(Number);
-    
+
     const inicioMinutos = horaInicioH * 60 + horaInicioM;
     const finMinutos = horaFinH * 60 + horaFinM;
-    
+
     let currentMinutos = inicioMinutos;
-    
-    // Generar slots de 20 minutos (3 por hora)
+
+    // Generar slots de 1 hora
     while (currentMinutos + this.DURACION_CITA <= finMinutos) {
       const slotInicio = this.minutosAHora(currentMinutos);
       const slotFin = this.minutosAHora(currentMinutos + this.DURACION_CITA);
-      
+
       slots.push({
         hora: slotInicio,
         hora_inicio: slotInicio,
         hora_fin: slotFin,
         disponible: true
       });
-      
+
       currentMinutos += this.DURACION_CITA;
     }
-    
+
     return slots;
   }
 
@@ -315,7 +321,7 @@ export class AppointmentsService {
     citasExistentes: Appointment[] = []
   ): HorariosDisponibles {
     let slots: TimeSlot[] = [];
-    
+
     // Generar slots según el turno
     if (doctor.turno === 'Matutino' && doctor.hora_inicio_matutino && doctor.hora_fin_matutino) {
       slots = this.generarTimeSlots(doctor.hora_inicio_matutino, doctor.hora_fin_matutino);
@@ -331,7 +337,7 @@ export class AppointmentsService {
         : [];
       slots = [...slotsMatutino, ...slotsVespertino];
     }
-    
+
     // Marcar slots ocupados por citas existentes
     citasExistentes.forEach(cita => {
       const slotOcupado = slots.find(slot => slot.hora_inicio === cita.hora_inicio);
@@ -340,7 +346,7 @@ export class AppointmentsService {
         slotOcupado.cita_id = cita.id;
       }
     });
-    
+
     return {
       fecha,
       doctor_id: doctor.id!,

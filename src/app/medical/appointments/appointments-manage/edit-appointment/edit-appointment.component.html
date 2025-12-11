@@ -35,20 +35,86 @@
                   </h5>
                 </div>
                 <div class="row g-3">
-                  <!-- Paciente -->
+                  <!-- Folio Expediente -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-file-medical me-1"></i>Folio Expediente <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="folio_expediente" name="folio_expediente"
+                      placeholder="Ej: EXP-2024-001" required>
+                  </div>
+
+                  <!-- Nombre del Paciente -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-user me-1"></i>Nombre del Paciente <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="nombre_paciente" name="nombre_paciente"
+                      placeholder="Nombre completo del paciente" required>
+                  </div>
+
+                  <!-- Fecha de Nacimiento -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-birthday-cake me-1"></i>Fecha de Nacimiento <span class="text-danger">*</span>
+                    </label>
+                    <input type="date" class="form-control" [(ngModel)]="fecha_nacimiento" name="fecha_nacimiento"
+                      required>
+                  </div>
+
+                  <!-- Número Celular -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-phone me-1"></i>Número Celular <span class="text-danger">*</span>
+                    </label>
+                    <input type="tel" class="form-control" [(ngModel)]="numero_cel" name="numero_cel"
+                      placeholder="Ej: 4491234567" required>
+                  </div>
+
+                  <!-- Procedencia -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-map-marker-alt me-1"></i>Procedencia <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" [(ngModel)]="procedencia" name="procedencia"
+                      placeholder="Localidad o municipio" required>
+                  </div>
+
+                  <!-- Tipo de Cita -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-clipboard-list me-1"></i>Tipo de Cita <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-select form-control" [(ngModel)]="tipo_cita" name="tipo_cita" required>
+                      <option value="">Seleccione el tipo de cita</option>
+                      <option *ngFor="let tipo of tiposCita" [value]="tipo">{{ tipo }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Separador -->
+              <div class="form-divider my-4"></div>
+
+              <!-- Sección: Turno -->
+              <div class="form-section">
+                <div class="section-header mb-3">
+                  <h5 class="section-title">
+                    <i class="fa fa-sun me-2"></i>Turno
+                  </h5>
+                </div>
+                <div class="row g-3">
+                  <!-- Turno -->
                   <div class="col-md-12">
                     <label class="form-label">
-                      <i class="fa fa-user me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.PATIENT' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-clock me-1"></i>Seleccione el Turno <span class="text-danger">*</span>
                     </label>
-                    <input 
-                      type="text" 
-                      class="form-control" 
-                      [(ngModel)]="nombre_paciente" 
-                      name="nombre_paciente"
-                      placeholder="Nombre completo del paciente"
-                      required>
+                    <select class="form-select form-control" [(ngModel)]="turno" name="turno" required>
+                      <option value="">Seleccione el turno</option>
+                      <option *ngFor="let t of turnos" [value]="t">{{ t }}</option>
+                    </select>
                     <small class="text-muted mt-1 d-block">
-                      <i class="fa fa-info-circle me-1"></i>Ingrese el nombre completo del paciente
+                      <i class="fa fa-info-circle me-1"></i>El turno determina los doctores y horarios disponibles
                     </small>
                   </div>
                 </div>
@@ -68,14 +134,11 @@
                   <!-- Especialidad -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-stethoscope me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.SPECIALTY' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-stethoscope me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.SPECIALTY' | translate }}
+                      <span class="text-danger">*</span>
                     </label>
-                    <select 
-                      class="form-select form-control" 
-                      [(ngModel)]="especialidad_id" 
-                      name="especialidad_id"
-                      (change)="onEspecialidadChange()"
-                      required>
+                    <select class="form-select form-control" [(ngModel)]="especialidad_id" name="especialidad_id"
+                      (change)="onEspecialidadChange()" required>
                       <option [value]="0">{{ 'APPOINTMENTS.ADD_APPOINTMENT.SELECT_SPECIALTY' | translate }}</option>
                       <option *ngFor="let esp of especialidades" [value]="esp.id">{{ esp.nombre }}</option>
                     </select>
@@ -84,20 +147,16 @@
                   <!-- Doctor -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-user-md me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.DOCTOR' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-user-md me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.DOCTOR' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <select 
-                      class="form-select form-control" 
-                      [(ngModel)]="doctor_id" 
-                      name="doctor_id"
-                      (change)="onDoctorOrFechaChange()"
-                      [disabled]="!especialidad_id || loadingDoctors"
-                      required>
+                    <select class="form-select form-control" [(ngModel)]="doctor_id" name="doctor_id"
+                      (change)="onDoctorOrFechaChange()" [disabled]="!especialidad_id || loadingDoctors" required>
                       <option [value]="0">
                         @if (loadingDoctors) {
-                          {{ 'COMMON.LOADING' | translate }}...
+                        {{ 'COMMON.LOADING' | translate }}...
                         } @else {
-                          {{ 'APPOINTMENTS.ADD_APPOINTMENT.SELECT_DOCTOR' | translate }}
+                        {{ 'APPOINTMENTS.ADD_APPOINTMENT.SELECT_DOCTOR' | translate }}
                         }
                       </option>
                       <option *ngFor="let doc of doctoresDisponibles" [value]="doc.id">
@@ -122,59 +181,53 @@
                   <!-- Fecha -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-calendar me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.DATE' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-calendar me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.DATE' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <input 
-                      type="date" 
-                      class="form-control" 
-                      [(ngModel)]="fecha" 
-                      name="fecha"
-                      (change)="onDoctorOrFechaChange()"
-                      required />
+                    <input type="date" class="form-control" [(ngModel)]="fecha" name="fecha"
+                      (change)="onDoctorOrFechaChange()" required />
                   </div>
 
                   <!-- Hora (solo mostrar después de seleccionar doctor y fecha) -->
                   @if (doctor_id && fecha) {
-                    <div class="col-md-6">
-                      <label class="form-label">
-                        <i class="fa fa-clock me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.TIME' | translate }} <span class="text-danger">*</span>
-                      </label>
-                      <select 
-                        class="form-select form-control" 
-                        [(ngModel)]="hora_inicio" 
-                        name="hora_inicio"
-                        [disabled]="loadingHorarios"
-                        required>
-                        <option value="">
-                          @if (loadingHorarios) {
-                            {{ 'COMMON.LOADING' | translate }}...
-                          } @else if (horariosDisponibles.length === 0) {
-                            {{ 'APPOINTMENTS.ADD_APPOINTMENT.NO_TIMES' | translate }}
-                          } @else {
-                            {{ 'APPOINTMENTS.ADD_APPOINTMENT.SELECT_TIME' | translate }}
-                          }
-                        </option>
-                        <option *ngFor="let slot of horariosDisponibles" [value]="slot.hora">
-                          {{ formatTimeAMPM(slot.hora) }}
-                        </option>
-                      </select>
-                      <small class="text-muted mt-1 d-block">
-                        <i class="fa fa-info-circle me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.DURATION_INFO' | translate }}
-                      </small>
-                    </div>
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-clock me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.TIME' | translate }} <span
+                        class="text-danger">*</span>
+                    </label>
+                    <select class="form-select form-control" [(ngModel)]="hora_inicio" name="hora_inicio"
+                      [disabled]="loadingHorarios" required>
+                      <option value="">
+                        @if (loadingHorarios) {
+                        {{ 'COMMON.LOADING' | translate }}...
+                        } @else if (horariosDisponibles.length === 0) {
+                        {{ 'APPOINTMENTS.ADD_APPOINTMENT.NO_TIMES' | translate }}
+                        } @else {
+                        {{ 'APPOINTMENTS.ADD_APPOINTMENT.SELECT_TIME' | translate }}
+                        }
+                      </option>
+                      <option *ngFor="let slot of horariosDisponibles" [value]="slot.hora">
+                        {{ formatTimeAMPM(slot.hora) }}
+                      </option>
+                    </select>
+                    <small class="text-muted mt-1 d-block">
+                      <i class="fa fa-info-circle me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.DURATION_INFO' | translate
+                      }}
+                    </small>
+                  </div>
 
-                    <!-- Mostrar hora de fin calculada -->
-                    @if (hora_inicio) {
-                      <div class="col-12">
-                        <div class="alert alert-info d-flex align-items-center">
-                          <i class="fa fa-clock me-3"></i>
-                          <div>
-                            <strong>{{ 'APPOINTMENTS.ADD_APPOINTMENT.APPOINTMENT_TIME' | translate }}:</strong>
-                            {{ formatTimeAMPM(hora_inicio) }} - {{ formatTimeAMPM(getHoraFin()) }}
-                          </div>
-                        </div>
+                  <!-- Mostrar hora de fin calculada -->
+                  @if (hora_inicio) {
+                  <div class="col-12">
+                    <div class="alert alert-info d-flex align-items-center">
+                      <i class="fa fa-clock me-3"></i>
+                      <div>
+                        <strong>{{ 'APPOINTMENTS.ADD_APPOINTMENT.APPOINTMENT_TIME' | translate }}:</strong>
+                        {{ formatTimeAMPM(hora_inicio) }} - {{ formatTimeAMPM(getHoraFin()) }}
                       </div>
-                    }
+                    </div>
+                  </div>
+                  }
                   }
                 </div>
               </div>
@@ -193,13 +246,10 @@
                   <!-- Motivo de consulta -->
                   <div class="col-md-12">
                     <label class="form-label">
-                      <i class="fa fa-clipboard me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.REASON' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-clipboard me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.REASON' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <textarea 
-                      class="form-control" 
-                      [(ngModel)]="motivo_consulta" 
-                      name="motivo_consulta"
-                      rows="3"
+                    <textarea class="form-control" [(ngModel)]="motivo_consulta" name="motivo_consulta" rows="3"
                       placeholder="{{ 'APPOINTMENTS.ADD_APPOINTMENT.REASON_PLACEHOLDER' | translate }}"
                       required></textarea>
                   </div>
@@ -207,33 +257,27 @@
                   <!-- Estado -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-flag me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.STATUS' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-flag me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.STATUS' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <select 
-                      class="form-select form-control" 
-                      [(ngModel)]="estado" 
-                      name="estado"
-                      required>
+                    <select class="form-select form-control" [(ngModel)]="estado" name="estado" required>
                       <option *ngFor="let est of estadosDisponibles" [value]="est">{{ est }}</option>
                     </select>
                   </div>
 
                   <!-- Motivo de Cancelación (solo si está cancelada) -->
                   @if (estado === 'Cancelada') {
-                    <div class="col-md-12">
-                      <label class="form-label">
-                        <i class="fa fa-comment me-1"></i>Motivo de Cancelación
-                      </label>
-                      <textarea 
-                        class="form-control" 
-                        [(ngModel)]="motivoCancelacion" 
-                        name="motivoCancelacion"
-                        rows="2"
-                        placeholder="Ingrese el motivo de la cancelación (opcional)"></textarea>
-                      <small class="text-muted mt-1 d-block">
-                        <i class="fa fa-info-circle me-1"></i>Si no especifica un motivo, se registrará como "Sin motivo especificado"
-                      </small>
-                    </div>
+                  <div class="col-md-12">
+                    <label class="form-label">
+                      <i class="fa fa-comment me-1"></i>Motivo de Cancelación
+                    </label>
+                    <textarea class="form-control" [(ngModel)]="motivoCancelacion" name="motivoCancelacion" rows="2"
+                      placeholder="Ingrese el motivo de la cancelación (opcional)"></textarea>
+                    <small class="text-muted mt-1 d-block">
+                      <i class="fa fa-info-circle me-1"></i>Si no especifica un motivo, se registrará como "Sin motivo
+                      especificado"
+                    </small>
+                  </div>
                   }
 
                   <!-- Notas -->
@@ -241,11 +285,7 @@
                     <label class="form-label">
                       <i class="fa fa-sticky-note me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.NOTES' | translate }}
                     </label>
-                    <textarea 
-                      class="form-control" 
-                      [(ngModel)]="notas" 
-                      name="notas"
-                      rows="2"
+                    <textarea class="form-control" [(ngModel)]="notas" name="notas" rows="2"
                       placeholder="{{ 'APPOINTMENTS.ADD_APPOINTMENT.NOTES_PLACEHOLDER' | translate }}"></textarea>
                   </div>
                 </div>
@@ -253,28 +293,28 @@
 
               <!-- Alerta de éxito -->
               @if (text_success) {
-                <div class="mt-4">
-                  <div class="alert alert-modern alert-success d-flex align-items-center">
-                    <i class="fa fa-check-circle me-3"></i>
-                    <div class="flex-grow-1">
-                      <strong>{{ 'COMMON.SUCCESS' | translate }}:</strong> {{ text_success }}
-                    </div>
-                    <button type="button" class="btn-close" (click)="text_success = ''"></button>
+              <div class="mt-4">
+                <div class="alert alert-modern alert-success d-flex align-items-center">
+                  <i class="fa fa-check-circle me-3"></i>
+                  <div class="flex-grow-1">
+                    <strong>{{ 'COMMON.SUCCESS' | translate }}:</strong> {{ text_success }}
                   </div>
+                  <button type="button" class="btn-close" (click)="text_success = ''"></button>
                 </div>
+              </div>
               }
 
               <!-- Alerta de validación -->
               @if (text_validation) {
-                <div class="mt-4">
-                  <div class="alert alert-modern alert-warning d-flex align-items-center">
-                    <i class="fa fa-exclamation-triangle me-3"></i>
-                    <div class="flex-grow-1">
-                      <strong>{{ 'COMMON.WARNING' | translate }}:</strong> {{ text_validation }}
-                    </div>
-                    <button type="button" class="btn-close" (click)="text_validation = ''"></button>
+              <div class="mt-4">
+                <div class="alert alert-modern alert-warning d-flex align-items-center">
+                  <i class="fa fa-exclamation-triangle me-3"></i>
+                  <div class="flex-grow-1">
+                    <strong>{{ 'COMMON.WARNING' | translate }}:</strong> {{ text_validation }}
                   </div>
+                  <button type="button" class="btn-close" (click)="text_validation = ''"></button>
                 </div>
+              </div>
               }
 
               <!-- Botones de acción -->
@@ -284,9 +324,9 @@
                 </button>
                 <button type="button" class="btn btn-save" (click)="save()" [disabled]="loading">
                   @if (loading) {
-                    <span class="spinner-border spinner-border-sm me-2"></span>
+                  <span class="spinner-border spinner-border-sm me-2"></span>
                   } @else {
-                    <i class="fa fa-save me-2"></i>
+                  <i class="fa fa-save me-2"></i>
                   }
                   {{ 'COMMON.UPDATE' | translate }}
                 </button>
@@ -300,9 +340,7 @@
 </div>
 
 <!-- Botón flotante de ayuda para iniciar el tour -->
-<button class="tour-help-button" 
-        (click)="startEditAppointmentTour()" 
-        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
-        type="button">
+<button class="tour-help-button" (click)="startEditAppointmentTour()" title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+  type="button">
   <i class="fa fa-question"></i>
 </button>

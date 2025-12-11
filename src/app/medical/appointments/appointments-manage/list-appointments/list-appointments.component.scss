@@ -23,7 +23,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  
+
   &:hover {
     background: linear-gradient(135deg, #ef4444, #dc2626);
     transform: translateY(-2px);
@@ -31,11 +31,11 @@
     filter: brightness(1.1);
     color: white;
   }
-  
+
   &:active {
     transform: translateY(0);
   }
-  
+
   i.fa-ban {
     font-size: 0.875rem;
   }
@@ -50,32 +50,32 @@
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  
+
   &.badge-warning {
     background: linear-gradient(135deg, #f59e0b, #d97706);
     color: white;
   }
-  
+
   &.badge-info {
     background: linear-gradient(135deg, #3b82f6, #2563eb);
     color: white;
   }
-  
+
   &.badge-primary {
     background: linear-gradient(135deg, #8b5cf6, #7c3aed);
     color: white;
   }
-  
+
   &.badge-success {
     background: linear-gradient(135deg, #10b981, #059669);
     color: white;
   }
-  
+
   &.badge-danger {
     background: linear-gradient(135deg, #ef4444, #dc2626);
     color: white;
   }
-  
+
   &.badge-secondary {
     background: linear-gradient(135deg, #6b7280, #4b5563);
     color: white;
@@ -86,11 +86,22 @@
 .modern-table {
   td {
     vertical-align: middle;
-    
+
     // ID de cita destacado
     .text-primary {
       font-weight: 700;
       font-size: 0.95rem;
     }
   }
+}
+
+// ===== FIX PARA SELECTS =====
+//Corregir padding heredado de list-doctors que causa que el texto se salga
+.role-filter-box .white-select,
+.role-filter-box .form-select2 {
+  padding: 0.625rem 0.75rem !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 }

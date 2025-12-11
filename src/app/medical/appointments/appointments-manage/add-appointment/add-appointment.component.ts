@@ -23,7 +23,13 @@ import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 export class AddAppointmentComponent implements OnInit {
 
   // Propiedades del formulario
+  folio_expediente: string = '';
   nombre_paciente: string = ''; // Campo de texto libre
+  fecha_nacimiento: string = '';
+  numero_cel: string = '';
+  procedencia: string = '';
+  tipo_cita: 'Primera vez' | 'Subsecuente' | '' = '';
+  turno: 'Matutino' | 'Vespertino' | '' = '';
   especialidad_id: number = 0;
   doctor_id: number = 0;
   fecha: string = '';
@@ -50,6 +56,10 @@ export class AddAppointmentComponent implements OnInit {
   // Estados disponibles
   estadosDisponibles: EstadoCita[] = ['Programada', 'Confirmada'];
 
+  // Tipos de cita y turnos
+  tiposCita: ('Primera vez' | 'Subsecuente')[] = ['Primera vez', 'Subsecuente'];
+  turnos: ('Matutino' | 'Vespertino')[] = ['Matutino', 'Vespertino'];
+
   /**
    * Obtener fecha mínima (hoy) en formato YYYY-MM-DD
    */
@@ -70,7 +80,7 @@ export class AddAppointmentComponent implements OnInit {
   ) {
     const selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(selectedLang);
-    
+
     // Establecer fecha como hoy en zona horaria local
     this.fecha = this.getMinDate();
   }
@@ -109,7 +119,7 @@ export class AddAppointmentComponent implements OnInit {
     this.doctor_id = 0;
     this.hora_inicio = '';
     this.horariosDisponibles = [];
-    
+
     if (this.especialidad_id && this.especialidad_id !== 0) {
       this.loadDoctoresByEspecialidad();
     } else {
@@ -123,14 +133,14 @@ export class AddAppointmentComponent implements OnInit {
   loadDoctoresByEspecialidad(): void {
     this.loadingDoctors = true;
     this.doctoresDisponibles = [];
-    
+
     this.appointmentsService.getDoctorsByEspecialidad(this.especialidad_id).subscribe({
       next: (response) => {
         this.loadingDoctors = false;
-        
+
         if (response.success && response.data) {
           this.doctoresDisponibles = response.data.filter(d => d.activo);
-          
+
           if (this.doctoresDisponibles.length === 0) {
             this.text_validation = 'No hay doctores disponibles para esta especialidad';
           }
@@ -151,7 +161,7 @@ export class AddAppointmentComponent implements OnInit {
   onDoctorOrFechaChange(): void {
     this.hora_inicio = '';
     this.horariosDisponibles = [];
-    
+
     if (this.doctor_id && this.fecha) {
       this.loadHorariosDisponibles();
     }
@@ -167,7 +177,7 @@ export class AddAppointmentComponent implements OnInit {
         this.loadingHorarios = false;
         if (response.success) {
           this.horariosDisponibles = response.data.slots.filter(slot => slot.disponible);
-          
+
           if (this.horariosDisponibles.length === 0) {
             this.text_validation = this.translate.instant('APPOINTMENTS.ADD_APPOINTMENT.NO_AVAILABLE_TIMES');
           }
@@ -201,7 +211,31 @@ export class AddAppointmentComponent implements OnInit {
    * Validar formulario
    */
   validateForm(): boolean {
+    if (!this.folio_expediente || !this.folio_expediente.trim()) {
+      return false;
+    }
+
     if (!this.nombre_paciente || !this.nombre_paciente.trim()) {
+      return false;
+    }
+
+    if (!this.fecha_nacimiento) {
+      return false;
+    }
+
+    if (!this.numero_cel || !this.numero_cel.trim()) {
+      return false;
+    }
+
+    if (!this.procedencia || !this.procedencia.trim()) {
+      return false;
+    }
+
+    if (!this.tipo_cita) {
+      return false;
+    }
+
+    if (!this.turno) {
       return false;
     }
 
@@ -244,7 +278,13 @@ export class AddAppointmentComponent implements OnInit {
     this.loading = true;
 
     const appointmentData: any = {
+      folio_expediente: this.folio_expediente.trim(),
       paciente_nombre: this.nombre_paciente.trim(), // Backend espera 'paciente_nombre'
+      fecha_nacimiento: this.fecha_nacimiento,
+      numero_cel: this.numero_cel.trim(),
+      procedencia: this.procedencia.trim(),
+      tipo_cita: this.tipo_cita,
+      turno: this.turno,
       doctor_id: this.doctor_id,
       fecha: this.fecha,
       hora: this.hora_inicio, // Backend espera 'hora'
@@ -303,21 +343,21 @@ export class AddAppointmentComponent implements OnInit {
    */
   formatTimeAMPM(timeString: string): string {
     if (!timeString) return '';
-    
+
     const parts = timeString.split(':');
     if (parts.length < 2) return timeString;
-    
+
     let hours = parseInt(parts[0], 10);
     const minutes = parts[1];
-    
+
     const period = hours >= 12 ? 'PM' : 'AM';
-    
+
     if (hours === 0) {
       hours = 12;
     } else if (hours > 12) {
       hours = hours - 12;
     }
-    
+
     return `${hours}:${minutes} ${period}`;
   }
 }
