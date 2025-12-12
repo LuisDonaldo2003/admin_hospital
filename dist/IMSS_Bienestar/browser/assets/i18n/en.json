@@ -367,7 +367,6 @@
       "CURP": "CURP",
       "RFC": "RFC",
       "INE": "INE",
-
       "AVATAR": "Avatar",
       "WARNING": "Warning",
       "SUCCESS": "Success",
@@ -388,6 +387,7 @@
       "ID_USER": "User ID",
       "SYSTEM_LICENSE": "System License",
       "SOFTWARE_LICENSE_INFO": "Information about the software license",
+      "CHANGE_PASSWORD": "Change Password",
       "LOADING_LICENSE_INFO": "Loading license information...",
       "LICENSE_STATUS": "License Status",
       "DAYS_REMAINING": "days remaining",

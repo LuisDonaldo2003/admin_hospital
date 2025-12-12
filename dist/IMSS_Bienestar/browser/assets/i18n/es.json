@@ -384,6 +384,7 @@
       "ID_USER": "ID de usuario",
       "SYSTEM_LICENSE": "Licencia del Sistema",
       "SOFTWARE_LICENSE_INFO": "Información sobre la licencia de uso del software",
+      "CHANGE_PASSWORD": "Cambiar Contraseña",
       "LOADING_LICENSE_INFO": "Cargando información de licencia...",
       "LICENSE_STATUS": "Estado de la Licencia",
       "DAYS_REMAINING": "días restantes",

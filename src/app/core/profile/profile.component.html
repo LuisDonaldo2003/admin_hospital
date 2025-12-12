@@ -15,6 +15,10 @@
         </ul>
       </div>
       <div class="col-sm-5 col-6 text-end mb-3">
+        <!-- Botón para cambiar contraseña -->
+        <a [routerLink]="routes.changePassword" class="btn btn-warning btn-rounded me-2">
+          <i class="fa fa-lock"></i> {{ 'PROFILE.PROFILES.CHANGE_PASSWORD' | translate }}
+        </a>
         <!-- Botón para editar el perfil -->
         <a [routerLink]="routes.editProfile" class="btn btn-primary btn-rounded">
           <i class="fa fa-pencil"></i> {{ 'PROFILE.PROFILES.EDIT_PROFILE' | translate }}

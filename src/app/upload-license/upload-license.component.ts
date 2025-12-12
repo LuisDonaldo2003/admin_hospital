@@ -90,29 +90,13 @@ export class UploadLicenseComponent {
         // Invalidar caché de licencia para que se verifique nuevamente
         this.licenseGuard.invalidateCache();
 
-        // Esperar un poco y verificar que la licencia esté activada antes de redirigir
+        // Redirigir después de 3 segundos usando window.location.replace
+        // Esto fuerza una recarga completa de la página y evita problemas de caché de routing
+        console.log('Licencia activada exitosamente, redirigiendo en 3 segundos...');
         setTimeout(() => {
-          // Verificar estado de licencia antes de redirigir
-          this.http.get(`${URL_SERVICIOS}/license/status`).subscribe({
-            next: (status: any) => {
-              console.log('Estado de licencia:', status);
-              if (status.valid && status.has_license) {
-                console.log('Licencia confirmada, redirigiendo a /login...');
-                window.location.href = '/login';
-              } else {
-                console.warn('La licencia aún no está activa, esperando...');
-                // Reintentar después de 2 segundos más
-                setTimeout(() => {
-                  window.location.href = '/login';
-                }, 2000);
-              }
-            },
-            error: (err) => {
-              console.error('Error verificando licencia, redirigiendo de todas formas:', err);
-              window.location.href = '/login';
-            }
-          });
-        }, 1500); // Dar 1.5 segundos al backend para procesar
+          console.log('Redirigiendo a /login con recarga completa...');
+          window.location.replace('/login');
+        }, 3000); // 3 segundos para que el usuario vea la información
       },
       error: (err: any) => {
         this.uploading = false;
@@ -151,19 +135,6 @@ export class UploadLicenseComponent {
   goToLogin(): void {
     console.log('Navegación manual a /login');
     this.licenseGuard.invalidateCache();
-
-    // Verificar que la licencia esté activada
-    this.http.get(`${URL_SERVICIOS}/license/status`).subscribe({
-      next: (status: any) => {
-        if (status.valid && status.has_license) {
-          console.log('Licencia confirmada, redirigiendo...');
-          window.location.href = '/login';
-        } else {
-          this.message = 'Espere un momento, procesando...';
-          setTimeout(() => window.location.href = '/login', 2000);
-        }
-      },
-      error: () => window.location.href = '/login'
-    });
+    window.location.replace('/login');
   }
 }
