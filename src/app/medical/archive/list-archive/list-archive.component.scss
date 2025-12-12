@@ -833,16 +833,20 @@
             }
           }
 
-          // Ubicación - más ancho
+          // Ubicación - más ancho y permite múltiples líneas
           &.info-location {
             flex: 1 1 280px;
             min-width: 220px;
+            align-items: flex-start; // Alinear arriba para textos multilínea
 
             .info-value-main {
               font-size: 0.78rem;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
+              // Permitir múltiples líneas para ubicaciones largas
+              white-space: normal;
+              overflow-wrap: break-word;
+              word-wrap: break-word;
+              line-height: 1.4;
+              max-width: 100%;
             }
           }
         }

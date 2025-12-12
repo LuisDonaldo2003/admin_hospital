@@ -25,11 +25,11 @@ export class AuthService {
   private refreshInProgress = false;
   // Subject para el token renovado
   private refreshTokenSubject = new BehaviorSubject<any>(null);
-  
+
   // Variables para el heartbeat de actividad de usuario
   private heartbeatSubscription: Subscription | undefined;
   private readonly HEARTBEAT_INTERVAL = 15 * 1000; // 15 segundos para detección rápida de sesiones concurrentes
-  
+
   // Control para evitar múltiples diálogos de sesión cerrada
   private sessionDialogOpen = false;
 
@@ -37,7 +37,7 @@ export class AuthService {
    * Inyecta el router y el cliente HTTP, inicializa el usuario desde localStorage
    */
   constructor(
-    private router: Router, 
+    private router: Router,
     public http: HttpClient,
     private permissionService: PermissionService,
     private themeService: ThemeService,
@@ -55,7 +55,7 @@ export class AuthService {
       let USER = localStorage.getItem('user');
       this.token = localStorage.getItem("token");
       this.userSubject.next(JSON.parse(USER ? USER : ''));
-      
+
       // Si hay token válido, iniciar heartbeat
       if (this.token && !this.isTokenExpired()) {
         this.startUserActivityTracking();
@@ -86,10 +86,6 @@ export class AuthService {
           this.router.navigate(['/verify-code']);
           return of({ success: false, unverified: true });
         }
-        // Caso especial: cuenta baneada - propagar el error para que login.component lo maneje
-        if (error.status === 403 && error.error?.banned) {
-          return throwError(() => error);
-        }
         // Otros errores: credenciales inválidas (401)
         return throwError(() => error);
       })
@@ -109,26 +105,26 @@ export class AuthService {
       localStorage.setItem("token", auth.access_token);
       localStorage.setItem("user", JSON.stringify(auth.user));
       localStorage.setItem('authenticated', 'true');
-      
+
       // 🔐 GUARDAR SESSION_ID DEL SERVIDOR
       if (auth.session_id) {
         this.sessionService.setSessionId(auth.session_id);
       }
-      
+
       this.userSubject.next(auth.user);
       this.token = auth.access_token;
-      
+
       // Refrescar permisos en el servicio de permisos
       this.permissionService.refreshUser();
-      
+
       // Aplicar tema del usuario después del login
       setTimeout(() => {
         this.themeService.applyUserTheme();
       }, 100); // Pequeño delay para asegurar que el userId esté disponible
-      
+
       // Iniciar heartbeat para mantener vivo el estado del usuario
       this.startUserActivityTracking();
-      
+
       return true;
     }
     return false;
@@ -140,7 +136,7 @@ export class AuthService {
   logout() {
     // Detener heartbeat antes del logout
     this.stopUserActivityTracking();
-    
+
     const URL = URL_SERVICIOS + "/auth/logout";
     this.http.post(URL, {}).subscribe({
       next: () => {
@@ -160,16 +156,16 @@ export class AuthService {
    */
   private clearLocalStorage(): void {
     this.stopUserActivityTracking(); // Detener heartbeat
-    
+
     // ✨ LIMPIAR TEMA AL CERRAR SESIÓN ✨
     this.themeService.clearUserTheme();
-    
+
     // 🔐 LIMPIAR SESSION_ID
     this.sessionService.clearSessionId();
-    
+
     // 🔄 LIMPIAR ÚLTIMA URL VISITADA
     localStorage.removeItem('lastVisitedUrl');
-    
+
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem('authenticated');
@@ -289,10 +285,10 @@ export class AuthService {
    */
   private startUserActivityTracking(): void {
     this.stopUserActivityTracking();
-    
+
     if (this.token) {
       this.sendHeartbeat();
-      
+
       this.heartbeatSubscription = interval(this.HEARTBEAT_INTERVAL).subscribe(() => {
         if (this.token) {
           this.sendHeartbeat();
@@ -319,16 +315,16 @@ export class AuthService {
    */
   private sendHeartbeat(): void {
     if (!this.token) return;
-    
+
     const sessionId = this.sessionService.getSessionId();
-    
+
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + this.token,
       'X-Session-ID': sessionId || ''
     });
 
     const URL = URL_SERVICIOS + "/auth/heartbeat";
-    
+
     // Enviar heartbeat con manejo de respuesta de sesión cerrada
     this.http.post(URL, { session_id: sessionId }, { headers }).subscribe({
       next: (response: any) => {
@@ -342,25 +338,25 @@ export class AuthService {
       }
     });
   }
-  
+
   /**
    * Maneja el evento de sesión cerrada por login en otro dispositivo
    */
   private handleSessionClosed(): void {
     // Evitar abrir múltiples diálogos
     if (this.sessionDialogOpen) return;
-    
+
     this.sessionDialogOpen = true;
-    
+
     // Detener heartbeat
     this.stopUserActivityTracking();
-    
+
     // Mostrar diálogo informativo
     const dialogRef = this.dialog.open(SessionClosedDialogComponent, {
       width: '500px',
       disableClose: true
     });
-    
+
     dialogRef.afterClosed().subscribe(() => {
       this.sessionDialogOpen = false;
     });
@@ -386,7 +382,7 @@ export class AuthService {
    */
   getDefaultRouteForUser(): string {
     const role = this.getUserRole();
-    
+
     switch (role) {
       case 'Director General':
         return '/dashboard';
