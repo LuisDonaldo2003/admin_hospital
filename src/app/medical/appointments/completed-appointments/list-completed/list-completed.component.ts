@@ -7,6 +7,7 @@ import { AppointmentsService } from '../../service/appointments.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PermissionService } from 'src/app/shared/services/permission.service';
 import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
+import { AuthService } from 'src/app/shared/auth/auth.service';
 
 @Component({
   selector: 'app-list-completed',
@@ -46,8 +47,9 @@ export class ListCompletedComponent implements OnInit {
     public appointmentsService: AppointmentsService,
     private translate: TranslateService,
     public permissionService: PermissionService,
-    private driverTourService: DriverTourService
-  ) {}
+    private driverTourService: DriverTourService,
+    public authService: AuthService
+  ) { }
 
   ngOnInit(): void {
     this.getTableData();
@@ -73,8 +75,26 @@ export class ListCompletedComponent implements OnInit {
     // Filtrar solo citas completadas
     this.appointmentsService.listAppointments({ estado: 'completada' }).subscribe({
       next: (resp: any) => {
-        this.totalData = resp.data.length;
-        this.appointment_generals = resp.data;
+        let data = resp.data || [];
+
+        // Filtrado estricto por permisos
+        const canSpecialist = this.authService.hasPermission('appointments_add_especialidad');
+        const canGeneral = this.authService.hasPermission('appointments_add_general_medical');
+
+        if (canSpecialist && !canGeneral) {
+          data = data.filter((item: any) => {
+            const doc = item.doctor_relation || item.doctor;
+            return doc && doc.especialidad_id;
+          });
+        } else if (canGeneral && !canSpecialist) {
+          data = data.filter((item: any) => {
+            const doc = item.doctor_relation || item.doctor;
+            return doc && doc.general_medical_id;
+          });
+        }
+
+        this.totalData = data.length;
+        this.appointment_generals = data;
         this.getTableDataGeneral();
       },
       error: (error: any) => {
@@ -192,9 +212,9 @@ export class ListCompletedComponent implements OnInit {
   formatDateTime(dateString: string): string {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toLocaleString('es-ES', { 
-      year: 'numeric', 
-      month: 'short', 
+    return date.toLocaleString('es-ES', {
+      year: 'numeric',
+      month: 'short',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'

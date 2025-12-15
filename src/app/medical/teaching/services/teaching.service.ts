@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { 
-  Teaching, 
-  Evaluacion, 
-  Modalidad, 
+import {
+  Teaching,
+  Evaluacion,
+  Modalidad,
   Participacion,
-  ApiResponse, 
-  PaginatedResponse, 
+  ApiResponse,
+  PaginatedResponse,
   TeachingStats,
   EvaluacionStats,
-  TeachingFilters 
+  TeachingFilters
 } from '../models/teaching.interface';
 import { URL_SERVICIOS } from 'src/app/config/config';
 import { AuthService } from 'src/app/shared/auth/auth.service';
@@ -41,8 +41,8 @@ export class TeachingService {
    * Obtener listado paginado de enseñanzas
    */
   getTeachings(
-    page: number = 1, 
-    perPage: number = 10, 
+    page: number = 1,
+    perPage: number = 10,
     filters?: TeachingFilters
   ): Observable<PaginatedResponse<Teaching>> {
     let params = new HttpParams()
@@ -56,6 +56,7 @@ export class TeachingService {
       if (filters.modalidad_id) params = params.set('modalidad_id', filters.modalidad_id.toString());
       if (filters.participacion_id) params = params.set('participacion_id', filters.participacion_id.toString());
       if (filters.nombre_evento) params = params.set('nombre_evento', filters.nombre_evento);
+      if (filters.sort_direction) params = params.set('sort_direction', filters.sort_direction);
     }
 
     return this.http.get<PaginatedResponse<Teaching>>(this.apiUrl, { params, headers: this.getHeaders() });
@@ -205,8 +206,8 @@ export class TeachingService {
       'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     });
 
-    return this.http.get(`${this.apiUrl}/export/excel`, { 
-      params, 
+    return this.http.get(`${this.apiUrl}/export/excel`, {
+      params,
       headers: headers,
       responseType: 'blob',
       observe: 'body'

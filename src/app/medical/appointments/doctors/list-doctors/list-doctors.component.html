@@ -19,18 +19,32 @@
               <div class="filter-controls-wrapper">
                 <div class="filters-section d-flex gap-2 mb-2">
                   <div class="search-box">
-                    <input type="text" class="form-control white-input" [placeholder]="'APPOINTMENTS.LIST_DOCTORS.SEARCH_PLACEHOLDER' | translate" [(ngModel)]="searchTerm" (ngModelChange)="filterDoctors()">
+                    <input type="text" class="form-control white-input"
+                      [placeholder]="'APPOINTMENTS.LIST_DOCTORS.SEARCH_PLACEHOLDER' | translate"
+                      [(ngModel)]="searchTerm" (ngModelChange)="filterDoctors()">
                     <i class="fa fa-search search-icon"></i>
                   </div>
-                  <div class="role-filter-box">
-                    <select class="form-select white-select" [(ngModel)]="filtroEspecialidad" (ngModelChange)="filterDoctors()">
+                  <!-- Filtro Especialidad -->
+                  <div class="role-filter-box" *ngIf="showSpecialist">
+                    <select class="form-select white-select" [(ngModel)]="filtroEspecialidad"
+                      (ngModelChange)="filterDoctors()">
                       <option value="">{{ 'APPOINTMENTS.LIST_DOCTORS.ALL_SPECIALTIES' | translate }}</option>
                       <option *ngFor="let esp of especialidades" [value]="esp.id">{{ esp.nombre }}</option>
                     </select>
                   </div>
+
+                  <!-- Filtro General Medical -->
+                  <div class="role-filter-box" *ngIf="showGeneral">
+                    <select class="form-select white-select" [(ngModel)]="filtroGeneralMedical"
+                      (ngModelChange)="filterDoctors()">
+                      <option value="">{{ 'APPOINTMENTS.ADD_APPOINTMENT.GENERAL_MEDICAL' | translate }} (Todas)</option>
+                      <option *ngFor="let gm of generalMedicals" [value]="gm.id">{{ gm.nombre }}</option>
+                    </select>
+                  </div>
                 </div>
                 <a [routerLink]="['/appointments/add_doctor']" class="btn btn-options d-flex align-items-center gap-1">
-                  <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'APPOINTMENTS.LIST_DOCTORS.ADD_DOCTOR' | translate }}</span>
+                  <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'APPOINTMENTS.LIST_DOCTORS.ADD_DOCTOR'
+                    | translate }}</span>
                 </a>
               </div>
             </div>
@@ -38,11 +52,16 @@
               <table class="table table-hover align-middle modern-table">
                 <thead class="table-light">
                   <tr>
-                    <th style="width: 30%;"><i class="fa fa-user-md me-2"></i>{{ 'APPOINTMENTS.LIST_DOCTORS.NAME' | translate }}</th>
-                    <th style="width: 20%;"><i class="fa fa-stethoscope me-2"></i>{{ 'APPOINTMENTS.LIST_DOCTORS.SPECIALTY' | translate }}</th>
-                    <th style="width: 15%;"><i class="fa fa-clock me-2"></i>{{ 'APPOINTMENTS.LIST_DOCTORS.SHIFT' | translate }}</th>
-                    <th style="width: 20%;"><i class="fa fa-calendar-alt me-2"></i>{{ 'APPOINTMENTS.LIST_DOCTORS.SCHEDULE' | translate }}</th>
-                    <th style="width: 15%;" class="text-center"><i class="fa fa-cog me-2"></i>{{ 'APPOINTMENTS.LIST_DOCTORS.ACTIONS' | translate }}</th>
+                    <th style="width: 30%;"><i class="fa fa-user-md me-2"></i>{{ 'APPOINTMENTS.LIST_DOCTORS.NAME' |
+                      translate }}</th>
+                    <th style="width: 20%;"><i class="fa fa-stethoscope me-2"></i>{{
+                      'APPOINTMENTS.LIST_DOCTORS.SPECIALTY' | translate }}</th>
+                    <th style="width: 15%;"><i class="fa fa-clock me-2"></i>{{ 'APPOINTMENTS.LIST_DOCTORS.SHIFT' |
+                      translate }}</th>
+                    <th style="width: 20%;"><i class="fa fa-calendar-alt me-2"></i>{{
+                      'APPOINTMENTS.LIST_DOCTORS.SCHEDULE' | translate }}</th>
+                    <th style="width: 15%;" class="text-center"><i class="fa fa-cog me-2"></i>{{
+                      'APPOINTMENTS.LIST_DOCTORS.ACTIONS' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -71,13 +90,14 @@
                       <div class="specialty-cell">
                         <span class="badge badge-role">
                           <i class="fa fa-stethoscope me-1"></i>
-                          {{ doctor.especialidad?.nombre || 'N/A' }}
+                          {{ getRoleName(doctor) }}
                         </span>
                       </div>
                     </td>
                     <td>
                       <div class="shift-cell">
-                        <span class="badge" [ngClass]="{'bg-success': doctor.turno === 'Matutino', 'bg-primary': doctor.turno === 'Vespertino', 'bg-info': doctor.turno === 'Mixto'}">
+                        <span class="badge"
+                          [ngClass]="{'bg-success': doctor.turno === 'Matutino', 'bg-primary': doctor.turno === 'Vespertino', 'bg-info': doctor.turno === 'Mixto'}">
                           <i class="fa fa-sun me-1" *ngIf="doctor.turno === 'Matutino'"></i>
                           <i class="fa fa-moon me-1" *ngIf="doctor.turno === 'Vespertino'"></i>
                           <i class="fa fa-adjust me-1" *ngIf="doctor.turno === 'Mixto'"></i>
@@ -95,10 +115,12 @@
                     </td>
                     <td class="text-center">
                       <div class="action-buttons">
-                        <button class="btn btn-sm btn-edit" [routerLink]="['/appointments/edit_doctor/', doctor.id]" [title]="'APPOINTMENTS.LIST_DOCTORS.EDIT' | translate">
+                        <button class="btn btn-sm btn-edit" [routerLink]="['/appointments/edit_doctor/', doctor.id]"
+                          [title]="'APPOINTMENTS.LIST_DOCTORS.EDIT' | translate">
                           <i class="fa fa-pen"></i>
                         </button>
-                        <button class="btn btn-sm btn-delete" (click)="selectDoctor(doctor)" data-bs-toggle="modal" data-bs-target="#deleteModal" [title]="'APPOINTMENTS.LIST_DOCTORS.DELETE' | translate">
+                        <button class="btn btn-sm btn-delete" (click)="selectDoctor(doctor)" data-bs-toggle="modal"
+                          data-bs-target="#deleteModal" [title]="'APPOINTMENTS.LIST_DOCTORS.DELETE' | translate">
                           <i class="fa fa-trash"></i>
                         </button>
                       </div>
@@ -111,13 +133,17 @@
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
               <div class="pagination-info small">
                 <!-- Información de registros mostrados -->
-                {{ 'APPOINTMENTS.LIST_DOCTORS.SHOWING' | translate }} {{ serialNumberArray[0] || 0 }} {{ 'APPOINTMENTS.LIST_DOCTORS.TO' | translate }} {{ serialNumberArray[serialNumberArray.length - 1] || 0 }} {{ 'APPOINTMENTS.LIST_DOCTORS.OF' | translate }} {{ totalData }} {{ 'APPOINTMENTS.LIST_DOCTORS.RECORDS' | translate }}
+                {{ 'APPOINTMENTS.LIST_DOCTORS.SHOWING' | translate }} {{ serialNumberArray[0] || 0 }} {{
+                'APPOINTMENTS.LIST_DOCTORS.TO' | translate }} {{ serialNumberArray[serialNumberArray.length - 1] || 0 }}
+                {{ 'APPOINTMENTS.LIST_DOCTORS.OF' | translate }} {{ totalData }} {{ 'APPOINTMENTS.LIST_DOCTORS.RECORDS'
+                | translate }}
               </div>
               <nav>
                 <ul class="pagination mb-0">
                   <!-- Botón para página anterior -->
                   <li class="page-item" [class.disabled]="currentPage === 1">
-                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('previous')">{{ 'APPOINTMENTS.LIST_DOCTORS.PREVIOUS' | translate }}</a>
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('previous')">{{
+                      'APPOINTMENTS.LIST_DOCTORS.PREVIOUS' | translate }}</a>
                   </li>
                   <!-- Botones para cada página -->
                   <ng-container *ngFor="let item of pageNumberArray">
@@ -127,7 +153,8 @@
                   </ng-container>
                   <!-- Botón para página siguiente -->
                   <li class="page-item" [class.disabled]="currentPage === pageNumberArray[pageNumberArray.length - 1]">
-                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('next')">{{ 'APPOINTMENTS.LIST_DOCTORS.NEXT' | translate }}</a>
+                    <a class="page-link" href="javascript:void(0);" (click)="getMoreData('next')">{{
+                      'APPOINTMENTS.LIST_DOCTORS.NEXT' | translate }}</a>
                   </li>
                 </ul>
               </nav>
@@ -142,7 +169,8 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header border-0">
-        <h5 class="modal-title"><i class="fa fa-exclamation-triangle text-warning me-2"></i>{{ 'APPOINTMENTS.LIST_DOCTORS.CONFIRM_DELETE' | translate }}</h5>
+        <h5 class="modal-title"><i class="fa fa-exclamation-triangle text-warning me-2"></i>{{
+          'APPOINTMENTS.LIST_DOCTORS.CONFIRM_DELETE' | translate }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
@@ -154,20 +182,20 @@
             <small class="text-muted">{{ selectedDoctor.especialidad?.nombre }}</small>
           </div>
         </div>
-        <p class="text-danger small mb-0"><i class="fa fa-exclamation-circle me-1"></i>{{ 'APPOINTMENTS.LIST_DOCTORS.DELETE_WARNING' | translate }}</p>
+        <p class="text-danger small mb-0"><i class="fa fa-exclamation-circle me-1"></i>{{
+          'APPOINTMENTS.LIST_DOCTORS.DELETE_WARNING' | translate }}</p>
       </div>
       <div class="modal-footer border-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times me-1"></i>{{ 'COMMON.CANCEL' | translate }}</button>
-        <button type="button" class="btn btn-danger" (click)="confirmDelete()" data-bs-dismiss="modal"><i class="fa fa-trash me-1"></i>{{ 'APPOINTMENTS.LIST_DOCTORS.DELETE' | translate }}</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times me-1"></i>{{
+          'COMMON.CANCEL' | translate }}</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()" data-bs-dismiss="modal"><i
+            class="fa fa-trash me-1"></i>{{ 'APPOINTMENTS.LIST_DOCTORS.DELETE' | translate }}</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Botón flotante de ayuda para iniciar el tour -->
-<button class="tour-help-button" 
-        (click)="startTour()" 
-        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
-        type="button">
+<button class="tour-help-button" (click)="startTour()" title="{{ 'TOUR.HELP_BUTTON' | translate }}" type="button">
   <i class="fa fa-question"></i>
 </button>

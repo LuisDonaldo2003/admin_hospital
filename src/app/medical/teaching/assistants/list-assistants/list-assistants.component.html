@@ -23,7 +23,7 @@
           <i class="fa fa-filter me-2"></i>{{ 'TEACHING_MODULE.ASSISTANTS.FILTERS' | translate }}
         </h5>
       </div>
-      
+
       <!-- Fila de búsqueda -->
       <div class="row g-3 mb-3">
         <!-- Búsqueda general -->
@@ -32,22 +32,15 @@
             <span class="input-group-text">
               <i class="fa fa-search"></i>
             </span>
-            <input type="text"
-                   class="form-control"
-                   placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.SEARCH_PLACEHOLDER' | translate }}"
-                   [(ngModel)]="searchTerm"
-                   (keyup.enter)="searchData()"
-                   (input)="searchTerm === '' && searchData()"
-                   [disabled]="loading">
+            <input type="text" class="form-control"
+              placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.SEARCH_PLACEHOLDER' | translate }}" [(ngModel)]="searchTerm"
+              (keyup.enter)="searchData()" (input)="searchTerm === '' && searchData()" [disabled]="loading">
           </div>
         </div>
 
         <!-- Búsqueda por profesión -->
         <div class="col-lg-6">
-          <select class="form-select"
-                  [(ngModel)]="filtroEspecialidad"
-                  (change)="filterData()"
-                  [disabled]="loading">
+          <select class="form-select" [(ngModel)]="filtroEspecialidad" (change)="filterData()" [disabled]="loading">
             <option value="">{{ 'TEACHING_MODULE.ASSISTANTS.ALL_PROFESSIONS' | translate }}</option>
             <option *ngFor="let profesion of profesiones" [value]="profesion">
               {{ profesion }}
@@ -80,10 +73,7 @@
 
         <!-- Área -->
         <div class="col-lg-4">
-          <select class="form-select"
-                  [(ngModel)]="filtroArea"
-                  (change)="filterData()"
-                  [disabled]="loading">
+          <select class="form-select" [(ngModel)]="filtroArea" (change)="filterData()" [disabled]="loading">
             <option value="">{{ 'TEACHING_MODULE.ASSISTANTS.ALL_AREAS' | translate }}</option>
             <option *ngFor="let area of areas" [value]="area">
               {{ area }}
@@ -95,26 +85,19 @@
       <!-- Botones de acción -->
       <div class="row g-3">
         <div class="col-lg-4">
-          <button class="btn btn-clear w-100"
-                  (click)="clearFilters()"
-                  [disabled]="loading">
+          <button class="btn btn-clear w-100" (click)="clearFilters()" [disabled]="loading">
             <i class="fa fa-refresh me-2"></i>
             {{ 'TEACHING_MODULE.ASSISTANTS.CLEAR_FILTERS' | translate }}
           </button>
         </div>
         <div class="col-lg-4">
-          <button class="btn btn-evaluaciones w-100"
-                  (click)="goToEvaluaciones()"
-                  [disabled]="loading">
+          <button class="btn btn-evaluaciones w-100" (click)="goToEvaluaciones()" [disabled]="loading">
             <i class="fa fa-clipboard-check me-2"></i>
             {{ 'TEACHING_MODULE.ASSISTANTS.PENDING_EVALUATIONS' | translate }}
           </button>
         </div>
         <div class="col-lg-4">
-          <button class="btn btn-add-patient w-100"
-                  (click)="addTeaching()"
-                  [disabled]="loading"
-                  *ngIf="canCreate()">
+          <button class="btn btn-add-patient w-100" (click)="addTeaching()" [disabled]="loading" *ngIf="canCreate()">
             <i class="fa fa-plus me-2"></i>
             {{ 'TEACHING_MODULE.ASSISTANTS.NEW_TEACHING' | translate }}
           </button>
@@ -141,6 +124,15 @@
                   <span class="stat-label">{{ 'TEACHING_MODULE.ASSISTANTS.SHOWING' | translate }}:</span>
                   <span class="stat-value">{{ teachingList.length }}</span>
                 </div>
+
+                <!-- Botón de Ordenamiento -->
+                <button class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2" (click)="toggleSort()"
+                  [title]="sortDirection === 'desc' ? ('TEACHING_MODULE.ASSISTANTS.SORT_ASC' | translate) : ('TEACHING_MODULE.ASSISTANTS.SORT_DESC' | translate)">
+                  <i class="fa" [ngClass]="sortDirection === 'desc' ? 'fa-sort-amount-down' : 'fa-sort-amount-up'"></i>
+                  <span class="d-none d-md-inline">{{ sortDirection === 'desc' ? ('TEACHING_MODULE.ASSISTANTS.RECENT' |
+                    translate) : ('TEACHING_MODULE.ASSISTANTS.OLDEST' | translate) }}</span>
+                </button>
+
                 <div class="stat-item">
                   <i class="fa fa-clock me-2"></i>
                   <span class="stat-label">{{ 'TEACHING_MODULE.ASSISTANTS.TOTAL_HOURS' | translate }}:</span>
@@ -161,9 +153,7 @@
               <p *ngIf="hasActiveFilters">
                 {{ 'TEACHING_MODULE.ASSISTANTS.NO_MATCHING' | translate }}
               </p>
-              <button *ngIf="hasActiveFilters" 
-                      class="btn btn-clear" 
-                      (click)="clearFilters()">
+              <button *ngIf="hasActiveFilters" class="btn btn-clear" (click)="clearFilters()">
                 <i class="fa fa-refresh me-2"></i>
                 {{ 'TEACHING_MODULE.ASSISTANTS.CLEAR_FILTERS' | translate }}
               </button>
@@ -171,46 +161,36 @@
 
             <!-- Vista de cards horizontales (solo si hay resultados) -->
             <div class="patients-grid" *ngIf="!loading && teachingList.length > 0">
-              <div class="patient-card" 
-                   *ngFor="let teaching of teachingList; let i = index">
-                
+              <div class="patient-card" *ngFor="let teaching of teachingList; let i = index">
+
                 <!-- Encabezado de la card con número y acciones -->
                 <div class="patient-card-header">
                   <div class="expediente-section">
                     <i class="fa fa-chalkboard-teacher"></i>
-                    <span class="expediente-number">#{{ (currentPage - 1) * pageSize + i + 1 }}</span>
+                    <span class="expediente-number">#{{ rangeStart + i }}</span>
                   </div>
-                  
+
                   <!-- Botones de acción -->
                   <div class="action-buttons-compact">
                     <!-- Botón Expandir/Colapsar -->
-                    <button 
-                      class="btn-icon btn-expand" 
-                      (click)="toggleCardExpansion(teaching.id)"
+                    <button class="btn-icon btn-expand" (click)="toggleCardExpansion(teaching.id)"
                       [title]="isCardExpanded(teaching.id) ? ('TEACHING_MODULE.ASSISTANTS.COLLAPSE' | translate) : ('TEACHING_MODULE.ASSISTANTS.EXPAND' | translate)">
                       <i class="fa" [ngClass]="isCardExpanded(teaching.id) ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
                     </button>
-                    
+
                     <!-- Botón Editar - solo si tiene permiso -->
-                    <button 
-                      *ngIf="canEdit() && teaching.id"
-                      class="btn-icon btn-edit" 
-                      (click)="editTeaching(teaching.id!)"
-                      title="{{ 'TEACHING_MODULE.ASSISTANTS.EDIT' | translate }}">
+                    <button *ngIf="canEdit() && teaching.id" class="btn-icon btn-edit"
+                      (click)="editTeaching(teaching.id!)" title="{{ 'TEACHING_MODULE.ASSISTANTS.EDIT' | translate }}">
                       <i class="fa fa-pen"></i>
                     </button>
-                    
+
                     <!-- Botón Eliminar - solo si tiene permiso -->
-                    <button 
-                      *ngIf="canDelete()"
-                      class="btn-icon btn-delete"
-                      (click)="selectTeaching(teaching)"
-                      data-bs-toggle="modal"
-                      data-bs-target="#delete_teaching"
+                    <button *ngIf="canDelete()" class="btn-icon btn-delete" (click)="selectTeaching(teaching)"
+                      data-bs-toggle="modal" data-bs-target="#delete_teaching"
                       title="{{ 'TEACHING_MODULE.ASSISTANTS.DELETE' | translate }}">
                       <i class="fa fa-trash"></i>
                     </button>
-                    
+
                     <!-- Badge sin permisos -->
                     <span class="badge badge-no-permission" *ngIf="!canEdit() && !canDelete()">
                       <i class="fa fa-ban me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.NO_PERMISSIONS' | translate }}
@@ -222,7 +202,7 @@
                 <div class="patient-card-body">
                   <!-- Vista resumida (siempre visible) -->
                   <div class="patient-horizontal-info mb-2">
-                    
+
                     <!-- Nombre completo -->
                     <div class="info-block info-name">
                       <i class="fa fa-user-circle"></i>
@@ -237,7 +217,8 @@
                       <i class="fa fa-bookmark"></i>
                       <div class="info-details">
                         <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.EVENT' | translate }}</span>
-                        <span class="info-value-main">{{ teaching.nombre_evento || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
+                        <span class="info-value-main">{{ teaching.nombre_evento ||
+                          ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
                       </div>
                     </div>
 
@@ -245,13 +226,14 @@
 
                   <!-- Segunda fila resumida -->
                   <div class="patient-horizontal-info mb-2">
-                    
+
                     <!-- Tema -->
                     <div class="info-block info-tema">
                       <i class="fa fa-tags"></i>
                       <div class="info-details">
                         <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.THEME' | translate }}</span>
-                        <span class="info-value-main">{{ teaching.tema || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
+                        <span class="info-value-main">{{ teaching.tema || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' |
+                          translate) }}</span>
                       </div>
                     </div>
 
@@ -260,7 +242,8 @@
                       <i class="fa fa-laptop"></i>
                       <div class="info-details">
                         <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.MODALITY' | translate }}</span>
-                        <span class="info-value-main">{{ teaching.modalidad || getModalidadNombre(teaching.modalidad_id) }}</span>
+                        <span class="info-value-main">{{ teaching.modalidad || getModalidadNombre(teaching.modalidad_id)
+                          }}</span>
                       </div>
                     </div>
 
@@ -268,8 +251,10 @@
                     <div class="info-block info-medium">
                       <i class="fa fa-users"></i>
                       <div class="info-details">
-                        <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.PARTICIPATION' | translate }}</span>
-                        <span class="info-value-main">{{ teaching.participacion || getParticipacionNombre(teaching.participacion_id) }}</span>
+                        <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.PARTICIPATION' | translate
+                          }}</span>
+                        <span class="info-value-main">{{ teaching.participacion ||
+                          getParticipacionNombre(teaching.participacion_id) }}</span>
                       </div>
                     </div>
 
@@ -277,19 +262,21 @@
 
                   <!-- Detalles expandidos (solo cuando está expandida) -->
                   <div class="expanded-details" *ngIf="isCardExpanded(teaching.id)">
-                    
+
                     <!-- Separador visual -->
                     <div class="details-separator"></div>
 
                     <!-- Fila 1: Datos personales adicionales -->
                     <div class="patient-horizontal-info mb-2">
-                      
+
                       <!-- Profesión -->
                       <div class="info-block info-compact">
                         <i class="fa fa-user-md"></i>
                         <div class="info-details">
-                          <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.PROFESSION' | translate }}</span>
-                          <span class="info-value-main">{{ teaching.profesion || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
+                          <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.PROFESSION' | translate
+                            }}</span>
+                          <span class="info-value-main">{{ teaching.profesion ||
+                            ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
                         </div>
                       </div>
 
@@ -298,7 +285,8 @@
                         <i class="fa fa-building"></i>
                         <div class="info-details">
                           <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.AREA' | translate }}</span>
-                          <span class="info-value-main">{{ teaching.area || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
+                          <span class="info-value-main">{{ teaching.area || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE'
+                            | translate) }}</span>
                         </div>
                       </div>
 
@@ -307,169 +295,181 @@
                         <i class="fa fa-envelope"></i>
                         <div class="info-details">
                           <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.EMAIL' | translate }}</span>
-                          <span class="info-value-main">{{ teaching.correo || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
+                          <span class="info-value-main">{{ teaching.correo ||
+                            ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
                         </div>
                       </div>
 
                     </div>
 
                     <!-- Fila 2: Ubicación -->
-                  <div class="patient-horizontal-info mb-2">
-                    
-                    <!-- Fila 2: Ubicación -->
                     <div class="patient-horizontal-info mb-2">
-                      
-                      <!-- Adscripción -->
-                      <div class="info-block info-location">
-                        <i class="fa fa-hospital"></i>
-                        <div class="info-details">
-                          <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.ADSCRIPTION' | translate }}</span>
-                          <span class="info-value-main">{{ teaching.adscripcion || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
+
+                      <!-- Fila 2: Ubicación -->
+                      <div class="patient-horizontal-info mb-2">
+
+                        <!-- Adscripción -->
+                        <div class="info-block info-location">
+                          <i class="fa fa-hospital"></i>
+                          <div class="info-details">
+                            <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.ADSCRIPTION' | translate
+                              }}</span>
+                            <span class="info-value-main">{{ teaching.adscripcion ||
+                              ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
+                          </div>
                         </div>
+
+                      </div>
+
+                      <!-- Fila 3: Foja -->
+                      <div class="patient-horizontal-info mb-2">
+
+                        <!-- Foja -->
+                        <div class="info-block info-small">
+                          <i class="fa fa-file-alt"></i>
+                          <div class="info-details">
+                            <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.FOJA' | translate }}</span>
+                            <span class="info-value-main">{{ teaching.foja ||
+                              ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <!-- Fila 4: Fechas y horas -->
+                      <div class="patient-horizontal-info">
+
+                        <!-- Fecha del evento -->
+                        <div class="info-block info-date">
+                          <i class="fa fa-calendar"></i>
+                          <div class="info-details">
+                            <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.DATE' | translate }}</span>
+                            <span class="info-value-main">{{ formatDate(teaching.fecha) }}</span>
+                          </div>
+                        </div>
+
+                        <!-- Horas -->
+                        <div class="info-block info-small">
+                          <i class="fa fa-clock"></i>
+                          <div class="info-details">
+                            <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.HOURS' | translate }}</span>
+                            <span class="info-value-main">{{ formatHoras(teaching.horas) }}</span>
+                          </div>
+                        </div>
+
+                        <!-- E.I. -->
+                        <div class="info-block info-date">
+                          <i class="fa fa-calendar-plus"></i>
+                          <div class="info-details">
+                            <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.EI' | translate }}</span>
+                            <span class="info-value-main">{{ teaching.ei || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE'
+                              | translate) }}</span>
+                          </div>
+                        </div>
+
+                        <!-- E.F. -->
+                        <div class="info-block info-date">
+                          <i class="fa fa-calendar-check"></i>
+                          <div class="info-details">
+                            <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.EF' | translate }}</span>
+                            <span class="info-value-main">{{ teaching.ef || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE'
+                              | translate) }}</span>
+                          </div>
+                        </div>
+
                       </div>
 
                     </div>
-
-                    <!-- Fila 3: Foja -->
-                    <div class="patient-horizontal-info mb-2">
-                      
-                      <!-- Foja -->
-                      <div class="info-block info-small">
-                        <i class="fa fa-file-alt"></i>
-                        <div class="info-details">
-                          <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.FOJA' | translate }}</span>
-                          <span class="info-value-main">{{ teaching.foja || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    <!-- Fila 4: Fechas y horas -->
-                    <div class="patient-horizontal-info">
-                      
-                      <!-- Fecha del evento -->
-                      <div class="info-block info-date">
-                        <i class="fa fa-calendar"></i>
-                        <div class="info-details">
-                          <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.DATE' | translate }}</span>
-                          <span class="info-value-main">{{ formatDate(teaching.fecha) }}</span>
-                        </div>
-                      </div>
-
-                      <!-- Horas -->
-                      <div class="info-block info-small">
-                        <i class="fa fa-clock"></i>
-                        <div class="info-details">
-                          <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.HOURS' | translate }}</span>
-                          <span class="info-value-main">{{ formatHoras(teaching.horas) }}</span>
-                        </div>
-                      </div>
-
-                      <!-- E.I. -->
-                      <div class="info-block info-date">
-                        <i class="fa fa-calendar-plus"></i>
-                        <div class="info-details">
-                          <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.EI' | translate }}</span>
-                          <span class="info-value-main">{{ teaching.ei || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
-                        </div>
-                      </div>
-
-                      <!-- E.F. -->
-                      <div class="info-block info-date">
-                        <i class="fa fa-calendar-check"></i>
-                        <div class="info-details">
-                          <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.EF' | translate }}</span>
-                          <span class="info-value-main">{{ teaching.ef || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
-                        </div>
-                      </div>
-
-                    </div>
-
+                    <!-- Fin detalles expandidos -->
                   </div>
-                  <!-- Fin detalles expandidos -->
                 </div>
               </div>
-            </div>
 
-            <!-- Paginación de resultados -->
-            <div class="pagination-wrapper mt-4" 
-                 *ngIf="!loading && teachingList.length > 0">
-              <!-- Información de paginación -->
-              <div class="pagination-info">
-                <i class="fa fa-info-circle me-2"></i>
-                {{ 'TEACHING_MODULE.ASSISTANTS.SHOWING' | translate }} {{ (currentPage - 1) * pageSize + 1 }}
-                {{ 'TEACHING_MODULE.ASSISTANTS.TO' | translate }} {{ (currentPage - 1) * pageSize + teachingList.length }}
-                {{ 'TEACHING_MODULE.ASSISTANTS.OF' | translate }} {{ totalData }} {{ 'TEACHING_MODULE.ASSISTANTS.RECORDS' | translate }}
+              <!-- Paginación de resultados -->
+              <div class="pagination-wrapper mt-4" *ngIf="!loading && teachingList.length > 0">
+                <!-- Información de paginación -->
+                <div class="pagination-info">
+                  <i class="fa fa-info-circle me-2"></i>
+                  {{ 'TEACHING_MODULE.ASSISTANTS.SHOWING' | translate }} {{ rangeStart }}
+                  {{ 'TEACHING_MODULE.ASSISTANTS.TO' | translate }} {{ rangeEnd }}
+                  {{ 'TEACHING_MODULE.ASSISTANTS.OF' | translate }} {{ totalData }} {{
+                  'TEACHING_MODULE.ASSISTANTS.RECORDS' | translate }}
+                  <span *ngIf="totalData < stats.total" class="text-muted ms-1">
+                    (filtrado de {{ stats.total }} registros totales)
+                  </span>
+                </div>
+                <!-- Navegación de paginación (solo si hay más de una página) -->
+                <!-- Navegación de paginación (solo si hay más de una página) -->
+                <nav *ngIf="totalPages > 1">
+                  <ul class="pagination mb-0">
+                    <!-- Botón para ir a la página anterior -->
+                    <li class="page-item" [class.disabled]="currentPage === 1 || loading">
+                      <a class="page-link" href="javascript:void(0);" (click)="moveToPage(currentPage - 1)"
+                        [attr.aria-disabled]="currentPage === 1 || loading">
+                        <i class="fa fa-chevron-left me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.PREVIOUS' | translate }}
+                      </a>
+                    </li>
+
+                    <!-- Botones de páginas individuales -->
+                    <li class="page-item" *ngFor="let page of visiblePages" [class.active]="page === currentPage"
+                      [class.disabled]="loading || page === '...'">
+
+                      <!-- Si es un número, es clickable -->
+                      <a class="page-link" *ngIf="page !== '...'" href="javascript:void(0);" (click)="moveToPage(page)"
+                        [attr.aria-disabled]="loading">
+                        {{ page }}
+                      </a>
+
+                      <!-- Si es '...', no es clickable -->
+                      <span class="page-link" *ngIf="page === '...'">
+                        ...
+                      </span>
+                    </li>
+
+                    <!-- Botón para ir a la página siguiente -->
+                    <li class="page-item" [class.disabled]="currentPage === totalPages || loading">
+                      <a class="page-link" href="javascript:void(0);" (click)="moveToPage(currentPage + 1)"
+                        [attr.aria-disabled]="currentPage === totalPages || loading">
+                        {{ 'TEACHING_MODULE.ASSISTANTS.NEXT' | translate }}<i class="fa fa-chevron-right ms-1"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
               </div>
-              <!-- Navegación de paginación (solo si hay más de una página) -->
-              <nav *ngIf="pageNumberArray.length > 1">
-                <ul class="pagination mb-0">
-                  <!-- Botón para ir a la página anterior -->
-                  <li class="page-item" [class.disabled]="currentPage === 1 || loading">
-                    <a class="page-link" 
-                       href="javascript:void(0);" 
-                       (click)="moveToPage(currentPage - 1)"
-                       [attr.aria-disabled]="currentPage === 1 || loading">
-                      <i class="fa fa-chevron-left me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.PREVIOUS' | translate }}
-                    </a>
-                  </li>
-                  <!-- Botones de páginas individuales -->
-                  <li class="page-item"
-                      *ngFor="let page of pageNumberArray"
-                      [class.active]="page === currentPage"
-                      [class.disabled]="loading">
-                    <a class="page-link" 
-                       href="javascript:void(0);" 
-                       (click)="moveToPage(page)"
-                       [attr.aria-disabled]="loading">
-                      {{ page }}
-                    </a>
-                  </li>
-                  <!-- Botón para ir a la página siguiente -->
-                  <li class="page-item" [class.disabled]="currentPage === pageNumberArray.length || loading">
-                    <a class="page-link" 
-                       href="javascript:void(0);" 
-                       (click)="moveToPage(currentPage + 1)"
-                       [attr.aria-disabled]="currentPage === pageNumberArray.length || loading">
-                      {{ 'TEACHING_MODULE.ASSISTANTS.NEXT' | translate }}<i class="fa fa-chevron-right ms-1"></i>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
 
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Modal de Eliminación para confirmar borrado de enseñanza -->
-<div class="modal fade" id="delete_teaching" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body text-center p-4">
-        <!-- Imagen de advertencia -->
-        <img src="assets/img/sent.png" alt="" width="50" height="46" />
-        <!-- Mensaje de confirmación -->
-        <h5 class="mt-3" *ngIf="teaching_selected">
-          {{ 'TEACHING_MODULE.ASSISTANTS.DELETE_CONFIRMATION' | translate }} <strong>{{ teaching_selected.nombre }}</strong>?
-        </h5>
-        <!-- Botones para cancelar o confirmar eliminación -->
-        <div class="mt-4 d-flex justify-content-center gap-3">
-          <button class="btn btn-light" data-bs-dismiss="modal">{{ 'TEACHING_MODULE.ASSISTANTS.CANCEL' | translate }}</button>
-          <button class="btn btn-danger" (click)="deleteTeaching()" data-bs-dismiss="modal">{{ 'TEACHING_MODULE.ASSISTANTS.DELETE' | translate }}</button>
+  <!-- Modal de Eliminación para confirmar borrado de enseñanza -->
+  <div class="modal fade" id="delete_teaching" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center p-4">
+          <!-- Imagen de advertencia -->
+          <img src="assets/img/sent.png" alt="" width="50" height="46" />
+          <!-- Mensaje de confirmación -->
+          <h5 class="mt-3" *ngIf="teaching_selected">
+            {{ 'TEACHING_MODULE.ASSISTANTS.DELETE_CONFIRMATION' | translate }} <strong>{{ teaching_selected.nombre
+              }}</strong>?
+          </h5>
+          <!-- Botones para cancelar o confirmar eliminación -->
+          <div class="mt-4 d-flex justify-content-center gap-3">
+            <button class="btn btn-light" data-bs-dismiss="modal">{{ 'TEACHING_MODULE.ASSISTANTS.CANCEL' | translate
+              }}</button>
+            <button class="btn btn-danger" (click)="deleteTeaching()" data-bs-dismiss="modal">{{
+              'TEACHING_MODULE.ASSISTANTS.DELETE' | translate }}</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Botón flotante de ayuda para iniciar el tour -->
-<button class="tour-help-button" 
-        (click)="startAssistantsListTour()" 
-        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
-        type="button">
-  <i class="fa fa-question"></i>
-</button>
+  <!-- Botón flotante de ayuda para iniciar el tour -->
+  <button class="tour-help-button" (click)="startAssistantsListTour()" title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+    type="button">
+    <i class="fa fa-question"></i>
+  </button>

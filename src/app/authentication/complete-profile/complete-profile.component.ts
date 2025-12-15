@@ -22,31 +22,21 @@ export class CompleteProfileComponent {
 
   // Campos del formulario de perfil
   mobile = '';
-  curp = '';
-  ine = '';
-  rfc = '';
-  attendance_number = '';
-  professional_license = '';
-  funcion_real = '';
   birth_date: any;
   gender = '';
-  departament_id = '';
-  profile_id = '';
-  contract_type_id = '';
+  attendance_number = '';
+
   IMAGEN_PREVIZUALIZA: any = null; // Previsualización del avatar
   avatarFile: File | null = null;  // Archivo de imagen seleccionado
 
-  // Catálogos para los selectores del formulario
-  departaments: any[] = [];
-  profiles: any[] = [];
-  contractTypes: any[] = [];
+  // Catálogos
   genders: any[] = []; // lista de géneros desde el backend
 
   // Mensajes de éxito y validación
   text_success = '';
   text_validation = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) { }
 
   // Al inicializar, carga los catálogos y los datos del usuario
   ngOnInit() {
@@ -57,28 +47,15 @@ export class CompleteProfileComponent {
     this.email = user.email || '';
   }
 
-  // Obtiene los catálogos de departamentos, perfiles y tipos de contrato desde el backend
+  // Obtiene los catálogos necesarios (solo géneros ahora)
   getCatalogs() {
-    this.http.get<any>(`${URL_SERVICIOS}/staffs/config`).subscribe({
-      next: res => {
-        this.departaments = res.departaments;
-        this.profiles = res.profiles;
-        this.contractTypes = res.contractTypes;
-      },
-      error: err => {
-        this.text_validation = 'Error al cargar catálogos.';
-      }
-    });
-
     // Obtener géneros desde el endpoint público
     this.http.get<any>(`${URL_SERVICIOS}/genders`).subscribe({
       next: res => {
-        // El endpoint devuelve un array [{id,name},...]
         this.genders = res || [];
       },
       error: err => {
-        // fallback estático si el endpoint falla
-        this.genders = [ { id: 1, name: 'Hombre' }, { id: 2, name: 'Mujer' } ];
+        this.genders = [{ id: 1, name: 'Hombre' }, { id: 2, name: 'Mujer' }];
       }
     });
   }
@@ -99,44 +76,30 @@ export class CompleteProfileComponent {
     this.text_validation = '';
     this.text_success = '';
 
-    // Validación de campos obligatorios
-    if (!this.mobile || !this.birth_date || !this.gender || !this.attendance_number || !this.avatarFile) {
-      this.text_validation = 'Por favor completa los campos obligatorios: número de móvil, fecha de nacimiento, género, No. de asistencia y foto de perfil.';
+    // Validación de campos obligatorios (Foto ya NO es obligatoria)
+    if (!this.mobile || !this.birth_date || !this.gender || !this.attendance_number) {
+      this.text_validation = 'Por favor completa todos los campos obligatorios (Móvil, Fecha Nacimiento, Género y No. Asistencia).';
       return;
     }
 
-    // Construye el objeto FormData: solo añadir campos opcionales si tienen valor
     const formData = new FormData();
-    // Campos obligatorios (siempre)
     formData.append('mobile', this.mobile);
     formData.append('attendance_number', this.attendance_number);
     formData.append('birth_date', this.birth_date);
     formData.append('gender_id', this.gender);
 
-    // Opcionales: añadir solo si tienen contenido
-    if (this.curp) formData.append('curp', this.curp);
-    if (this.rfc) formData.append('rfc', this.rfc);
-    if (this.ine) formData.append('ine', this.ine);
-    if (this.professional_license) formData.append('professional_license', this.professional_license);
-    if (this.funcion_real) formData.append('funcion_real', this.funcion_real);
-    if (this.departament_id) formData.append('departament_id', this.departament_id);
-    if (this.profile_id) formData.append('profile_id', this.profile_id);
-    if (this.contract_type_id) formData.append('contract_type_id', this.contract_type_id);
-
     if (this.avatarFile) {
       formData.append('avatar', this.avatarFile);
     }
 
-  // (Debug removed) enviar FormData al backend
-
-    // Envía el perfil al backend y muestra mensajes según el resultado
+    // Envía el perfil al backend
     this.http.post(`${URL_SERVICIOS}/complete-profile`, formData).subscribe({
       next: () => {
         this.text_success = 'Perfil completado correctamente';
         setTimeout(() => this.router.navigate(['/profile']), 1000);
       },
       error: err => {
-        this.text_validation = err?.error?.message || 'Error al guardar';
+        this.text_validation = err?.error?.message || 'Error al guardar. Verifique los datos.';
       }
     });
   }

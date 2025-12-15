@@ -36,7 +36,7 @@ const routes: Routes = [{
       canActivate: [PermissionGuard],
       data: { requiredPermissions: ['edit_doctor'] }
     },
-    
+
     // Appointments Routes
     {
       path: 'list_appointment',
@@ -56,7 +56,7 @@ const routes: Routes = [{
       canActivate: [PermissionGuard],
       data: { requiredPermissions: ['edit_appointment'] }
     },
-    
+
     // Calendar View
     {
       path: 'calendar',
@@ -64,7 +64,7 @@ const routes: Routes = [{
       canActivate: [PermissionGuard],
       data: { requiredPermissions: ['list_appointments'] }
     },
-    
+
     // Especialidades Routes
     {
       path: 'especialidades',
@@ -72,7 +72,16 @@ const routes: Routes = [{
       canActivate: [PermissionGuard],
       data: { requiredPermissions: ['appointments_especialidades_list'] }
     },
-    
+
+    // General Medicals Routes
+    {
+      path: 'general-medicals',
+      loadChildren: () => import('./general-medical/general-medical.module').then(m => m.GeneralMedicalModule),
+      canActivate: [PermissionGuard],
+      // Reusing existing permission for now as new permissions were not seeded
+      data: { requiredPermissions: ['appointments_list_general_medical'] }
+    },
+
     // Cancelled Appointments Routes
     {
       path: 'cancelled',
@@ -80,7 +89,7 @@ const routes: Routes = [{
       canActivate: [PermissionGuard],
       data: { requiredPermissions: ['list_appointments'] }
     },
-    
+
     // Completed Appointments Routes
     {
       path: 'completed',
@@ -88,7 +97,7 @@ const routes: Routes = [{
       canActivate: [PermissionGuard],
       data: { requiredPermissions: ['list_appointments'] }
     },
-    
+
     // No-Show Appointments Routes
     {
       path: 'no-show',
@@ -96,7 +105,7 @@ const routes: Routes = [{
       canActivate: [PermissionGuard],
       data: { requiredPermissions: ['list_appointments'] }
     },
-    
+
     // Default redirect
     {
       path: '',

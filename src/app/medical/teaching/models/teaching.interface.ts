@@ -117,4 +117,5 @@ export interface TeachingFilters {
   modalidad_id?: number;
   participacion_id?: number;
   nombre_evento?: string;
+  sort_direction?: 'asc' | 'desc';
 }

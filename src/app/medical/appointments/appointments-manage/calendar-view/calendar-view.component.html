@@ -18,6 +18,51 @@
     </div>
 
     <div class="row">
+      <!-- Filtros de Doctor -->
+      <div class="col-12 mb-3">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-3">
+            <div class="row g-3">
+              <!-- Filtro: Especialidad (Solo si tiene permiso) -->
+              @if (showSpecialist) {
+              <div class="col-md-4">
+                <label class="form-label small text-muted mb-1">{{ 'APPOINTMENTS.ADD_APPOINTMENT.SPECIALTY' |
+                  translate }}</label>
+                <select class="form-select form-select-sm" [(ngModel)]="especialidad_id"
+                  (change)="onEspecialidadChange()">
+                  <option [value]="0">Todas las Especialidades</option>
+                  <option *ngFor="let esp of especialidades" [value]="esp.id">{{ esp.nombre }}</option>
+                </select>
+              </div>
+              }
+
+              <!-- Filtro: Médico General (Solo si tiene permiso) -->
+              @if (showGeneral) {
+              <div class="col-md-4">
+                <label class="form-label small text-muted mb-1">{{ 'APPOINTMENTS.ADD_APPOINTMENT.GENERAL_MEDICAL' |
+                  translate }}</label>
+                <select class="form-select form-select-sm" [(ngModel)]="general_medical_id"
+                  (change)="onGeneralMedicalChange()">
+                  <option [value]="0">Todas las Categorías</option>
+                  <option *ngFor="let gm of generalMedicals" [value]="gm.id">{{ gm.nombre }}</option>
+                </select>
+              </div>
+              }
+
+              <!-- Filtro: Doctor -->
+              <div class="col-md-4">
+                <label class="form-label small text-muted mb-1">{{ 'APPOINTMENTS.ADD_APPOINTMENT.DOCTOR' | translate
+                  }}</label>
+                <select class="form-select form-select-sm" [(ngModel)]="doctor_id" (change)="onDoctorChange()">
+                  <option [value]="0">Todos los Doctores</option>
+                  <option *ngFor="let doc of doctores" [value]="doc.id">{{ doc.nombre_completo }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Calendar Column -->
       <div class="col-lg-8">
         <div class="card">
@@ -37,33 +82,29 @@
               <!-- Day Headers -->
               <div class="calendar-header">
                 @for (dayName of dayNames; track dayName) {
-                  <div class="calendar-day-name">{{ dayName }}</div>
+                <div class="calendar-day-name">{{ dayName }}</div>
                 }
               </div>
 
               <!-- Calendar Days -->
               @for (week of weeks; track week) {
-                <div class="calendar-week">
-                  @for (day of week; track day) {
-                    <div 
-                      class="calendar-day"
-                      [class.today]="day.isToday"
-                      [class.selected]="day.isSelected"
-                      [class.has-appointments]="day.appointments?.length > 0"
-                      [class.no-appointments]="day.date && day.appointments?.length === 0"
-                      [class.disabled]="!day.date"
-                      (click)="selectDate(day)">
-                      @if (day.day) {
-                        <div class="day-number">{{ day.day }}</div>
-                        @if (day.appointments?.length > 0) {
-                          <div class="appointments-count">
-                            <span class="badge bg-primary text-white fw-bold">{{ day.appointments.length }}</span>
-                          </div>
-                        }
-                      }
-                    </div>
+              <div class="calendar-week">
+                @for (day of week; track day) {
+                <div class="calendar-day" [class.today]="day.isToday" [class.selected]="day.isSelected"
+                  [class.has-appointments]="day.appointments?.length > 0"
+                  [class.no-appointments]="day.date && day.appointments?.length === 0" [class.disabled]="!day.date"
+                  (click)="selectDate(day)">
+                  @if (day.day) {
+                  <div class="day-number">{{ day.day }}</div>
+                  @if (day.appointments?.length > 0) {
+                  <div class="appointments-count">
+                    <span class="badge bg-primary text-white fw-bold">{{ day.appointments.length }}</span>
+                  </div>
+                  }
                   }
                 </div>
+                }
+              </div>
               }
             </div>
 
@@ -97,10 +138,12 @@
         <div class="card">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">
-              @if (selectedDate) {
-                {{ 'APPOINTMENTS.CALENDAR.APPOINTMENTS_FOR' | translate }} {{ selectedDate | date: 'dd/MM/yyyy' }}
+              @if (doctor_id && !selectedDate) {
+              {{ 'APPOINTMENTS.CALENDAR.MONTHLY_SCHEDULE' | translate }}
+              } @else if (selectedDate) {
+              {{ 'APPOINTMENTS.CALENDAR.APPOINTMENTS_FOR' | translate }} {{ selectedDate | date: 'dd/MM/yyyy' }}
               } @else {
-                {{ 'APPOINTMENTS.CALENDAR.SELECT_DATE' | translate }}
+              {{ 'APPOINTMENTS.CALENDAR.SELECT_DATE' | translate }}
               }
             </h5>
             <button class="btn btn-sm btn-primary" (click)="addNewAppointment()">
@@ -109,48 +152,65 @@
           </div>
           <div class="card-body" style="max-height: 600px; overflow-y: auto;">
             @if (isLoading) {
-              <div class="text-center py-4">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">{{ 'COMMON.LOADING' | translate }}...</span>
-                </div>
+            <div class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">{{ 'COMMON.LOADING' | translate }}...</span>
               </div>
+            </div>
             } @else if (filteredAppointments.length > 0) {
-              @for (appointment of filteredAppointments; track appointment.id) {
-                <div class="appointment-card mb-3" (click)="viewAppointment(appointment)">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                      <h6 class="mb-1">
-                        <i class="fas fa-clock text-muted me-1"></i>
-                        {{ formatTime(appointment.hora) }}
-                      </h6>
-                      <p class="mb-1">
-                        <i class="fas fa-user-injured text-primary me-1"></i>
-                        <strong>{{ getPacienteNombre(appointment) }}</strong>
-                      </p>
-                      <p class="mb-1">
-                        <i class="fas fa-user-md text-info me-1"></i>
-                        {{ getDoctorNombre(appointment) }}
-                      </p>
-                      <p class="mb-0 text-muted small">
-                        {{ appointment.motivo_consulta || appointment.motivo || 'Sin motivo' }}
-                      </p>
-                    </div>
-                    <span [class]="'badge ' + getStatusClass(appointment.estado)">
-                      {{ getStatusText(appointment.estado) }}
+            @for (appointment of filteredAppointments; track appointment.id) {
+            <div class="appointment-card mb-3" (click)="viewAppointment(appointment)">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  @if (!selectedDate) {
+                  <div class="mb-2">
+                    <span class="badge badge-info p-2">
+                      <i class="fas fa-calendar-alt me-1"></i>
+                      {{ appointment.fecha | date:'dd MMM yyyy' }}
                     </span>
                   </div>
+                  }
+                  <h6 class="mb-1">
+                    <i class="fas fa-clock text-muted me-1"></i>
+                    {{ formatTime(appointment.hora) }}
+                  </h6>
+                  <p class="mb-1">
+                    <i class="fas fa-user-injured text-primary me-1"></i>
+                    <strong>{{ getPacienteNombre(appointment) }}</strong>
+                  </p>
+                  <p class="mb-1">
+                    <i class="fas fa-user-md text-info me-1"></i>
+                    {{ getDoctorNombre(appointment) }}
+                  </p>
+                  <p class="mb-1">
+                    <i class="fas fa-stethoscope text-secondary me-1"></i>
+                    {{ getDoctorEspecialidad(appointment) }}
+                  </p>
+                  <p class="mb-0 text-muted small">
+                    {{ appointment.motivo_consulta || appointment.motivo || 'Sin motivo' }}
+                  </p>
                 </div>
-              }
+                <span [class]="'badge ' + getStatusClass(appointment.estado)">
+                  {{ getStatusText(appointment.estado) }}
+                </span>
+              </div>
+            </div>
+            }
+            } @else if (doctor_id && !selectedDate) {
+            <div class="text-center py-5">
+              <i class="fas fa-calendar-check fa-3x text-muted mb-3"></i>
+              <p class="text-muted">{{ 'APPOINTMENTS.CALENDAR.NO_MONTHLY_APPOINTMENTS' | translate }}</p>
+            </div>
             } @else if (selectedDate) {
-              <div class="text-center py-5">
-                <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
-                <p class="text-muted">{{ 'APPOINTMENTS.CALENDAR.NO_APPOINTMENTS' | translate }}</p>
-              </div>
+            <div class="text-center py-5">
+              <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+              <p class="text-muted">{{ 'APPOINTMENTS.CALENDAR.NO_APPOINTMENTS' | translate }}</p>
+            </div>
             } @else {
-              <div class="text-center py-5">
-                <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
-                <p class="text-muted">{{ 'APPOINTMENTS.CALENDAR.SELECT_DATE_MESSAGE' | translate }}</p>
-              </div>
+            <div class="text-center py-5">
+              <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
+              <p class="text-muted">{{ 'APPOINTMENTS.CALENDAR.SELECT_DATE_MESSAGE' | translate }}</p>
+            </div>
             }
           </div>
         </div>
@@ -160,9 +220,7 @@
 </div>
 
 <!-- Botón flotante de ayuda para iniciar el tour -->
-<button class="tour-help-button" 
-        (click)="startAppointmentsCalendarTour()" 
-        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
-        type="button">
+<button class="tour-help-button" (click)="startAppointmentsCalendarTour()" title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+  type="button">
   <i class="fa fa-question"></i>
 </button>

@@ -374,7 +374,36 @@ export class AuthService {
    */
   getUserRole(): string | null {
     const user = this.user;
-    return user?.role_name || user?.role?.name || null;
+    if (!user) return null;
+
+    // 1. Prioridad: role_name (formato legado o custom)
+    if (user.role_name) return user.role_name;
+
+    // 2. role.name (relación objeto)
+    if (user.role?.name) return user.role.name;
+
+    // 3. roles (array de strings del Spatie Permission)
+    if (user.roles && Array.isArray(user.roles) && user.roles.length > 0) {
+      // Retornar el primer rol encontrado
+      return user.roles[0];
+    }
+
+    return null;
+  }
+
+  /**
+   * Verifica si el usuario tiene un permiso específico
+   */
+  hasPermission(permission: string): boolean {
+    const user = this.user;
+    if (!user || !user.permissions) return false;
+
+    // Si es array de strings
+    if (Array.isArray(user.permissions)) {
+      return user.permissions.includes(permission);
+    }
+
+    return false;
   }
 
   /**

@@ -9,36 +9,36 @@ import { URL_SERVICIOS } from '../../config/config';
   providedIn: 'root'
 })
 export class LicenseCheckGuard implements CanActivate {
-  private licenseCheckCache: { 
-    valid: boolean; 
+  private licenseCheckCache: {
+    valid: boolean;
     hasLicense: boolean;
-    timestamp: number 
+    timestamp: number
   } | null = null;
   private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutos en milisegundos
 
   constructor(
     private http: HttpClient,
     private router: Router
-  ) {}
+  ) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     // Rutas públicas que no requieren verificación de licencia
     const publicRoutes = ['/upload-license', '/login', '/register', '/forgot-password', '/reset-password'];
-    
+
     // Si estamos en una ruta pública, permitir acceso siempre
     if (publicRoutes.some(publicRoute => state.url.includes(publicRoute))) {
       return of(true);
     }
 
     // Verificar si tenemos un caché válido (menos de 5 minutos)
-    if (this.licenseCheckCache && 
-        (Date.now() - this.licenseCheckCache.timestamp) < this.CACHE_DURATION) {
-      
+    if (this.licenseCheckCache &&
+      (Date.now() - this.licenseCheckCache.timestamp) < this.CACHE_DURATION) {
+
       // Si hay licencia activa en el sistema, permitir acceso
       if (this.licenseCheckCache.hasLicense && this.licenseCheckCache.valid) {
         return of(true);
-      } 
-      
+      }
+
       // Si no hay licencia en el sistema, redirigir a upload-license
       if (!this.licenseCheckCache.hasLicense) {
         this.router.navigate(['/upload-license']);
@@ -61,7 +61,7 @@ export class LicenseCheckGuard implements CanActivate {
         if (response.has_license && response.valid) {
           return true;
         }
-        
+
         // Si no hay licencia o es inválida/expirada, redirigir a upload-license solo si no hay licencia
         if (!response.has_license) {
           this.router.navigate(['/upload-license']);
@@ -85,13 +85,13 @@ export class LicenseCheckGuard implements CanActivate {
           hasLicense: false,
           timestamp: Date.now()
         };
-        
+
         // Solo redirigir si el error es 404 (no hay licencia)
         if (error.status === 404) {
           this.router.navigate(['/upload-license']);
           return of(false);
         }
-        
+
         // Para otros errores, permitir acceso (podría ser error temporal)
         console.error('Error al verificar licencia:', error);
         return of(true);

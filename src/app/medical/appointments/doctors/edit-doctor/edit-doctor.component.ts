@@ -6,6 +6,9 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AppointmentsService, Doctor, Especialidad, TipoTurno } from '../../service/appointments.service';
 
+import { GeneralMedicalService } from '../../general-medical/service/general-medical.service';
+import { AuthService } from 'src/app/shared/auth/auth.service';
+
 @Component({
   selector: 'app-edit-doctor',
   standalone: true,
@@ -26,8 +29,9 @@ export class EditDoctorComponent implements OnInit {
   // Propiedades del formulario simplificado
   nombre_completo: string = '';
   especialidad_id: number = 0;
+  general_medical_id: number = 0;
   turno: TipoTurno = 'Matutino';
-  
+
   // Horarios
   hora_inicio_matutino: string = '08:00';
   hora_fin_matutino: string = '14:00';
@@ -40,7 +44,12 @@ export class EditDoctorComponent implements OnInit {
 
   // Listas
   especialidades: Especialidad[] = [];
+  generalMedicals: any[] = [];
   turnosDisponibles: TipoTurno[] = ['Matutino', 'Vespertino', 'Mixto'];
+
+  // Flags de UI
+  showSpecialist: boolean = false;
+  showGeneral: boolean = false;
 
   // Mensajes
   text_success: string = '';
@@ -50,15 +59,17 @@ export class EditDoctorComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private translate: TranslateService,
-    private appointmentsService: AppointmentsService
+    private appointmentsService: AppointmentsService,
+    private generalMedicalService: GeneralMedicalService,
+    public authService: AuthService
   ) {
     const selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(selectedLang);
   }
 
   ngOnInit(): void {
-    this.loadEspecialidades();
-    
+    this.determineFilters();
+
     // Detectar si estamos en modo edición por la ruta
     this.route.params.subscribe(params => {
       if (params['id']) {
@@ -68,7 +79,28 @@ export class EditDoctorComponent implements OnInit {
       }
     });
   }
-  
+
+  determineFilters(): void {
+    const canSpecialist = this.authService.hasPermission('appointments_add_especialidad');
+    const canGeneral = this.authService.hasPermission('appointments_add_general_medical');
+
+    if (canSpecialist && !canGeneral) {
+      this.showSpecialist = true;
+      this.showGeneral = false;
+      this.loadEspecialidades();
+    } else if (canGeneral && !canSpecialist) {
+      this.showSpecialist = false;
+      this.showGeneral = true;
+      this.loadGeneralMedicals();
+    } else {
+      // Admin o ambos
+      this.showSpecialist = true;
+      this.showGeneral = true;
+      this.loadEspecialidades();
+      this.loadGeneralMedicals();
+    }
+  }
+
   loadDoctorData(id: number): void {
     this.loading = true;
     this.appointmentsService.getDoctor(id).subscribe({
@@ -76,6 +108,7 @@ export class EditDoctorComponent implements OnInit {
         const doctor = response.data;
         this.nombre_completo = doctor.nombre_completo;
         this.especialidad_id = doctor.especialidad_id;
+        this.general_medical_id = doctor.general_medical_id || 0;
         this.turno = doctor.turno;
         this.hora_inicio_matutino = doctor.hora_inicio_matutino || '08:00';
         this.hora_fin_matutino = doctor.hora_fin_matutino || '14:00';
@@ -106,6 +139,14 @@ export class EditDoctorComponent implements OnInit {
     });
   }
 
+  loadGeneralMedicals(): void {
+    this.generalMedicalService.listGeneralMedicals().subscribe({
+      next: (resp) => {
+        if (resp.success) this.generalMedicals = resp.data.filter(g => g.activo);
+      }
+    });
+  }
+
   /**
    * Validar formulario
    */
@@ -114,7 +155,27 @@ export class EditDoctorComponent implements OnInit {
       return false;
     }
 
-    if (!this.especialidad_id || this.especialidad_id === 0) {
+    // Validar según rol
+    if (this.showSpecialist && (!this.especialidad_id || this.especialidad_id === 0)) {
+      // En caso de Admin, puede que haya llenado el otro. 
+      // Si showSpecialist y showGeneral son true (Admin), se debiera exigir al menos uno?
+      // Asumiremos: Si es Admin, debe elegir una especialidad SI NO ha elegido general (y viceversa?)
+      // O más simple: Si tiene permiso de especialista, debe llenar especialidad.
+      // Pero el requerimiento dice que Admin puede ver ambos filtros en listado.
+      // Al crear doctor, un Admin debería poder asignar especialidad O general.
+
+      if (this.showGeneral) {
+        // Es admin: validamos que tenga AL MENOS UNO
+        if ((!this.especialidad_id || this.especialidad_id === 0) && (!this.general_medical_id || this.general_medical_id === 0)) {
+          return false;
+        }
+      } else {
+        // Solo especialista
+        return false;
+      }
+    }
+
+    if (this.showGeneral && !this.showSpecialist && (!this.general_medical_id || this.general_medical_id === 0)) {
       return false;
     }
 
@@ -176,10 +237,19 @@ export class EditDoctorComponent implements OnInit {
 
     const doctorData: any = {
       nombre_completo: this.nombre_completo.trim(),
-      especialidad_id: this.especialidad_id,
       turno: this.turno,
       activo: true
     };
+
+    if (this.especialidad_id) {
+      doctorData.especialidad_id = this.especialidad_id;
+    }
+
+    if (this.general_medical_id) {
+      doctorData.general_medical_id = this.general_medical_id;
+    }
+    // Limpiar si no aplica el contexto? Mejor enviar lo que esté setedo.
+    // Si el usuario cambia de rol, podría enviar datos basura, pero el backend debiera ignorarlos o validarlos.
 
     // Agregar horarios según el turno (formato H:i sin segundos)
     if (this.turno === 'Matutino' || this.turno === 'Mixto') {
@@ -192,7 +262,7 @@ export class EditDoctorComponent implements OnInit {
       doctorData.hora_fin_vespertino = this.formatTimeToHi(this.hora_fin_vespertino);
     }
 
-    
+
 
     const request = this.isEditMode && this.doctorId
       ? this.appointmentsService.updateDoctor(this.doctorId, doctorData)
@@ -205,7 +275,7 @@ export class EditDoctorComponent implements OnInit {
           const successKey = this.isEditMode ? 'APPOINTMENTS.EDIT_DOCTOR.UPDATE_SUCCESS' : 'APPOINTMENTS.EDIT_DOCTOR.SUCCESS';
           this.text_success = this.translate.instant(successKey);
           setTimeout(() => {
-            this.router.navigate(['/appointments/list_doctor']);
+            this.router.navigate(['/medical/appointments/list-doctors']); // Corregida la ruta de redirección
           }, 1500);
         } else {
           this.text_validation = response.message || this.translate.instant('COMMON.ERROR_OCCURRED');
@@ -216,7 +286,7 @@ export class EditDoctorComponent implements OnInit {
         console.error('Error al guardar doctor:', error);
         console.error('Datos enviados:', doctorData);
         console.error('Errores específicos del backend:', JSON.stringify(error.error, null, 2));
-        
+
         // Mostrar errores de validación específicos
         if (error.error?.errors) {
           const errors = error.error.errors;
@@ -244,7 +314,7 @@ export class EditDoctorComponent implements OnInit {
     const charCode = event.charCode;
     const char = String.fromCharCode(charCode);
     const pattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]$/;
-    
+
     if (!pattern.test(char)) {
       event.preventDefault();
     }

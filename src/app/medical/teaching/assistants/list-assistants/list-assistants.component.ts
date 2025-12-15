@@ -5,12 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TeachingService } from '../../services/teaching.service';
-import { 
-  Teaching, 
-  Modalidad, 
-  Participacion, 
+import {
+  Teaching,
+  Modalidad,
+  Participacion,
   TeachingStats,
-  TeachingFilters 
+  TeachingFilters
 } from '../../models/teaching.interface';
 import { PermissionService } from 'src/app/shared/services/permission.service';
 import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
@@ -32,14 +32,14 @@ import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
   styleUrls: ['./list-assistants.component.scss']
 })
 export class ListAssistantsComponent implements OnInit {
-  
+
   // Datos
   public teachingList: Teaching[] = [];
   public modalidades: Modalidad[] = [];
   public participaciones: Participacion[] = [];
   public profesiones: string[] = [];
   public areas: string[] = [];
-  
+
   // Paginación
   public pageSize = 10;
   public skip = 0;
@@ -47,23 +47,26 @@ export class ListAssistantsComponent implements OnInit {
   public totalData = 0;
   public currentPage = 1;
   public pageIndex = 0;
-  public pageNumberArray: number[] = [];
   public serialNumberArray: number[] = [];
-  
+
+  public totalPages = 0;
+  public visiblePages: any[] = [];
+
   // Filtros
   public searchTerm = '';
   public filtroEspecialidad = '';
   public filtroArea = '';
   public filtroModalidad: number | undefined;
   public filtroParticipacion: number | undefined;
-  
+  public sortDirection: 'asc' | 'desc' = 'desc';
+
   // Estado
   public loading = false;
   public teaching_selected: Teaching | null = null;
-  
+
   // Control de expansión de cards
   public expandedCards: Set<number> = new Set();
-  
+
   // Estadísticas
   public stats: TeachingStats = {
     total: 0,
@@ -72,7 +75,7 @@ export class ListAssistantsComponent implements OnInit {
     total_horas: 0,
     evaluaciones_pendientes: 0
   };
-  
+
   // Servicios
   private router = inject(Router);
   private translate = inject(TranslateService);
@@ -93,13 +96,13 @@ export class ListAssistantsComponent implements OnInit {
   public startAssistantsListTour(): void {
     this.driverTourService.startAssistantsListTour();
   }
-  
+
   ngOnInit(): void {
     this.loadCatalogs();
     this.getTableData();
     this.getStats();
   }
-  
+
   /**
    * Cargar catálogos de modalidades, participaciones, profesiones y áreas
    */
@@ -114,7 +117,7 @@ export class ListAssistantsComponent implements OnInit {
         console.error('Error al cargar modalidades:', error);
       }
     });
-    
+
     this.teachingService.getParticipaciones().subscribe({
       next: (response) => {
         if (response.success && response.data) {
@@ -125,7 +128,7 @@ export class ListAssistantsComponent implements OnInit {
         console.error('Error al cargar participaciones:', error);
       }
     });
-    
+
     this.teachingService.getProfesiones().subscribe({
       next: (response) => {
         if (response.success && response.data) {
@@ -136,7 +139,7 @@ export class ListAssistantsComponent implements OnInit {
         console.error('Error al cargar profesiones:', error);
       }
     });
-    
+
     this.teachingService.getAreas().subscribe({
       next: (response) => {
         if (response.success && response.data) {
@@ -148,23 +151,24 @@ export class ListAssistantsComponent implements OnInit {
       }
     });
   }
-  
+
   /**
    * Obtener datos de la tabla desde el servidor
    */
   public getTableData(): void {
     this.loading = true;
-    
+
     const filters: TeachingFilters = {
       search: this.searchTerm || undefined,
       especialidad: this.filtroEspecialidad || undefined,
       area: this.filtroArea || undefined,
       modalidad_id: this.filtroModalidad,
-      participacion_id: this.filtroParticipacion
+      participacion_id: this.filtroParticipacion,
+      sort_direction: this.sortDirection
     };
-    
-    
-    
+
+
+
     this.teachingService.getTeachings(this.currentPage, this.pageSize, filters).subscribe({
       next: (response) => {
         this.teachingList = response.data;
@@ -178,7 +182,7 @@ export class ListAssistantsComponent implements OnInit {
       }
     });
   }
-  
+
   /**
    * Obtener estadísticas
    */
@@ -194,7 +198,7 @@ export class ListAssistantsComponent implements OnInit {
       }
     });
   }
-  
+
   /**
    * Filtrar datos
    */
@@ -203,7 +207,7 @@ export class ListAssistantsComponent implements OnInit {
     this.pageIndex = 0;
     this.getTableData();
   }
-  
+
   /**
    * Buscar
    */
@@ -212,7 +216,17 @@ export class ListAssistantsComponent implements OnInit {
     this.pageIndex = 0;
     this.getTableData();
   }
-  
+
+  /**
+   * Alternar ordenamiento (asc/desc)
+   */
+  public toggleSort(): void {
+    this.sortDirection = this.sortDirection === 'desc' ? 'asc' : 'desc';
+    this.currentPage = 1;
+    this.pageIndex = 0;
+    this.getTableData();
+  }
+
   /**
    * Limpiar filtros
    */
@@ -224,40 +238,78 @@ export class ListAssistantsComponent implements OnInit {
     this.filtroParticipacion = undefined;
     this.getTableData();
   }
-  
+
   /**
    * Calcular total de páginas
    */
   private calculateTotalPages(totalData: number, pageSize: number): void {
-    const pageCount = Math.ceil(totalData / pageSize);
+    this.totalPages = Math.ceil(totalData / pageSize);
     this.serialNumberArray = Array.from({ length: totalData }, (_, i) => i + 1);
-    this.pageNumberArray = Array.from({ length: pageCount }, (_, i) => i + 1);
+    this.updatePagination();
   }
-  
+
+  /**
+   * Actualizar paginación visible (algoritmo smart pagination)
+   */
+  private updatePagination(): void {
+    const total = this.totalPages;
+    const current = this.currentPage;
+    const delta = 2; // Número de páginas a mostrar alrededor de la actual
+    const left = current - delta;
+    const right = current + delta + 1;
+    const range: number[] = [];
+    const rangeWithDots: any[] = [];
+    let l;
+
+    for (let i = 1; i <= total; i++) {
+      if (i === 1 || i === total || (i >= left && i < right)) {
+        range.push(i);
+      }
+    }
+
+    for (const i of range) {
+      if (l) {
+        if (i - l === 2) {
+          rangeWithDots.push(l + 1);
+        } else if (i - l !== 1) {
+          rangeWithDots.push('...');
+        }
+      }
+      rangeWithDots.push(i);
+      l = i;
+    }
+
+    this.visiblePages = rangeWithDots;
+  }
+
   /**
    * Navegar a una página específica
    */
   public moveToPage(pageNumber: number): void {
+    if (pageNumber < 1 || pageNumber > this.totalPages) {
+      return;
+    }
     this.currentPage = pageNumber;
     this.pageIndex = pageNumber - 1;
     this.skip = (pageNumber - 1) * this.pageSize;
     this.limit = this.pageSize;
+    this.updatePagination();
     this.getTableData();
   }
-  
+
   /**
    * Seleccionar registro para eliminar
    */
   public selectTeaching(teaching: Teaching): void {
     this.teaching_selected = teaching;
   }
-  
+
   /**
    * Eliminar registro
    */
   public deleteTeaching(): void {
     if (!this.teaching_selected?.id) return;
-    
+
     this.teachingService.deleteTeaching(this.teaching_selected.id).subscribe({
       next: (response) => {
         if (response.success) {
@@ -274,14 +326,14 @@ export class ListAssistantsComponent implements OnInit {
       }
     });
   }
-  
+
   /**
    * Navegar a agregar registro
    */
   public addTeaching(): void {
     this.router.navigate(['/teaching/add_teaching']);
   }
-  
+
   /**
    * Navegar a editar registro
    */
@@ -290,34 +342,34 @@ export class ListAssistantsComponent implements OnInit {
       this.router.navigate(['/teaching/edit_teaching', id]);
     }
   }
-  
+
   /**
    * Navegar a evaluaciones pendientes
    */
   public goToEvaluaciones(): void {
     this.router.navigate(['/teaching/list_evaluation']);
   }
-  
+
   /**
    * Toggle expansión de card
    */
   public toggleCardExpansion(teachingId: number | undefined): void {
     if (!teachingId) return;
-    
+
     if (this.expandedCards.has(teachingId)) {
       this.expandedCards.delete(teachingId);
     } else {
       this.expandedCards.add(teachingId);
     }
   }
-  
+
   /**
    * Verificar si una card está expandida
    */
   public isCardExpanded(teachingId: number | undefined): boolean {
     return teachingId ? this.expandedCards.has(teachingId) : false;
   }
-  
+
   /**
    * Exportar a Excel
    */
@@ -329,7 +381,7 @@ export class ListAssistantsComponent implements OnInit {
       modalidad_id: this.filtroModalidad,
       participacion_id: this.filtroParticipacion
     };
-    
+
     this.teachingService.exportToExcel(filters).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
@@ -347,7 +399,7 @@ export class ListAssistantsComponent implements OnInit {
       }
     });
   }
-  
+
   /**
    * Obtener nombre de modalidad por ID
    */
@@ -356,7 +408,7 @@ export class ListAssistantsComponent implements OnInit {
     const modalidad = this.modalidades.find(m => m.id === id);
     return modalidad?.nombre || 'N/A';
   }
-  
+
   /**
    * Obtener nombre de participación por ID
    */
@@ -365,7 +417,7 @@ export class ListAssistantsComponent implements OnInit {
     const participacion = this.participaciones.find(p => p.id === id);
     return participacion?.nombre || 'N/A';
   }
-  
+
   /**
    * Calcular el total de horas de los registros visibles
    */
@@ -373,35 +425,35 @@ export class ListAssistantsComponent implements OnInit {
     if (!this.teachingList || this.teachingList.length === 0) {
       return 0;
     }
-    
+
     return this.teachingList.reduce((total, teaching) => {
       if (!teaching.horas) return total;
-      
+
       // Extraer el número de horas
       const horasStr = teaching.horas.toString().replace(/[^0-9.]/g, '');
       const horasNum = parseFloat(horasStr);
-      
+
       return total + (isNaN(horasNum) ? 0 : horasNum);
     }, 0);
   }
-  
+
   /**
    * Formatear horas para mostrar correctamente
    */
   public formatHoras(horas: string | undefined): string {
     if (!horas) return 'N/A';
-    
+
     // Si ya viene formateado correctamente, devolverlo
     if (horas.includes('HRA') || horas.includes('HR')) {
       return horas;
     }
-    
+
     // Intentar extraer el número
     const numero = parseFloat(horas);
     if (isNaN(numero)) {
       return horas; // Devolver el valor original si no es un número
     }
-    
+
     // Formatear según el número
     if (numero === 1) {
       return '1 HRA.';
@@ -411,63 +463,63 @@ export class ListAssistantsComponent implements OnInit {
       return `${numero} HRA.`;
     }
   }
-  
+
   /**
    * Formatear fecha
    */
   public formatDate(dateString: string): string {
     if (!dateString) return 'N/A';
-    
+
     // Si la fecha ya está en formato DD/MM/YYYY, devolverla tal cual
     if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) {
       return dateString;
     }
-    
+
     // Si viene en formato ISO (2025-11-14T06:00:00.000000Z)
     try {
       const date = new Date(dateString);
       if (isNaN(date.getTime())) {
         return dateString; // Si no es una fecha válida, devolver el string original
       }
-      
+
       const day = date.getDate().toString().padStart(2, '0');
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
       const year = date.getFullYear();
-      
+
       return `${day}/${month}/${year}`;
     } catch (error) {
       return dateString;
     }
   }
-  
+
   /**
    * Permisos - verificar si puede crear
    */
   canCreate(): boolean {
     return this.permissionService.hasPermission('add_teaching');
   }
-  
+
   /**
    * Permisos - verificar si puede editar
    */
   canEdit(): boolean {
     return this.permissionService.hasPermission('edit_teaching');
   }
-  
+
   /**
    * Permisos - verificar si puede eliminar
    */
   canDelete(): boolean {
     return this.permissionService.hasPermission('delete_teaching');
   }
-  
+
   /**
    * Permisos - verificar si puede exportar
    */
   canExport(): boolean {
     return this.permissionService.hasPermission('teaching.export');
   }
-  
+
   /**
    * Verificar si hay filtros activos
    */
@@ -479,5 +531,22 @@ export class ListAssistantsComponent implements OnInit {
       this.filtroModalidad ||
       this.filtroParticipacion
     );
+  }
+
+  /**
+   * Obtener el índice inicial del rango mostrado
+   */
+  get rangeStart(): number {
+    if (this.totalData === 0) return 0;
+    return (this.currentPage - 1) * this.pageSize + 1;
+  }
+
+  /**
+   * Obtener el índice final del rango mostrado
+   */
+  get rangeEnd(): number {
+    if (this.totalData === 0) return 0;
+    const end = (this.currentPage - 1) * this.pageSize + this.teachingList.length;
+    return end > this.totalData ? this.totalData : end;
   }
 }

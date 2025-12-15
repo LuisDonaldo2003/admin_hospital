@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppointmentsService } from '../../service/appointments.service';
 import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
+import { AuthService } from 'src/app/shared/auth/auth.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -25,11 +26,11 @@ export class ListAppointmentsComponent implements OnInit {
   doctors: any[] = [];
   searchText: string = '';
   isLoading: boolean = false;
-  
+
   // Filtros
   filtroEstado: string = '';
   filtroDoctor: number = 0;
-  
+
   // Paginación
   currentPage: number = 1;
   limit: number = 10;
@@ -37,19 +38,20 @@ export class ListAppointmentsComponent implements OnInit {
   totalPages: number = 0;
   pageNumbers: number[] = [];
   Math = Math;
-  
+
   // Cita seleccionada para cancelar/eliminar
   selectedAppointment: any = null;
   motivoCancelacion: string = '';
-  
+
   // Totales
   totalAppointments: number = 0;
 
   constructor(
     private appointmentsService: AppointmentsService,
     private router: Router,
-    private driverTourService: DriverTourService
-  ) {}
+    private driverTourService: DriverTourService,
+    public authService: AuthService
+  ) { }
 
   ngOnInit(): void {
     this.loadDoctors();
@@ -62,7 +64,7 @@ export class ListAppointmentsComponent implements OnInit {
   public startAppointmentsListTour(): void {
     this.driverTourService.startAppointmentsListTour();
   }
-  
+
   /**
    * Cargar doctores para filtro
    */
@@ -83,12 +85,35 @@ export class ListAppointmentsComponent implements OnInit {
     this.isLoading = true;
     this.appointmentsService.listAppointments().subscribe({
       next: (response: any) => {
-        // Filtrar para excluir citas canceladas, completadas y no asistidas
-        this.appointments = (response.data || []).filter((apt: any) => 
-          apt.estado !== 'cancelada' && 
-          apt.estado !== 'completada' && 
+        let allAppointments = response.data || [];
+
+        // Filtrado por estados (excluir canceladas, etc. si aplica)
+        allAppointments = allAppointments.filter((apt: any) =>
+          apt.estado !== 'cancelada' &&
+          apt.estado !== 'completada' &&
           apt.estado !== 'no_asistio'
         );
+
+        // Filtrado estricto por permisos
+        const canSpecialist = this.authService.hasPermission('appointments_add_especialidad');
+        const canGeneral = this.authService.hasPermission('appointments_add_general_medical');
+
+        if (canSpecialist && !canGeneral) {
+          // Solo especialistas
+          allAppointments = allAppointments.filter((apt: any) => {
+            // Preferir doctor_relation si existe (trae datos completos), sino fallback a doctor (ahora arreglado en backend)
+            const doc = apt.doctor_relation || apt.doctor;
+            return doc && doc.especialidad_id;
+          });
+        } else if (canGeneral && !canSpecialist) {
+          // Solo generales
+          allAppointments = allAppointments.filter((apt: any) => {
+            const doc = apt.doctor_relation || apt.doctor;
+            return doc && doc.general_medical_id;
+          });
+        }
+
+        this.appointments = allAppointments;
         this.totalAppointments = this.appointments.length;
         this.filteredAppointments = [...this.appointments];
         this.updatePagination();
@@ -108,24 +133,25 @@ export class ListAppointmentsComponent implements OnInit {
 
   searchAppointments(): void {
     this.filteredAppointments = this.appointments.filter(appointment => {
-      const matchSearch = !this.searchText.trim() || 
+      const matchSearch = !this.searchText.trim() ||
         appointment.paciente_nombre?.toLowerCase().includes(this.searchText.toLowerCase()) ||
         appointment.nombre_paciente?.toLowerCase().includes(this.searchText.toLowerCase()) ||
         appointment.doctor?.nombre_completo?.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        appointment.folio_expediente?.toLowerCase().includes(this.searchText.toLowerCase()) ||
         appointment.motivo?.toLowerCase().includes(this.searchText.toLowerCase());
-      
+
       const matchEstado = !this.filtroEstado || appointment.estado === this.filtroEstado;
-      
+
       const matchDoctor = !this.filtroDoctor || appointment.doctor_id === this.filtroDoctor;
-      
+
       return matchSearch && matchEstado && matchDoctor;
     });
-    
+
     // Resetear paginación
     this.currentPage = 1;
     this.updatePagination();
   }
-  
+
   /**
    * Limpiar filtros
    */
@@ -135,39 +161,39 @@ export class ListAppointmentsComponent implements OnInit {
     this.filtroDoctor = 0;
     this.searchAppointments();
   }
-  
+
   /**
    * Verificar si hay filtros activos
    */
   get hasActiveFilters(): boolean {
     return !!(this.searchText.trim() || this.filtroEstado || this.filtroDoctor);
   }
-  
+
   /**
    * Actualizar paginación
    */
   updatePagination(): void {
     this.totalPages = Math.ceil(this.filteredAppointments.length / this.limit);
     this.skip = (this.currentPage - 1) * this.limit;
-    
+
     // Calcular páginas a mostrar
     this.pageNumbers = [];
     const maxPagesToShow = 5;
     let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
     let endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
-    
+
     if (endPage - startPage < maxPagesToShow - 1) {
       startPage = Math.max(1, endPage - maxPagesToShow + 1);
     }
-    
+
     for (let i = startPage; i <= endPage; i++) {
       this.pageNumbers.push(i);
     }
-    
+
     // Actualizar datos paginados
     this.paginatedAppointments = this.filteredAppointments.slice(this.skip, this.skip + this.limit);
   }
-  
+
   /**
    * Ir a página específica
    */
@@ -177,7 +203,7 @@ export class ListAppointmentsComponent implements OnInit {
       this.updatePagination();
     }
   }
-  
+
   /**
    * Página anterior
    */
@@ -187,7 +213,7 @@ export class ListAppointmentsComponent implements OnInit {
       this.updatePagination();
     }
   }
-  
+
   /**
    * Página siguiente
    */
@@ -197,7 +223,7 @@ export class ListAppointmentsComponent implements OnInit {
       this.updatePagination();
     }
   }
-  
+
   /**
    * Seleccionar cita para cancelar/eliminar
    */
@@ -205,24 +231,24 @@ export class ListAppointmentsComponent implements OnInit {
     this.selectedAppointment = appointment;
     this.motivoCancelacion = ''; // Limpiar el campo al abrir el modal
   }
-  
+
   /**
    * Ir a agregar cita
    */
   goToAddAppointment(): void {
     this.router.navigate(['/appointments/add_appointment']);
   }
-  
+
   /**
    * Formatear fecha
    */
   formatDate(dateString: string): string {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
-    return date.toLocaleDateString('es-MX', { 
-      year: 'numeric', 
-      month: '2-digit', 
-      day: '2-digit' 
+    return date.toLocaleDateString('es-MX', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
     });
   }
 
@@ -231,24 +257,24 @@ export class ListAppointmentsComponent implements OnInit {
    */
   formatTime(timeString: string): string {
     if (!timeString) return 'N/A';
-    
+
     // Extraer hora y minutos (formato puede ser HH:MM:SS o HH:MM)
     const parts = timeString.split(':');
     if (parts.length < 2) return timeString;
-    
+
     let hours = parseInt(parts[0], 10);
     const minutes = parts[1];
-    
+
     // Determinar AM/PM
     const period = hours >= 12 ? 'PM' : 'AM';
-    
+
     // Convertir a formato 12 horas
     if (hours === 0) {
       hours = 12;
     } else if (hours > 12) {
       hours = hours - 12;
     }
-    
+
     return `${hours}:${minutes} ${period}`;
   }
 
@@ -257,17 +283,17 @@ export class ListAppointmentsComponent implements OnInit {
    */
   getPacienteNombre(appointment: any): string {
     if (!appointment) return 'N/A';
-    
+
     // El backend retorna siempre un objeto paciente con la propiedad nombre
     if (appointment.paciente?.nombre) {
       return appointment.paciente.nombre;
     }
-    
+
     // Fallback a campos directos
     if (appointment.paciente_nombre) {
       return appointment.paciente_nombre;
     }
-    
+
     return 'N/A';
   }
 
@@ -276,17 +302,17 @@ export class ListAppointmentsComponent implements OnInit {
    */
   getDoctorNombre(appointment: any): string {
     if (!appointment) return 'N/A';
-    
+
     // El backend retorna siempre un objeto doctor con la propiedad nombre
     if (appointment.doctor?.nombre) {
       return appointment.doctor.nombre;
     }
-    
+
     // Fallback a doctor_relation
     if (appointment.doctor_relation?.nombre_completo) {
       return appointment.doctor_relation.nombre_completo;
     }
-    
+
     return 'N/A';
   }
 
@@ -295,30 +321,30 @@ export class ListAppointmentsComponent implements OnInit {
    */
   getMotivoConsulta(appointment: any): string {
     if (!appointment) return 'N/A';
-    
+
     // El backend retorna motivo como string simple
     if (appointment.motivo) {
       return appointment.motivo;
     }
-    
+
     // Fallback alternativo
     if (appointment.motivo_consulta) {
       return appointment.motivo_consulta;
     }
-    
+
     return 'N/A';
   }
-  
+
   /**
    * Confirmar cancelación
    */
   confirmCancel(): void {
     if (!this.selectedAppointment?.id) return;
-    
-    const motivo = this.motivoCancelacion && this.motivoCancelacion.trim() 
-      ? this.motivoCancelacion.trim() 
+
+    const motivo = this.motivoCancelacion && this.motivoCancelacion.trim()
+      ? this.motivoCancelacion.trim()
       : 'Sin motivo especificado';
-    
+
     this.appointmentsService.cancelAppointment(this.selectedAppointment.id, motivo).subscribe({
       next: () => {
         this.closeModal('cancel_appointment');
@@ -333,13 +359,13 @@ export class ListAppointmentsComponent implements OnInit {
       }
     });
   }
-  
+
   /**
    * Confirmar eliminación
    */
   confirmDelete(): void {
     if (!this.selectedAppointment?.id) return;
-    
+
     this.appointmentsService.deleteAppointment(this.selectedAppointment.id).subscribe({
       next: () => {
         this.closeModal('delete_appointment');
@@ -371,7 +397,7 @@ export class ListAppointmentsComponent implements OnInit {
 
   getStatusTranslationKey(status: string): string {
     if (!status) return 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS.PENDING';
-    
+
     const statusKeys: { [key: string]: string } = {
       'pendiente': 'PENDING',
       'confirmada': 'CONFIRMED',
@@ -380,7 +406,7 @@ export class ListAppointmentsComponent implements OnInit {
       'cancelada': 'CANCELLED',
       'no_asistio': 'NO_SHOW'
     };
-    
+
     const key = statusKeys[status] || 'PENDING';
     return `APPOINTMENTS.LIST_APPOINTMENTS.STATUS.${key}`;
   }

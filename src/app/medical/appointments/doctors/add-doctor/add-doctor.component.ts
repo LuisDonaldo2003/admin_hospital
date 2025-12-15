@@ -1,4 +1,4 @@
-    import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AppointmentsService, Doctor, Especialidad, TipoTurno } from '../../service/appointments.service';
 import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
+import { PermissionService } from 'src/app/shared/services/permission.service';
+import { GeneralMedicalService, GeneralMedical } from '../../general-medical/service/general-medical.service';
 
 @Component({
   selector: 'app-add-doctor',
@@ -27,8 +29,14 @@ export class AddDoctorComponent implements OnInit {
   // Propiedades del formulario simplificado
   nombre_completo: string = '';
   especialidad_id: number = 0;
+  general_medical_id: number = 0; // Nueva propiedad
   turno: TipoTurno = 'Matutino';
-  
+
+  // Flags de permisos
+  isGeneral: boolean = false;
+  isSpecialist: boolean = false;
+
+
   // Horarios
   hora_inicio_matutino: string = '08:00';
   hora_fin_matutino: string = '14:00';
@@ -41,6 +49,7 @@ export class AddDoctorComponent implements OnInit {
 
   // Listas
   especialidades: Especialidad[] = [];
+  generalMedicals: GeneralMedical[] = []; // Nueva lista
   turnosDisponibles: TipoTurno[] = ['Matutino', 'Vespertino', 'Mixto'];
 
   // Mensajes
@@ -52,15 +61,28 @@ export class AddDoctorComponent implements OnInit {
     private route: ActivatedRoute,
     private translate: TranslateService,
     private appointmentsService: AppointmentsService,
-    private driverTourService: DriverTourService
+    private driverTourService: DriverTourService,
+    private permissionService: PermissionService, // Inyectado
+    private generalMedicalService: GeneralMedicalService // Inyectado
   ) {
     const selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(selectedLang);
   }
 
   ngOnInit(): void {
-    this.loadEspecialidades();
-    
+    this.checkPermissions();
+
+    if (this.isGeneral) {
+      this.loadGeneralMedicals();
+    }
+
+    // Si es especialista cargamos especialidades, o si tiene ambos por defecto cargamos especialidades
+    // Si SOLO es general NO cargamos especialidades para evitar confusión, a menos que se quiera híbrido.
+    // Asumiremos que si isSpecialist es true, cargamos.
+    if (this.isSpecialist || !this.isGeneral) {
+      this.loadEspecialidades();
+    }
+
     // Detectar si estamos en modo edición por la ruta
     this.route.params.subscribe(params => {
       if (params['id']) {
@@ -77,14 +99,15 @@ export class AddDoctorComponent implements OnInit {
   startTour(): void {
     this.driverTourService.startAddDoctorTour();
   }
-  
+
   loadDoctorData(id: number): void {
     this.loading = true;
     this.appointmentsService.getDoctor(id).subscribe({
       next: (response: any) => {
         const doctor = response.data;
         this.nombre_completo = doctor.nombre_completo;
-        this.especialidad_id = doctor.especialidad_id;
+        this.especialidad_id = doctor.especialidad_id || 0;
+        this.general_medical_id = doctor.general_medical_id || 0; // Cargar ID medical
         this.turno = doctor.turno;
         this.hora_inicio_matutino = doctor.hora_inicio_matutino || '08:00';
         this.hora_fin_matutino = doctor.hora_fin_matutino || '14:00';
@@ -116,6 +139,32 @@ export class AddDoctorComponent implements OnInit {
   }
 
   /**
+   * Verificar permisos para decidir qué mostrar
+   */
+  checkPermissions(): void {
+    this.isGeneral = this.permissionService.hasPermission('appointments_add_general_medical');
+    this.isSpecialist = this.permissionService.hasPermission('appointments_add_especialidad');
+    // Si no tiene ningun permiso especifico pero es admin, podría ver ambos.
+    // Por defecto si no detectamos roles especificos, mostramos especialidades.
+  }
+
+  /**
+   * Cargar médicos generales (categorías/profesiones)
+   */
+  loadGeneralMedicals(): void {
+    this.generalMedicalService.listGeneralMedicals().subscribe({
+      next: (resp) => {
+        if (resp.success) {
+          this.generalMedicals = resp.data;
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar médicos generales:', error);
+      }
+    });
+  }
+
+  /**
    * Validar formulario
    */
   validateForm(): boolean {
@@ -123,8 +172,16 @@ export class AddDoctorComponent implements OnInit {
       return false;
     }
 
-    if (!this.especialidad_id || this.especialidad_id === 0) {
-      return false;
+    // Validación condicional
+    if (this.isGeneral && !this.isSpecialist) {
+      if (!this.general_medical_id || this.general_medical_id === 0) {
+        return false;
+      }
+    } else {
+      // Por defecto o si es Especialista
+      if (!this.especialidad_id || this.especialidad_id === 0) {
+        return false;
+      }
     }
 
     if (!this.turno) {
@@ -185,10 +242,17 @@ export class AddDoctorComponent implements OnInit {
 
     const doctorData: any = {
       nombre_completo: this.nombre_completo.trim(),
-      especialidad_id: this.especialidad_id,
       turno: this.turno,
       activo: true
     };
+
+    if (this.isGeneral && !this.isSpecialist) {
+      doctorData.general_medical_id = this.general_medical_id;
+      doctorData.especialidad_id = null;
+    } else {
+      doctorData.especialidad_id = this.especialidad_id;
+      doctorData.general_medical_id = null;
+    }
 
     // Agregar horarios según el turno (formato H:i sin segundos)
     if (this.turno === 'Matutino' || this.turno === 'Mixto') {
@@ -201,7 +265,7 @@ export class AddDoctorComponent implements OnInit {
       doctorData.hora_fin_vespertino = this.formatTimeToHi(this.hora_fin_vespertino);
     }
 
-    
+
 
     const request = this.isEditMode && this.doctorId
       ? this.appointmentsService.updateDoctor(this.doctorId, doctorData)
@@ -224,7 +288,7 @@ export class AddDoctorComponent implements OnInit {
         this.loading = false;
         console.error('Error al guardar doctor:', error);
         console.error('Datos enviados:', doctorData);
-        
+
         // Mostrar errores de validación específicos
         if (error.error?.errors) {
           const errors = error.error.errors;
@@ -251,7 +315,7 @@ export class AddDoctorComponent implements OnInit {
     const charCode = event.charCode;
     const char = String.fromCharCode(charCode);
     const pattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]$/;
-    
+
     if (!pattern.test(char)) {
       event.preventDefault();
     }

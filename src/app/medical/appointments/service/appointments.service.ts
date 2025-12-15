@@ -21,6 +21,7 @@ export interface Doctor {
   nombre_completo: string;
   especialidad_id: number;
   especialidad?: Especialidad;
+  general_medical_id?: number;
   turno: TipoTurno;
   hora_inicio_matutino?: string; // Formato: HH:mm
   hora_fin_matutino?: string;

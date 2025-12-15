@@ -195,7 +195,7 @@
         "DELETE": "Eliminar Inventario"
       }
     },
-     "CITAS": {
+    "CITAS": {
       "TITLE": "Citas",
       "APPOINTMENTS": {
         "TITLE": "Citas",
@@ -220,6 +220,13 @@
         "ADD": "Agregar Especialidad",
         "EDIT": "Editar Especialidad",
         "DELETE": "Eliminar Especialidad"
+      },
+      "GENERAL_MEDICAL": {
+        "TITLE": "Generales",
+        "LIST": "Lista de Generales",
+        "ADD": "Agregar General",
+        "EDIT": "Editar General",
+        "DELETE": "Eliminar General"
       },
       "CALENDAR": {
         "TITLE": "Calendario",
@@ -363,7 +370,6 @@
       "CURP": "CURP",
       "RFC": "RFC",
       "INE": "INE",
-
       "AVATAR": "Avatar",
       "WARNING": "Advertencia",
       "SUCCESS": "Éxito",
@@ -1074,7 +1080,7 @@
       "ROLES_LIST_DESC": "Marca los roles que quieres asignar a esta familia. Puedes seleccionar múltiples roles.",
       "SAVE_TITLE": "Guardar Asignación",
       "SAVE_DESC": "Haz clic aquí para guardar los roles asignados a la familia.",
-      "SELECTOR_TITLE": "Seleccionar una familia", 
+      "SELECTOR_TITLE": "Seleccionar una familia",
       "SELECTOR_DESC": "Busca y selecciona la familia de roles a la que deseas asignar roles."
     },
     "ROLES_LIST": {
@@ -2152,6 +2158,10 @@
       "EI": "E.I.",
       "EF": "E.F.",
       "NOT_AVAILABLE": "N/D",
+      "SORT_ASC": "Orden Ascendente",
+      "SORT_DESC": "Orden Descendente",
+      "RECENT": "Recientes",
+      "OLDEST": "Antiguos",
       "PREVIOUS": "Anterior",
       "NEXT": "Siguiente",
       "TO": "a",
@@ -2561,7 +2571,7 @@
       "SEARCH_PLACEHOLDER": "Buscar por nombre del doctor...",
       "ALL_SPECIALTIES": "Todas las Especialidades",
       "NAME": "Nombre",
-      "SPECIALTY": "Especialidad",
+      "SPECIALTY": "Profesión",
       "LICENSE": "Cédula",
       "SHIFT": "Turno",
       "SCHEDULE": "Horario",
@@ -2590,6 +2600,11 @@
       "DOCTOR_INFO": "Selección de Doctor",
       "DATETIME_INFO": "Fecha y Hora",
       "DETAILS": "Detalles de la Cita",
+      "SERVICE_TYPE": "Tipo de Servicio",
+      "GENERAL_MEDICAL": "Médico General",
+      "SPECIALIST": "Especialista",
+      "GENERAL_SERVICE": "Servicio General",
+      "SELECT_GENERAL_SERVICE": "Seleccione un servicio general",
       "PATIENT": "Paciente",
       "SELECT_PATIENT": "Seleccione un paciente",
       "SPECIALTY": "Especialidad",
@@ -2623,6 +2638,7 @@
       "ALL_DOCTORS": "Todos los Doctores",
       "DATE": "Fecha",
       "TIME": "Hora",
+      "FOLIO": "Folio",
       "PATIENT": "Paciente",
       "DOCTOR": "Doctor",
       "SPECIALTY": "Especialidad",
@@ -2680,7 +2696,9 @@
       "SELECT_DATE_MESSAGE": "Seleccione una fecha en el calendario para ver las citas",
       "NO_APPOINTMENTS": "No hay citas programadas para esta fecha",
       "WITH_APPOINTMENTS": "Días con citas",
-      "WITHOUT_APPOINTMENTS": "Días sin citas"
+      "WITHOUT_APPOINTMENTS": "Días sin citas",
+      "MONTHLY_SCHEDULE": "Agenda del Doctor (Mes)",
+      "NO_MONTHLY_APPOINTMENTS": "No hay citas programadas en este mes"
     },
     "CANCELLED": {
       "LIST": {
@@ -2763,6 +2781,42 @@
         "PLACEHOLDER_DESCRIPTION": "Ingrese una breve descripción de la especialidad",
         "STATE": "Estado",
         "SUCCESS_MESSAGE": "Especialidad actualizada exitosamente"
+      }
+    },
+    "GENERAL_MEDICAL": {
+      "LIST": {
+        "TITLE": "Médicos Generales",
+        "BREADCRUMB": "Médicos Generales",
+        "SEARCH_PLACEHOLDER": "Buscar por nombre o descripción...",
+        "NEW": "Nuevo Médico General",
+        "NAME": "Nombre",
+        "DESCRIPTION": "Descripción",
+        "STATE": "Estado",
+        "REGISTERED": "Fecha de Registro",
+        "ACTIONS": "Acciones",
+        "DELETE_CONFIRMATION": "¿Está seguro de eliminar la categoría"
+      },
+      "ADD": {
+        "TITLE": "Nuevo Médico General",
+        "BREADCRUMB": "Agregar Médico General",
+        "NAME": "Nombre de la Categoría",
+        "PLACEHOLDER_NAME": "Ej: Médico General A, Internista, etc.",
+        "NAME_REQUIRED": "El nombre es requerido",
+        "DESCRIPTION": "Descripción",
+        "PLACEHOLDER_DESCRIPTION": "Ingrese una breve descripción",
+        "STATE": "Estado",
+        "SUCCESS_MESSAGE": "Categoría creada exitosamente"
+      },
+      "EDIT": {
+        "TITLE": "Editar Médico General",
+        "BREADCRUMB": "Editar Médico General",
+        "NAME": "Nombre de la Categoría",
+        "PLACEHOLDER_NAME": "Ej: Médico General A, Internista, etc.",
+        "NAME_REQUIRED": "El nombre es requerido",
+        "DESCRIPTION": "Descripción",
+        "PLACEHOLDER_DESCRIPTION": "Ingrese una breve descripción",
+        "STATE": "Estado",
+        "SUCCESS_MESSAGE": "Categoría actualizada exitosamente"
       }
     }
   },

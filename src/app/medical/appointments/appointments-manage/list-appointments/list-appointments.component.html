@@ -24,49 +24,50 @@
                 <div class="filters-section d-flex gap-2 mb-2">
                   <!-- Búsqueda -->
                   <div class="search-box">
-                    <input 
-                      type="text" 
-                      class="form-control white-input"
-                      [(ngModel)]="searchText"
+                    <input type="text" class="form-control white-input" [(ngModel)]="searchText"
                       (ngModelChange)="searchAppointments()"
                       [placeholder]="'APPOINTMENTS.LIST_APPOINTMENTS.SEARCH_PLACEHOLDER' | translate">
                     <i class="fa fa-search search-icon"></i>
                   </div>
-                  
+
                   <!-- Filtro Estado -->
                   <div class="role-filter-box">
-                    <select 
-                      class="form-select white-select"
-                      [(ngModel)]="filtroEstado"
+                    <select class="form-select white-select" [(ngModel)]="filtroEstado"
                       (ngModelChange)="searchAppointments()">
                       <option value="">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.ALL_STATUS' | translate }}</option>
-                      <option value="pendiente">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS.PENDING' | translate }}</option>
-                      <option value="confirmada">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS.CONFIRMED' | translate }}</option>
-                      <option value="en_progreso">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS.IN_PROGRESS' | translate }}</option>
-                      <option value="completada">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS.COMPLETED' | translate }}</option>
-                      <option value="cancelada">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS.CANCELLED' | translate }}</option>
-                      <option value="no_asistio">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS.NO_SHOW' | translate }}</option>
+                      <option value="pendiente">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS.PENDING' | translate }}
+                      </option>
+                      <option value="confirmada">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS.CONFIRMED' | translate }}
+                      </option>
+                      <option value="en_progreso">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS.IN_PROGRESS' | translate }}
+                      </option>
+                      <option value="completada">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS.COMPLETED' | translate }}
+                      </option>
+                      <option value="cancelada">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS.CANCELLED' | translate }}
+                      </option>
+                      <option value="no_asistio">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS.NO_SHOW' | translate }}
+                      </option>
                     </select>
                   </div>
-                  
+
                   <!-- Filtro Doctor -->
                   <div class="role-filter-box">
-                    <select 
-                      class="form-select2 white-select"
-                      [(ngModel)]="filtroDoctor"
+                    <select class="form-select2 white-select" [(ngModel)]="filtroDoctor"
                       (ngModelChange)="searchAppointments()">
                       <option value="0">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.ALL_DOCTORS' | translate }}</option>
                       @for (doctor of doctors; track doctor.id) {
-                        <option [value]="doctor.id">{{ doctor.nombre_completo }}</option>
+                      <option [value]="doctor.id">{{ doctor.nombre_completo }}</option>
                       }
                     </select>
                   </div>
                 </div>
-                
+
                 <!-- Botón agregar -->
-                <a (click)="goToAddAppointment()" class="btn btn-options d-flex align-items-center gap-1" style="cursor: pointer;">
-                  <i class="fa fa-plus"></i> 
-                  <span class="d-none d-sm-inline">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.ADD_APPOINTMENT' | translate }}</span>
+                <a (click)="goToAddAppointment()" class="btn btn-options d-flex align-items-center gap-1"
+                  style="cursor: pointer;">
+                  <i class="fa fa-plus"></i>
+                  <span class="d-none d-sm-inline">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.ADD_APPOINTMENT' | translate
+                    }}</span>
                 </a>
               </div>
             </div>
@@ -76,121 +77,127 @@
               <table class="table table-hover align-middle modern-table">
                 <thead class="table-light">
                   <tr>
-                    <th style="width: 18%;"><i class="fa fa-user me-2"></i>{{ 'APPOINTMENTS.LIST_APPOINTMENTS.PATIENT' | translate }}</th>
-                    <th style="width: 18%;"><i class="fa fa-user-md me-2"></i>{{ 'APPOINTMENTS.LIST_APPOINTMENTS.DOCTOR' | translate }}</th>
-                    <th style="width: 12%;"><i class="fa fa-calendar me-2"></i>{{ 'APPOINTMENTS.LIST_APPOINTMENTS.DATE' | translate }}</th>
-                    <th style="width: 10%;"><i class="fa fa-clock me-2"></i>{{ 'APPOINTMENTS.LIST_APPOINTMENTS.TIME' | translate }}</th>
-                    <th style="width: 20%;"><i class="fa fa-stethoscope me-2"></i>{{ 'APPOINTMENTS.LIST_APPOINTMENTS.REASON' | translate }}</th>
-                    <th style="width: 12%;"><i class="fa fa-info-circle me-2"></i>{{ 'APPOINTMENTS.LIST_APPOINTMENTS.STATUS_LABEL' | translate }}</th>
-                    <th style="width: 10%;" class="text-center"><i class="fa fa-cog me-2"></i>{{ 'COMMON.ACTIONS' | translate }}</th>
+                    <th style="width: 10%;"><i class="fa fa-hashtag me-2"></i>{{ 'APPOINTMENTS.LIST_APPOINTMENTS.FOLIO'
+                      | translate }}</th>
+                    <th style="width: 18%;"><i class="fa fa-user me-2"></i>{{ 'APPOINTMENTS.LIST_APPOINTMENTS.PATIENT' |
+                      translate }}</th>
+                    <th style="width: 18%;"><i class="fa fa-user-md me-2"></i>{{ 'APPOINTMENTS.LIST_APPOINTMENTS.DOCTOR'
+                      | translate }}</th>
+                    <th style="width: 12%;"><i class="fa fa-calendar me-2"></i>{{ 'APPOINTMENTS.LIST_APPOINTMENTS.DATE'
+                      | translate }}</th>
+                    <th style="width: 10%;"><i class="fa fa-clock me-2"></i>{{ 'APPOINTMENTS.LIST_APPOINTMENTS.TIME' |
+                      translate }}</th>
+                    <th style="width: 20%;"><i class="fa fa-stethoscope me-2"></i>{{
+                      'APPOINTMENTS.LIST_APPOINTMENTS.REASON' | translate }}</th>
+                    <th style="width: 12%;"><i class="fa fa-info-circle me-2"></i>{{
+                      'APPOINTMENTS.LIST_APPOINTMENTS.STATUS_LABEL' | translate }}</th>
+                    <th style="width: 10%;" class="text-center"><i class="fa fa-cog me-2"></i>{{ 'COMMON.ACTIONS' |
+                      translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <!-- Loading -->
                   @if (isLoading) {
-                    <tr>
-                      <td colspan="7" class="text-center py-5">
-                        <div class="spinner-border text-primary" role="status">
-                          <span class="visually-hidden">{{ 'COMMON.LOADING' | translate }}...</span>
-                        </div>
-                        <p class="mt-2 text-muted">{{ 'COMMON.LOADING' | translate }}...</p>
-                      </td>
-                    </tr>
+                  <tr>
+                    <td colspan="7" class="text-center py-5">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">{{ 'COMMON.LOADING' | translate }}...</span>
+                      </div>
+                      <p class="mt-2 text-muted">{{ 'COMMON.LOADING' | translate }}...</p>
+                    </td>
+                  </tr>
                   }
-                  
+
                   <!-- Empty state -->
                   @if (!isLoading && filteredAppointments.length === 0) {
-                    <tr>
-                      <td colspan="7" class="text-center py-5">
-                        <i class="fa fa-calendar-times fa-3x text-muted mb-3"></i>
-                        <p class="text-muted">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.NO_APPOINTMENTS' | translate }}</p>
-                      </td>
-                    </tr>
+                  <tr>
+                    <td colspan="7" class="text-center py-5">
+                      <i class="fa fa-calendar-times fa-3x text-muted mb-3"></i>
+                      <p class="text-muted">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.NO_APPOINTMENTS' | translate }}</p>
+                    </td>
+                  </tr>
                   }
-                  
+
                   <!-- Filas de datos -->
                   @for (appointment of paginatedAppointments; track appointment.id) {
-                    <tr>
-                      <td>
-                        <div class="user-name-cell">
-                          <i class="fa fa-user-circle text-primary me-2"></i>
-                          <strong>{{ getPacienteNombre(appointment) }}</strong>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="specialty-cell">
-                          <span class="badge badge-role">
-                            <i class="fa fa-user-md me-1"></i>
-                            {{ getDoctorNombre(appointment) }}
-                          </span>
-                        </div>
-                      </td>
-                      <td>
-                        <small class="text-muted">
-                          <i class="fa fa-calendar me-1"></i>
-                          {{ formatDate(appointment.fecha) }}
-                        </small>
-                      </td>
-                      <td>
-                        <small class="text-muted">
-                          <i class="fa fa-clock me-1"></i>
-                          {{ formatTime(appointment.hora) }}
-                        </small>
-                      </td>
-                      <td>
-                        <small class="text-muted">
-                          <i class="fa fa-stethoscope me-1"></i>
-                          {{ getMotivoConsulta(appointment) }}
-                        </small>
-                      </td>
-                      <td>
-                        <span class="badge" [ngClass]="getStatusClass(appointment.estado)">
-                          {{ getStatusTranslationKey(appointment.estado) | translate }}
+                  <tr>
+                    <td>
+                      <span class="fw-bold text-dark">
+                        #{{ appointment.folio_expediente || 'N/A' }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="user-name-cell">
+                        <i class="fa fa-user-circle text-primary me-2"></i>
+                        <strong>{{ getPacienteNombre(appointment) }}</strong>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="specialty-cell">
+                        <span class="badge badge-role">
+                          <i class="fa fa-user-md me-1"></i>
+                          {{ getDoctorNombre(appointment) }}
                         </span>
-                      </td>
-                      <td class="text-center">
-                        <div class="action-buttons">
-                          <button 
-                            class="btn btn-sm btn-edit" 
-                            (click)="editAppointment(appointment.id)"
-                            [title]="'COMMON.EDIT' | translate">
-                            <i class="fa fa-pen"></i>
-                          </button>
-                          @if (appointment.estado !== 'cancelada') {
-                            <button 
-                              class="btn btn-sm btn-cancel-appointment" 
-                              (click)="selectAppointment(appointment)"
-                              data-bs-toggle="modal"
-                              data-bs-target="#cancel_appointment"
-                              [title]="'APPOINTMENTS.LIST_APPOINTMENTS.CANCEL' | translate">
-                              <i class="fa fa-ban"></i>
-                            </button>
-                          }
-                          <button 
-                            class="btn btn-sm btn-delete" 
-                            (click)="selectAppointment(appointment)"
-                            data-bs-toggle="modal"
-                            data-bs-target="#delete_appointment"
-                            [title]="'COMMON.DELETE' | translate">
-                            <i class="fa fa-trash"></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
+                      </div>
+                    </td>
+                    <td>
+                      <small class="text-muted">
+                        <i class="fa fa-calendar me-1"></i>
+                        {{ formatDate(appointment.fecha) }}
+                      </small>
+                    </td>
+                    <td>
+                      <small class="text-muted">
+                        <i class="fa fa-clock me-1"></i>
+                        {{ formatTime(appointment.hora) }}
+                      </small>
+                    </td>
+                    <td>
+                      <small class="text-muted">
+                        <i class="fa fa-stethoscope me-1"></i>
+                        {{ getMotivoConsulta(appointment) }}
+                      </small>
+                    </td>
+                    <td>
+                      <span class="badge" [ngClass]="getStatusClass(appointment.estado)">
+                        {{ getStatusTranslationKey(appointment.estado) | translate }}
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <div class="action-buttons">
+                        <button class="btn btn-sm btn-edit" (click)="editAppointment(appointment.id)"
+                          [title]="'COMMON.EDIT' | translate">
+                          <i class="fa fa-pen"></i>
+                        </button>
+                        @if (appointment.estado !== 'cancelada') {
+                        <button class="btn btn-sm btn-cancel-appointment" (click)="selectAppointment(appointment)"
+                          data-bs-toggle="modal" data-bs-target="#cancel_appointment"
+                          [title]="'APPOINTMENTS.LIST_APPOINTMENTS.CANCEL' | translate">
+                          <i class="fa fa-ban"></i>
+                        </button>
+                        }
+                        <button class="btn btn-sm btn-delete" (click)="selectAppointment(appointment)"
+                          data-bs-toggle="modal" data-bs-target="#delete_appointment"
+                          [title]="'COMMON.DELETE' | translate">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
                   }
                 </tbody>
               </table>
             </div>
-            
+
             <!-- Paginación -->
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
               <div class="pagination-info small">
-                {{ 'APPOINTMENTS.LIST_APPOINTMENTS.SHOWING' | translate }} 
-                {{ skip + 1 }} 
-                {{ 'APPOINTMENTS.LIST_APPOINTMENTS.TO' | translate }} 
-                {{ Math.min(skip + limit, filteredAppointments.length) }} 
-                {{ 'APPOINTMENTS.LIST_APPOINTMENTS.OF' | translate }} 
-                {{ filteredAppointments.length }} 
+                {{ 'APPOINTMENTS.LIST_APPOINTMENTS.SHOWING' | translate }}
+                {{ skip + 1 }}
+                {{ 'APPOINTMENTS.LIST_APPOINTMENTS.TO' | translate }}
+                {{ Math.min(skip + limit, filteredAppointments.length) }}
+                {{ 'APPOINTMENTS.LIST_APPOINTMENTS.OF' | translate }}
+                {{ filteredAppointments.length }}
                 {{ 'APPOINTMENTS.LIST_APPOINTMENTS.RECORDS' | translate }}
               </div>
               <nav>
@@ -201,9 +208,9 @@
                     </a>
                   </li>
                   @for (page of pageNumbers; track page) {
-                    <li class="page-item" [class.active]="page === currentPage">
-                      <a class="page-link" (click)="goToPage(page)" style="cursor: pointer;">{{ page }}</a>
-                    </li>
+                  <li class="page-item" [class.active]="page === currentPage">
+                    <a class="page-link" (click)="goToPage(page)" style="cursor: pointer;">{{ page }}</a>
+                  </li>
                   }
                   <li class="page-item" [class.disabled]="currentPage === totalPages">
                     <a class="page-link" (click)="nextPage()" style="cursor: pointer;">
@@ -227,46 +234,34 @@
     <div class="modal-content">
       <div class="modal-body p-4">
         <div class="text-center mb-4">
-          <img 
-            src="assets/img/sent.png" 
-            alt="Cancelar" 
-            class="img-fluid mb-3" 
-            style="max-width: 120px;">
+          <img src="assets/img/sent.png" alt="Cancelar" class="img-fluid mb-3" style="max-width: 120px;">
           <h3 class="mb-3">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.CONFIRM_CANCEL_TITLE' | translate }}</h3>
           <p class="text-muted mb-0">
             {{ 'APPOINTMENTS.LIST_APPOINTMENTS.CONFIRM_CANCEL_MESSAGE' | translate }}
             @if (selectedAppointment) {
-              <strong>{{ getPacienteNombre(selectedAppointment) }}</strong>
+            <strong>{{ getPacienteNombre(selectedAppointment) }}</strong>
             }
           </p>
         </div>
-        
+
         <!-- Campo de motivo de cancelación -->
         <div class="mb-4">
           <label class="form-label">
             <i class="fa fa-comment me-1"></i>Motivo de Cancelación
           </label>
-          <textarea 
-            class="form-control" 
-            [(ngModel)]="motivoCancelacion" 
-            name="motivoCancelacion"
-            rows="3"
-            placeholder="Ingrese el motivo de la cancelación (opcional)"
-            autofocus></textarea>
+          <textarea class="form-control" [(ngModel)]="motivoCancelacion" name="motivoCancelacion" rows="3"
+            placeholder="Ingrese el motivo de la cancelación (opcional)" autofocus></textarea>
           <small class="text-muted mt-1 d-block">
-            <i class="fa fa-info-circle me-1"></i>Si no especifica un motivo, se registrará como "Sin motivo especificado"
+            <i class="fa fa-info-circle me-1"></i>Si no especifica un motivo, se registrará como "Sin motivo
+            especificado"
           </small>
         </div>
-        
+
         <div class="d-flex gap-2 justify-content-center">
           <button type="button" class="btn btn-cancel px-4" data-bs-dismiss="modal" (click)="motivoCancelacion = ''">
             <i class="fas fa-times me-2"></i>{{ 'COMMON.NO' | translate }}
           </button>
-          <button 
-            type="button" 
-            class="btn btn-warning px-4" 
-            (click)="confirmCancel()" 
-            data-bs-dismiss="modal">
+          <button type="button" class="btn btn-warning px-4" (click)="confirmCancel()" data-bs-dismiss="modal">
             <i class="fas fa-check me-2"></i>{{ 'COMMON.YES_CANCEL' | translate }}
           </button>
         </div>
@@ -280,27 +275,19 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body text-center p-4">
-        <img 
-          src="assets/img/sent.png" 
-          alt="Eliminar" 
-          class="img-fluid mb-3" 
-          style="max-width: 120px;">
+        <img src="assets/img/sent.png" alt="Eliminar" class="img-fluid mb-3" style="max-width: 120px;">
         <h3 class="mb-3">{{ 'APPOINTMENTS.LIST_APPOINTMENTS.CONFIRM_DELETE_TITLE' | translate }}</h3>
         <p class="text-muted mb-4">
           {{ 'APPOINTMENTS.LIST_APPOINTMENTS.CONFIRM_DELETE_MESSAGE' | translate }}
           @if (selectedAppointment) {
-            <strong>{{ getPacienteNombre(selectedAppointment) }}</strong>
+          <strong>{{ getPacienteNombre(selectedAppointment) }}</strong>
           }
         </p>
         <div class="d-flex gap-2 justify-content-center">
           <button type="button" class="btn btn-cancel px-4" data-bs-dismiss="modal">
             <i class="fas fa-times me-2"></i>{{ 'COMMON.NO' | translate }}
           </button>
-          <button 
-            type="button" 
-            class="btn btn-save px-4" 
-            (click)="confirmDelete()" 
-            data-bs-dismiss="modal">
+          <button type="button" class="btn btn-save px-4" (click)="confirmDelete()" data-bs-dismiss="modal">
             <i class="fas fa-check me-2"></i>{{ 'COMMON.YES_DELETE' | translate }}
           </button>
         </div>
@@ -310,9 +297,7 @@
 </div>
 
 <!-- Botón flotante de ayuda para iniciar el tour -->
-<button class="tour-help-button" 
-        (click)="startAppointmentsListTour()" 
-        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
-        type="button">
+<button class="tour-help-button" (click)="startAppointmentsListTour()" title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+  type="button">
   <i class="fa fa-question"></i>
 </button>

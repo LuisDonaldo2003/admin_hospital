@@ -41,7 +41,7 @@
                       <i class="fa fa-file-medical me-1"></i>Folio Expediente <span class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control" [(ngModel)]="folio_expediente" name="folio_expediente"
-                      placeholder="Ej: EXP-2024-001" required>
+                      placeholder="Ej: EXP-2024-001" (keypress)="onFolioKeyPress($event)" required>
                   </div>
 
                   <!-- Nombre del Paciente -->
@@ -109,7 +109,8 @@
                     <label class="form-label">
                       <i class="fa fa-clock me-1"></i>Seleccione el Turno <span class="text-danger">*</span>
                     </label>
-                    <select class="form-select form-control" [(ngModel)]="turno" name="turno" required>
+                    <select class="form-select form-control" [(ngModel)]="turno" name="turno" (change)="onTurnoChange()"
+                      required>
                       <option value="">Seleccione el turno</option>
                       <option *ngFor="let t of turnos" [value]="t">{{ t }}</option>
                     </select>
@@ -131,7 +132,33 @@
                   </h5>
                 </div>
                 <div class="row g-3">
-                  <!-- Especialidad -->
+                  <!-- Tipo de Servicio -->
+                  <!-- Tipo de Servicio (Solo si tiene permisos para AMBOS) -->
+                  @if (showSpecialist && showGeneral) {
+                  <div class="col-md-12 mb-3">
+                    <label class="form-label d-block">
+                      <i class="fa fa-hospital-user me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.SERVICE_TYPE' | translate
+                      }} <span class="text-danger">*</span>
+                    </label>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="service_type" id="service_specialist"
+                        [(ngModel)]="service_type" value="specialist" (change)="onServiceTypeChange()">
+                      <label class="form-check-label" for="service_specialist">
+                        {{ 'APPOINTMENTS.ADD_APPOINTMENT.SPECIALIST' | translate }}
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="service_type" id="service_general"
+                        [(ngModel)]="service_type" value="general" (change)="onServiceTypeChange()">
+                      <label class="form-check-label" for="service_general">
+                        {{ 'APPOINTMENTS.ADD_APPOINTMENT.GENERAL_MEDICAL' | translate }}
+                      </label>
+                    </div>
+                  </div>
+                  }
+
+                  <!-- Especialidad (Solo si es Especialista) -->
+                  @if (service_type === 'specialist') {
                   <div class="col-md-6">
                     <label class="form-label">
                       <i class="fa fa-stethoscope me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.SPECIALTY' | translate }}
@@ -143,6 +170,24 @@
                       <option *ngFor="let esp of especialidades" [value]="esp.id">{{ esp.nombre }}</option>
                     </select>
                   </div>
+                  }
+
+                  <!-- Médico General / Categoría (Solo si es General) -->
+                  @if (service_type === 'general') {
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa fa-briefcase-medical me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.GENERAL_SERVICE' |
+                      translate }}
+                      <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-select form-control" [(ngModel)]="general_medical_id" name="general_medical_id"
+                      (change)="onGeneralMedicalChange()" required>
+                      <option [value]="0">{{ 'APPOINTMENTS.ADD_APPOINTMENT.SELECT_GENERAL_SERVICE' | translate }}
+                      </option>
+                      <option *ngFor="let gm of generalMedicals" [value]="gm.id">{{ gm.nombre }}</option>
+                    </select>
+                  </div>
+                  }
 
                   <!-- Doctor -->
                   <div class="col-md-6">
@@ -151,7 +196,9 @@
                         class="text-danger">*</span>
                     </label>
                     <select class="form-select form-control" [(ngModel)]="doctor_id" name="doctor_id"
-                      (change)="onDoctorOrFechaChange()" [disabled]="!especialidad_id || loadingDoctors" required>
+                      (change)="onDoctorOrFechaChange()"
+                      [disabled]="(service_type === 'specialist' && !especialidad_id) || (service_type === 'general' && !general_medical_id) || loadingDoctors"
+                      required>
                       <option [value]="0">
                         @if (loadingDoctors) {
                         {{ 'COMMON.LOADING' | translate }}...

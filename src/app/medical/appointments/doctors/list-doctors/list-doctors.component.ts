@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AppointmentsService, Doctor } from '../../service/appointments.service';
 import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
+import { GeneralMedicalService } from '../../general-medical/service/general-medical.service';
+import { AuthService } from 'src/app/shared/auth/auth.service';
 
 @Component({
   selector: 'app-list-doctors',
@@ -24,15 +26,21 @@ export class ListDoctorsComponent implements OnInit {
   doctors: Doctor[] = [];
   filteredDoctors: Doctor[] = [];
   especialidades: any[] = [];
+  generalMedicals: any[] = [];
   isLoading = false;
   searchTerm: string = '';
-  
+
   // Filtros
   filtroEspecialidad: string = '';
-  
+  filtroGeneralMedical: string = '';
+
+  // Flags de UI
+  showSpecialist: boolean = false;
+  showGeneral: boolean = false;
+
   // Doctor seleccionado para eliminar
   selectedDoctor: Doctor | null = null;
-  
+
   // Totales
   totalDoctors: number = 0;
 
@@ -52,16 +60,39 @@ export class ListDoctorsComponent implements OnInit {
     private router: Router,
     private translate: TranslateService,
     private appointmentsService: AppointmentsService,
-    private driverTourService: DriverTourService
+    private generalMedicalService: GeneralMedicalService,
+    private driverTourService: DriverTourService,
+    public authService: AuthService
   ) {
     const selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(selectedLang);
   }
 
   ngOnInit(): void {
-    this.loadEspecialidades();
+    this.determineFilters();
     this.loadDoctors();
     this.checkAndStartTour();
+  }
+
+  determineFilters(): void {
+    const canSpecialist = this.authService.hasPermission('appointments_add_especialidad');
+    const canGeneral = this.authService.hasPermission('appointments_add_general_medical');
+
+    if (canSpecialist && !canGeneral) {
+      this.showSpecialist = true;
+      this.showGeneral = false;
+      this.loadEspecialidades();
+    } else if (canGeneral && !canSpecialist) {
+      this.showSpecialist = false;
+      this.showGeneral = true;
+      this.loadGeneralMedicals();
+    } else {
+      // Admin o ambos
+      this.showSpecialist = true;
+      this.showGeneral = true;
+      this.loadEspecialidades();
+      this.loadGeneralMedicals();
+    }
   }
 
   private checkAndStartTour(): void {
@@ -75,7 +106,7 @@ export class ListDoctorsComponent implements OnInit {
   startTour(): void {
     this.driverTourService.startDoctorsListTour();
   }
-  
+
   /**
    * Cargar especialidades
    */
@@ -92,6 +123,14 @@ export class ListDoctorsComponent implements OnInit {
     });
   }
 
+  loadGeneralMedicals(): void {
+    this.generalMedicalService.listGeneralMedicals().subscribe({
+      next: (resp) => {
+        if (resp.success) this.generalMedicals = resp.data.filter(g => g.activo);
+      }
+    });
+  }
+
   /**
    * Cargar doctores
    */
@@ -101,7 +140,23 @@ export class ListDoctorsComponent implements OnInit {
       next: (response) => {
         this.isLoading = false;
         if (response.success) {
-          this.doctors = response.data;
+          let allDoctors = response.data;
+
+          // Filtrado estricto por permisos
+          const canSpecialist = this.authService.hasPermission('appointments_add_especialidad');
+          const canGeneral = this.authService.hasPermission('appointments_add_general_medical');
+
+          if (canSpecialist && !canGeneral) {
+            // Solo especialistas: filtrar aquellos que tienen especialidad_id
+            allDoctors = allDoctors.filter(d => d.especialidad_id);
+          } else if (canGeneral && !canSpecialist) {
+            // Solo generales: filtrar aquellos que tienen general_medical_id
+            allDoctors = allDoctors.filter(d => d.general_medical_id);
+          }
+          // Si tiene ambos o ninguno (admin?), mostrar todos o manejar segun requerimiento.
+          // Asumimos que admin ve todo.
+
+          this.doctors = allDoctors;
           this.totalDoctors = this.doctors.length;
           this.filteredDoctors = [...this.doctors];
           this.calculatePagination();
@@ -119,21 +174,26 @@ export class ListDoctorsComponent implements OnInit {
    */
   filterDoctors(): void {
     this.filteredDoctors = this.doctors.filter(doctor => {
-      const matchSearch = !this.searchTerm || 
+      const matchSearch = !this.searchTerm ||
         doctor.nombre_completo.toLowerCase().includes(this.searchTerm.toLowerCase());
-      
-      const matchEspecialidad = !this.filtroEspecialidad || 
+
+      // Filtro especialidad
+      const matchEspecialidad = !this.filtroEspecialidad ||
         doctor.especialidad_id === parseInt(this.filtroEspecialidad);
-      
-      return matchSearch && matchEspecialidad;
+
+      // Filtro General Medical
+      const matchGeneral = !this.filtroGeneralMedical ||
+        doctor.general_medical_id === parseInt(this.filtroGeneralMedical);
+
+      return matchSearch && matchEspecialidad && matchGeneral;
     });
-    
+
     // Reset a la primera página y calcular paginación
     this.currentPage = 1;
     this.skip = 0;
     this.calculatePagination();
   }
-  
+
   /**
    * Limpiar filtros
    */
@@ -142,20 +202,20 @@ export class ListDoctorsComponent implements OnInit {
     this.filtroEspecialidad = '';
     this.filterDoctors();
   }
-  
+
   /**
    * Seleccionar doctor para eliminar
    */
   selectDoctor(doctor: Doctor): void {
     this.selectedDoctor = doctor;
   }
-  
+
   /**
    * Confirmar eliminación
    */
   confirmDelete(): void {
     if (!this.selectedDoctor?.id) return;
-    
+
     this.appointmentsService.deleteDoctor(this.selectedDoctor.id).subscribe({
       next: (response) => {
         if (response.success) {
@@ -168,7 +228,7 @@ export class ListDoctorsComponent implements OnInit {
       }
     });
   }
-  
+
   /**
    * Verificar si hay filtros activos
    */
@@ -213,18 +273,35 @@ export class ListDoctorsComponent implements OnInit {
   }
 
   /**
+   * Obtener nombre del rol (Especialidad o Médico General)
+   */
+  getRoleName(doctor: Doctor): string {
+    if (doctor.especialidad?.nombre) {
+      return doctor.especialidad.nombre;
+    }
+
+    if (doctor.general_medical_id) {
+      // Buscar en la lista cargada
+      const gm = this.generalMedicals.find(g => g.id === doctor.general_medical_id);
+      return gm ? gm.nombre : 'Médico General';
+    }
+
+    return 'N/A';
+  }
+
+  /**
    * Calcular paginación
    */
   private calculatePagination(): void {
     this.totalData = this.filteredDoctors.length;
     this.totalPages = Math.ceil(this.totalData / this.pageSize);
-    
+
     // Generar array de números de página
     this.pageNumberArray = [];
     for (let i = 1; i <= this.totalPages; i++) {
       this.pageNumberArray.push(i);
     }
-    
+
     // Generar array de números de serie
     this.serialNumberArray = [];
     const startIndex = (this.currentPage - 1) * this.pageSize + 1;

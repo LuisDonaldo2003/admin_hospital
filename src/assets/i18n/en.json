@@ -225,6 +225,13 @@
         "EDIT": "Edit Specialty",
         "DELETE": "Delete Specialty"
       },
+      "GENERAL_MEDICAL": {
+        "TITLE": "General",
+        "LIST": "List Doctors",
+        "ADD": "Add Doctor",
+        "EDIT": "Edit Doctor",
+        "DELETE": "Delete Doctor"
+      },
       "CALENDAR": {
         "TITLE": "Calendar",
         "VIEW": "View Calendar"
@@ -2151,6 +2158,10 @@
       "FOJA": "Sheet",
       "DATE": "Date",
       "HOURS": "Hours",
+      "SORT_ASC": "Sort Ascending",
+      "SORT_DESC": "Sort Descending",
+      "RECENT": "Recent",
+      "OLDEST": "Oldest",
       "EI": "E.I.",
       "EF": "E.F.",
       "NOT_AVAILABLE": "N/A",
@@ -2563,7 +2574,7 @@
       "SEARCH_PLACEHOLDER": "Search by doctor name...",
       "ALL_SPECIALTIES": "All Specialties",
       "NAME": "Name",
-      "SPECIALTY": "Specialty",
+      "SPECIALTY": "Profession",
       "LICENSE": "License",
       "SHIFT": "Shift",
       "SCHEDULE": "Schedule",
@@ -2625,6 +2636,7 @@
       "ALL_DOCTORS": "All Doctors",
       "DATE": "Date",
       "TIME": "Time",
+      "FOLIO": "Folio",
       "PATIENT": "Patient",
       "DOCTOR": "Doctor",
       "SPECIALTY": "Specialty",

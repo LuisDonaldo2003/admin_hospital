@@ -540,7 +540,7 @@ export class routes {
   public static get editAppointments(): string {
     return this.baseUrl + '/appointments/edit_appointment';
   }
-  
+
   // Calendar
   public static get appointmentsCalendar(): string {
     return this.baseUrl + '/appointments/calendar';
@@ -555,6 +555,17 @@ export class routes {
   }
   public static get editEspecialidad(): string {
     return this.baseUrl + '/appointments/especialidades/edit';
+  }
+
+  // General Medicals
+  public static get generalMedicalsList(): string {
+    return this.baseUrl + '/appointments/general-medicals/list';
+  }
+  public static get addGeneralMedical(): string {
+    return this.baseUrl + '/appointments/general-medicals/add';
+  }
+  public static get editGeneralMedical(): string {
+    return this.baseUrl + '/appointments/general-medicals/edit';
   }
 
   // Cancelled Appointments
