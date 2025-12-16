@@ -106,7 +106,7 @@
                     </label>
                     <select class="form-select form-control" [(ngModel)]="turno" name="turno" (change)="onTurnoChange()"
                       required>
-                      <option *ngFor="let t of turnosDisponibles" [value]="t">{{ t }}</option>
+                      <option *ngFor="let t of turnosDisponibles" [value]="t.value">{{ t.label }}</option>
                     </select>
                   </div>
 

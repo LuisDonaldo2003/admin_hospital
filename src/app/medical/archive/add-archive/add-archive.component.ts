@@ -247,10 +247,10 @@ export class AddArchiveComponent implements OnInit {
         this.text_success = 'Paciente registrado exitosamente';
         // Limpiar el formulario inmediatamente
         this.resetForm();
-        // Quitar el mensaje de éxito después de 3 segundos
+        // Redirigir automáticamente
         setTimeout(() => {
-          this.text_success = '';
-        }, 3000);
+          this.router.navigate(['/archives/list_archive']);
+        }, 1500);
       },
       error: (err) => {
         // Manejo de errores específico y genérico

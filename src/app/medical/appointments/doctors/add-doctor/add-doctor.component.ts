@@ -50,7 +50,11 @@ export class AddDoctorComponent implements OnInit {
   // Listas
   especialidades: Especialidad[] = [];
   generalMedicals: GeneralMedical[] = []; // Nueva lista
-  turnosDisponibles: TipoTurno[] = ['Matutino', 'Vespertino', 'Mixto'];
+  turnosDisponibles: any[] = [
+    { value: 'Matutino', label: 'Matutino' },
+    { value: 'Vespertino', label: 'Vespertino' },
+    { value: 'Mixto', label: 'Jornada Acumulada' }
+  ];
 
   // Mensajes
   text_success: string = '';

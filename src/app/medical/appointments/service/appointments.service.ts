@@ -6,7 +6,7 @@ import { URL_SERVICIOS } from '../../../config/config';
 
 // ===== INTERFACES Y TIPOS =====
 
-export type TipoTurno = 'Matutino' | 'Vespertino' | 'Mixto';
+export type TipoTurno = 'Matutino' | 'Vespertino' | 'Mixto' | 'Jornada Acumulada';
 export type EstadoCita = 'Programada' | 'Confirmada' | 'En curso' | 'Completada' | 'Cancelada' | 'No asistió';
 
 export interface Especialidad {
@@ -82,7 +82,7 @@ export interface HorariosDisponibles {
 export class AppointmentsService {
 
   // Duración de cada cita en minutos
-  private readonly DURACION_CITA = 60;
+  private readonly DURACION_CITA = 20;
 
   constructor(
     private http: HttpClient,

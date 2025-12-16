@@ -31,7 +31,7 @@ export class AddAppointmentComponent implements OnInit {
   numero_cel: string = '';
   procedencia: string = '';
   tipo_cita: 'Primera vez' | 'Subsecuente' | '' = '';
-  turno: 'Matutino' | 'Vespertino' | '' = '';
+  turno: 'Matutino' | 'Vespertino' | 'Jornada Acumulada' | '' = '';
 
   // Selección de servicio
   service_type: 'general' | 'specialist' = 'specialist';
@@ -70,7 +70,7 @@ export class AddAppointmentComponent implements OnInit {
 
   // Tipos de cita y turnos
   tiposCita: ('Primera vez' | 'Subsecuente')[] = ['Primera vez', 'Subsecuente'];
-  turnos: ('Matutino' | 'Vespertino')[] = ['Matutino', 'Vespertino'];
+  turnos: ('Matutino' | 'Vespertino' | 'Jornada Acumulada')[] = ['Matutino', 'Vespertino', 'Jornada Acumulada'];
 
   /**
    * Obtener fecha mínima (hoy) en formato YYYY-MM-DD

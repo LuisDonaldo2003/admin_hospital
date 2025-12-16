@@ -45,7 +45,11 @@ export class EditDoctorComponent implements OnInit {
   // Listas
   especialidades: Especialidad[] = [];
   generalMedicals: any[] = [];
-  turnosDisponibles: TipoTurno[] = ['Matutino', 'Vespertino', 'Mixto'];
+  turnosDisponibles: any[] = [
+    { value: 'Matutino', label: 'Matutino' },
+    { value: 'Vespertino', label: 'Vespertino' },
+    { value: 'Mixto', label: 'Jornada Acumulada' }
+  ];
 
   // Flags de UI
   showSpecialist: boolean = false;

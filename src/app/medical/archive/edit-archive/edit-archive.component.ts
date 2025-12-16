@@ -179,8 +179,12 @@ export class EditArchiveComponent implements OnInit {
           this.router.navigate(['/archives/list_archive']);
         }, 2000);
       },
-      error: () => {
-        this.text_validation = this.translate.instant('ERROR_OCCURRED');
+      error: (err) => {
+        if (err.status === 422 && err.error?.message) {
+          this.text_validation = err.error.message;
+        } else {
+          this.text_validation = this.translate.instant('ERROR_OCCURRED');
+        }
       }
     });
   }
