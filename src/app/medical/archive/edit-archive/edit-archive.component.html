@@ -6,10 +6,10 @@
 <div class="page-wrapper">
   <!-- Contenido principal de la página de edición de expediente -->
   <div class="content add-staff-form">
-  <!-- Encabezado con breadcrumb de navegación -->
-  <div class="page-header mb-4">
-  <div class="row">
-  <div class="col-sm-12">
+    <!-- Encabezado con breadcrumb de navegación -->
+    <div class="page-header mb-4">
+      <div class="row">
+        <div class="col-sm-12">
           <!-- Breadcrumb para mostrar la ruta de navegación -->
           <ol class="breadcrumb bg-light p-2 rounded">
             <li class="breadcrumb-item">
@@ -23,10 +23,10 @@
       </div>
     </div>
 
-  <!-- Formulario de edición de paciente -->
-  <div class="row justify-content-center">
-  <div class="col-lg-10 col-xl-8">
-  <div class="card card-form shadow border-0">
+    <!-- Formulario de edición de paciente -->
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-xl-8">
+        <div class="card card-form shadow border-0">
           <div class="card-body p-4">
             <!-- Encabezado del formulario con icono -->
             <div class="form-header text-center mb-4">
@@ -71,122 +71,123 @@
                   </h5>
                 </div>
                 <div class="row g-3">
-                <!-- Número de expediente (solo lectura) -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.ARCHIVE_NUMBER' | translate }}</label>
-                  <input type="text" [(ngModel)]="archive_number" name="archive_number" class="form-control" readonly />
-                </div>
+                  <!-- Número de expediente (solo lectura) -->
+                  <div class="col-md-6">
+                    <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.ARCHIVE_NUMBER' | translate }}</label>
+                    <input type="text" [(ngModel)]="archive_number" name="archive_number" class="form-control"
+                      (keypress)="onArchiveNumberKeyPress($event)" />
+                  </div>
 
-                <!-- Nombre del paciente -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.FIRST_NAME' | translate }}</label>
-                  <input type="text" [(ngModel)]="name" name="name" class="form-control" />
-                </div>
+                  <!-- Nombre del paciente -->
+                  <div class="col-md-6">
+                    <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.FIRST_NAME' | translate }}</label>
+                    <input type="text" [(ngModel)]="name" name="name" class="form-control" />
+                  </div>
 
-                <!-- Apellido paterno -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.FATHER_LAST_NAME' | translate }}</label>
-                  <input type="text" [(ngModel)]="last_name_father" name="last_name_father" class="form-control" />
-                </div>
+                  <!-- Apellido paterno -->
+                  <div class="col-md-6">
+                    <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.FATHER_LAST_NAME' | translate }}</label>
+                    <input type="text" [(ngModel)]="last_name_father" name="last_name_father" class="form-control" />
+                  </div>
 
-                <!-- Apellido materno -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.MOTHER_LAST_NAME' | translate }}</label>
-                  <input type="text" [(ngModel)]="last_name_mother" name="last_name_mother" class="form-control" />
-                </div>
+                  <!-- Apellido materno -->
+                  <div class="col-md-6">
+                    <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.MOTHER_LAST_NAME' | translate }}</label>
+                    <input type="text" [(ngModel)]="last_name_mother" name="last_name_mother" class="form-control" />
+                  </div>
 
-                <!-- Edad -->
-                <div class="col-md-4">
-                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.AGE' | translate }}</label>
-                  <input type="number" [(ngModel)]="age" name="age" class="form-control" 
-                         min="0" max="120" placeholder="{{ 'ARCHIVE.EDIT_PATIENT.AGE_PLACEHOLDER' | translate }}" />
-                </div>
+                  <!-- Edad -->
+                  <div class="col-md-4">
+                    <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.AGE' | translate }}</label>
+                    <input type="number" [(ngModel)]="age" name="age" class="form-control" min="0" max="120"
+                      placeholder="{{ 'ARCHIVE.EDIT_PATIENT.AGE_PLACEHOLDER' | translate }}" />
+                  </div>
 
-                <!-- Unidad de edad -->
-                <div class="col-md-2">
-                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.AGE_UNIT' | translate }}</label>
-                  <select [(ngModel)]="age_unit" name="age_unit" class="form-control">
-                    <option value="años">{{ 'ARCHIVE.COMMON.YEARS' | translate }}</option>
-                    <option value="meses">{{ 'ARCHIVE.COMMON.MONTHS' | translate }}</option>
-                    <option value="días">{{ 'ARCHIVE.COMMON.DAYS' | translate }}</option>
-                  </select>
-                </div>
+                  <!-- Unidad de edad -->
+                  <div class="col-md-2">
+                    <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.AGE_UNIT' | translate }}</label>
+                    <select [(ngModel)]="age_unit" name="age_unit" class="form-control">
+                      <option value="años">{{ 'ARCHIVE.COMMON.YEARS' | translate }}</option>
+                      <option value="meses">{{ 'ARCHIVE.COMMON.MONTHS' | translate }}</option>
+                      <option value="días">{{ 'ARCHIVE.COMMON.DAYS' | translate }}</option>
+                    </select>
+                  </div>
 
-                <!-- Género -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.GENDER' | translate }}</label>
-                  <select [(ngModel)]="gender_id" name="gender_id" class="form-control">
-                    <option value="">{{ 'ARCHIVE.EDIT_PATIENT.SELECT_GENDER' | translate }}</option>
-                    <option *ngFor="let gender of genders" [value]="gender.id">{{ gender.name }}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <!-- Separador -->
-            <div class="form-divider my-4"></div>
-
-            <!-- Sección: Ubicación -->
-            <div class="form-section">
-              <div class="section-header mb-3">
-                <h5 class="section-title">
-                  <i class="fa fa-map-marker-alt me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.LOCATION_SECTION' | translate }}
-                </h5>
-              </div>
-              <div class="row g-3">
-                <!-- Estado -->
-                <div class="col-md-4">
-                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.STATE' | translate }}</label>
-                  <input type="text" [(ngModel)]="state_text" name="state_text" class="form-control" 
-                         placeholder="{{ 'ARCHIVE.COMMON.PLACEHOLDER_STATE' | translate }}" />
-                </div>
-
-                <!-- Municipio -->
-                <div class="col-md-4">
-                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.MUNICIPALITY' | translate }}</label>
-                  <input type="text" [(ngModel)]="municipality_text" name="municipality_text" class="form-control"
-                         placeholder="{{ 'ARCHIVE.COMMON.PLACEHOLDER_MUNICIPALITY' | translate }}" />
-                </div>
-
-                <!-- Localidad -->
-                <div class="col-md-4">
-                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.LOCATION' | translate }}</label>
-                  <input type="text" [(ngModel)]="location_text" name="location_text" class="form-control"
-                         placeholder="{{ 'ARCHIVE.COMMON.PLACEHOLDER_LOCATION' | translate }}" />
+                  <!-- Género -->
+                  <div class="col-md-6">
+                    <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.GENDER' | translate }}</label>
+                    <select [(ngModel)]="gender_id" name="gender_id" class="form-control">
+                      <option value="">{{ 'ARCHIVE.EDIT_PATIENT.SELECT_GENDER' | translate }}</option>
+                      <option *ngFor="let gender of genders" [value]="gender.id">{{ gender.name }}</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Separador -->
-            <div class="form-divider my-4"></div>
+              <!-- Separador -->
+              <div class="form-divider my-4"></div>
 
-            <!-- Sección: Información de Admisión -->
-            <div class="form-section">
-              <div class="section-header mb-3">
-                <h5 class="section-title">
-                  <i class="fa fa-calendar-check me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.ADMISSION_SECTION' | translate }}
-                </h5>
-              </div>
-              <div class="row g-3">
+              <!-- Sección: Ubicación -->
+              <div class="form-section">
+                <div class="section-header mb-3">
+                  <h5 class="section-title">
+                    <i class="fa fa-map-marker-alt me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.LOCATION_SECTION' | translate }}
+                  </h5>
+                </div>
+                <div class="row g-3">
+                  <!-- Estado -->
+                  <div class="col-md-4">
+                    <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.STATE' | translate }}</label>
+                    <input type="text" [(ngModel)]="state_text" name="state_text" class="form-control"
+                      placeholder="{{ 'ARCHIVE.COMMON.PLACEHOLDER_STATE' | translate }}" />
+                  </div>
 
-                <!-- Fecha de admisión -->
-                <div class="col-md-6">
-                  <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.ADMISSION_DATE' | translate }}</label>
-                  <input type="date" [(ngModel)]="admission_date" name="admission_date" class="form-control" />
+                  <!-- Municipio -->
+                  <div class="col-md-4">
+                    <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.MUNICIPALITY' | translate }}</label>
+                    <input type="text" [(ngModel)]="municipality_text" name="municipality_text" class="form-control"
+                      placeholder="{{ 'ARCHIVE.COMMON.PLACEHOLDER_MUNICIPALITY' | translate }}" />
+                  </div>
+
+                  <!-- Localidad -->
+                  <div class="col-md-4">
+                    <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.LOCATION' | translate }}</label>
+                    <input type="text" [(ngModel)]="location_text" name="location_text" class="form-control"
+                      placeholder="{{ 'ARCHIVE.COMMON.PLACEHOLDER_LOCATION' | translate }}" />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Botones de acción -->
-            <div class="form-actions d-flex justify-content-end gap-2 mt-4">
-              <button type="button" class="btn btn-cancel" (click)="goToList()">
-                <i class="fa fa-times me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.CANCEL' | translate }}
-              </button>
-              <button type="submit" class="btn btn-primary px-4">
-                <i class="fa fa-save me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.SAVE' | translate }}
-              </button>
-            </div>
-          </form>
+              <!-- Separador -->
+              <div class="form-divider my-4"></div>
+
+              <!-- Sección: Información de Admisión -->
+              <div class="form-section">
+                <div class="section-header mb-3">
+                  <h5 class="section-title">
+                    <i class="fa fa-calendar-check me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.ADMISSION_SECTION' | translate }}
+                  </h5>
+                </div>
+                <div class="row g-3">
+
+                  <!-- Fecha de admisión -->
+                  <div class="col-md-6">
+                    <label class="form-label">{{ 'ARCHIVE.EDIT_PATIENT.ADMISSION_DATE' | translate }}</label>
+                    <input type="date" [(ngModel)]="admission_date" name="admission_date" class="form-control" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Botones de acción -->
+              <div class="form-actions d-flex justify-content-end gap-2 mt-4">
+                <button type="button" class="btn btn-cancel" (click)="goToList()">
+                  <i class="fa fa-times me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.CANCEL' | translate }}
+                </button>
+                <button type="submit" class="btn btn-primary px-4">
+                  <i class="fa fa-save me-2"></i>{{ 'ARCHIVE.EDIT_PATIENT.SAVE' | translate }}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -195,9 +196,7 @@
 </div>
 
 <!-- Botón flotante de ayuda para iniciar el tour -->
-<button class="tour-help-button" 
-        (click)="startEditArchiveTour()" 
-        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
-        type="button">
+<button class="tour-help-button" (click)="startEditArchiveTour()" title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+  type="button">
   <i class="fa fa-question"></i>
 </button>

@@ -53,18 +53,21 @@ export class AddArchiveComponent implements OnInit {
   text_validation = '';
   text_success = '';
 
+  private checkTimeout: any;
+
   /**
    * Inyección de dependencias.
    * @param archiveService Servicio para operaciones de archivo
    * @param router Servicio de navegación
    * @param translate Servicio de traducción
+   * @param driverTourService Servicio del tour guiado
    */
   constructor(
-    private archiveService: ArchiveService,
-    private router: Router,
+    public archiveService: ArchiveService,
+    public router: Router,
     private translate: TranslateService,
-    private driverTourService: DriverTourService
-  ) {}
+    public driverTourService: DriverTourService
+  ) { }
 
   /**
    * Obtiene la fecha actual en formato YYYY-MM-DD usando la zona horaria local.
@@ -85,16 +88,43 @@ export class AddArchiveComponent implements OnInit {
   ngOnInit(): void {
     // Usar la fecha local correcta
     this.admission_date = this.getTodayLocalDate();
-    
+
     this.loadGenders();
-    
+
     // Verificar si mostrar el tour del formulario automáticamente
     this.checkAndShowFormTour();
   }
 
   /**
-   * Carga la lista de géneros desde el servicio y la asigna al select.
+   * Valida si el número de expediente ya existe en tiempo real (con debounce).
    */
+  checkArchiveNumberExists(): void {
+    if (this.checkTimeout) {
+      clearTimeout(this.checkTimeout);
+    }
+
+    if (!this.archive_number || this.archive_number.trim() === '') {
+      this.text_validation = '';
+      return;
+    }
+
+    this.checkTimeout = setTimeout(() => {
+      this.archiveService.checkUniqueArchiveNumber(this.archive_number).subscribe({
+        next: (res: any) => {
+          if (res.status === 'error') {
+            this.text_validation = res.message;
+          } else {
+            // Si ya no hay error, limpiamos mensaje
+            this.text_validation = '';
+          }
+        },
+        error: () => {
+          // No bloqueamos por error de servidor
+        }
+      });
+    }, 500);
+  }
+
   private loadGenders(): void {
     this.archiveService.listGenders().subscribe({
       next: (data: any) => this.genders = data,
@@ -143,11 +173,11 @@ export class AddArchiveComponent implements OnInit {
   }
 
   /**
-   * Valida en tiempo real el input de número de expediente (letras, números, guion y guion bajo).
+   * Valida en tiempo real el input de número de expediente (solo números).
    */
   onArchiveNumberKeyPress(event: KeyboardEvent): boolean {
     this.clearMessages();
-    const pattern = /^[A-Za-z0-9\-_]$/;
+    const pattern = /^[0-9]$/;
     const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
     return pattern.test(event.key) || allowedKeys.includes(event.key);
   }
@@ -259,10 +289,10 @@ export class AddArchiveComponent implements OnInit {
     this.contact_last_name_father = '';
     this.contact_last_name_mother = '';
     this.contact_name = '';
-    
+
     // Usar la fecha local correcta
     this.admission_date = this.getTodayLocalDate();
-    
+
     this.submitted = false;
     this.text_validation = '';
     // No limpiar text_success aquí para que se vea el mensaje

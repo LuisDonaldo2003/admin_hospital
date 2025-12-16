@@ -40,121 +40,105 @@
                   <!-- Campo: Número de archivo -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-folder me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.ARCHIVE_NUMBER' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-folder me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.ARCHIVE_NUMBER' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <input 
-                      type="text" 
-                      class="form-control" 
-                      [(ngModel)]="archive_number" 
-                      name="archive_number"
-                      (keypress)="onArchiveNumberKeyPress($event)"
-                      placeholder="{{ 'ARCHIVE.ADD_PATIENT.EXPEDITION' | translate }}"
-                      required 
-                      [ngClass]="{ 'is-invalid': submitted && !archive_number.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !archive_number.trim()">{{ 'ARCHIVE.ADD_PATIENT.ARCHIVE_NUMBER_REQUIERE' | translate }}</div>
+                    <input type="text" class="form-control" [(ngModel)]="archive_number" name="archive_number"
+                      (keypress)="onArchiveNumberKeyPress($event)" (ngModelChange)="checkArchiveNumberExists()"
+                      placeholder="{{ 'ARCHIVE.ADD_PATIENT.EXPEDITION' | translate }}" required
+                      [ngClass]="{ 'is-invalid': (submitted && !archive_number.trim()) || (text_validation && text_validation.includes('ya está en uso')) }" />
+
+                    <div class="invalid-feedback" *ngIf="submitted && !archive_number.trim()">{{
+                      'ARCHIVE.ADD_PATIENT.REQUIRED_EXPEDITION' | translate }}</div>
+                    <div class="invalid-feedback" *ngIf="text_validation && text_validation.includes('ya está en uso')"
+                      style="display: block;">
+                      {{ text_validation }}
+                    </div>
+
                   </div>
 
                   <!-- Campo: Nombre -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-id-card me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.FIRST_NAME' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-id-card me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.FIRST_NAME' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <input 
-                      type="text" 
-                      class="form-control" 
-                      [(ngModel)]="name" 
-                      name="name"
-                      (keypress)="onNameKeyPress($event)"
-                      placeholder="{{ 'ARCHIVE.ADD_PATIENT.LETTERS' | translate }}"
-                      required 
-                      [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !name.trim()">{{ 'ARCHIVE.ADD_PATIENT.NAME_REQUIERE' | translate }}</div>
+                    <input type="text" class="form-control" [(ngModel)]="name" name="name"
+                      (keypress)="onNameKeyPress($event)" placeholder="{{ 'ARCHIVE.ADD_PATIENT.LETTERS' | translate }}"
+                      required [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !name.trim()">{{
+                      'ARCHIVE.ADD_PATIENT.NAME_REQUIERE' | translate }}</div>
                   </div>
 
                   <!-- Campo: Apellido paterno -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-id-card me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.FATHER_LAST_NAME' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-id-card me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.FATHER_LAST_NAME' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <input 
-                      type="text" 
-                      class="form-control" 
-                      [(ngModel)]="last_name_father" 
-                      name="last_name_father"
-                      (keypress)="onNameKeyPress($event)"
-                      placeholder="{{ 'ARCHIVE.ADD_PATIENT.LETTERS' | translate }}"
-                      required 
-                      [ngClass]="{ 'is-invalid': submitted && !last_name_father.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !last_name_father.trim()">{{ 'ARCHIVE.ADD_PATIENT.LAST_NAME_REQUIERE' | translate }}</div>
+                    <input type="text" class="form-control" [(ngModel)]="last_name_father" name="last_name_father"
+                      (keypress)="onNameKeyPress($event)" placeholder="{{ 'ARCHIVE.ADD_PATIENT.LETTERS' | translate }}"
+                      required [ngClass]="{ 'is-invalid': submitted && !last_name_father.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !last_name_father.trim()">{{
+                      'ARCHIVE.ADD_PATIENT.LAST_NAME_REQUIERE' | translate }}</div>
                   </div>
 
                   <!-- Campo: Apellido materno -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-id-card me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.MOTHER_LAST_NAME' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-id-card me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.MOTHER_LAST_NAME' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <input 
-                      type="text" 
-                      class="form-control" 
-                      [(ngModel)]="last_name_mother" 
-                      name="last_name_mother"
-                      (keypress)="onNameKeyPress($event)"
-                      placeholder="{{ 'ARCHIVE.ADD_PATIENT.LETTERS' | translate }}"
-                      required 
-                      [ngClass]="{ 'is-invalid': submitted && !last_name_mother.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !last_name_mother.trim()">{{ 'ARCHIVE.ADD_PATIENT.LAST_NAME_REQUIERE2' | translate }}</div>
+                    <input type="text" class="form-control" [(ngModel)]="last_name_mother" name="last_name_mother"
+                      (keypress)="onNameKeyPress($event)" placeholder="{{ 'ARCHIVE.ADD_PATIENT.LETTERS' | translate }}"
+                      required [ngClass]="{ 'is-invalid': submitted && !last_name_mother.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !last_name_mother.trim()">{{
+                      'ARCHIVE.ADD_PATIENT.LAST_NAME_REQUIERE2' | translate }}</div>
                   </div>
 
                   <!-- Campo: Edad -->
                   <div class="col-md-4">
                     <label class="form-label">
-                      <i class="fa fa-birthday-cake me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.AGE' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-birthday-cake me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.AGE' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <input 
-                      type="number" 
-                      class="form-control" 
-                      [(ngModel)]="age" 
-                      name="age"
-                      (keypress)="onAgeKeyPress($event)"
-                      min="0"
-                      max="120"
-                      placeholder="{{ 'ARCHIVE.ADD_PATIENT.NUMBERS' | translate }}"
-                      required 
+                    <input type="number" class="form-control" [(ngModel)]="age" name="age"
+                      (keypress)="onAgeKeyPress($event)" min="0" max="120"
+                      placeholder="{{ 'ARCHIVE.ADD_PATIENT.NUMBERS' | translate }}" required
                       [ngClass]="{ 'is-invalid': submitted && !age }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !age">{{ 'ARCHIVE.ADD_PATIENT.AGE_REQUIRED' | translate }}</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !age">{{ 'ARCHIVE.ADD_PATIENT.AGE_REQUIRED' |
+                      translate }}</div>
                   </div>
 
                   <!-- Campo: Unidad de edad -->
                   <div class="col-md-2">
                     <label class="form-label">
-                      <i class="fa fa-clock me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.AGE_UNIT' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-clock me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.AGE_UNIT' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <select class="form-select form-control" 
-                            [(ngModel)]="age_unit" 
-                            name="age_unit"
-                            required 
-                            [ngClass]="{ 'is-invalid': submitted && !age_unit }">
+                    <select class="form-select form-control" [(ngModel)]="age_unit" name="age_unit" required
+                      [ngClass]="{ 'is-invalid': submitted && !age_unit }">
                       <option value="años">{{ 'ARCHIVE.ADD_PATIENT.YEARS' | translate }}</option>
                       <option value="meses">{{ 'ARCHIVE.ADD_PATIENT.MONTHS' | translate }}</option>
                       <option value="días">{{ 'ARCHIVE.ADD_PATIENT.DAYS' | translate }}</option>
                     </select>
-                    <div class="invalid-feedback" *ngIf="submitted && !age_unit">{{ 'ARCHIVE.ADD_PATIENT.AGE_UNIT_REQUIRED' | translate }}</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !age_unit">{{
+                      'ARCHIVE.ADD_PATIENT.AGE_UNIT_REQUIRED' | translate }}</div>
                   </div>
 
                   <!-- Campo: Género -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-venus-mars me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.GENDER' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-venus-mars me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.GENDER' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <select class="form-select form-control" 
-                            [(ngModel)]="gender_id" 
-                            name="gender_id"
-                            required 
-                            [ngClass]="{ 'is-invalid': submitted && !gender_id }">
+                    <select class="form-select form-control" [(ngModel)]="gender_id" name="gender_id" required
+                      [ngClass]="{ 'is-invalid': submitted && !gender_id }">
                       <option value="">{{ 'ARCHIVE.ADD_PATIENT.SELECT_GENDER' | translate }}</option>
                       <option *ngFor="let g of genders" [value]="g.id">{{ g.name }}</option>
                     </select>
-                    <div class="invalid-feedback" *ngIf="submitted && !gender_id">{{ 'ARCHIVE.ADD_PATIENT.GENDER_REQUIRED' | translate }}</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !gender_id">{{
+                      'ARCHIVE.ADD_PATIENT.GENDER_REQUIRED' | translate }}</div>
                   </div>
                 </div>
               </div>
@@ -173,19 +157,15 @@
                   <!-- Campo: Localidad -->
                   <div class="col-md-4">
                     <label class="form-label">
-                      <i class="fa fa-home me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.LOCATION' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-home me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.LOCATION' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <input 
-                      type="text" 
-                      class="form-control" 
-                      [(ngModel)]="location_text" 
-                      name="location_text"
+                    <input type="text" class="form-control" [(ngModel)]="location_text" name="location_text"
                       (keypress)="onLocationKeyPress($event)"
-                      placeholder="{{ 'ARCHIVE.ADD_PATIENT.LOCATION_PLACEHOLDER' | translate }}"
-                      autocomplete="off"
-                      required 
-                      [ngClass]="{ 'is-invalid': submitted && !location_text.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !location_text.trim()">{{ 'ARCHIVE.ADD_PATIENT.LOCATION_REQUIRED' | translate }}</div>
+                      placeholder="{{ 'ARCHIVE.ADD_PATIENT.LOCATION_PLACEHOLDER' | translate }}" autocomplete="off"
+                      required [ngClass]="{ 'is-invalid': submitted && !location_text.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !location_text.trim()">{{
+                      'ARCHIVE.ADD_PATIENT.LOCATION_REQUIRED' | translate }}</div>
                   </div>
 
                   <!-- Campo: Municipio -->
@@ -193,11 +173,7 @@
                     <label class="form-label">
                       <i class="fa fa-city me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.MUNICIPALITY' | translate }}
                     </label>
-                    <input 
-                      type="text" 
-                      class="form-control" 
-                      [(ngModel)]="municipality_text" 
-                      name="municipality_text"
+                    <input type="text" class="form-control" [(ngModel)]="municipality_text" name="municipality_text"
                       (keypress)="onLocationKeyPress($event)"
                       placeholder="{{ 'ARCHIVE.ADD_PATIENT.MUNICIPALITY_PLACEHOLDER' | translate }}"
                       autocomplete="off" />
@@ -208,14 +184,9 @@
                     <label class="form-label">
                       <i class="fa fa-flag me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.STATE' | translate }}
                     </label>
-                    <input 
-                      type="text" 
-                      class="form-control" 
-                      [(ngModel)]="state_text" 
-                      name="state_text"
+                    <input type="text" class="form-control" [(ngModel)]="state_text" name="state_text"
                       (keypress)="onLocationKeyPress($event)"
-                      placeholder="{{ 'ARCHIVE.ADD_PATIENT.STATE_PLACEHOLDER' | translate }}"
-                      autocomplete="off" />
+                      placeholder="{{ 'ARCHIVE.ADD_PATIENT.STATE_PLACEHOLDER' | translate }}" autocomplete="off" />
                   </div>
                 </div>
               </div>
@@ -234,39 +205,41 @@
                   <!-- Campo: Fecha de admisión -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-calendar me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.ADMISSION_DATE' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-calendar me-1"></i>{{ 'ARCHIVE.ADD_PATIENT.ADMISSION_DATE' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <input type="date" class="form-control" [(ngModel)]="admission_date" name="admission_date"
-                           required [ngClass]="{ 'is-invalid': submitted && !admission_date }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !admission_date">{{ 'ARCHIVE.ADD_PATIENT.ADMISSION_DATE_REQUIRED' | translate }}</div>
+                    <input type="date" class="form-control" [(ngModel)]="admission_date" name="admission_date" required
+                      [ngClass]="{ 'is-invalid': submitted && !admission_date }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !admission_date">{{
+                      'ARCHIVE.ADD_PATIENT.ADMISSION_DATE_REQUIRED' | translate }}</div>
                   </div>
                 </div>
               </div>
 
               <!-- Alerta de éxito -->
               @if (text_success) {
-                <div class="mt-4">
-                  <div class="alert alert-modern alert-success d-flex align-items-center">
-                    <i class="fa fa-check-circle me-3"></i>
-                    <div class="flex-grow-1">
-                      <strong>{{ 'ARCHIVE.ADD_PATIENT.SUCCESS' | translate }}:</strong> {{ text_success }}
-                    </div>
-                    <button type="button" class="btn-close" (click)="text_success = ''"></button>
+              <div class="mt-4">
+                <div class="alert alert-modern alert-success d-flex align-items-center">
+                  <i class="fa fa-check-circle me-3"></i>
+                  <div class="flex-grow-1">
+                    <strong>{{ 'ARCHIVE.ADD_PATIENT.SUCCESS' | translate }}:</strong> {{ text_success }}
                   </div>
+                  <button type="button" class="btn-close" (click)="text_success = ''"></button>
                 </div>
+              </div>
               }
 
               <!-- Alerta de validación/error -->
               @if (text_validation) {
-                <div class="mt-4">
-                  <div class="alert alert-modern alert-warning d-flex align-items-center">
-                    <i class="fa fa-exclamation-triangle me-3"></i>
-                    <div class="flex-grow-1">
-                      <strong>{{ 'ARCHIVE.ADD_PATIENT.WARNING' | translate }}:</strong> {{ text_validation }}
-                    </div>
-                    <button type="button" class="btn-close" (click)="text_validation = ''"></button>
+              <div class="mt-4">
+                <div class="alert alert-modern alert-warning d-flex align-items-center">
+                  <i class="fa fa-exclamation-triangle me-3"></i>
+                  <div class="flex-grow-1">
+                    <strong>{{ 'ARCHIVE.ADD_PATIENT.WARNING' | translate }}:</strong> {{ text_validation }}
                   </div>
+                  <button type="button" class="btn-close" (click)="text_validation = ''"></button>
                 </div>
+              </div>
               }
 
               <!-- Botones de acción -->
@@ -286,10 +259,8 @@
   </div>
 
   <!-- Botón flotante de ayuda para iniciar el tour del formulario -->
-  <button class="tour-help-button" 
-          (click)="startArchiveFormTour()" 
-          title="{{ 'ARCHIVE.ADD_PATIENT.TOUR_HELP_TITLE' | translate }}"
-          type="button">
+  <button class="tour-help-button" (click)="startArchiveFormTour()"
+    title="{{ 'ARCHIVE.ADD_PATIENT.TOUR_HELP_TITLE' | translate }}" type="button">
     <i class="fa fa-question"></i>
   </button>
 </div>

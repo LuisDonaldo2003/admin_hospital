@@ -111,6 +111,18 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
   // Días disponibles para filtro de fecha
   public days: number[] = [];
 
+  // Dirección de ordenamiento
+  public sortDir: 'asc' | 'desc' = 'asc';
+
+  /**
+   * Método para alternar el ordenamiento
+   */
+  public toggleSort(): void {
+    this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+    this.currentPage = 1;
+    this.loadArchives();
+  }
+
   // Catálogos (solo géneros necesarios)
   public genders: CatalogItem[] = [];
 
@@ -253,7 +265,7 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
       dateFrom: this.dateFrom,
       dateTo: this.dateTo
     };
-    this.archiveService.listArchivesWithFilters(filters, skip, this.pageSize)
+    this.archiveService.listArchivesWithFilters(filters, skip, this.pageSize, this.sortDir)
       .pipe(
         catchError(() => {
           // Si ocurre error, retorna lista vacía y total 0
@@ -655,5 +667,39 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
    */
   canDeleteArchive(): boolean {
     return this.permissionService.hasPermission('delete_archive');
+  }
+
+  // --- CONFIGURACIÓN DE FOLIO ---
+  configStartNumber: number | null = null;
+
+  openConfigModal() {
+    this.archiveService.getArchiveConfig().subscribe({
+      next: (res: any) => {
+        this.configStartNumber = res.archive_start_number || null;
+      },
+      error: (err) => {
+        console.error('Error loading config', err);
+      }
+    });
+  }
+
+  saveConfig() {
+    if (this.configStartNumber === null || this.configStartNumber < 0) {
+      // Validación básica
+      return;
+    }
+    this.archiveService.updateArchiveConfig(this.configStartNumber).subscribe({
+      next: (res: any) => {
+        // Cerrar modal (hack simple si no tenemos referencia directa a bootstrap)
+        const closeBtn = document.querySelector('#configModal .btn-close') as HTMLElement;
+        if (closeBtn) closeBtn.click();
+
+        // Refrescar lista si es necesario o mostrar éxito
+        // Swal.fire(...) si estuviera importado, pero usaremos alert por ahora o nada
+      },
+      error: (err) => {
+        console.error('Error saving config', err);
+      }
+    });
   }
 }

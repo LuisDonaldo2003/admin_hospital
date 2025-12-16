@@ -64,7 +64,7 @@ export class EditArchiveComponent implements OnInit {
     private router: Router,
     private translate: TranslateService,
     private driverTourService: DriverTourService
-  ) {}
+  ) { }
 
   /** Inicializa el componente cargando el expediente y los dropdowns. */
   ngOnInit(): void {
@@ -184,4 +184,16 @@ export class EditArchiveComponent implements OnInit {
       }
     });
   }
+
+  /**
+   * Valida en tiempo real el input de número de expediente (solo números).
+   */
+  onArchiveNumberKeyPress(event: KeyboardEvent): boolean {
+    this.text_validation = ''; // Limpiar mensajes de error
+    const pattern = /^[0-9]$/;
+    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+    return pattern.test(event.key) || allowedKeys.includes(event.key);
+  }
+
+
 }

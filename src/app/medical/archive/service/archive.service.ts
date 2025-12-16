@@ -15,7 +15,7 @@ export class ArchiveService {
   constructor(
     public http: HttpClient,
     public authService: AuthService,
-  ) {}
+  ) { }
 
   /**
    * Obtiene los headers de autorización para las peticiones HTTP
@@ -35,10 +35,18 @@ export class ArchiveService {
   }
 
   /**
+   * Verifica si un número de expediente es único
+   */
+  checkUniqueArchiveNumber(archiveNumber: string) {
+    return this.http.get(`${URL_SERVICIOS}/archives/check-unique?archive_number=${archiveNumber}`, { headers: this.getHeaders() });
+  }
+
+  /**
    * Obtiene la lista de archivos filtrados por los parámetros recibidos y paginados
    */
-  listArchivesWithFilters(filters: any, skip: number, limit: number) {
+  listArchivesWithFilters(filters: any, skip: number, limit: number, sortDir: string = 'asc') {
     const queryParams = new URLSearchParams();
+    queryParams.append('sort_dir', sortDir);
     // Solo agregar parámetros que tengan valor para evitar consultas innecesarias
     if (filters.archiveNumberSearch?.trim()) {
       queryParams.append('archive_number', filters.archiveNumberSearch.trim());
@@ -96,10 +104,10 @@ export class ArchiveService {
     // Parámetros de paginación
     queryParams.append('skip', skip.toString());
     queryParams.append('limit', limit.toString());
-    
+
     // Parámetro para búsqueda case-insensitive
     queryParams.append('case_insensitive', 'true');
-    
+
     const URL = `${URL_SERVICIOS}/archives?${queryParams.toString()}`;
     return this.http.get(URL, { headers: this.getHeaders() });
   }
@@ -224,6 +232,14 @@ export class ArchiveService {
   }
 
   /**
+   * Obtiene el siguiente número de expediente disponible y huecos sugeridos
+   */
+  getNextNumber() {
+    const URL = `${URL_SERVICIOS}/archives/next-number`;
+    return this.http.get(URL, { headers: this.getHeaders() });
+  }
+
+  /**
    * Sube un respaldo de archivos
    */
   uploadBackup(formData: FormData) {
@@ -245,5 +261,13 @@ export class ArchiveService {
   downloadBackup(filename: string) {
     const URL = `${URL_SERVICIOS}/archives/backup/download/${filename}`;
     return this.http.get(URL, { headers: this.getHeaders(), responseType: 'blob' });
+  }
+
+  getArchiveConfig() {
+    return this.http.get(`${URL_SERVICIOS}/config/archive`, { headers: this.getHeaders() });
+  }
+
+  updateArchiveConfig(startNumber: number) {
+    return this.http.post(`${URL_SERVICIOS}/config/archive`, { archive_start_number: startNumber }, { headers: this.getHeaders() });
   }
 }
