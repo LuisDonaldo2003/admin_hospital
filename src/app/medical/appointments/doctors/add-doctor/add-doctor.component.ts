@@ -4,10 +4,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { AppointmentsService, Doctor, Especialidad, TipoTurno } from '../../service/appointments.service';
+import { AppointmentsService, Doctor, TipoTurno, AppointmentServiceType } from '../../service/appointments.service';
+import { AppointmentServicesService } from '../../service/appointment-services.service';
 import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 import { PermissionService } from 'src/app/shared/services/permission.service';
-import { GeneralMedicalService, GeneralMedical } from '../../general-medical/service/general-medical.service';
 
 @Component({
   selector: 'app-add-doctor',
@@ -26,16 +26,10 @@ export class AddDoctorComponent implements OnInit {
   @Input() isEditMode: boolean = false;
   doctorId: number | null = null;
 
-  // Propiedades del formulario simplificado
+  // Propiedades del formulario
   nombre_completo: string = '';
-  especialidad_id: number = 0;
-  general_medical_id: number = 0; // Nueva propiedad
+  appointment_service_id: number = 0; // NUEVO: Servicio seleccionado
   turno: TipoTurno = 'Matutino';
-
-  // Flags de permisos
-  isGeneral: boolean = false;
-  isSpecialist: boolean = false;
-
 
   // Horarios
   hora_inicio_matutino: string = '08:00';
@@ -48,8 +42,7 @@ export class AddDoctorComponent implements OnInit {
   loading = false;
 
   // Listas
-  especialidades: Especialidad[] = [];
-  generalMedicals: GeneralMedical[] = []; // Nueva lista
+  servicios: AppointmentServiceType[] = []; // Lista de servicios de citas
   turnosDisponibles: any[] = [
     { value: 'Matutino', label: 'Matutino' },
     { value: 'Vespertino', label: 'Vespertino' },
@@ -65,27 +58,16 @@ export class AddDoctorComponent implements OnInit {
     private route: ActivatedRoute,
     private translate: TranslateService,
     private appointmentsService: AppointmentsService,
+    private appointmentServicesService: AppointmentServicesService, // NUEVO
     private driverTourService: DriverTourService,
-    private permissionService: PermissionService, // Inyectado
-    private generalMedicalService: GeneralMedicalService // Inyectado
+    private permissionService: PermissionService
   ) {
     const selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(selectedLang);
   }
 
   ngOnInit(): void {
-    this.checkPermissions();
-
-    if (this.isGeneral) {
-      this.loadGeneralMedicals();
-    }
-
-    // Si es especialista cargamos especialidades, o si tiene ambos por defecto cargamos especialidades
-    // Si SOLO es general NO cargamos especialidades para evitar confusión, a menos que se quiera híbrido.
-    // Asumiremos que si isSpecialist es true, cargamos.
-    if (this.isSpecialist || !this.isGeneral) {
-      this.loadEspecialidades();
-    }
+    this.loadServicios(); // Cargar servicios disponibles
 
     // Detectar si estamos en modo edición por la ruta
     this.route.params.subscribe(params => {
@@ -110,8 +92,7 @@ export class AddDoctorComponent implements OnInit {
       next: (response: any) => {
         const doctor = response.data;
         this.nombre_completo = doctor.nombre_completo;
-        this.especialidad_id = doctor.especialidad_id || 0;
-        this.general_medical_id = doctor.general_medical_id || 0; // Cargar ID medical
+        this.appointment_service_id = doctor.appointment_service_id || 0;
         this.turno = doctor.turno;
         this.hora_inicio_matutino = doctor.hora_inicio_matutino || '08:00';
         this.hora_fin_matutino = doctor.hora_fin_matutino || '14:00';
@@ -127,90 +108,60 @@ export class AddDoctorComponent implements OnInit {
   }
 
   /**
-   * Cargar especialidades
+   * Cargar servicios de citas disponibles (solo los asignados al usuario)
    */
-  loadEspecialidades(): void {
-    this.appointmentsService.listEspecialidades().subscribe({
+  loadServicios(): void {
+    this.appointmentServicesService.listAccessible().subscribe({
       next: (response) => {
         if (response.success) {
-          this.especialidades = response.data;
+          this.servicios = response.data;
         }
       },
       error: (error) => {
-        console.error('Error al cargar especialidades:', error);
+        console.error('Error al cargar servicios:', error);
       }
     });
   }
 
   /**
-   * Verificar permisos para decidir qué mostrar
-   */
-  checkPermissions(): void {
-    this.isGeneral = this.permissionService.hasPermission('appointments_add_general_medical');
-    this.isSpecialist = this.permissionService.hasPermission('appointments_add_especialidad');
-    // Si no tiene ningun permiso especifico pero es admin, podría ver ambos.
-    // Por defecto si no detectamos roles especificos, mostramos especialidades.
-  }
-
-  /**
-   * Cargar médicos generales (categorías/profesiones)
-   */
-  loadGeneralMedicals(): void {
-    this.generalMedicalService.listGeneralMedicals().subscribe({
-      next: (resp) => {
-        if (resp.success) {
-          this.generalMedicals = resp.data;
-        }
-      },
-      error: (error) => {
-        console.error('Error al cargar médicos generales:', error);
-      }
-    });
-  }
-
-  /**
-   * Validar formulario
+   * Valida el formulario antes de enviar
    */
   validateForm(): boolean {
-    if (!this.nombre_completo || !this.nombre_completo.trim()) {
-      return false;
+    const missingFields: string[] = [];
+
+    if (!this.nombre_completo || this.nombre_completo.trim() === '') {
+      missingFields.push(this.translate.instant('APPOINTMENTS.ADD_DOCTOR.FULL_NAME'));
     }
 
-    // Validación condicional
-    if (this.isGeneral && !this.isSpecialist) {
-      if (!this.general_medical_id || this.general_medical_id === 0) {
-        return false;
-      }
-    } else {
-      // Por defecto o si es Especialista
-      if (!this.especialidad_id || this.especialidad_id === 0) {
-        return false;
-      }
+    if (!this.appointment_service_id || this.appointment_service_id === 0) {
+      missingFields.push('Servicio de cita');
     }
 
     if (!this.turno) {
-      return false;
+      missingFields.push(this.translate.instant('APPOINTMENTS.ADD_DOCTOR.SHIFT'));
     }
 
-    // Validar horarios según turno
-    if (this.turno === 'Matutino' || this.turno === 'Mixto') {
+    // Validar horarios según el turno
+    if (this.turno === 'Matutino' || this.turno === 'Mixto' || this.turno === 'Jornada Acumulada') {
       if (!this.hora_inicio_matutino || !this.hora_fin_matutino) {
-        return false;
-      }
-      if (this.hora_inicio_matutino >= this.hora_fin_matutino) {
-        this.text_validation = this.translate.instant('APPOINTMENTS.ADD_DOCTOR.INVALID_SCHEDULE');
-        return false;
+        missingFields.push(this.translate.instant('APPOINTMENTS.ADD_DOCTOR.MORNING_HOURS'));
       }
     }
 
-    if (this.turno === 'Vespertino' || this.turno === 'Mixto') {
+    if (this.turno === 'Vespertino' || this.turno === 'Mixto' || this.turno === 'Jornada Acumulada') {
       if (!this.hora_inicio_vespertino || !this.hora_fin_vespertino) {
-        return false;
+        missingFields.push(this.translate.instant('APPOINTMENTS.ADD_DOCTOR.AFTERNOON_HOURS'));
       }
-      if (this.hora_inicio_vespertino >= this.hora_fin_vespertino) {
-        this.text_validation = this.translate.instant('APPOINTMENTS.ADD_DOCTOR.INVALID_SCHEDULE');
-        return false;
-      }
+    }
+
+    if (missingFields.length > 0) {
+      const campos = missingFields.join(', ');
+      this.text_validation = this.translate.instant('FIELDS_MISSING', {
+        plural: missingFields.length > 1 ? 'n' : '',
+        sPlural: missingFields.length > 1 ? 's' : '',
+        campos
+      });
+      return false;
     }
 
     return true;
@@ -230,79 +181,61 @@ export class AddDoctorComponent implements OnInit {
   }
 
   /**
-   * Guardar doctor
+   * Guarda el doctor (Create o Update según isEditMode)
    */
-  save(): void {
+  saveDoctor(): void {
     this.submitted = true;
     this.text_validation = '';
     this.text_success = '';
 
     if (!this.validateForm()) {
-      this.text_validation = this.translate.instant('COMMON.FILL_REQUIRED_FIELDS');
       return;
     }
 
-    this.loading = true;
-
-    const doctorData: any = {
-      nombre_completo: this.nombre_completo.trim(),
+    const doctorData: Partial<Doctor> = {
+      nombre_completo: this.nombre_completo,
+      appointment_service_id: this.appointment_service_id,
       turno: this.turno,
+      hora_inicio_matutino: this.formatTimeToHi(this.hora_inicio_matutino),
+      hora_fin_matutino: this.formatTimeToHi(this.hora_fin_matutino),
+      hora_inicio_vespertino: this.formatTimeToHi(this.hora_inicio_vespertino),
+      hora_fin_vespertino: this.formatTimeToHi(this.hora_fin_vespertino),
       activo: true
     };
 
-    if (this.isGeneral && !this.isSpecialist) {
-      doctorData.general_medical_id = this.general_medical_id;
-      doctorData.especialidad_id = null;
-    } else {
-      doctorData.especialidad_id = this.especialidad_id;
-      doctorData.general_medical_id = null;
-    }
+    this.loading = true;
 
-    // Agregar horarios según el turno (formato H:i sin segundos)
-    if (this.turno === 'Matutino' || this.turno === 'Mixto') {
-      doctorData.hora_inicio_matutino = this.formatTimeToHi(this.hora_inicio_matutino);
-      doctorData.hora_fin_matutino = this.formatTimeToHi(this.hora_fin_matutino);
-    }
-
-    if (this.turno === 'Vespertino' || this.turno === 'Mixto') {
-      doctorData.hora_inicio_vespertino = this.formatTimeToHi(this.hora_inicio_vespertino);
-      doctorData.hora_fin_vespertino = this.formatTimeToHi(this.hora_fin_vespertino);
-    }
-
-
-
-    const request = this.isEditMode && this.doctorId
-      ? this.appointmentsService.updateDoctor(this.doctorId, doctorData)
-      : this.appointmentsService.storeDoctor(doctorData);
-
-    request.subscribe({
-      next: (response) => {
-        this.loading = false;
-        if (response.success) {
-          const successKey = this.isEditMode ? 'APPOINTMENTS.ADD_DOCTOR.UPDATE_SUCCESS' : 'APPOINTMENTS.ADD_DOCTOR.SUCCESS';
-          this.text_success = this.translate.instant(successKey);
+    if (this.isEditMode && this.doctorId) {
+      this.appointmentsService.updateDoctor(this.doctorId, doctorData as Doctor).subscribe({
+        next: (response: any) => {
+          this.text_success = this.translate.instant('APPOINTMENTS.ADD_DOCTOR.UPDATE_SUCCESS');
+          this.loading = false;
           setTimeout(() => {
             this.router.navigate(['/appointments/list_doctor']);
           }, 1500);
-        } else {
-          this.text_validation = response.message || this.translate.instant('COMMON.ERROR_OCCURRED');
+        },
+        error: (error: any) => {
+          const errorMsg = error.error?.message || this.translate.instant('ERROR_OCCURRED');
+          this.text_validation = errorMsg;
+          this.loading = false;
         }
-      },
-      error: (error) => {
-        this.loading = false;
-        console.error('Error al guardar doctor:', error);
-        console.error('Datos enviados:', doctorData);
-
-        // Mostrar errores de validación específicos
-        if (error.error?.errors) {
-          const errors = error.error.errors;
-          const errorMessages = Object.keys(errors).map(key => `${key}: ${errors[key].join(', ')}`);
-          this.text_validation = errorMessages.join(' | ');
-        } else {
-          this.text_validation = error.error?.message || this.translate.instant('COMMON.ERROR_OCCURRED');
+      });
+    } else {
+      this.appointmentsService.storeDoctor(doctorData as Doctor).subscribe({
+        next: (response: any) => {
+          this.text_success = this.translate.instant('APPOINTMENTS.ADD_DOCTOR.SUCCESS');
+          this.loading = false;
+          setTimeout(() => {
+            this.router.navigate(['/appointments/list_doctor']);
+          }, 1500);
+        },
+        error: (error: any) => {
+          const errorMsg = error.error?.message || this.translate.instant('ERROR_OCCURRED');
+          this.text_validation = errorMsg;
+          this.loading = false;
         }
-      }
-    });
+      });
+    }
   }
 
   /**
@@ -321,16 +254,6 @@ export class AddDoctorComponent implements OnInit {
     const pattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]$/;
 
     if (!pattern.test(char)) {
-      event.preventDefault();
-    }
-  }
-
-  /**
-   * Permitir solo números
-   */
-  onNumberKeyPress(event: KeyboardEvent): void {
-    const charCode = event.charCode;
-    if (charCode < 48 || charCode > 57) {
       event.preventDefault();
     }
   }

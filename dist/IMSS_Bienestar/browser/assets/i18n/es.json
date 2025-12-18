@@ -210,6 +210,7 @@
       "DOCTORS": {
         "TITLE": "Doctores",
         "LIST": "Lista de Doctores",
+        "ASSIGN_SERVICES": "Asignar Servicios",
         "ADD": "Agregar Doctor",
         "EDIT": "Editar Doctor",
         "DELETE": "Eliminar Doctor"
@@ -411,6 +412,23 @@
       "ERRORS": {
         "LOAD_LICENSE": "Error al cargar la licencia",
         "CONTACT_ADMIN": "No se pudo obtener la información de la licencia. Por favor, contacte al administrador."
+      },
+      "EMAIL_CHANGE": {
+        "TITLE": "Cambiar Correo Electrónico",
+        "REQUEST_DESC": "Introduce tu nueva dirección de correo electrónico. Se enviará un código de verificación a tu correo actual:",
+        "NEW_EMAIL": "Nuevo Correo Electrónico",
+        "PLACEHOLDER": "nombre@ejemplo.com",
+        "CONFIRM_DESC": "Ingresa el código de 8 caracteres que enviamos a tu correo actual para confirmar que eres tú.",
+        "VERIFICATION_CODE": "Código de Verificación",
+        "SEND_CODE": "Siguiente",
+        "CONFIRM_CHANGE": "Confirmar Cambio",
+        "CANCEL": "Cancelar",
+        "SUCCESS_REQUEST": "Código enviado a tu correo actual.",
+        "SUCCESS_CONFIRM": "Correo electrónico actualizado correctamente.",
+        "ERROR_REQUEST": "Error al solicitar el cambio de correo.",
+        "ERROR_CONFIRM": "Código incorrecto o expirado.",
+        "INVALID_EMAIL": "Por favor, ingrese un correo electrónico válido.",
+        "CODE_REQUIRED": "El código debe tener 8 caracteres."
       }
     }
   },
@@ -1827,8 +1845,8 @@
       "MAX_SIZE_PER_FILE": "Tamaño máximo por archivo",
       "ONLY_PDF_ALLOWED": "Solo archivos PDF son permitidos",
       "CURRENT_TOTAL_SIZE": "Total acumulado actual",
-      "PDF_LIMITS_DESC": "Each document can have a maximum size of 10MB",
-      "COURSE_CERTIFICATES": "Course Certificates"
+      "PDF_LIMITS_DESC": "Cada documento puede tener un tamaño máximo de 10MB",
+      "COURSE_CERTIFICATES": "Certificados de Cursos"
     },
     "EDIT_PERSONAL": {
       "BREADCRUMB_PERSONAL": "Personal",
@@ -2879,6 +2897,7 @@
   "DOCTORS_LIST": "Lista de Doctores",
   "ADD_DOCTOR": "Agregar Doctor",
   "EDIT_DOCTOR": "Editar Doctor",
+  "ASSIGN_SERVICES": "Asignar Servicios",
   "DELETE_DOCTOR": "Eliminar Doctor",
   "APPOINTMENTS_LIST": "Lista de Citas",
   "ADD_APPOINTMENT": "Nueva Cita",

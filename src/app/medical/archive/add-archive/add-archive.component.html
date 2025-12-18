@@ -50,8 +50,7 @@
 
                     <div class="invalid-feedback" *ngIf="submitted && !archive_number.trim()">{{
                       'ARCHIVE.ADD_PATIENT.REQUIRED_EXPEDITION' | translate }}</div>
-                    <div class="invalid-feedback" *ngIf="text_validation && text_validation.includes('ya está en uso')"
-                      style="display: block;">
+                    <div class="invalid-feedback" *ngIf="text_validation" style="display: block;">
                       {{ text_validation }}
                     </div>
 

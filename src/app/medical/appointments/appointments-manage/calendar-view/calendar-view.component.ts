@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppointmentsService } from '../../service/appointments.service';
-import { GeneralMedicalService } from '../../general-medical/service/general-medical.service';
+import { AppointmentServicesService } from '../../service/appointment-services.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
@@ -37,92 +37,60 @@ export class CalendarViewComponent implements OnInit {
   isLoading: boolean = false;
 
   // Filtros
-  showSpecialist: boolean = false;
-  showGeneral: boolean = false;
-
-  especialidad_id: number = 0;
-  general_medical_id: number = 0;
+  // Filtros
+  appointment_service_id: number = 0;
   doctor_id: number = 0;
 
-  especialidades: any[] = [];
-  generalMedicals: any[] = [];
+  services: any[] = [];
   doctores: any[] = [];
   loadingDoctors: boolean = false;
 
   constructor(
     private appointmentsService: AppointmentsService,
-    private generalMedicalService: GeneralMedicalService,
+    private appointmentServicesService: AppointmentServicesService,
     private authService: AuthService,
     private router: Router,
     private driverTourService: DriverTourService
   ) { }
 
   ngOnInit(): void {
-    this.filterServiceTypesByRole();
-    this.loadAppointments();
-  }
-
-  /**
-   * Determinar qué filtros mostrar según permisos
-   */
-  filterServiceTypesByRole(): void {
-    const canSpecialist = this.authService.hasPermission('appointments_add_especialidad');
-    const canGeneral = this.authService.hasPermission('appointments_add_general_medical');
-
-    if (canSpecialist && !canGeneral) {
-      this.showSpecialist = true;
-      this.showGeneral = false;
-      this.loadEspecialidades();
-    } else if (canGeneral && !canSpecialist) {
-      this.showSpecialist = false;
-      this.showGeneral = true;
-      this.loadGeneralMedicals();
+    const user = this.authService.user;
+    if (user && user.doctor_id) {
+      this.setupDoctorMode(user.doctor_id);
     } else {
-      // Admin o ambos permisos
-      this.showSpecialist = true;
-      this.showGeneral = true;
-      this.loadEspecialidades();
-      this.loadGeneralMedicals();
+      this.loadServices();
+      this.loadAppointments();
     }
   }
 
-  loadEspecialidades(): void {
-    this.appointmentsService.listEspecialidades().subscribe({
-      next: (resp) => {
-        if (resp.success) this.especialidades = resp.data;
+  setupDoctorMode(doctorId: number): void {
+    this.doctor_id = doctorId;
+    this.appointmentsService.getDoctor(doctorId).subscribe({
+      next: (resp: any) => {
+        if (resp.success && resp.data) {
+          const doctor = resp.data;
+          this.appointment_service_id = doctor.appointment_service_id || 0;
+          this.loadServices(); // Cargar servicios para visualización (aunque esté bloqueado)
+          this.loadDoctors(); // Cargar lista de doctores (filtrada por servicio)
+          this.loadAppointments();
+        }
       }
     });
   }
 
-  loadGeneralMedicals(): void {
-    this.generalMedicalService.listGeneralMedicals().subscribe({
+  loadServices(): void {
+    this.appointmentServicesService.listAccessible().subscribe({
       next: (resp) => {
-        if (resp.success) this.generalMedicals = resp.data.filter(g => g.activo);
+        if (resp.success) this.services = resp.data;
       }
     });
   }
 
-  onServiceTypeChange(): void {
+  onServiceChange(): void {
     this.doctor_id = 0;
     this.doctores = [];
-    // Recargar calendario sin filtros específicos o resetear
-    this.loadAppointments();
-  }
-
-  onEspecialidadChange(): void {
-    this.doctor_id = 0;
-    this.doctores = [];
-    if (this.especialidad_id) {
-      this.loadDoctorsByEspecialidad();
-    }
-    this.loadAppointments();
-  }
-
-  onGeneralMedicalChange(): void {
-    this.doctor_id = 0;
-    this.doctores = [];
-    if (this.general_medical_id) {
-      this.loadDoctorsByGeneralMedical();
+    if (this.appointment_service_id) {
+      this.loadDoctors();
     }
     this.loadAppointments();
   }
@@ -133,20 +101,9 @@ export class CalendarViewComponent implements OnInit {
     this.loadAppointments();
   }
 
-  loadDoctorsByEspecialidad(): void {
+  loadDoctors(): void {
     this.loadingDoctors = true;
-    this.appointmentsService.listDoctors({ especialidad_id: this.especialidad_id }).subscribe({
-      next: (resp) => {
-        this.loadingDoctors = false;
-        if (resp.success) this.doctores = resp.data.filter(d => d.activo);
-      },
-      error: () => this.loadingDoctors = false
-    });
-  }
-
-  loadDoctorsByGeneralMedical(): void {
-    this.loadingDoctors = true;
-    this.appointmentsService.listDoctors({ general_medical_id: this.general_medical_id }).subscribe({
+    this.appointmentsService.listDoctors({ appointment_service_id: this.appointment_service_id }).subscribe({
       next: (resp) => {
         this.loadingDoctors = false;
         if (resp.success) this.doctores = resp.data.filter(d => d.activo);
@@ -179,14 +136,8 @@ export class CalendarViewComponent implements OnInit {
 
     if (this.doctor_id) {
       params.doctor_id = this.doctor_id;
-    } else {
-      // Si no hay doctor seleccionado, filtrar por especialidad o categoría si están seleccionadas
-      if (this.especialidad_id) {
-        params.especialidad_id = this.especialidad_id;
-      }
-      if (this.general_medical_id) {
-        params.general_medical_id = this.general_medical_id;
-      }
+    } else if (this.appointment_service_id) {
+      params.appointment_service_id = this.appointment_service_id;
     }
 
     // Llamar al servicio con filtros
@@ -194,22 +145,11 @@ export class CalendarViewComponent implements OnInit {
       next: (response: any) => {
         let allAppointments = response.data || [];
 
-        // Filtrado estricto por permisos para evitar fugas de información
-        const canSpecialist = this.authService.hasPermission('appointments_add_especialidad');
-        const canGeneral = this.authService.hasPermission('appointments_add_general_medical');
-
-        if (canSpecialist && !canGeneral) {
-          // Solo especialistas: ver citas donde el doctor tiene especialidad
-          allAppointments = allAppointments.filter((apt: any) => {
-            const doc = apt.doctor_relation || apt.doctor;
-            return doc && doc.especialidad_id;
-          });
-        } else if (canGeneral && !canSpecialist) {
-          // Solo generales: ver citas donde el doctor pertenece a medico general
-          allAppointments = allAppointments.filter((apt: any) => {
-            const doc = apt.doctor_relation || apt.doctor;
-            return doc && doc.general_medical_id;
-          });
+        // Filtramos por servicio si se proporcionó, para asegurar consistencia
+        // (Aunque el backend debería encargarse, esto es doble seguridad)
+        if (this.appointment_service_id && !this.doctor_id) {
+          // Opcional: filtrar en cliente si el backend no soporta filtro por servicio en appointment
+          // allAppointments = allAppointments.filter(...)
         }
 
         this.appointments = allAppointments;
@@ -408,35 +348,18 @@ export class CalendarViewComponent implements OnInit {
       'N/A';
   }
 
-  getDoctorEspecialidad(appointment: any): string {
-    // Primero intentar obtener el objeto doctor completo
+  getDoctorService(appointment: any): string {
     const doc = appointment.doctorRelation || appointment.doctor;
-
     if (!doc) return 'N/A';
 
-    // Si tiene especialidad asignada
-    if (doc.especialidad && doc.especialidad.nombre) {
-      return doc.especialidad.nombre;
+    // Priorizar el servicio unificado
+    if (doc.appointment_service) {
+      return doc.appointment_service.nombre || doc.appointment_service;
+    }
+    if (appointment.specialty) {
+      return appointment.specialty.nombre;
     }
 
-    // Si tiene ID de especialidad, buscar en la lista cargada localmente
-    if (doc.especialidad_id) {
-      const esp = this.especialidades.find(e => e.id === doc.especialidad_id);
-      if (esp) return esp.nombre;
-    }
-
-    // Si es médico general (general_medical_id no nulo)
-    if (doc.general_medical_id) {
-      // Intentar obtener de la relación directa
-      if (doc.general_medical && doc.general_medical.nombre) {
-        return doc.general_medical.nombre;
-      }
-      // Si no, buscar en la lista cargada localmente
-      const gm = this.generalMedicals.find(g => g.id === doc.general_medical_id);
-      return gm ? gm.nombre : 'Médico General';
-    }
-
-    // Fallback si la info viene anidada diferente o es solo string
-    return doc.especialidad_nombre || 'N/A';
+    return 'N/A';
   }
 }

@@ -9,7 +9,8 @@
               <a>{{ 'TEACHING_MODULE.ASSISTANTS.BREADCRUMB' | translate }}</a>
             </li>
             <li class="breadcrumb-item active">
-              {{ isEditMode ? ('TEACHING_MODULE.ASSISTANTS.BREADCRUMB_EDIT' | translate) : ('TEACHING_MODULE.ASSISTANTS.BREADCRUMB_NEW' | translate) }}
+              {{ isEditMode ? ('TEACHING_MODULE.ASSISTANTS.BREADCRUMB_EDIT' | translate) :
+              ('TEACHING_MODULE.ASSISTANTS.BREADCRUMB_NEW' | translate) }}
             </li>
           </ol>
         </div>
@@ -27,7 +28,8 @@
               <div class="form-icon mb-3">
                 <i class="fa fa-graduation-cap"></i>
               </div>
-              <h3 class="fw-bold mb-2">{{ isEditMode ? ('TEACHING_MODULE.ASSISTANTS.EDIT_TITLE' | translate) : ('TEACHING_MODULE.ASSISTANTS.ADD_TITLE' | translate) }}</h3>
+              <h3 class="fw-bold mb-2">{{ isEditMode ? ('TEACHING_MODULE.ASSISTANTS.EDIT_TITLE' | translate) :
+                ('TEACHING_MODULE.ASSISTANTS.ADD_TITLE' | translate) }}</h3>
               <p class="text-muted small">{{ 'TEACHING_MODULE.ASSISTANTS.FORM_SUBTITLE' | translate }}</p>
             </div>
 
@@ -43,10 +45,11 @@
                 <div class="row g-3">
                   <div class="col-md-3">
                     <label class="form-label">
-                      <i class="fa fa-user-md me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.PROFESSION' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-user-md me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.PROFESSION' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
                     <select class="form-control form-select" [(ngModel)]="teaching.profesion" name="profesion" required
-                            [ngClass]="{ 'is-invalid': submitted && !teaching.profesion }">
+                      [ngClass]="{ 'is-invalid': submitted && !teaching.profesion }">
                       <option value="">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT' | translate }}</option>
                       <option *ngFor="let prof of profesiones" [value]="prof">{{ prof }}</option>
                     </select>
@@ -56,11 +59,12 @@
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-id-card me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.FULL_NAME' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-id-card me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.FULL_NAME' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control" [(ngModel)]="teaching.nombre" name="nombre" required
-                           [ngClass]="{ 'is-invalid': submitted && !teaching.nombre }"
-                           placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.FULL_NAME_PLACEHOLDER' | translate }}">
+                      [ngClass]="{ 'is-invalid': submitted && !teaching.nombre }"
+                      placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.FULL_NAME_PLACEHOLDER' | translate }}">
                     <div class="invalid-feedback" *ngIf="submitted && !teaching.nombre">
                       El nombre completo es requerido
                     </div>
@@ -70,17 +74,18 @@
                       <i class="fa fa-envelope me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.EMAIL' | translate }}
                     </label>
                     <input type="email" class="form-control" [(ngModel)]="teaching.correo" name="correo"
-                           placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.EMAIL_PLACEHOLDER' | translate }}">
+                      placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.EMAIL_PLACEHOLDER' | translate }}">
                   </div>
                 </div>
 
                 <div class="row g-3 mt-2">
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-hospital me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.AREA' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-hospital me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.AREA' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
                     <select class="form-control form-select" [(ngModel)]="teaching.area" name="area" required
-                            [ngClass]="{ 'is-invalid': submitted && !teaching.area }">
+                      [ngClass]="{ 'is-invalid': submitted && !teaching.area }">
                       <option value="">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_AREA' | translate }}</option>
                       <option *ngFor="let area of areas" [value]="area">{{ area }}</option>
                     </select>
@@ -92,15 +97,15 @@
                     <label class="form-label">
                       <i class="fa fa-file-alt me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.EI' | translate }}
                     </label>
-                    <input type="text" class="form-control" [(ngModel)]="teaching.ei" name="ei" 
-                           placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.EI_PLACEHOLDER' | translate }}">
+                    <input type="text" class="form-control" [(ngModel)]="teaching.ei" name="ei"
+                      placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.EI_PLACEHOLDER' | translate }}">
                   </div>
                   <div class="col-md-3">
                     <label class="form-label">
                       <i class="fa fa-file-alt me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.EF' | translate }}
                     </label>
-                    <input type="text" class="form-control" [(ngModel)]="teaching.ef" name="ef" 
-                           placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.EF_PLACEHOLDER' | translate }}">
+                    <input type="text" class="form-control" [(ngModel)]="teaching.ef" name="ef"
+                      placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.EF_PLACEHOLDER' | translate }}">
                   </div>
                 </div>
               </div>
@@ -108,22 +113,23 @@
               <!-- Separador -->
               <div class="form-divider my-4"></div>
 
-              <!-- Sección: Detalles del Evento -->
-              <div class="form-section">
+              <!-- Sección: Detalles del Evento (Solo visible en creación - Para editar eventos usar el historial) -->
+              <div class="form-section" *ngIf="!isEditMode">
                 <div class="section-header mb-3">
                   <h5 class="section-title">
-                    <i class="fa fa-calendar-check me-2"></i>{{ 'TEACHING_MODULE.ASSISTANTS.EVENT_DETAILS' | translate }}
+                    <i class="fa fa-calendar-check me-2"></i>{{ 'TEACHING_MODULE.ASSISTANTS.EVENT_DETAILS' | translate
+                    }}
                   </h5>
                 </div>
                 <div class="row g-3">
                   <div class="col-12">
                     <label class="form-label">
-                      <i class="fa fa-bullhorn me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.EVENT_NAME' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-bullhorn me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.EVENT_NAME' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <input type="text" class="form-control" [(ngModel)]="teaching.nombre_evento" 
-                           name="nombre_evento" required
-                           [ngClass]="{ 'is-invalid': submitted && !teaching.nombre_evento }"
-                           placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.EVENT_NAME_PLACEHOLDER' | translate }}">
+                    <input type="text" class="form-control" [(ngModel)]="teaching.nombre_evento" name="nombre_evento"
+                      required [ngClass]="{ 'is-invalid': submitted && !teaching.nombre_evento }"
+                      placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.EVENT_NAME_PLACEHOLDER' | translate }}">
                     <div class="invalid-feedback" *ngIf="submitted && !teaching.nombre_evento">
                       El nombre del evento es requerido
                     </div>
@@ -135,15 +141,16 @@
                     <label class="form-label">
                       <i class="fa fa-comment me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.THEME' | translate }}
                     </label>
-                    <input type="text" class="form-control" [(ngModel)]="teaching.tema" 
-                           name="tema" placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.THEME_PLACEHOLDER' | translate }}">
+                    <input type="text" class="form-control" [(ngModel)]="teaching.tema" name="tema"
+                      placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.THEME_PLACEHOLDER' | translate }}">
                   </div>
                   <div class="col-md-4">
                     <label class="form-label">
-                      <i class="fa fa-calendar me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.DATE' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-calendar me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.DATE' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
                     <input type="date" class="form-control" [(ngModel)]="teaching.fecha" name="fecha" required
-                           [ngClass]="{ 'is-invalid': submitted && !teaching.fecha }">
+                      [ngClass]="{ 'is-invalid': submitted && !teaching.fecha }">
                     <div class="invalid-feedback" *ngIf="submitted && !teaching.fecha">
                       La fecha es requerida
                     </div>
@@ -153,11 +160,13 @@
                 <div class="row g-3 mt-2">
                   <div class="col-md-4">
                     <label class="form-label">
-                      <i class="fa fa-desktop me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_MODALITY' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-desktop me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_MODALITY' | translate }}
+                      <span class="text-danger">*</span>
                     </label>
-                    <select class="form-control form-select" [(ngModel)]="teaching.modalidad_id" name="modalidad_id" required
-                            [ngClass]="{ 'is-invalid': submitted && !teaching.modalidad_id }">
-                      <option [ngValue]="undefined">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_MODALITY' | translate }}</option>
+                    <select class="form-control form-select" [(ngModel)]="teaching.modalidad_id" name="modalidad_id"
+                      required [ngClass]="{ 'is-invalid': submitted && !teaching.modalidad_id }">
+                      <option [ngValue]="undefined">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_MODALITY' | translate }}
+                      </option>
                       <option *ngFor="let modalidad of modalidades" [ngValue]="modalidad.id">
                         {{ modalidad.nombre }}
                       </option>
@@ -168,11 +177,14 @@
                   </div>
                   <div class="col-md-4">
                     <label class="form-label">
-                      <i class="fa fa-users me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_PARTICIPATION' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-users me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_PARTICIPATION' | translate
+                      }} <span class="text-danger">*</span>
                     </label>
-                    <select class="form-control form-select" [(ngModel)]="teaching.participacion_id" name="participacion_id" required
-                            [ngClass]="{ 'is-invalid': submitted && !teaching.participacion_id }">
-                      <option [ngValue]="undefined">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_PARTICIPATION' | translate }}</option>
+                    <select class="form-control form-select" [(ngModel)]="teaching.participacion_id"
+                      name="participacion_id" required
+                      [ngClass]="{ 'is-invalid': submitted && !teaching.participacion_id }">
+                      <option [ngValue]="undefined">{{ 'TEACHING_MODULE.ASSISTANTS.SELECT_PARTICIPATION' | translate }}
+                      </option>
                       <option *ngFor="let participacion of participaciones" [ngValue]="participacion.id">
                         {{ participacion.nombre }}
                       </option>
@@ -183,11 +195,12 @@
                   </div>
                   <div class="col-md-4">
                     <label class="form-label">
-                      <i class="fa fa-clock me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.HOURS' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-clock me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.HOURS' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <input type="text" class="form-control" [(ngModel)]="teaching.horas" 
-                           name="horas" placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.HOURS_PLACEHOLDER' | translate }}" required
-                           [ngClass]="{ 'is-invalid': submitted && !teaching.horas }">
+                    <input type="text" class="form-control" [(ngModel)]="teaching.horas" name="horas"
+                      placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.HOURS_PLACEHOLDER' | translate }}" required
+                      [ngClass]="{ 'is-invalid': submitted && !teaching.horas }">
                     <div class="invalid-feedback" *ngIf="submitted && !teaching.horas">
                       Las horas son requeridas
                     </div>
@@ -208,23 +221,24 @@
                 <div class="row g-3">
                   <div class="col-md-9">
                     <label class="form-label">
-                      <i class="fa fa-map-marker-alt me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.ADSCRIPTION' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-map-marker-alt me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.ADSCRIPTION' | translate
+                      }} <span class="text-danger">*</span>
                     </label>
-                    <input type="text" class="form-control" [(ngModel)]="teaching.adscripcion" 
-                           name="adscripcion" required 
-                           [ngClass]="{ 'is-invalid': submitted && !teaching.adscripcion }"
-                           placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.ADSCRIPTION_PLACEHOLDER' | translate }}">
+                    <input type="text" class="form-control" [(ngModel)]="teaching.adscripcion" name="adscripcion"
+                      required [ngClass]="{ 'is-invalid': submitted && !teaching.adscripcion }"
+                      placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.ADSCRIPTION_PLACEHOLDER' | translate }}">
                     <div class="invalid-feedback" *ngIf="submitted && !teaching.adscripcion">
                       La adscripción es requerida
                     </div>
                   </div>
                   <div class="col-md-3">
                     <label class="form-label">
-                      <i class="fa fa-file-invoice me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.FOJA' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-file-invoice me-1"></i>{{ 'TEACHING_MODULE.ASSISTANTS.FOJA' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <input type="text" class="form-control" [(ngModel)]="teaching.foja" 
-                           name="foja" placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.FOJA_PLACEHOLDER' | translate }}" required
-                           [ngClass]="{ 'is-invalid': submitted && !teaching.foja }">
+                    <input type="text" class="form-control" [(ngModel)]="teaching.foja" name="foja"
+                      placeholder="{{ 'TEACHING_MODULE.ASSISTANTS.FOJA_PLACEHOLDER' | translate }}" required
+                      [ngClass]="{ 'is-invalid': submitted && !teaching.foja }">
                     <div class="invalid-feedback" *ngIf="submitted && !teaching.foja">
                       La foja es requerida
                     </div>
@@ -249,7 +263,9 @@
                   <i class="fa fa-times me-2"></i>{{ 'TEACHING_MODULE.ASSISTANTS.CANCEL' | translate }}
                 </button>
                 <button type="button" class="btn btn-save" (click)="validateAndSave()" [disabled]="loading">
-                  <i class="fa fa-save me-2"></i>{{ loading ? ('TEACHING_MODULE.ASSISTANTS.SAVING' | translate) : (isEditMode ? ('TEACHING_MODULE.ASSISTANTS.UPDATE' | translate) : ('TEACHING_MODULE.ASSISTANTS.SAVE' | translate)) }}
+                  <i class="fa fa-save me-2"></i>{{ loading ? ('TEACHING_MODULE.ASSISTANTS.SAVING' | translate) :
+                  (isEditMode ? ('TEACHING_MODULE.ASSISTANTS.UPDATE' | translate) : ('TEACHING_MODULE.ASSISTANTS.SAVE' |
+                  translate)) }}
                 </button>
               </div>
             </form>
@@ -264,13 +280,176 @@
         </div>
       </div>
     </div>
+
+    <!-- Sección: Historial de Eventos (Solo visible en edición) -->
+    <div class="row justify-content-center mt-4" *ngIf="isEditMode">
+      <div class="col-lg-11 col-xl-10">
+        <div class="card card-list shadow border-0">
+          <div class="card-body p-4">
+            <div class="header-history d-flex justify-content-between align-items-center mb-4">
+              <h5 class="fw-bold mb-0">
+                <i class="fa fa-history me-2"></i>Historial de Eventos
+              </h5>
+              <button class="btn btn-add-event" (click)="openEventModal()" data-bs-toggle="modal"
+                data-bs-target="#add_event_modal">
+                <i class="fa fa-plus me-1"></i>Agregar Evento
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr class="text-center">
+                    <th>Evento</th>
+                    <th>Tema</th>
+                    <th>Fecha</th>
+                    <th>Modalidad</th>
+                    <th>Participación</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let event of eventsList">
+                    <td>{{ event.nombre_evento }}</td>
+                    <td>
+                      <span class="badge rounded-pill bg-light text-dark border">{{ event.tema || 'N/A' }}</span>
+                    </td>
+                    <td>{{ event.fecha | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ getModalidadName(event.modalidad_id) }}</td>
+                    <td>{{ getParticipacionName(event.participacion_id) }}</td>
+                    <td class="text-center">
+                      <div class="d-flex justify-content-center gap-2">
+                        <button class="btn btn-sm btn-delete" (click)="selectEvent(event)" data-bs-toggle="modal"
+                          data-bs-target="#delete_event" title="Eliminar">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr *ngIf="eventsList.length === 0">
+                    <td colspan="6" class="text-center py-4 text-muted">
+                      No hay eventos registrados en el historial
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal para Agregar Evento -->
+<div class="modal fade" id="add_event_modal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content card-list border-0">
+      <div class="modal-header border-0 pb-0 px-4 pt-4 d-flex flex-column align-items-center position-relative">
+        <h5 class="modal-title fw-bold text-center w-100" id="addEventModalLabel">
+          <i class="fa fa-calendar-plus me-2"></i>Agregar Nuevo Evento
+        </h5>
+        <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"
+          aria-label="Close" (click)="closeEventModal()"></button>
+      </div>
+      <div class="modal-body px-4 pb-4">
+        <!-- Alerta de validación específica del modal -->
+        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert" *ngIf="modal_validation">
+          <strong>¡Atención!</strong> {{ modal_validation }}
+          <button type="button" class="btn-close" (click)="modal_validation = ''" aria-label="Close"></button>
+        </div>
+
+        <form>
+          <div class="row g-3">
+            <div class="col-md-12">
+              <label class="form-label">
+                <i class="fa fa-bullhorn me-1"></i>Nombre del Evento <span class="text-danger">*</span>
+              </label>
+              <input type="text" class="form-control" name="nombre_evento" [(ngModel)]="newEvent.nombre_evento"
+                placeholder="Ej. Congreso Internacional de Medicina">
+            </div>
+            <div class="col-md-8">
+              <label class="form-label">
+                <i class="fa fa-comment me-1"></i>Tema
+              </label>
+              <input type="text" class="form-control" name="tema" [(ngModel)]="newEvent.tema"
+                placeholder="Ej. Nuevas técnicas quirúrgicas">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">
+                <i class="fa fa-calendar me-1"></i>Fecha <span class="text-danger">*</span>
+              </label>
+              <input type="date" class="form-control" name="fecha" [(ngModel)]="newEvent.fecha">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">
+                <i class="fa fa-handshake me-1"></i>Modalidad <span class="text-danger">*</span>
+              </label>
+              <select class="form-control form-select" name="modalidad_id" [(ngModel)]="newEvent.modalidad_id">
+                <option value="">Seleccione...</option>
+                <option *ngFor="let mod of modalidades" [value]="mod.id">{{ mod.nombre }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">
+                <i class="fa fa-user-tag me-1"></i>Participación <span class="text-danger">*</span>
+              </label>
+              <select class="form-control form-select" name="participacion_id" [(ngModel)]="newEvent.participacion_id">
+                <option value="">Seleccione...</option>
+                <option *ngFor="let part of participaciones" [value]="part.id">{{ part.nombre }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">
+                <i class="fa fa-clock me-1"></i>Horas
+              </label>
+              <input type="number" class="form-control" name="horas" [(ngModel)]="newEvent.horas" placeholder="0">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">
+                <i class="fa fa-file-alt me-1"></i>Foja
+              </label>
+              <input type="text" class="form-control" name="foja" [(ngModel)]="newEvent.foja" placeholder="N/A">
+            </div>
+          </div>
+          <div class="d-flex justify-content-center gap-3 mt-4">
+            <button type="button" class="btn btn-modal-dismiss" (click)="closeEventModal()" data-bs-dismiss="modal">
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-modal-save" (click)="saveEvent()" [disabled]="loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+              {{ loading ? 'Guardando...' : 'Guardar Evento' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Eliminación para confirmar borrado de evento -->
+<div class="modal fade" id="delete_event" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-body text-center p-4">
+        <!-- Imagen de advertencia -->
+        <img src="assets/img/sent.png" alt="" width="50" height="46" />
+        <!-- Mensaje de confirmación -->
+        <h5 class="mt-3" *ngIf="event_selected">
+          ¿Está seguro que desea eliminar el registro de <strong>{{ event_selected.nombre_evento }}</strong>?
+        </h5>
+        <div class="mt-4 d-flex justify-content-center gap-3">
+          <button class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-danger" (click)="deleteEvent()" data-bs-dismiss="modal">Eliminar</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- Botón flotante de ayuda para iniciar el tour -->
-<button class="tour-help-button" 
-        (click)="startEditAssistantTour()" 
-        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
-        type="button">
+<button class="tour-help-button" (click)="startEditAssistantTour()" title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+  type="button">
   <i class="fa fa-question"></i>
 </button>

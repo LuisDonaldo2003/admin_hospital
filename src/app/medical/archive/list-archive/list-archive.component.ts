@@ -668,38 +668,4 @@ export class ListArchiveComponent implements OnInit, OnDestroy {
   canDeleteArchive(): boolean {
     return this.permissionService.hasPermission('delete_archive');
   }
-
-  // --- CONFIGURACIÓN DE FOLIO ---
-  configStartNumber: number | null = null;
-
-  openConfigModal() {
-    this.archiveService.getArchiveConfig().subscribe({
-      next: (res: any) => {
-        this.configStartNumber = res.archive_start_number || null;
-      },
-      error: (err) => {
-        console.error('Error loading config', err);
-      }
-    });
-  }
-
-  saveConfig() {
-    if (this.configStartNumber === null || this.configStartNumber < 0) {
-      // Validación básica
-      return;
-    }
-    this.archiveService.updateArchiveConfig(this.configStartNumber).subscribe({
-      next: (res: any) => {
-        // Cerrar modal (hack simple si no tenemos referencia directa a bootstrap)
-        const closeBtn = document.querySelector('#configModal .btn-close') as HTMLElement;
-        if (closeBtn) closeBtn.click();
-
-        // Refrescar lista si es necesario o mostrar éxito
-        // Swal.fire(...) si estuviera importado, pero usaremos alert por ahora o nada
-      },
-      error: (err) => {
-        console.error('Error saving config', err);
-      }
-    });
-  }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import { routes } from 'src/app/shared/routes/routes';
 import { ProfileService } from './service/profile.service';
 import { CommonModule } from '@angular/common';
@@ -8,11 +9,11 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { URL_SERVICIOS } from 'src/app/config/config';
 
 @Component({
-    selector: 'app-profile',
-    standalone: true,
-    imports: [CommonModule, RouterModule, TranslateModule], 
-    templateUrl: './profile.component.html',
-    styleUrls: ['./profile.component.scss'],
+  selector: 'app-profile',
+  standalone: true,
+  imports: [CommonModule, RouterModule, TranslateModule, FormsModule],
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
   // Datos del perfil del usuario
@@ -26,6 +27,15 @@ export class ProfileComponent implements OnInit {
   public routes = routes;
   // Idioma seleccionado
   public selectedLang: string;
+
+  // Variables para cambio de correo
+  public showEmailModal = false;
+  public emailStep: 'request' | 'confirm' = 'request';
+  public newEmail = '';
+  public verificationCode = '';
+  public emailError = '';
+  public emailSuccess = '';
+  public emailLoading = false;
 
   // Inyecta el servicio de perfil y el de traducción
   constructor(
@@ -130,5 +140,79 @@ export class ProfileComponent implements OnInit {
       return 'Mensual';
     }
     return 'Limitada';
+  }
+
+  /**
+   * Abre el modal de cambio de correo
+   */
+  openEmailModal(): void {
+    this.showEmailModal = true;
+    this.emailStep = 'request';
+    this.newEmail = '';
+    this.verificationCode = '';
+    this.emailError = '';
+    this.emailSuccess = '';
+  }
+
+  /**
+   * Cierra el modal de cambio de correo
+   */
+  closeEmailModal(): void {
+    this.showEmailModal = false;
+  }
+
+  /**
+   * Inicia la solicitud de cambio de correo
+   */
+  requestEmailChange(): void {
+    if (!this.newEmail || !this.newEmail.includes('@')) {
+      this.emailError = 'Por favor, ingrese un correo electrónico válido.';
+      return;
+    }
+
+    this.emailLoading = true;
+    this.emailError = '';
+
+    this.profileService.requestEmailChange(this.newEmail).subscribe({
+      next: (resp: any) => {
+        this.emailLoading = false;
+        this.emailStep = 'confirm';
+        this.emailSuccess = resp.message || 'Código enviado a tu correo actual.';
+      },
+      error: (err: any) => {
+        this.emailLoading = false;
+        this.emailError = err.error?.message || 'Error al solicitar el cambio de correo.';
+      }
+    });
+  }
+
+  /**
+   * Confirma el cambio de correo con el código
+   */
+  confirmEmailChange(): void {
+    if (!this.verificationCode || this.verificationCode.length !== 8) {
+      this.emailError = 'El código debe tener 8 caracteres.';
+      return;
+    }
+
+    this.emailLoading = true;
+    this.emailError = '';
+
+    this.profileService.confirmEmailChange(this.verificationCode).subscribe({
+      next: (resp: any) => {
+        this.emailLoading = false;
+        this.emailSuccess = resp.message || 'Correo actualizado correctamente.';
+
+        // Actualizar localmente y cerrar después de un delay
+        setTimeout(() => {
+          this.getProfileData(); // Recargar datos
+          this.closeEmailModal();
+        }, 2000);
+      },
+      error: (err: any) => {
+        this.emailLoading = false;
+        this.emailError = err.error?.message || 'Código incorrecto o expirado.';
+      }
+    });
   }
 }

@@ -37,4 +37,24 @@ export class ProfileService {
     let URL = `${URL_SERVICIOS}/users/profile_avatar/${userId}`;
     return this.http.put(URL, data, { headers: headers });
   }
+
+  /**
+   * Solicita un cambio de correo electrónico
+   * @param newEmail Nuevo correo solicitado
+   */
+  requestEmailChange(newEmail: string) {
+    let headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.authService.token });
+    let URL = `${URL_SERVICIOS}/auth/request-email-change`;
+    return this.http.post(URL, { new_email: newEmail }, { headers: headers });
+  }
+
+  /**
+   * Confirma el cambio de correo electrónico con el código recibido
+   * @param code Código de verificación de 8 caracteres
+   */
+  confirmEmailChange(code: string) {
+    let headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.authService.token });
+    let URL = `${URL_SERVICIOS}/auth/confirm-email-change`;
+    return this.http.post(URL, { code: code }, { headers: headers });
+  }
 }

@@ -529,6 +529,9 @@ export class routes {
   public static get editDoctors(): string {
     return this.baseUrl + '/appointments/edit_doctor';
   }
+  public static get assignServices(): string {
+    return this.baseUrl + '/appointments/assign-services';
+  }
 
   // Appointments
   public static get appointmentsList(): string {
@@ -544,28 +547,6 @@ export class routes {
   // Calendar
   public static get appointmentsCalendar(): string {
     return this.baseUrl + '/appointments/calendar';
-  }
-
-  // Especialidades
-  public static get especialidadesList(): string {
-    return this.baseUrl + '/appointments/especialidades/list';
-  }
-  public static get addEspecialidad(): string {
-    return this.baseUrl + '/appointments/especialidades/add';
-  }
-  public static get editEspecialidad(): string {
-    return this.baseUrl + '/appointments/especialidades/edit';
-  }
-
-  // General Medicals
-  public static get generalMedicalsList(): string {
-    return this.baseUrl + '/appointments/general-medicals/list';
-  }
-  public static get addGeneralMedical(): string {
-    return this.baseUrl + '/appointments/general-medicals/add';
-  }
-  public static get editGeneralMedical(): string {
-    return this.baseUrl + '/appointments/general-medicals/edit';
   }
 
   // Cancelled Appointments

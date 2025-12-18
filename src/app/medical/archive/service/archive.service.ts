@@ -262,12 +262,4 @@ export class ArchiveService {
     const URL = `${URL_SERVICIOS}/archives/backup/download/${filename}`;
     return this.http.get(URL, { headers: this.getHeaders(), responseType: 'blob' });
   }
-
-  getArchiveConfig() {
-    return this.http.get(`${URL_SERVICIOS}/config/archive`, { headers: this.getHeaders() });
-  }
-
-  updateArchiveConfig(startNumber: number) {
-    return this.http.post(`${URL_SERVICIOS}/config/archive`, { archive_start_number: startNumber }, { headers: this.getHeaders() });
-  }
 }

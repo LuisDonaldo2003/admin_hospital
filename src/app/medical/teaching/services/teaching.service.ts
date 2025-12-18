@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import {
-  Teaching,
+  TeachingAssistant,
+  TeachingEvent,
   Evaluacion,
   Modalidad,
   Participacion,
@@ -44,7 +45,7 @@ export class TeachingService {
     page: number = 1,
     perPage: number = 10,
     filters?: TeachingFilters
-  ): Observable<PaginatedResponse<Teaching>> {
+  ): Observable<PaginatedResponse<TeachingAssistant>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('per_page', perPage.toString());
@@ -59,35 +60,49 @@ export class TeachingService {
       if (filters.sort_direction) params = params.set('sort_direction', filters.sort_direction);
     }
 
-    return this.http.get<PaginatedResponse<Teaching>>(this.apiUrl, { params, headers: this.getHeaders() });
+    return this.http.get<PaginatedResponse<TeachingAssistant>>(this.apiUrl, { params, headers: this.getHeaders() });
   }
 
   /**
    * Obtener un registro de enseñanza por ID
    */
-  getTeaching(id: number): Observable<ApiResponse<Teaching>> {
-    return this.http.get<ApiResponse<Teaching>>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
+  getTeaching(id: number): Observable<ApiResponse<TeachingAssistant>> {
+    return this.http.get<ApiResponse<TeachingAssistant>>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
   /**
    * Crear nuevo registro de enseñanza
    */
-  createTeaching(teaching: Teaching): Observable<ApiResponse<Teaching>> {
-    return this.http.post<ApiResponse<Teaching>>(this.apiUrl, teaching, { headers: this.getHeaders() });
+  createTeaching(teaching: any): Observable<ApiResponse<TeachingAssistant>> {
+    return this.http.post<ApiResponse<TeachingAssistant>>(this.apiUrl, teaching, { headers: this.getHeaders() });
   }
 
   /**
    * Actualizar registro de enseñanza
    */
-  updateTeaching(id: number, teaching: Teaching): Observable<ApiResponse<Teaching>> {
-    return this.http.put<ApiResponse<Teaching>>(`${this.apiUrl}/${id}`, teaching, { headers: this.getHeaders() });
+  updateTeaching(id: number, teaching: any): Observable<ApiResponse<TeachingAssistant>> {
+    return this.http.put<ApiResponse<TeachingAssistant>>(`${this.apiUrl}/${id}`, teaching, { headers: this.getHeaders() });
   }
 
   /**
-   * Eliminar registro de enseñanza
+   * Eliminar registro de enseñanza (Asistente)
    */
   deleteTeaching(id: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
+  }
+
+  /**
+   * Eliminar evento individual
+   */
+  deleteTeachingEvent(id: number): Observable<ApiResponse<void>> {
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/events/${id}`, { headers: this.getHeaders() });
+  }
+
+  /**
+   * Agregar evento a un asistente existente
+   */
+  createEvent(assistantId: number, event: any): Observable<ApiResponse<TeachingEvent>> {
+    return this.http.post<ApiResponse<TeachingEvent>>(`${this.apiUrl}/${assistantId}/events`, event, { headers: this.getHeaders() });
   }
 
   // ==================== Estadísticas ====================

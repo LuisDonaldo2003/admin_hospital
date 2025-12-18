@@ -24,23 +24,16 @@
                       [(ngModel)]="searchTerm" (ngModelChange)="filterDoctors()">
                     <i class="fa fa-search search-icon"></i>
                   </div>
-                  <!-- Filtro Especialidad -->
-                  <div class="role-filter-box" *ngIf="showSpecialist">
-                    <select class="form-select white-select" [(ngModel)]="filtroEspecialidad"
+
+                  <!-- Filtro Único de Servicio -->
+                  <div class="role-filter-box">
+                    <select class="form-select white-select" [(ngModel)]="filtroService"
                       (ngModelChange)="filterDoctors()">
-                      <option value="">{{ 'APPOINTMENTS.LIST_DOCTORS.ALL_SPECIALTIES' | translate }}</option>
-                      <option *ngFor="let esp of especialidades" [value]="esp.id">{{ esp.nombre }}</option>
+                      <option value="">Todas los Servicios</option>
+                      <option *ngFor="let s of services" [value]="s.id">{{ s.nombre }}</option>
                     </select>
                   </div>
 
-                  <!-- Filtro General Medical -->
-                  <div class="role-filter-box" *ngIf="showGeneral">
-                    <select class="form-select white-select" [(ngModel)]="filtroGeneralMedical"
-                      (ngModelChange)="filterDoctors()">
-                      <option value="">{{ 'APPOINTMENTS.ADD_APPOINTMENT.GENERAL_MEDICAL' | translate }} (Todas)</option>
-                      <option *ngFor="let gm of generalMedicals" [value]="gm.id">{{ gm.nombre }}</option>
-                    </select>
-                  </div>
                 </div>
                 <a [routerLink]="['/appointments/add_doctor']" class="btn btn-options d-flex align-items-center gap-1">
                   <i class="fa fa-plus"></i> <span class="d-none d-sm-inline">{{ 'APPOINTMENTS.LIST_DOCTORS.ADD_DOCTOR'
@@ -120,7 +113,7 @@
                           <i class="fa fa-pen"></i>
                         </button>
                         <button class="btn btn-sm btn-delete" (click)="selectDoctor(doctor)" data-bs-toggle="modal"
-                          data-bs-target="#deleteModal" [title]="'APPOINTMENTS.LIST_DOCTORS.DELETE' | translate">
+                          data-bs-target="#delete_doctor" [title]="'APPOINTMENTS.LIST_DOCTORS.DELETE' | translate">
                           <i class="fa fa-trash"></i>
                         </button>
                       </div>
@@ -165,31 +158,27 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="deleteModal" tabindex="-1">
+<!-- Modal: Eliminar Doctor -->
+<div class="modal fade" id="delete_doctor" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header border-0">
-        <h5 class="modal-title"><i class="fa fa-exclamation-triangle text-warning me-2"></i>{{
-          'APPOINTMENTS.LIST_DOCTORS.CONFIRM_DELETE' | translate }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <p>{{ 'APPOINTMENTS.LIST_DOCTORS.DELETE_CONFIRMATION' | translate }}</p>
-        <div class="alert alert-warning d-flex align-items-center" *ngIf="selectedDoctor">
-          <i class="fa fa-user-md fa-2x me-3"></i>
-          <div>
-            <strong>{{ selectedDoctor.nombre_completo }}</strong><br>
-            <small class="text-muted">{{ selectedDoctor.especialidad?.nombre }}</small>
-          </div>
+      <div class="modal-body text-center p-4">
+        <img src="assets/img/sent.png" alt="Eliminar" class="img-fluid mb-3" style="max-width: 120px;">
+        <h3 class="mb-3">{{ 'APPOINTMENTS.LIST_DOCTORS.CONFIRM_DELETE' | translate }}</h3>
+        <p class="text-muted mb-4">
+          {{ 'APPOINTMENTS.LIST_DOCTORS.DELETE_CONFIRMATION' | translate }}
+          @if (selectedDoctor) {
+          <br><strong>{{ selectedDoctor.nombre_completo }}</strong>
+          }
+        </p>
+        <div class="d-flex gap-2 justify-content-center">
+          <button type="button" class="btn btn-cancel px-4" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>{{ 'COMMON.NO' | translate }}
+          </button>
+          <button type="button" class="btn btn-save px-4" (click)="confirmDelete()" data-bs-dismiss="modal">
+            <i class="fas fa-check me-2"></i>{{ 'COMMON.YES_DELETE' | translate }}
+          </button>
         </div>
-        <p class="text-danger small mb-0"><i class="fa fa-exclamation-circle me-1"></i>{{
-          'APPOINTMENTS.LIST_DOCTORS.DELETE_WARNING' | translate }}</p>
-      </div>
-      <div class="modal-footer border-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times me-1"></i>{{
-          'COMMON.CANCEL' | translate }}</button>
-        <button type="button" class="btn btn-danger" (click)="confirmDelete()" data-bs-dismiss="modal"><i
-            class="fa fa-trash me-1"></i>{{ 'APPOINTMENTS.LIST_DOCTORS.DELETE' | translate }}</button>
       </div>
     </div>
   </div>

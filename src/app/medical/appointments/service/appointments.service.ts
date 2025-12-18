@@ -9,6 +9,19 @@ import { URL_SERVICIOS } from '../../../config/config';
 export type TipoTurno = 'Matutino' | 'Vespertino' | 'Mixto' | 'Jornada Acumulada';
 export type EstadoCita = 'Programada' | 'Confirmada' | 'En curso' | 'Completada' | 'Cancelada' | 'No asistió';
 
+/**
+ * Servicio de citas (reemplaza sistema Especialidad/General)
+ */
+export interface AppointmentServiceType {
+  id: number;
+  nombre: string;
+  descripcion?: string;
+  categoria: 'Especialidad' | 'Otros' | 'General';
+  orden: number;
+  activo: boolean;
+}
+
+/** DEPRECATED - mantener para compatibilidad */
 export interface Especialidad {
   id: number;
   nombre: string;
@@ -19,9 +32,16 @@ export interface Especialidad {
 export interface Doctor {
   id?: number;
   nombre_completo: string;
-  especialidad_id: number;
-  especialidad?: Especialidad;
-  general_medical_id?: number;
+  user_id?: number; // Relación con usuario
+  appointment_service_id?: number; // NUEVO CAMPO PRINCIPAL
+  appointmentService?: AppointmentServiceType; // Relación
+  appointment_service?: AppointmentServiceType; // Relación (snake_case fallback)
+  especialidad_id?: number; // DEPRECATED
+  especialidad?: Especialidad; // DEPRECATED
+  general_medical_id?: number; // DEPRECATED
+  generalMedical?: { id: number; nombre: string }; // DEPRECATED - para compatibilidad
+  service_name?: string; // Accessor del backend
+  especialidad_nombre?: string; // DEPRECATED - Accessor del backend
   turno: TipoTurno;
   hora_inicio_matutino?: string; // Formato: HH:mm
   hora_fin_matutino?: string;

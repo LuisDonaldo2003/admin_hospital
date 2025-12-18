@@ -25,7 +25,8 @@ export interface PersonalDocument {
   nombre_archivo: string;
   ruta_archivo: string;
   tipo_mime: string;
-  tamaño_archivo: number;
+  file_size: number; // Renamed from tamaño_archivo to avoid 'ñ' issues
+  // tamaño_archivo?: number; // Optional fallback if needed, but avoiding usage
   fecha_subida: string;
 }
 
@@ -33,7 +34,7 @@ export interface ApiResponse<T> {
   success: boolean;
   data: T;
   message: string;
-  total?: number; // Para paginación
+  total?: number;
   errors?: any;
 }
 
@@ -72,39 +73,6 @@ export class PersonalService {
     const headers = this.getHeaders();
     const url = `${URL_SERVICIOS}/personal`;
     return this.http.post<ApiResponse<Personal>>(url, data, { headers });
-  }
-
-  /**
-   * Crear personal con documentos
-   */
-  storePersonalWithDocuments(personalData: Personal, documentos: Map<string, File>): Observable<ApiResponse<Personal>> {
-    const headers = new HttpHeaders({
-      'Authorization': 'Bearer ' + this.authService.token
-      // No agregar Content-Type para FormData
-    });
-
-    const formData = new FormData();
-    
-    // Agregar datos del personal
-    formData.append('nombre', personalData.nombre);
-    formData.append('apellidos', personalData.apellidos);
-    formData.append('tipo', personalData.tipo);
-    
-    // Agregar RFC y número de checador (campos que faltaban)
-    if (personalData.rfc) {
-      formData.append('rfc', personalData.rfc);
-    }
-    if (personalData.numero_checador) {
-      formData.append('numero_checador', personalData.numero_checador);
-    }
-
-    // Agregar documentos
-    documentos.forEach((file, tipoDocumento) => {
-      formData.append(`documentos[${tipoDocumento}]`, file, file.name);
-    });
-
-    const url = `${URL_SERVICIOS}/personal/with-documents`;
-    return this.http.post<ApiResponse<Personal>>(url, formData, { headers });
   }
 
   /**
@@ -149,6 +117,7 @@ export class PersonalService {
   uploadDocument(personalId: number, tipoDocumento: string, archivo: File): Observable<ApiResponse<PersonalDocument>> {
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + this.authService.token
+      // Content-Type se maneja automáticamente con FormData
     });
 
     const formData = new FormData();
@@ -170,22 +139,13 @@ export class PersonalService {
   }
 
   /**
-   * Obtener estado de documentos de una persona
-   */
-  getEstadoDocumentos(personalId: number): Observable<ApiResponse<any>> {
-    const headers = this.getHeaders();
-    const url = `${URL_SERVICIOS}/personal/${personalId}/documentos/estado`;
-    return this.http.get<ApiResponse<any>>(url, { headers });
-  }
-
-  /**
    * Descargar documento
    */
   downloadDocument(documentId: number): Observable<Blob> {
     const headers = this.getHeaders();
     const url = `${URL_SERVICIOS}/personal/documentos/${documentId}/download`;
-    return this.http.get(url, { 
-      headers, 
+    return this.http.get(url, {
+      headers,
       responseType: 'blob'
     });
   }

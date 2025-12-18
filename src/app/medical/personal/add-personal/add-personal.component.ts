@@ -29,22 +29,27 @@ export class AddPersonalComponent implements OnInit {
   fechaIngreso: string;
   rfc: string = '';
   numeroChecador: string = '';
-  
+
   // Control del formulario
   submitted = false;
   loading = false;
-  
-  // Documentos
-  documentos = new Map<string, File>();
-  
+
+  // Control de subida de archivos
+  isUploadingFiles = false;
+  uploadProgress = 0;
+  totalFilesToUpload = 0;
+  filesUploaded = 0;
+
+  // Documentos pendientes de subida
+  // Clave: Tipo de documento, Valor: Array de archivos (para soportar múltiples constancias)
+  documentosPendientes = new Map<string, File[]>();
+
   // Mensajes
-  // Flags y datos para mostrar alertas desde el HTML
   showSuccess: boolean = false;
   showValidation: boolean = false;
   serverValidationMessage: string = '';
-  uploadedDocsCount: number = 0;
 
-  // Lista de documentos requeridos
+  // Lista de documentos requeridos disponibles
   documentosRequeridos = [
     'Acta de nacimiento',
     'Comprobante de domicilio',
@@ -56,375 +61,278 @@ export class AddPersonalComponent implements OnInit {
   ];
 
   // Configuración de archivos
-  readonly MAX_FILE_SIZE = 500 * 1024; // 500KB máximo para PDFs de documentos
+  readonly MAX_FILE_SIZE = 500 * 1024; // 500KB
   readonly ALLOWED_FILE_TYPE = 'application/pdf';
-  readonly ALLOWED_FILE_EXTENSIONS = ['.pdf'];
 
   constructor(
     private router: Router,
     private translate: TranslateService,
-    private personalService: PersonalService
-    ,
+    private personalService: PersonalService,
     private driverTourService: DriverTourService
   ) {
     const selectedLang = localStorage.getItem('language') || 'es';
     this.translate.use(selectedLang);
-    
-    // Inicializar fecha de ingreso con fecha actual
     this.fechaIngreso = new Date().toLocaleDateString('es-ES');
   }
 
-  /**
-   * Inicia el tour del formulario de agregar personal
-   */
   public startPersonalFormTour(): void {
     this.driverTourService.startPersonalFormTour();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
-  /**
-   * Detectar si el modo oscuro está activo
-   */
   isDarkMode(): boolean {
     return document.body.classList.contains('dark-mode');
   }
 
   /**
-   * Manejar selección de archivos
+   * Manejar selección de archivos (Input)
    */
   onFileSelected(event: any, tipoDocumento: string): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.processFile(file, tipoDocumento);
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      this.processFiles(Array.from(files), tipoDocumento);
       event.target.value = ''; // Limpiar input
     }
   }
 
   /**
-   * Procesar archivo (común para input y drag & drop)
+   * Manejar Drop de archivos
    */
-  processFile(file: File, tipoDocumento: string): void {
-    // Limpiar mensajes previos
-    this.serverValidationMessage = '';
-    this.showValidation = false;
-    
-    // Validar extensión del archivo
-    const fileName = file.name.toLowerCase();
-    const hasValidExtension = this.ALLOWED_FILE_EXTENSIONS.some(ext => fileName.endsWith(ext));
-    
-    if (!hasValidExtension) {
-      this.serverValidationMessage = `Solo se permiten archivos PDF. Archivo seleccionado: ${file.name}`;
-      this.showValidation = true;
-      return;
+  onDrop(event: DragEvent, tipoDocumento: string): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.removeDragOverClass(event.currentTarget as HTMLElement);
+
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      this.processFiles(Array.from(files), tipoDocumento);
     }
-    
-    // Validar tipo MIME
-    if (file.type !== this.ALLOWED_FILE_TYPE) {
-      this.serverValidationMessage = `Tipo de archivo no válido. Solo se permiten archivos PDF.`;
-      this.showValidation = true;
-      return;
-    }
-    
-    // Validar tamaño del archivo
-    if (file.size > this.MAX_FILE_SIZE) {
-      const sizeInKB = (file.size / 1024).toFixed(0);
-      const maxSizeInKB = (this.MAX_FILE_SIZE / 1024).toFixed(0);
-      this.serverValidationMessage = `El archivo es demasiado grande (${sizeInKB}KB). Tamaño máximo permitido: ${maxSizeInKB}KB para documentos PDF.`;
-      this.showValidation = true;
-      return;
-    }
-    
-    // Validar tamaño mínimo (evitar archivos corruptos o vacíos)
-    if (file.size < 1024) { // 1KB mínimo
-      this.serverValidationMessage = `El archivo parece estar dañado o vacío. Tamaño mínimo: 1KB.`;
-      this.showValidation = true;
-      return;
-    }
-    
-    // Validar que no se exceda el límite total de archivos
-    if (this.documentos.size >= this.documentosRequeridos.length && !this.documentos.has(tipoDocumento)) {
-      this.serverValidationMessage = `Ya has subido el máximo de ${this.documentosRequeridos.length} documentos permitidos.`;
-      this.showValidation = true;
-      return;
-    }
-    
-    // Si ya existe un documento de este tipo, mostramos mensaje de reemplazo
-    if (this.documentos.has(tipoDocumento)) {
-      // Reemplazo de documento existente
-    }
-    
-    // Agregar archivo al mapa
-    this.documentos.set(tipoDocumento, file);
-    
-    // Mostrar mensaje de éxito temporal
-    const sizeInKB = (file.size / 1024).toFixed(1);
   }
 
   /**
-   * Eventos de drag & drop
+   * Eventos Drag & Drop visuales
    */
   onDragOver(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
+    this.addDragOverClass(event.currentTarget as HTMLElement);
   }
 
-  onDragEnter(event: DragEvent, element?: EventTarget | null): void {
+  onDragLeave(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
-    if (element && element instanceof HTMLElement) {
-      element.classList.add('drag-over');
-    }
+    this.removeDragOverClass(event.currentTarget as HTMLElement);
   }
 
-  onDragLeave(event: DragEvent, element?: EventTarget | null): void {
-    event.preventDefault();
-    event.stopPropagation();
-    if (element && element instanceof HTMLElement) {
-      element.classList.remove('drag-over');
-    }
+  private addDragOverClass(element: HTMLElement | null): void {
+    if (element) element.classList.add('drag-over');
   }
 
-  onDrop(event: DragEvent, tipoDocumento: string, element?: EventTarget | null): void {
-    event.preventDefault();
-    event.stopPropagation();
-    if (element && element instanceof HTMLElement) {
-      element.classList.remove('drag-over');
-    }
-
-    const files = event.dataTransfer?.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      this.processFile(file, tipoDocumento);
-    }
+  private removeDragOverClass(element: HTMLElement | null): void {
+    if (element) element.classList.remove('drag-over');
   }
 
   /**
-   * Eliminar documento seleccionado
+   * Procesar archivos seleccionados o soltados
    */
-  removeDocument(tipoDocumento: string): void {
-    this.documentos.delete(tipoDocumento);
-    this.serverValidationMessage = ''; // Limpiar mensajes de error al eliminar
-    this.showValidation = false;
-  }
-
-  /**
-   * Formatear tamaño de archivo para mostrar al usuario
-   */
-  formatFileSize(bytes: number): string {
-    if (bytes === 0) return '0 Bytes';
-    
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-  }
-
-  /**
-   * Verificar si el archivo es de tamaño apropiado (para mostrar advertencias visuales)
-   */
-  isFileSizeAppropriate(file: File): boolean {
-    // Para documentos PDF, consideramos apropiado entre 50KB y 1MB
-    const minAppropriateSize = 50 * 1024; // 50KB
-    const maxAppropriateSize = 1024 * 1024; // 1MB
-    
-    return file.size >= minAppropriateSize && file.size <= maxAppropriateSize;
-  }
-
-  /**
-   * Obtener lista de documentos faltantes
-   */
-  getMissingDocuments(): string[] {
-    return this.documentosRequeridos.filter(tipo => !this.documentos.has(tipo));
-  }
-
-  /**
-   * Obtener el tamaño total de todos los documentos cargados
-   */
-  getTotalDocumentsSize(): string {
-    let totalSize = 0;
-    for (const [_, file] of this.documentos) {
-      totalSize += file.size;
-    }
-    return this.formatFileSize(totalSize);
-  }
-
-  /**
-   * Obtener información de un documento específico
-   */
-  getDocumentInfo(tipoDocumento: string): { name: string, size: string, sizeWarning: boolean } | null {
-    const file = this.documentos.get(tipoDocumento);
-    if (!file) return null;
-    
-    return {
-      name: file.name,
-      size: this.formatFileSize(file.size),
-      sizeWarning: !this.isFileSizeAppropriate(file)
-    };
-  }
-
-  /**
-   * Validar formulario
-   */
-  validateForm(): boolean {
+  processFiles(files: File[], tipoDocumento: string): void {
     this.serverValidationMessage = '';
     this.showValidation = false;
 
-    // Validar campos básicos
-    if (!this.nombre?.trim()) {
-      return false;
+    for (const file of files) {
+      if (!this.validateFile(file)) return;
     }
 
-    if (this.nombre.trim().length < 2) {
-      return false;
-    }
+    // Agregar a la lista de pendientes
+    const currentFiles = this.documentosPendientes.get(tipoDocumento) || [];
 
-    if (!this.apellidos?.trim()) {
-      return false;
+    if (tipoDocumento === 'Constancias de cursos') {
+      // Concatenar nuevos
+      this.documentosPendientes.set(tipoDocumento, [...currentFiles, ...files]);
+    } else {
+      // Reemplazar (solo 1 permitido para otros tipos por ahora en UI simple, aunque el map soporta array)
+      this.documentosPendientes.set(tipoDocumento, [files[0]]);
     }
-
-    if (this.apellidos.trim().length < 2) {
-      return false;
-    }
-
-    if (!this.tipo) {
-      return false;
-    }
-
-  // Validar RFC
-  if (!this.rfc || !this.rfc.trim()) {
-    return false;
   }
 
-  const rfcTrimmed = this.rfc.trim();
-  if (rfcTrimmed.length < 10 || rfcTrimmed.length > 13) {
-    return false;
-  }
-
-  // Validar RFC formato básico (letras/números)
-  const rfcPattern = /^[A-Z0-9]+$/;
-    if (!rfcPattern.test(rfcTrimmed.toUpperCase()) || rfcTrimmed.length > 13) {
+  /**
+   * Validar archivo individual
+   */
+  validateFile(file: File): boolean {
+    if (file.type !== this.ALLOWED_FILE_TYPE) {
+      this.serverValidationMessage = `Solo PDF permitidos. Archivo inválido: ${file.name}`;
+      this.showValidation = true;
       return false;
-  }
-
-  // Validar número de checador
-  if (!this.numeroChecador || !this.numeroChecador.trim()) {
-    return false;
-  }
-
-  if (!/^[0-9]{1,4}$/.test(this.numeroChecador.trim())) {
-    return false;
-  }    // Validar archivos cargados
-    if (this.documentos.size > 0) {
-      for (const [tipoDoc, file] of this.documentos) {
-        // Re-validar cada archivo por seguridad
-        if (file.size > this.MAX_FILE_SIZE) {
-          const sizeInKB = (file.size / 1024).toFixed(0);
-          const maxSizeInKB = (this.MAX_FILE_SIZE / 1024).toFixed(0);
-          this.serverValidationMessage = `El archivo "${tipoDoc}" es demasiado grande (${sizeInKB}KB). Máximo permitido: ${maxSizeInKB}KB`;
-          this.showValidation = true;
-          return false;
-        }
-        
-        if (file.type !== this.ALLOWED_FILE_TYPE) {
-          this.serverValidationMessage = `El archivo "${tipoDoc}" no es un PDF válido`;
-          this.showValidation = true;
-          return false;
-        }
-
-        // Advertencia para archivos muy pequeños (posible corrupción)
-        if (file.size < 1024) {
-          this.serverValidationMessage = `El archivo "${tipoDoc}" parece estar dañado o vacío (tamaño: ${file.size} bytes)`;
-          this.showValidation = true;
-          return false;
-        }
-      }
     }
-
-    // Los documentos son opcionales - no se requiere validación obligatoria
-    // Si hay documentos faltantes, el personal se marcará como "documentos incompletos"
-
+    if (file.size > this.MAX_FILE_SIZE) {
+      this.serverValidationMessage = `El archivo ${file.name} excede 500KB.`;
+      this.showValidation = true;
+      return false;
+    }
+    if (file.size < 100) { // Muy pequeño
+      this.serverValidationMessage = `El archivo ${file.name} parece estar vacío o corrupto.`;
+      this.showValidation = true;
+      return false;
+    }
     return true;
   }
 
   /**
-   * Guardar personal
+   * Remover documento de la lista de pendientes
+   */
+  removeDocument(tipoDocumento: string, index: number): void {
+    const files = this.documentosPendientes.get(tipoDocumento);
+    if (files) {
+      files.splice(index, 1);
+      if (files.length === 0) {
+        this.documentosPendientes.delete(tipoDocumento);
+      }
+    }
+  }
+
+  /**
+   * Obtener archivos pendientes para mostrar en UI
+   */
+  getPendingFiles(tipoDocumento: string): File[] {
+    return this.documentosPendientes.get(tipoDocumento) || [];
+  }
+
+  formatFileSize(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+  }
+
+  /**
+   * Validar formulario completo
+   */
+  validateForm(): boolean {
+    if (!this.nombre.trim() || !this.apellidos.trim() || !this.tipo) return false;
+    if (!this.rfc.trim() || !this.numeroChecador.trim()) return false;
+    return true;
+  }
+
+  /**
+   * Guardar Personal y luego subir archivos
    */
   save(): void {
     this.submitted = true;
     this.showSuccess = false;
-    this.serverValidationMessage = '';
     this.showValidation = false;
+    this.serverValidationMessage = '';
 
-    // Validar formulario
     if (!this.validateForm()) {
+      this.serverValidationMessage = 'Por favor complete los campos requeridos.';
+      this.showValidation = true;
       return;
     }
 
     this.loading = true;
 
-    // Preparar datos del personal
+    // 1. Crear Personal
     const personalData: Personal = {
       nombre: this.nombre.trim(),
       apellidos: this.apellidos.trim(),
       tipo: this.tipo as 'Clínico' | 'No Clínico',
       rfc: this.rfc.trim().toUpperCase(),
-      numero_checador: this.numeroChecador.trim()
+      numero_checador: this.numeroChecador.trim(),
+      activo: true
     };
 
-    // Enviar datos a la API
-    this.personalService.storePersonalWithDocuments(personalData, this.documentos)
-      .subscribe({
-        next: (response) => {
-          this.loading = false;
-          if (response.success) {
-            // Mensaje personalizado según el estado de documentos
-              // Guardar datos necesarios para la vista y mostrar alerta desde el HTML
-              this.uploadedDocsCount = this.documentos.size;
-              this.showSuccess = true;
-              this.showValidation = false;
-
-              // Opcional: redirigir después de unos segundos
-              setTimeout(() => {
-                this.goToList();
-              }, 3000);
+    this.personalService.storePersonal(personalData).subscribe({
+      next: (resp) => {
+        if (resp.success && resp.data.id) {
+          // Personal creado, proceder a subir archivos si existen
+          if (this.documentosPendientes.size > 0) {
+            this.uploadFiles(resp.data.id);
           } else {
-              this.serverValidationMessage = response.message || 'Error al guardar el personal';
-              this.showValidation = true;
+            this.loading = false;
+            this.showSuccess = true;
+            this.finishProcess();
           }
-        },
-        error: (error) => {
+        } else {
           this.loading = false;
-          console.error('Error al guardar personal:', error);
-          
-          if (error.status === 422 && error.error && error.error.errors) {
-            // Errores de validación del servidor
-            const errores = error.error.errors;
-            const mensajesError = [];
-            
-            for (const campo in errores) {
-              if (errores[campo] && errores[campo].length > 0) {
-                mensajesError.push(errores[campo][0]);
-              }
-            }
-            
-            this.serverValidationMessage = mensajesError.join('. ');
-            this.showValidation = true;
-          } else if (error.error && error.error.message) {
-            this.serverValidationMessage = error.error.message;
-            this.showValidation = true;
-          } else {
-            this.serverValidationMessage = 'Error de conexión. Intente nuevamente.';
-            this.showValidation = true;
-          }
+          this.serverValidationMessage = resp.message || 'Error al crear personal';
+          this.showValidation = true;
         }
-      });
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error(err);
+        this.handleError(err);
+      }
+    });
   }
 
   /**
-   * Ir a la lista de personal
+   * Subir archivos secuencialmente 
    */
+  async uploadFiles(personalId: number) {
+    this.isUploadingFiles = true;
+    this.uploadProgress = 0;
+
+    // Aplanar mapa a lista de tareas: {tipo, archivo}
+    const uploadTasks: { tipo: string, file: File }[] = [];
+    this.documentosPendientes.forEach((files, tipo) => {
+      files.forEach(f => uploadTasks.push({ tipo: tipo, file: f }));
+    });
+
+    this.totalFilesToUpload = uploadTasks.length;
+    this.filesUploaded = 0;
+
+    let errorCount = 0;
+
+    // Ejecutar subidas
+    for (const task of uploadTasks) {
+      try {
+        await new Promise<void>((resolve, reject) => {
+          this.personalService.uploadDocument(personalId, task.tipo, task.file).subscribe({
+            next: (res) => {
+              if (res.success) resolve();
+              else reject(res.message);
+            },
+            error: (err) => reject(err)
+          });
+        });
+        this.filesUploaded++;
+        this.uploadProgress = Math.round((this.filesUploaded / this.totalFilesToUpload) * 100);
+      } catch (e) {
+        console.error(`Error subiendo ${task.tipo}:`, e);
+        errorCount++;
+      }
+    }
+
+    this.isUploadingFiles = false;
+    this.loading = false;
+    this.showSuccess = true;
+
+    if (errorCount > 0) {
+      this.serverValidationMessage = `Personal creado, pero fallaron ${errorCount} documentos. Puede reintentar en Editar.`;
+      this.showValidation = true;
+    }
+
+    this.finishProcess();
+  }
+
+  finishProcess() {
+    setTimeout(() => {
+      this.router.navigate(['/personal/list_personal']); // Redirigir a 'list', no 'list_personal' segun routing
+    }, 2500);
+  }
+
+  handleError(error: any) {
+    if (error.error && error.error.errors) {
+      const msgs = Object.values(error.error.errors).flat() as string[];
+      this.serverValidationMessage = msgs.join('. ');
+    } else {
+      this.serverValidationMessage = error.error?.message || 'Error desconocido';
+    }
+    this.showValidation = true;
+  }
+
   goToList(): void {
     this.router.navigate(['/personal/list_personal']);
   }

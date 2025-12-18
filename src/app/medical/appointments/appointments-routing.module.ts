@@ -8,6 +8,9 @@ import { AddDoctorComponent } from './doctors/add-doctor/add-doctor.component';
 import { ListDoctorsComponent } from './doctors/list-doctors/list-doctors.component';
 import { EditDoctorComponent } from './doctors/edit-doctor/edit-doctor.component';
 
+// Assign Services
+import { AssignServicesComponent } from './assign-services/assign-services.component';
+
 // Appointments
 import { AddAppointmentComponent } from './appointments-manage/add-appointment/add-appointment.component';
 import { ListAppointmentsComponent } from './appointments-manage/list-appointments/list-appointments.component';
@@ -36,6 +39,12 @@ const routes: Routes = [{
       canActivate: [PermissionGuard],
       data: { requiredPermissions: ['edit_doctor'] }
     },
+    {
+      path: 'assign-services',
+      component: AssignServicesComponent,
+      canActivate: [PermissionGuard],
+      data: { requiredPermissions: ['manage_appointment_services'] }
+    },
 
     // Appointments Routes
     {
@@ -63,23 +72,6 @@ const routes: Routes = [{
       loadComponent: () => import('./appointments-manage/calendar-view/calendar-view.component').then(m => m.CalendarViewComponent),
       canActivate: [PermissionGuard],
       data: { requiredPermissions: ['list_appointments'] }
-    },
-
-    // Especialidades Routes
-    {
-      path: 'especialidades',
-      loadChildren: () => import('./especialidades/especialidades.module').then(m => m.EspecialidadesModule),
-      canActivate: [PermissionGuard],
-      data: { requiredPermissions: ['appointments_especialidades_list'] }
-    },
-
-    // General Medicals Routes
-    {
-      path: 'general-medicals',
-      loadChildren: () => import('./general-medical/general-medical.module').then(m => m.GeneralMedicalModule),
-      canActivate: [PermissionGuard],
-      // Reusing existing permission for now as new permissions were not seeded
-      data: { requiredPermissions: ['appointments_list_general_medical'] }
     },
 
     // Cancelled Appointments Routes

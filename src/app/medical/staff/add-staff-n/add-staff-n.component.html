@@ -51,34 +51,40 @@
                   <!-- Campo para el nombre -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-id-card me-1"></i>{{ 'STAFF.ADD_STAFF.FIRST_NAME' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-id-card me-1"></i>{{ 'STAFF.ADD_STAFF.FIRST_NAME' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control" [(ngModel)]="name" name="name" required
-                           placeholder="{{ 'STAFF.ADD_STAFF.NAME_PLACEHOLDER' | translate }}"
-                           [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !name.trim()">{{ 'STAFF.ADD_STAFF.NAME_REQUIRED' | translate }}</div>
+                      placeholder="{{ 'STAFF.ADD_STAFF.NAME_PLACEHOLDER' | translate }}"
+                      [ngClass]="{ 'is-invalid': submitted && !name.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !name.trim()">{{ 'STAFF.ADD_STAFF.NAME_REQUIRED' |
+                      translate }}</div>
                   </div>
 
                   <!-- Campo para el apellido -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-id-card me-1"></i>{{ 'STAFF.ADD_STAFF.SURNAME' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-id-card me-1"></i>{{ 'STAFF.ADD_STAFF.SURNAME' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control" [(ngModel)]="surname" name="surname" required
-                           placeholder="{{ 'STAFF.ADD_STAFF.SURNAME_PLACEHOLDER' | translate }}"
-                           [ngClass]="{ 'is-invalid': submitted && !surname.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !surname.trim()">{{ 'STAFF.ADD_STAFF.SURNAME_REQUIRED' | translate }}</div>
+                      placeholder="{{ 'STAFF.ADD_STAFF.SURNAME_PLACEHOLDER' | translate }}"
+                      [ngClass]="{ 'is-invalid': submitted && !surname.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !surname.trim()">{{
+                      'STAFF.ADD_STAFF.SURNAME_REQUIRED' | translate }}</div>
                   </div>
 
                   <!-- Campo para el correo electrónico -->
                   <div class="col-12">
                     <label class="form-label">
-                      <i class="fa fa-envelope me-1"></i>{{ 'STAFF.ADD_STAFF.EMAIL' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-envelope me-1"></i>{{ 'STAFF.ADD_STAFF.EMAIL' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
                     <input type="email" class="form-control" [(ngModel)]="email" name="email" required
-                           placeholder="{{ 'STAFF.ADD_STAFF.EMAIL_PLACEHOLDER' | translate }}"
-                           [ngClass]="{ 'is-invalid': submitted && !email.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !email.trim()">{{ 'STAFF.ADD_STAFF.EMAIL_REQUIRED' | translate }}</div>
+                      placeholder="{{ 'STAFF.ADD_STAFF.EMAIL_PLACEHOLDER' | translate }}"
+                      [ngClass]="{ 'is-invalid': submitted && !email.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !email.trim()">{{ 'STAFF.ADD_STAFF.EMAIL_REQUIRED'
+                      | translate }}</div>
                   </div>
                 </div>
               </div>
@@ -97,66 +103,78 @@
                   <!-- Selección de rol para el staff -->
                   <div class="col-12">
                     <label class="form-label">
-                      <i class="fa fa-user-tag me-1"></i>{{ 'STAFF.ADD_STAFF.ROLE_SELECT' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-user-tag me-1"></i>{{ 'STAFF.ADD_STAFF.ROLE_SELECT' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
                     <select class="form-control form-select" [(ngModel)]="selectedValue" name="role" required
-                            [ngClass]="{ 'is-invalid': submitted && !selectedValue }">
+                      [ngClass]="{ 'is-invalid': submitted && !selectedValue }">
                       <!-- Opción por defecto -->
-                      <option value="" disabled hidden>{{ 'STAFF.ADD_STAFF.SELECT_ROLE_PLACEHOLDER' | translate }}</option>
+                      <option value="" disabled hidden>{{ 'STAFF.ADD_STAFF.SELECT_ROLE_PLACEHOLDER' | translate }}
+                      </option>
                       <!-- Opciones de roles disponibles -->
                       <option *ngFor="let data of roles" [value]="data.id">{{ data.name }}</option>
                     </select>
-                    <div class="invalid-feedback" *ngIf="submitted && !selectedValue">{{ 'STAFF.ADD_STAFF.ROLE_REQUIRED' | translate }}</div>
+                    <div class="invalid-feedback" *ngIf="submitted && !selectedValue">{{ 'STAFF.ADD_STAFF.ROLE_REQUIRED'
+                      | translate }}</div>
                   </div>
 
                   <!-- Campo para la contraseña -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-lock me-1"></i>{{ 'STAFF.ADD_STAFF.PASSWORD' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-lock me-1"></i>{{ 'STAFF.ADD_STAFF.PASSWORD' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
                     <input type="password" class="form-control" [(ngModel)]="password" name="password" required
-                           placeholder="{{ 'STAFF.ADD_STAFF.PASSWORD_PLACEHOLDER' | translate }}"
-                           [ngClass]="{ 'is-invalid': submitted && !password.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !password.trim()">{{ 'STAFF.ADD_STAFF.PASSWORD_REQUIRED' | translate }}</div>
+                      placeholder="{{ 'STAFF.ADD_STAFF.PASSWORD_PLACEHOLDER' | translate }}"
+                      [ngClass]="{ 'is-invalid': submitted && !password.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !password.trim()">{{
+                      'STAFF.ADD_STAFF.PASSWORD_REQUIRED' | translate }}</div>
                   </div>
 
                   <!-- Campo para confirmar la contraseña -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-lock me-1"></i>{{ 'STAFF.ADD_STAFF.CONFIRM_PASSWORD' | translate }} <span class="text-danger">*</span>
+                      <i class="fa fa-lock me-1"></i>{{ 'STAFF.ADD_STAFF.CONFIRM_PASSWORD' | translate }} <span
+                        class="text-danger">*</span>
                     </label>
-                    <input type="password" class="form-control" [(ngModel)]="password_confirmation" name="password_confirmation" required
-                           placeholder="{{ 'STAFF.ADD_STAFF.CONFIRM_PASSWORD_PLACEHOLDER' | translate }}"
-                           [ngClass]="{ 'is-invalid': submitted && !password_confirmation.trim() }" />
-                    <div class="invalid-feedback" *ngIf="submitted && !password_confirmation.trim()">{{ 'STAFF.ADD_STAFF.CONFIRM_PASSWORD_REQUIRED' | translate }}</div>
+                    <input type="password" class="form-control" [(ngModel)]="password_confirmation"
+                      name="password_confirmation" required
+                      placeholder="{{ 'STAFF.ADD_STAFF.CONFIRM_PASSWORD_PLACEHOLDER' | translate }}"
+                      [ngClass]="{ 'is-invalid': submitted && !password_confirmation.trim() }" />
+                    <div class="invalid-feedback" *ngIf="submitted && !password_confirmation.trim()">{{
+                      'STAFF.ADD_STAFF.CONFIRM_PASSWORD_REQUIRED' | translate }}</div>
                   </div>
                 </div>
               </div>
 
               <!-- Alerta de éxito -->
               @if (showSuccess) {
-                <div class="mt-4">
-                  <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong><i class="fa fa-check-circle me-2"></i>{{ 'STAFF.ADD_STAFF.SUCCESS' | translate }}!</strong> {{ 'STAFF.ADD_STAFF.USER_CREATED_SUCCESS' | translate }}
-                    <button type="button" class="btn-close" (click)="showSuccess = false" aria-label="Cerrar"></button>
-                  </div>
+              <div class="mt-4">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong><i class="fa fa-check-circle me-2"></i>{{ 'STAFF.ADD_STAFF.SUCCESS' | translate }}!</strong>
+                  {{ 'STAFF.ADD_STAFF.USER_CREATED_SUCCESS' | translate }}
+                  <button type="button" class="btn-close" (click)="showSuccess = false" aria-label="Cerrar"></button>
                 </div>
+              </div>
               }
 
               <!-- Alerta de validación/error -->
               @if (showValidation) {
-                <div class="mt-4">
-                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'STAFF.ADD_STAFF.WARNING' | translate }}:</strong>
-                    <ng-container [ngSwitch]="validationType">
-                      <span *ngSwitchCase="'missing'">{{ 'STAFF.ADD_STAFF.FILL_REQUIRED_FIELDS' | translate }}</span>
-                      <span *ngSwitchCase="'password_mismatch'">{{ 'STAFF.ADD_STAFF.PASSWORD_MISMATCH' | translate }}</span>
-                      <span *ngSwitchCase="'permission'">{{ backendErrorText }}</span>
-                      <span *ngSwitchDefault>{{ 'STAFF.ADD_STAFF.UNKNOWN_VALIDATION' | translate }}</span>
-                    </ng-container>
-                    <button type="button" class="btn-close" (click)="showValidation = false; validationType = 'none'" aria-label="Cerrar"></button>
-                  </div>
+              <div class="mt-4">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong><i class="fa fa-exclamation-triangle me-2"></i>{{ 'STAFF.ADD_STAFF.WARNING' | translate
+                    }}:</strong>
+                  <ng-container [ngSwitch]="validationType">
+                    <span *ngSwitchCase="'missing'">{{ 'STAFF.ADD_STAFF.FILL_REQUIRED_FIELDS' | translate }}</span>
+                    <span *ngSwitchCase="'password_mismatch'">{{ 'STAFF.ADD_STAFF.PASSWORD_MISMATCH' | translate
+                      }}</span>
+                    <span *ngSwitchCase="'permission'">{{ backendErrorText }}</span>
+                    <span *ngSwitchDefault>{{ 'STAFF.ADD_STAFF.UNKNOWN_VALIDATION' | translate }}</span>
+                  </ng-container>
+                  <button type="button" class="btn-close" (click)="showValidation = false; validationType = 'none'"
+                    aria-label="Cerrar"></button>
                 </div>
+              </div>
               }
 
               <!-- Botones de acción -->
@@ -177,9 +195,7 @@
 </div>
 
 <!-- Botón flotante de ayuda para iniciar el tour -->
-<button class="tour-help-button" 
-        (click)="startStaffFormTour()" 
-        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
-        type="button">
+<button class="tour-help-button" (click)="startStaffFormTour()" title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+  type="button">
   <i class="fa fa-question"></i>
 </button>

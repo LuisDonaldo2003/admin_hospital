@@ -24,10 +24,10 @@
         </h5>
       </div>
 
-      <!-- Fila de búsqueda -->
-      <div class="row g-3 mb-3">
+      <!-- Fila de búsqueda y acciones combinada -->
+      <div class="row g-3 align-items-end">
         <!-- Búsqueda por expediente -->
-        <div class="col-lg-6">
+        <div class="col-lg-3 col-md-6">
           <div class="input-group search-input-group">
             <span class="input-group-text">
               <i class="fa fa-folder"></i>
@@ -39,7 +39,7 @@
         </div>
 
         <!-- Búsqueda por nombre -->
-        <div class="col-lg-6">
+        <div class="col-lg-3 col-md-6">
           <div class="input-group search-input-group">
             <span class="input-group-text">
               <i class="fa fa-user"></i>
@@ -49,13 +49,9 @@
               [disabled]="isLoading" minlength="2">
           </div>
         </div>
-      </div>
 
-      <!-- Botones de acción -->
-      <!-- Botones de acción organizados -->
-      <div class="row g-3">
-        <!-- 1. Ordenar -->
-        <div class="col-lg-3 col-md-6">
+        <!-- Ordenar -->
+        <div class="col-lg-2 col-md-4">
           <button class="btn btn-outline-secondary w-100" (click)="toggleSort()" [disabled]="isLoading">
             <i class="fa"
               [ngClass]="{'fa-sort-numeric-down': sortDir === 'asc', 'fa-sort-numeric-up': sortDir === 'desc'}"></i>
@@ -63,25 +59,16 @@
           </button>
         </div>
 
-        <!-- 2. Limpiar -->
-        <div class="col-lg-3 col-md-6">
+        <!-- Limpiar -->
+        <div class="col-lg-2 col-md-4">
           <button class="btn btn-clear w-100" (click)="clearAllFilters()" [disabled]="isLoading">
             <i class="fa fa-refresh me-2"></i>
             {{ 'ARCHIVE.LIST_PATIENT.CLEAR_FILTERS' | translate }}
           </button>
         </div>
 
-        <!-- 3. Configurar -->
-        <div class="col-lg-3 col-md-6">
-          <!-- Usamos data-bs-target directo y (click) solo para cargar datos, sinstopPropagation -->
-          <button class="btn btn-outline-primary w-100" (click)="openConfigModal()" data-bs-toggle="modal"
-            data-bs-target="#configModal" [disabled]="isLoading" title="Configurar un número de inicio para el folio">
-            <i class="fa fa-cog me-2"></i> Configurar
-          </button>
-        </div>
-
-        <!-- 4. Agregar -->
-        <div class="col-lg-3 col-md-6">
+        <!-- Agregar -->
+        <div class="col-lg-2 col-md-4">
           <button class="btn btn-add-patient w-100" [routerLink]="['/archives/add_archive']" [disabled]="isLoading">
             <i class="fa fa-plus me-2"></i>
             {{ 'ARCHIVE.LIST_PATIENT.ADD_PATIENT' | translate }}
@@ -295,32 +282,6 @@
   </div>
 </div>
 
-<!-- Modal de Configuración de Folio -->
-<div class="modal fade" id="configModal" tabindex="-1" aria-labelledby="configModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="configModalLabel">Configurar Inicio de Folio</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body p-4">
-        <p class="text-muted mb-3">
-          Establece el número desde el cual el sistema comenzará a sugerir/validar expedientes.
-          Si ingresas <strong>5000</strong>, el siguiente paciente será el 5000 (o superior si ya existen).
-        </p>
-        <div class="form-group">
-          <label for="startNumberInput" class="form-label fw-bold">Número de Inicio</label>
-          <input type="number" id="startNumberInput" class="form-control form-control-lg"
-            [(ngModel)]="configStartNumber" placeholder="Ej. 1000">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" (click)="saveConfig()">Guardar Configuración</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Botón flotante de ayuda para iniciar el tour -->
 <button class="tour-help-button" (click)="startArchiveListTour()"

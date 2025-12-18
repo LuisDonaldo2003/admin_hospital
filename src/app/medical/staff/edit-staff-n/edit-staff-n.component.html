@@ -129,7 +129,8 @@
                       <span *ngSwitchDefault>{{ 'STAFF.EDIT_STAFF.UNKNOWN_VALIDATION' | translate }}</span>
                     </ng-container>
                   </div>
-                  <button type="button" class="btn-close" (click)="showValidation = false; validationType = 'none'"></button>
+                  <button type="button" class="btn-close"
+                    (click)="showValidation = false; validationType = 'none'"></button>
                 </div>
               </div>
 
@@ -138,7 +139,8 @@
                 <div class="alert alert-modern alert-success d-flex align-items-center">
                   <i class="fa fa-check-circle me-3"></i>
                   <div class="flex-grow-1">
-                    <strong>{{ 'STAFF.EDIT_STAFF.SUCCESS' | translate }}:</strong> {{ 'STAFF.EDIT_STAFF.USER_UPDATED_SUCCESS' | translate }}
+                    <strong>{{ 'STAFF.EDIT_STAFF.SUCCESS' | translate }}:</strong> {{
+                    'STAFF.EDIT_STAFF.USER_UPDATED_SUCCESS' | translate }}
                   </div>
                   <button type="button" class="btn-close" (click)="showSuccess = false"></button>
                 </div>
@@ -162,9 +164,7 @@
 </div>
 
 <!-- Botón flotante de ayuda para iniciar el tour -->
-<button class="tour-help-button" 
-        (click)="startEditStaffTour()" 
-        title="{{ 'TOUR.HELP_BUTTON' | translate }}"
-        type="button">
+<button class="tour-help-button" (click)="startEditStaffTour()" title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+  type="button">
   <i class="fa fa-question"></i>
 </button>

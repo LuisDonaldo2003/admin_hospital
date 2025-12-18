@@ -79,7 +79,7 @@ export class AddStaffNComponent {
     private router: Router,
     private translate: TranslateService,
     private driverTourService: DriverTourService
-  ) {}
+  ) { }
 
   /**
    * Inicia el tour guiado del formulario de agregar staff

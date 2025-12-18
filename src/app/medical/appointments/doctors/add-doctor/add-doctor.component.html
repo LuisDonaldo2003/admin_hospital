@@ -50,38 +50,20 @@
                     </div>
                   </div>
 
-                  <!-- Especialidad (SOLO VISIBLE SI NO ES GENERAL O SI ES AMBOS/ESPECIALISTA) -->
-                  <div class="col-md-6" *ngIf="!isGeneral || isSpecialist">
+                  <!-- Servicio de Cita -->
+                  <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-stethoscope me-1"></i>{{ 'APPOINTMENTS.ADD_DOCTOR.SPECIALTY' | translate }} <span
-                        class="text-danger">*</span>
+                      <i class="fa fa-stethoscope me-1"></i>Servicio de Cita <span class="text-danger">*</span>
                     </label>
                     <select class="form-select form-control"
-                      [class.is-invalid]="submitted && (!especialidad_id || especialidad_id === 0)"
-                      [(ngModel)]="especialidad_id" name="especialidad_id" required>
-                      <option [value]="0">{{ 'APPOINTMENTS.ADD_DOCTOR.SELECT_SPECIALTY' | translate }}</option>
-                      <option *ngFor="let esp of especialidades" [value]="esp.id">{{ esp.nombre }}</option>
+                      [class.is-invalid]="submitted && (!appointment_service_id || appointment_service_id === 0)"
+                      [(ngModel)]="appointment_service_id" name="appointment_service_id" required>
+                      <option [value]="0">Seleccionar servicio</option>
+                      <option *ngFor="let servicio of servicios" [value]="servicio.id">{{ servicio.nombre }}</option>
                     </select>
                     <div class="invalid-feedback d-block"
-                      *ngIf="submitted && (!especialidad_id || especialidad_id === 0)">
-                      {{ 'APPOINTMENTS.ADD_DOCTOR.SPECIALTY_REQUIRED' | translate }}
-                    </div>
-                  </div>
-
-                  <!-- Profesión/Categoría (SOLO VISIBLE SI ES GENERAL) -->
-                  <div class="col-md-6" *ngIf="isGeneral && !isSpecialist">
-                    <label class="form-label">
-                      <i class="fa fa-user-md me-1"></i>{{ 'Profesión' | translate }} <span class="text-danger">*</span>
-                    </label>
-                    <select class="form-select form-control"
-                      [class.is-invalid]="submitted && (!general_medical_id || general_medical_id === 0)"
-                      [(ngModel)]="general_medical_id" name="general_medical_id" required>
-                      <option [value]="0">{{ 'Seleccione una profesión' | translate }}</option>
-                      <option *ngFor="let item of generalMedicals" [value]="item.id">{{ item.nombre }}</option>
-                    </select>
-                    <div class="invalid-feedback d-block"
-                      *ngIf="submitted && (!general_medical_id || general_medical_id === 0)">
-                      {{ 'Se requiere seleccionar una profesión' | translate }}
+                      *ngIf="submitted && (!appointment_service_id || appointment_service_id === 0)">
+                      Se requiere seleccionar un servicio
                     </div>
                   </div>
                 </div>
@@ -197,7 +179,7 @@
                 <button type="button" class="btn btn-cancel" (click)="goToList()" [disabled]="loading">
                   <i class="fa fa-times me-2"></i>{{ 'COMMON.CANCEL' | translate }}
                 </button>
-                <button type="button" class="btn btn-save" (click)="save()" [disabled]="loading">
+                <button type="button" class="btn btn-save" (click)="saveDoctor()" [disabled]="loading">
                   @if (loading) {
                   <span class="spinner-border spinner-border-sm me-2"></span>
                   } @else {

@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item"><a [routerLink]="['/medical/appointments/list_doctor']">{{ 'DOCTORS' | translate
+            <li class="breadcrumb-item"><a [routerLink]="['/appointments/list_doctor']">{{ 'DOCTORS' | translate
                 }}</a></li>
             <li class="breadcrumb-item active">{{ 'APPOINTMENTS.EDIT_DOCTOR.BREADCRUMB' | translate }}</li>
           </ol>
@@ -51,43 +51,37 @@
                     </div>
                   </div>
 
-                  <!-- Especialidad -->
-                  <!-- Especialidad (Solo si es Especialista o Admin) -->
-                  <div class="col-md-6" *ngIf="showSpecialist">
+                  <!-- Servicio Unificado -->
+                  <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-stethoscope me-1"></i>{{ 'APPOINTMENTS.EDIT_DOCTOR.SPECIALTY' | translate }} <span
-                        class="text-danger" *ngIf="!showGeneral">*</span>
+                      <i class="fa fa-briefcase-medical me-1"></i>Servicio / Especialidad <span
+                        class="text-danger">*</span>
                     </label>
                     <select class="form-select form-control"
-                      [class.is-invalid]="submitted && showSpecialist && !showGeneral && (!especialidad_id || especialidad_id === 0)"
-                      [(ngModel)]="especialidad_id" name="especialidad_id" [required]="!showGeneral">
-                      <option [value]="0">{{ 'APPOINTMENTS.EDIT_DOCTOR.SELECT_SPECIALTY' | translate }}</option>
-                      <option *ngFor="let esp of especialidades" [value]="esp.id">{{ esp.nombre }}</option>
+                      [class.is-invalid]="submitted && (!appointment_service_id || appointment_service_id === 0)"
+                      [(ngModel)]="appointment_service_id" name="appointment_service_id" required>
+                      <option [value]="0">Seleccione un Servicio</option>
+                      <option *ngFor="let s of services" [value]="s.id">{{ s.nombre }}</option>
                     </select>
                     <div class="invalid-feedback d-block"
-                      *ngIf="submitted && showSpecialist && !showGeneral && (!especialidad_id || especialidad_id === 0)">
-                      {{ 'APPOINTMENTS.EDIT_DOCTOR.SPECIALTY_REQUIRED' | translate }}
+                      *ngIf="submitted && (!appointment_service_id || appointment_service_id === 0)">
+                      {{ 'COMMON.FILL_REQUIRED_FIELDS' | translate }}
                     </div>
                   </div>
 
-                  <!-- Médico General (Solo si es General o Admin) -->
-                  <div class="col-md-6" *ngIf="showGeneral">
+                  <!-- Usuario Vinculado -->
+                  <div class="col-md-12">
                     <label class="form-label">
-                      <i class="fa fa-user-md me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.GENERAL_MEDICAL' | translate }}
-                      <span class="text-danger" *ngIf="!showSpecialist">*</span>
+                      <i class="fa fa-user-circle me-1"></i>Usuario Vinculado (Login)
                     </label>
-                    <select class="form-select form-control"
-                      [class.is-invalid]="submitted && showGeneral && !showSpecialist && (!general_medical_id || general_medical_id === 0)"
-                      [(ngModel)]="general_medical_id" name="general_medical_id" [required]="!showSpecialist">
-                      <option [value]="0">{{ 'APPOINTMENTS.ADD_APPOINTMENT.SELECT_GENERAL_MEDICAL' | translate }}
-                      </option>
-                      <option *ngFor="let gm of generalMedicals" [value]="gm.id">{{ gm.nombre }}</option>
+                    <select class="form-select form-control" [(ngModel)]="user_id" name="user_id">
+                      <option [ngValue]="null">-- Sin vincular --</option>
+                      <option *ngFor="let user of users" [value]="user.id">{{ user.name }} {{ user.surname }} ({{
+                        user.email }})</option>
                     </select>
-                    <div class="invalid-feedback d-block"
-                      *ngIf="submitted && showGeneral && !showSpecialist && (!general_medical_id || general_medical_id === 0)">
-                      {{ 'APPOINTMENTS.ADD_APPOINTMENT.GENERAL_MEDICAL_REQUIRED' | translate }}
-                    </div>
+                    <small class="text-muted">Seleccione el usuario que gestionará este perfil de doctor.</small>
                   </div>
+
                 </div>
               </div>
 

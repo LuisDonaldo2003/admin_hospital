@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TeachingService } from '../../services/teaching.service';
 import {
-  Teaching,
+  TeachingAssistant,
   Modalidad,
   Participacion,
   TeachingStats,
@@ -34,7 +34,7 @@ import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 export class ListAssistantsComponent implements OnInit {
 
   // Datos
-  public teachingList: Teaching[] = [];
+  public teachingList: TeachingAssistant[] = [];
   public modalidades: Modalidad[] = [];
   public participaciones: Participacion[] = [];
   public profesiones: string[] = [];
@@ -62,7 +62,8 @@ export class ListAssistantsComponent implements OnInit {
 
   // Estado
   public loading = false;
-  public teaching_selected: Teaching | null = null;
+  public teaching_selected: TeachingAssistant | null = null;
+  public event_selected: any = null;
 
   // Control de expansión de cards
   public expandedCards: Set<number> = new Set();
@@ -166,8 +167,6 @@ export class ListAssistantsComponent implements OnInit {
       participacion_id: this.filtroParticipacion,
       sort_direction: this.sortDirection
     };
-
-
 
     this.teachingService.getTeachings(this.currentPage, this.pageSize, filters).subscribe({
       next: (response) => {
@@ -300,7 +299,7 @@ export class ListAssistantsComponent implements OnInit {
   /**
    * Seleccionar registro para eliminar
    */
-  public selectTeaching(teaching: Teaching): void {
+  public selectTeaching(teaching: TeachingAssistant): void {
     this.teaching_selected = teaching;
   }
 
@@ -323,6 +322,35 @@ export class ListAssistantsComponent implements OnInit {
         this.translate.get('TEACHING.DELETE_ERROR').subscribe((text: string) => {
           alert(text);
         });
+      }
+    });
+  }
+
+  /**
+   * Seleccionar evento para eliminar
+   */
+  public selectEvent(event: any): void {
+    this.event_selected = event;
+  }
+
+  /**
+   * Eliminar evento individual
+   */
+  public deleteEvent(): void {
+    if (!this.event_selected?.id) return;
+
+    this.teachingService.deleteTeachingEvent(this.event_selected.id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          // Volver a cargar los datos y estadísticas
+          this.getTableData();
+          this.getStats();
+          this.event_selected = null;
+        }
+      },
+      error: (error) => {
+        console.error('Error al eliminar evento:', error);
+        alert('Error al eliminar evento');
       }
     });
   }
@@ -426,14 +454,17 @@ export class ListAssistantsComponent implements OnInit {
       return 0;
     }
 
-    return this.teachingList.reduce((total, teaching) => {
-      if (!teaching.horas) return total;
+    return this.teachingList.reduce((totalAssistants, assistant) => {
+      if (!assistant.events || assistant.events.length === 0) return totalAssistants;
 
-      // Extraer el número de horas
-      const horasStr = teaching.horas.toString().replace(/[^0-9.]/g, '');
-      const horasNum = parseFloat(horasStr);
+      const assistantTotal = assistant.events.reduce((totalEvents, event) => {
+        if (!event.horas) return totalEvents;
+        const horasStr = event.horas.toString().replace(/[^0-9.]/g, '');
+        const horasNum = parseFloat(horasStr);
+        return totalEvents + (isNaN(horasNum) ? 0 : horasNum);
+      }, 0);
 
-      return total + (isNaN(horasNum) ? 0 : horasNum);
+      return totalAssistants + assistantTotal;
     }, 0);
   }
 

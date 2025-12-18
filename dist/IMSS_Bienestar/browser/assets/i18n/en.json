@@ -215,6 +215,7 @@
         "TITLE": "Doctors",
         "LIST": "Doctor List",
         "ADD": "Add Doctor",
+        "ASSIGN_SERVICES": "Assign Services",
         "EDIT": "Edit Doctor",
         "DELETE": "Delete Doctor"
       },
@@ -2839,6 +2840,7 @@
   "DOCTORS_LIST": "Doctors List",
   "ADD_DOCTOR": "Add Doctor",
   "EDIT_DOCTOR": "Edit Doctor",
+  "ASSIGN_SERVICES": "Assign Services",
   "DELETE_DOCTOR": "Delete Doctor",
   "APPOINTMENTS_LIST": "Appointments List",
   "ADD_APPOINTMENT": "New Appointment",

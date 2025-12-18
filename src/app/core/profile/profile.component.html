@@ -1,28 +1,32 @@
 <!-- Contenedor principal de la página de perfil de usuario -->
 <div class="page-wrapper">
   <div class="content" *ngIf="profileData">
-    <!-- Encabezado y breadcrumb de navegación -->
-    <div class="row align-items-center">
-      <div class="col-sm-7 col-6">
-        <ul class="breadcrumb mb-3 mb-sm-0">
-          <li class="breadcrumb-item">
-            <a>{{ 'PROFILE.PROFILES.DASHBOARD' | translate }}</a>
-          </li>
-          <li class="breadcrumb-item" aria-hidden="true">
-            <i class="fa fa-chevron-right"></i>
-          </li>
-          <li class="breadcrumb-item active">{{ 'PROFILE.PROFILES.PROFILES' | translate }}</li>
-        </ul>
-      </div>
-      <div class="col-sm-5 col-6 text-end mb-3">
-        <!-- Botón para cambiar contraseña -->
-        <a [routerLink]="routes.changePassword" class="btn btn-warning btn-rounded me-2">
-          <i class="fa fa-lock"></i> {{ 'PROFILE.PROFILES.CHANGE_PASSWORD' | translate }}
-        </a>
-        <!-- Botón para editar el perfil -->
-        <a [routerLink]="routes.editProfile" class="btn btn-primary btn-rounded">
-          <i class="fa fa-pencil"></i> {{ 'PROFILE.PROFILES.EDIT_PROFILE' | translate }}
-        </a>
+    <!-- Estándar de Page Header del Proyecto -->
+    <div class="page-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a>{{ 'PROFILE.PROFILES.DASHBOARD' | translate }}</a>
+            </li>
+            <li class="breadcrumb-item"><i class="fa fa-chevron-right"></i></li>
+            <li class="breadcrumb-item active">{{ 'PROFILE.PROFILES.PROFILES' | translate }}</li>
+          </ul>
+        </div>
+        <div class="col-auto text-end float-end ms-auto">
+          <!-- Botón para cambiar correo -->
+          <button (click)="openEmailModal()" class="btn btn-info btn-rounded text-white me-2">
+            <i class="fa fa-envelope"></i> {{ 'PROFILE.PROFILES.EMAIL_CHANGE.TITLE' | translate }}
+          </button>
+          <!-- Botón para cambiar contraseña -->
+          <a [routerLink]="routes.changePassword" class="btn btn-warning btn-rounded me-2">
+            <i class="fa fa-lock"></i> {{ 'PROFILE.PROFILES.CHANGE_PASSWORD' | translate }}
+          </a>
+          <!-- Botón para editar el perfil -->
+          <a [routerLink]="routes.editProfile" class="btn btn-primary btn-rounded">
+            <i class="fa fa-pencil"></i> {{ 'PROFILE.PROFILES.EDIT_PROFILE' | translate }}
+          </a>
+        </div>
       </div>
     </div>
 
@@ -88,7 +92,6 @@
         </div>
       </div>
     </div>
-
 
     <!-- Información de la licencia del sistema -->
     <div class="card-box license-card mt-4">
@@ -233,3 +236,87 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal para cambio de correo electrónico (Ahora dentro de .content) -->
+    <div class="custom-modal-overlay" *ngIf="showEmailModal" (click)="closeEmailModal()">
+      <div class="custom-modal-content card" (click)="$event.stopPropagation()">
+        <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white py-3">
+          <h5 class="modal-title mb-0">
+            <i class="fa fa-envelope-o me-2"></i>
+            {{ 'PROFILE.PROFILES.EMAIL_CHANGE.TITLE' | translate }}
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="closeEmailModal()"></button>
+        </div>
+
+        <div class="card-body p-4">
+          <!-- Paso 1: Solicitar cambio -->
+          <div *ngIf="emailStep === 'request'" class="text-center">
+            <div class="step-icon mb-4">
+              <i class="fa fa-paper-plane-o fa-2x text-primary"></i>
+            </div>
+            <p class="text-muted mb-4">
+              {{ 'PROFILE.PROFILES.EMAIL_CHANGE.REQUEST_DESC' | translate }}
+              <br><strong>{{ profileData.email }}</strong>
+            </p>
+
+            <div class="form-group mb-3 text-start">
+              <label class="form-label font-weight-bold">{{ 'PROFILE.PROFILES.EMAIL_CHANGE.NEW_EMAIL' | translate
+                }}</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                <input type="email" class="form-control" [(ngModel)]="newEmail"
+                  placeholder="{{ 'PROFILE.PROFILES.EMAIL_CHANGE.PLACEHOLDER' | translate }}">
+              </div>
+            </div>
+
+            <div *ngIf="emailError" class="alert alert-danger py-2 small mb-3">
+              <i class="fa fa-exclamation-circle me-1"></i> {{ emailError }}
+            </div>
+
+            <button class="btn btn-primary w-100 py-2 mt-2" (click)="requestEmailChange()" [disabled]="emailLoading">
+              <i class="fa" [ngClass]="emailLoading ? 'fa-spinner fa-spin' : 'fa-arrow-right'"></i>
+              {{ 'PROFILE.PROFILES.EMAIL_CHANGE.SEND_CODE' | translate }}
+            </button>
+          </div>
+
+          <!-- Paso 2: Confirmar código -->
+          <div *ngIf="emailStep === 'confirm'" class="text-center">
+            <div class="step-icon mb-4">
+              <i class="fa fa-shield fa-2x text-success"></i>
+            </div>
+            <p class="text-muted mb-4">
+              {{ 'PROFILE.PROFILES.EMAIL_CHANGE.CONFIRM_DESC' | translate }}
+            </p>
+
+            <div *ngIf="emailSuccess" class="alert alert-success py-2 small mb-3">
+              <i class="fa fa-check-circle me-1"></i> {{ emailSuccess }}
+            </div>
+
+            <div class="form-group mb-4">
+              <label class="form-label font-weight-bold">{{ 'PROFILE.PROFILES.EMAIL_CHANGE.VERIFICATION_CODE' |
+                translate
+                }}</label>
+              <input type="text" class="form-control text-center verification-input py-2" [(ngModel)]="verificationCode"
+                maxlength="8" placeholder="00000000" style="font-size: 1.5rem; letter-spacing: 5px; font-weight: bold;">
+            </div>
+
+            <div *ngIf="emailError" class="alert alert-danger py-2 small mb-3">
+              <i class="fa fa-exclamation-circle me-1"></i> {{ emailError }}
+            </div>
+
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-secondary flex-1 py-2"
+                (click)="emailStep = 'request'; emailError = ''; emailSuccess = ''">
+                <i class="fa fa-arrow-left me-1"></i> Atrás
+              </button>
+              <button class="btn btn-primary flex-1 py-2" (click)="confirmEmailChange()" [disabled]="emailLoading">
+                <i class="fa" [ngClass]="emailLoading ? 'fa-spinner fa-spin' : 'fa-check'"></i>
+                {{ 'PROFILE.PROFILES.EMAIL_CHANGE.CONFIRM_CHANGE' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

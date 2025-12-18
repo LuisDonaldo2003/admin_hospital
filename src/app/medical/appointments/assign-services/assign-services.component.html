@@ -1,0 +1,227 @@
+<!-- Contenedor principal de la página -->
+<div class="page-wrapper">
+    <div class="content">
+
+        <!-- Breadcrumb de navegación -->
+        <div class="page-header mb-4">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb bg-light p-2 rounded">
+                        <li class="breadcrumb-item">
+                            <a routerLink="/appointments">Citas</a>
+                        </li>
+                        <li class="breadcrumb-item active">Asignar Servicios a Usuarios</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card card-assign shadow border-0">
+                    <div class="card-body">
+
+                        <!-- Encabezado -->
+                        <div class="header-section mb-4">
+                            <h4 class="mb-2 fw-semibold">
+                                <i class="fa fa-user-cog me-2"></i>
+                                Asignar Servicios a Usuarios
+                            </h4>
+                            <p class="description-text mb-0">
+                                Selecciona un usuario y marca los servicios que puede gestionar. Los cambios se
+                                guardarán al hacer clic en "Guardar Asignación".
+                            </p>
+                        </div>
+
+                        <!-- Selector de Usuario -->
+                        <div class="user-selector-section mb-4">
+                            <div class="row g-3">
+                                <div class="col-lg-8">
+                                    <label class="form-label fw-semibold">
+                                        <i class="fa fa-user me-2"></i>Selecciona un Usuario *
+                                    </label>
+                                    <!-- Usamos un select nativo para mantener el formato solicitado -->
+                                    <select class="form-select selector-user" [(ngModel)]="selectedUserId"
+                                        (change)="onUserSelect(selectedUserId)">
+                                        <option [ngValue]="null" selected>-- Selecciona un usuario para asignar
+                                            servicios --</option>
+                                        <option *ngFor="let user of users" [value]="user.id">
+                                            {{ user.name }} {{ user.surname }} ({{ user.email }})
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4 d-flex align-items-end">
+                                    <div class="counter-badge w-100">
+                                        <i class="fa fa-check-circle me-2"></i>
+                                        <strong>Servicios seleccionados:</strong>
+                                        <span class="count">{{ selectedServices.length }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="separator"></div>
+
+                        <!-- Sección de Servicios (Visible al seleccionar usuario) -->
+                        <div *ngIf="selectedUserId" class="services-grid-section">
+                            <h5 class="section-title mb-3">
+                                <i class="fa fa-shield-alt me-2"></i>Lista de Servicios Disponibles
+                            </h5>
+
+                            <!-- Tabs de Categorías -->
+                            <ul class="nav nav-pills services-tabs nav-fill" id="servicesTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="especialidades-tab" data-bs-toggle="tab"
+                                        data-bs-target="#especialidades-panel" type="button" role="tab"
+                                        aria-controls="especialidades-panel" aria-selected="true">
+                                        <i class="fa fa-stethoscope me-2"></i> Especialidades
+                                        <span class="badge ms-2">{{ getServicesByCategory('Especialidad').length
+                                            }}</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="otros-tab" data-bs-toggle="tab"
+                                        data-bs-target="#otros-panel" type="button" role="tab"
+                                        aria-controls="otros-panel" aria-selected="false">
+                                        <i class="fa fa-plus-circle me-2"></i> Otros Servicios
+                                        <span class="badge ms-2">{{ getServicesByCategory('Otros').length }}</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="general-tab" data-bs-toggle="tab"
+                                        data-bs-target="#general-panel" type="button" role="tab"
+                                        aria-controls="general-panel" aria-selected="false">
+                                        <i class="fa fa-user-md me-2"></i> Consulta General
+                                        <span class="badge ms-2">{{ getServicesByCategory('General').length }}</span>
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="servicesTabsContent">
+                                <!-- Panel Especialidades -->
+                                <div class="tab-pane fade show active" id="especialidades-panel" role="tabpanel"
+                                    aria-labelledby="especialidades-tab">
+                                    <div class="services-grid">
+                                        <div *ngFor="let service of getServicesByCategory('Especialidad')"
+                                            class="service-card" [class.selected]="isServiceSelected(service.id)"
+                                            (click)="toggleService(service.id)">
+
+                                            <div class="service-card-content">
+                                                <div class="checkbox-wrapper">
+                                                    <input type="checkbox" [checked]="isServiceSelected(service.id)"
+                                                        (click)="$event.stopPropagation()"
+                                                        (change)="toggleService(service.id)">
+                                                    <span class="checkmark"></span>
+                                                </div>
+                                                <div class="service-info">
+                                                    <span class="service-name">{{ service.nombre }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="getServicesByCategory('Especialidad').length === 0"
+                                        class="col-12 py-5 text-center no-services-message">
+                                        <i class="fa fa-info-circle fa-3x mb-3"></i>
+                                        <p>No se encontraron especialidades.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Panel Otros -->
+                                <div class="tab-pane fade" id="otros-panel" role="tabpanel" aria-labelledby="otros-tab">
+                                    <div class="services-grid">
+                                        <div *ngFor="let service of getServicesByCategory('Otros')" class="service-card"
+                                            [class.selected]="isServiceSelected(service.id)"
+                                            (click)="toggleService(service.id)">
+
+                                            <div class="service-card-content">
+                                                <div class="checkbox-wrapper">
+                                                    <input type="checkbox" [checked]="isServiceSelected(service.id)"
+                                                        (click)="$event.stopPropagation()"
+                                                        (change)="toggleService(service.id)">
+                                                    <span class="checkmark"></span>
+                                                </div>
+                                                <div class="service-info">
+                                                    <span class="service-name">{{ service.nombre }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="getServicesByCategory('Otros').length === 0"
+                                        class="col-12 py-5 text-center no-services-message">
+                                        <i class="fa fa-info-circle fa-3x mb-3"></i>
+                                        <p>No se encontraron otros servicios.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Panel General -->
+                                <div class="tab-pane fade" id="general-panel" role="tabpanel"
+                                    aria-labelledby="general-tab">
+                                    <div class="services-grid">
+                                        <div *ngFor="let service of getServicesByCategory('General')"
+                                            class="service-card" [class.selected]="isServiceSelected(service.id)"
+                                            (click)="toggleService(service.id)">
+
+                                            <div class="service-card-content">
+                                                <div class="checkbox-wrapper">
+                                                    <input type="checkbox" [checked]="isServiceSelected(service.id)"
+                                                        (click)="$event.stopPropagation()"
+                                                        (change)="toggleService(service.id)">
+                                                    <span class="checkmark"></span>
+                                                </div>
+                                                <div class="service-info">
+                                                    <span class="service-name">{{ service.nombre }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="getServicesByCategory('General').length === 0"
+                                        class="col-12 py-5 text-center no-services-message">
+                                        <i class="fa fa-info-circle fa-3x mb-3"></i>
+                                        <p>No se encontraron servicios generales.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estado vacío inicial -->
+                        <div *ngIf="!selectedUserId" class="empty-state">
+                            <i class="fa fa-hand-point-up fa-3x mb-3"></i>
+                            <p class="mb-0">Por favor, selecciona un usuario arriba para comenzar a asignar servicios.
+                            </p>
+                        </div>
+
+                        <div class="separator mt-4"></div>
+
+                        <!-- Alertas -->
+                        <div *ngIf="text_error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong><i class="fa fa-exclamation-triangle me-2"></i>Error:</strong> {{ text_error }}
+                            <button type="button" class="btn-close" (click)="text_error = ''"
+                                aria-label="Cerrar"></button>
+                        </div>
+
+                        <div *ngIf="text_success" class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong><i class="fa fa-check-circle me-2"></i>¡Éxito!</strong> {{ text_success }}
+                            <button type="button" class="btn-close" (click)="text_success = ''"
+                                aria-label="Cerrar"></button>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="actions-section">
+                            <button class="btn btn-cancel" (click)="cancelSelection()" [disabled]="loading">
+                                <i class="fa fa-times me-2"></i>Cancelar
+                            </button>
+                            <button class="btn btn-save" (click)="saveAssignment()"
+                                [disabled]="!selectedUserId || loading">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                                <i *ngIf="!loading" class="fa fa-save me-2"></i>
+                                Guardar Asignación
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

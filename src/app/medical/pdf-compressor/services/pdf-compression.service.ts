@@ -3,7 +3,8 @@ import { PDFDocument, rgb, PDFImage } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
 
 // Configurar worker de PDF.js
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
+// Configurar worker de PDF.js
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.394/build/pdf.worker.min.mjs`;
 
 @Injectable({
   providedIn: 'root'
@@ -21,22 +22,22 @@ export class PdfCompressionService {
   async compressPdf(file: File, targetSize: number = 500 * 1024): Promise<Blob> {
     try {
       const arrayBuffer = await file.arrayBuffer();
-      
-      
-      
+
+
+
       // Intentar primero con compresión estándar de pdf-lib
       let result = await this.tryStandardCompression(arrayBuffer, targetSize);
-      
+
       // Si no es suficiente, usar compresión con renderizado (más potente)
       if (result.length > targetSize) {
         result = await this.compressWithRendering(arrayBuffer, targetSize);
       }
-      
-      
-      
+
+
+
       const buffer = new Uint8Array(result);
       return new Blob([buffer], { type: 'application/pdf' });
-      
+
     } catch (error) {
       console.error('Error al comprimir PDF:', error);
       throw new Error('No se pudo comprimir el archivo PDF');
@@ -54,15 +55,15 @@ export class PdfCompressionService {
 
     // Nivel 1: Compresión básica
     let result = await this.basicCompression(pdfDoc);
-    
+
     if (result.length > targetSize) {
       result = await this.advancedCompression(pdfDoc);
     }
-    
+
     if (result.length > targetSize) {
       result = await this.aggressiveCompression(pdfDoc);
     }
-    
+
     return result;
   }
 
@@ -74,65 +75,65 @@ export class PdfCompressionService {
       // Cargar PDF con PDF.js
       const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
       const pdfDocument = await loadingTask.promise;
-      
+
       // Crear nuevo PDF
       const newPdfDoc = await PDFDocument.create();
-      
+
       const numPages = pdfDocument.numPages;
-      
-      
+
+
       // Calcular calidad basada en tamaño objetivo
       let quality = 0.5; // Calidad inicial (50%)
       const bytesPerPage = targetSize / (numPages || 1);
-      
+
       // Ajustar calidad según tamaño objetivo
       if (bytesPerPage < 50 * 1024) quality = 0.3; // Muy comprimido
       else if (bytesPerPage < 100 * 1024) quality = 0.4; // Comprimido
       else if (bytesPerPage < 200 * 1024) quality = 0.5; // Balanceado
       else quality = 0.6; // Buena calidad
-      
-      
-      
+
+
+
       // Renderizar cada página y agregarla al nuevo PDF
       for (let pageNum = 1; pageNum <= numPages; pageNum++) {
         try {
           const page = await pdfDocument.getPage(pageNum);
           const viewport = page.getViewport({ scale: 1.5 }); // Escala para mantener calidad
-          
+
           // Crear canvas
           const canvas = document.createElement('canvas');
           const context = canvas.getContext('2d')!;
           canvas.width = viewport.width;
           canvas.height = viewport.height;
-          
+
           // Renderizar PDF a canvas (actualizado para pdfjs-dist 5.x)
           await page.render({
             canvasContext: context,
             viewport: viewport,
             canvas: canvas // Requerido en pdfjs-dist 5.x
           }).promise;
-          
+
           // Convertir canvas a imagen JPEG comprimida
           const imageDataUrl = canvas.toDataURL('image/jpeg', quality);
           const imageBytes = this.dataURLToUint8Array(imageDataUrl);
-          
+
           // Agregar imagen al nuevo PDF
           const pdfImage = await newPdfDoc.embedJpg(imageBytes);
           const pdfPage = newPdfDoc.addPage([viewport.width, viewport.height]);
-          
+
           pdfPage.drawImage(pdfImage, {
             x: 0,
             y: 0,
             width: viewport.width,
             height: viewport.height
           });
-          
-          
+
+
         } catch (pageError) {
           console.warn(`  ⚠ Error en página ${pageNum}:`, pageError);
         }
       }
-      
+
       // Limpiar metadata
       newPdfDoc.setTitle('');
       newPdfDoc.setAuthor('');
@@ -140,19 +141,19 @@ export class PdfCompressionService {
       newPdfDoc.setKeywords([]);
       newPdfDoc.setProducer('');
       newPdfDoc.setCreator('');
-      
+
       // Guardar con máxima compresión
       const result = await newPdfDoc.save({
         useObjectStreams: true,
         addDefaultPage: false,
         objectsPerTick: 500
       });
-      
+
       // Si aún supera el tamaño, intentar con menor calidad
       if (result.length > targetSize && quality > 0.3) {
         return await this.compressWithLowerQuality(arrayBuffer, targetSize, quality - 0.1);
       }
-      
+
       return result;
     } catch (error) {
       console.error('Error en compresión con renderizado:', error);
@@ -166,36 +167,36 @@ export class PdfCompressionService {
    */
   private async compressWithLowerQuality(arrayBuffer: ArrayBuffer, targetSize: number, quality: number): Promise<Uint8Array> {
     if (quality < 0.2) quality = 0.2; // Calidad mínima
-    
+
     const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
     const pdfDocument = await loadingTask.promise;
     const newPdfDoc = await PDFDocument.create();
     const numPages = pdfDocument.numPages;
-    
-    
-    
+
+
+
     for (let pageNum = 1; pageNum <= numPages; pageNum++) {
       try {
         const page = await pdfDocument.getPage(pageNum);
         const viewport = page.getViewport({ scale: 1.2 }); // Menor escala
-        
+
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d')!;
         canvas.width = viewport.width;
         canvas.height = viewport.height;
-        
+
         await page.render({
           canvasContext: context,
           viewport: viewport,
           canvas: canvas // Requerido en pdfjs-dist 5.x
         }).promise;
-        
+
         const imageDataUrl = canvas.toDataURL('image/jpeg', quality);
         const imageBytes = this.dataURLToUint8Array(imageDataUrl);
-        
+
         const pdfImage = await newPdfDoc.embedJpg(imageBytes);
         const pdfPage = newPdfDoc.addPage([viewport.width, viewport.height]);
-        
+
         pdfPage.drawImage(pdfImage, {
           x: 0,
           y: 0,
@@ -206,11 +207,11 @@ export class PdfCompressionService {
         console.warn(`Error en página ${pageNum}:`, pageError);
       }
     }
-    
+
     newPdfDoc.setTitle('');
     newPdfDoc.setAuthor('');
     newPdfDoc.setSubject('');
-    
+
     return await newPdfDoc.save({
       useObjectStreams: true,
       addDefaultPage: false,
@@ -280,9 +281,9 @@ export class PdfCompressionService {
     try {
       // Crear un nuevo documento PDF
       const newPdfDoc = await PDFDocument.create();
-      
+
       const pages = pdfDoc.getPages();
-      
+
       // Copiar páginas con compresión
       for (let i = 0; i < pages.length; i++) {
         const [copiedPage] = await newPdfDoc.copyPages(pdfDoc, [i]);
@@ -315,19 +316,19 @@ export class PdfCompressionService {
     try {
       // Crear un nuevo documento completamente limpio
       const newPdfDoc = await PDFDocument.create();
-      
+
       const pages = pdfDoc.getPages();
       const totalPages = pages.length;
-      
+
       // Intentar copiar todas las páginas con máxima compresión
       for (let i = 0; i < totalPages; i++) {
         try {
           const [copiedPage] = await newPdfDoc.copyPages(pdfDoc, [i]);
-          
+
           // Reducir el tamaño de la página si es necesario (escalar a 90%)
           const { width, height } = copiedPage.getSize();
           copiedPage.setSize(width * 0.9, height * 0.9);
-          
+
           newPdfDoc.addPage(copiedPage);
         } catch (pageError) {
           console.warn(`Error copiando página ${i}:`, pageError);
@@ -381,11 +382,11 @@ export class PdfCompressionService {
    */
   formatFileSize(bytes: number): string {
     if (bytes === 0) return '0 Bytes';
-    
+
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
+
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   }
 }

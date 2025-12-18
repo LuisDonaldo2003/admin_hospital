@@ -200,7 +200,7 @@
 
                 <!-- Cuerpo de la card con información en layout horizontal -->
                 <div class="patient-card-body">
-                  <!-- Vista resumida (siempre visible) -->
+                  <!-- Vista resumida del Asistente (siempre visible) -->
                   <div class="patient-horizontal-info mb-2">
 
                     <!-- Nombre completo -->
@@ -212,175 +212,111 @@
                       </div>
                     </div>
 
-                    <!-- Nombre del Evento -->
-                    <div class="info-block info-tema">
-                      <i class="fa fa-bookmark"></i>
+                    <!-- Profesión -->
+                    <div class="info-block info-compact">
+                      <i class="fa fa-user-md"></i>
                       <div class="info-details">
-                        <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.EVENT' | translate }}</span>
-                        <span class="info-value-main">{{ teaching.nombre_evento ||
+                        <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.PROFESSION' | translate }}</span>
+                        <span class="info-value-main">{{ teaching.profesion ||
                           ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
                       </div>
                     </div>
 
-                  </div>
-
-                  <!-- Segunda fila resumida -->
-                  <div class="patient-horizontal-info mb-2">
-
-                    <!-- Tema -->
-                    <div class="info-block info-tema">
-                      <i class="fa fa-tags"></i>
+                    <!-- Area -->
+                    <div class="info-block info-compact">
+                      <i class="fa fa-building"></i>
                       <div class="info-details">
-                        <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.THEME' | translate }}</span>
-                        <span class="info-value-main">{{ teaching.tema || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' |
+                        <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.AREA' | translate }}</span>
+                        <span class="info-value-main">{{ teaching.area || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' |
                           translate) }}</span>
                       </div>
                     </div>
 
-                    <!-- Modalidad -->
-                    <div class="info-block info-medium">
-                      <i class="fa fa-laptop"></i>
+                    <!-- Contador de eventos -->
+                    <div class="info-block info-small">
+                      <i class="fa fa-list-ol"></i>
                       <div class="info-details">
-                        <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.MODALITY' | translate }}</span>
-                        <span class="info-value-main">{{ teaching.modalidad || getModalidadNombre(teaching.modalidad_id)
-                          }}</span>
-                      </div>
-                    </div>
-
-                    <!-- Participación -->
-                    <div class="info-block info-medium">
-                      <i class="fa fa-users"></i>
-                      <div class="info-details">
-                        <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.PARTICIPATION' | translate
-                          }}</span>
-                        <span class="info-value-main">{{ teaching.participacion ||
-                          getParticipacionNombre(teaching.participacion_id) }}</span>
+                        <span class="info-label-small">Eventos</span>
+                        <span class="info-value-main text-primary fw-bold">{{ teaching.events_count ||
+                          (teaching.events?.length || 0) }}</span>
                       </div>
                     </div>
 
                   </div>
 
-                  <!-- Detalles expandidos (solo cuando está expandida) -->
-                  <div class="expanded-details" *ngIf="isCardExpanded(teaching.id)">
+                  <!-- Segunda fila (Adscripción y Totales del asistente) -->
+                  <div class="patient-horizontal-info mb-2">
+                    <!-- Adscripción -->
+                    <div class="info-block info-location" style="flex: 2;">
+                      <i class="fa fa-hospital"></i>
+                      <div class="info-details">
+                        <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.ADSCRIPTION' | translate }}</span>
+                        <span class="info-value-main">{{ teaching.adscripcion ||
+                          ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
+                      </div>
+                    </div>
+                  </div>
 
-                    <!-- Separador visual -->
+                  <!-- Detalles expandidos (Lista de Eventos) -->
+                  <div class="expanded-details" *ngIf="isCardExpanded(teaching.id)">
                     <div class="details-separator"></div>
 
-                    <!-- Fila 1: Datos personales adicionales -->
-                    <div class="patient-horizontal-info mb-2">
+                    <h6 class="text-muted mb-3"><i class="fa fa-history me-2"></i>Historial de Eventos</h6>
 
-                      <!-- Profesión -->
-                      <div class="info-block info-compact">
-                        <i class="fa fa-user-md"></i>
-                        <div class="info-details">
-                          <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.PROFESSION' | translate
-                            }}</span>
-                          <span class="info-value-main">{{ teaching.profesion ||
-                            ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
+                    <!-- Grid de tarjetas de eventos -->
+                    <div class="events-grid">
+                      <div class="event-card" *ngFor="let event of teaching.events">
+                        <!-- Header del evento: Nombre y Fecha -->
+                        <div class="event-header">
+                          <div class="event-title">
+                            <i class="fa fa-calendar-check me-2"></i>{{ event.nombre_evento }}
+                          </div>
+                          <div class="event-date">
+                            <i class="fa fa-clock me-1"></i>{{ formatDate(event.fecha) }}
+                          </div>
                         </div>
+
+                        <!-- Body del evento: Info detallada -->
+                        <div class="event-body">
+                          <!-- Chips de información -->
+                          <div class="event-info-chips">
+                            <span class="info-chip" title="Modalidad">
+                              <i class="fa fa-desktop"></i>{{ event.modalidad || getModalidadNombre(event.modalidad_id)
+                              }}
+                            </span>
+                            <span class="info-chip" title="Participación">
+                              <i class="fa fa-users"></i>{{ event.participacion ||
+                              getParticipacionNombre(event.participacion_id) }}
+                            </span>
+                            <span class="info-chip" title="Horas">
+                              <i class="fa fa-hourglass-half"></i>{{ formatHoras(event.horas) }}
+                            </span>
+                            <span class="info-chip" title="Foja" *ngIf="event.foja">
+                              <i class="fa fa-file-invoice"></i>Foja: {{ event.foja }}
+                            </span>
+                          </div>
+
+                          <!-- Tema (si existe) -->
+                          <div class="event-theme" *ngIf="event.tema && event.tema !== 'N/A'">
+                            <span class="theme-label">Tema:</span> {{ event.tema }}
+                          </div>
+                        </div>
+
+                        <!-- Botón de eliminar (esquina superior derecha) -->
+                        <button *ngIf="canDelete()" class="btn-delete-event" (click)="selectEvent(event)"
+                          data-bs-toggle="modal" data-bs-target="#delete_event_list"
+                          title="{{ 'TEACHING_MODULE.ASSISTANTS.DELETE' | translate }}">
+                          <i class="fa fa-times"></i>
+                        </button>
                       </div>
 
-                      <!-- Área -->
-                      <div class="info-block info-compact">
-                        <i class="fa fa-building"></i>
-                        <div class="info-details">
-                          <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.AREA' | translate }}</span>
-                          <span class="info-value-main">{{ teaching.area || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE'
-                            | translate) }}</span>
-                        </div>
+                      <!-- Estado vacío -->
+                      <div class="empty-events" *ngIf="!teaching.events || teaching.events.length === 0">
+                        <i class="fa fa-calendar-times mb-2"></i>
+                        <p class="mb-0">Sin eventos registrados</p>
                       </div>
-
-                      <!-- Correo -->
-                      <div class="info-block info-email">
-                        <i class="fa fa-envelope"></i>
-                        <div class="info-details">
-                          <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.EMAIL' | translate }}</span>
-                          <span class="info-value-main">{{ teaching.correo ||
-                            ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
-                        </div>
-                      </div>
-
                     </div>
 
-                    <!-- Fila 2: Ubicación -->
-                    <div class="patient-horizontal-info mb-2">
-
-                      <!-- Fila 2: Ubicación -->
-                      <div class="patient-horizontal-info mb-2">
-
-                        <!-- Adscripción -->
-                        <div class="info-block info-location">
-                          <i class="fa fa-hospital"></i>
-                          <div class="info-details">
-                            <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.ADSCRIPTION' | translate
-                              }}</span>
-                            <span class="info-value-main">{{ teaching.adscripcion ||
-                              ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
-                          </div>
-                        </div>
-
-                      </div>
-
-                      <!-- Fila 3: Foja -->
-                      <div class="patient-horizontal-info mb-2">
-
-                        <!-- Foja -->
-                        <div class="info-block info-small">
-                          <i class="fa fa-file-alt"></i>
-                          <div class="info-details">
-                            <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.FOJA' | translate }}</span>
-                            <span class="info-value-main">{{ teaching.foja ||
-                              ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE' | translate) }}</span>
-                          </div>
-                        </div>
-
-                      </div>
-
-                      <!-- Fila 4: Fechas y horas -->
-                      <div class="patient-horizontal-info">
-
-                        <!-- Fecha del evento -->
-                        <div class="info-block info-date">
-                          <i class="fa fa-calendar"></i>
-                          <div class="info-details">
-                            <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.DATE' | translate }}</span>
-                            <span class="info-value-main">{{ formatDate(teaching.fecha) }}</span>
-                          </div>
-                        </div>
-
-                        <!-- Horas -->
-                        <div class="info-block info-small">
-                          <i class="fa fa-clock"></i>
-                          <div class="info-details">
-                            <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.HOURS' | translate }}</span>
-                            <span class="info-value-main">{{ formatHoras(teaching.horas) }}</span>
-                          </div>
-                        </div>
-
-                        <!-- E.I. -->
-                        <div class="info-block info-date">
-                          <i class="fa fa-calendar-plus"></i>
-                          <div class="info-details">
-                            <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.EI' | translate }}</span>
-                            <span class="info-value-main">{{ teaching.ei || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE'
-                              | translate) }}</span>
-                          </div>
-                        </div>
-
-                        <!-- E.F. -->
-                        <div class="info-block info-date">
-                          <i class="fa fa-calendar-check"></i>
-                          <div class="info-details">
-                            <span class="info-label-small">{{ 'TEACHING_MODULE.ASSISTANTS.EF' | translate }}</span>
-                            <span class="info-value-main">{{ teaching.ef || ('TEACHING_MODULE.ASSISTANTS.NOT_AVAILABLE'
-                              | translate) }}</span>
-                          </div>
-                        </div>
-
-                      </div>
-
-                    </div>
-                    <!-- Fin detalles expandidos -->
                   </div>
                 </div>
               </div>
@@ -461,6 +397,30 @@
             <button class="btn btn-light" data-bs-dismiss="modal">{{ 'TEACHING_MODULE.ASSISTANTS.CANCEL' | translate
               }}</button>
             <button class="btn btn-danger" (click)="deleteTeaching()" data-bs-dismiss="modal">{{
+              'TEACHING_MODULE.ASSISTANTS.DELETE' | translate }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Eliminación para confirmar borrado de EVENTO -->
+  <div class="modal fade" id="delete_event_list" tabindex="-1" aria-labelledby="deleteEventModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center p-4">
+          <!-- Imagen de advertencia -->
+          <img src="assets/img/sent.png" alt="" width="50" height="46" />
+          <!-- Mensaje de confirmación -->
+          <h5 class="mt-3" *ngIf="event_selected">
+            ¿Está seguro de eliminar el evento <strong>{{ event_selected.nombre_evento }}</strong>?
+          </h5>
+          <!-- Botones para cancelar o confirmar eliminación -->
+          <div class="mt-4 d-flex justify-content-center gap-3">
+            <button class="btn btn-light" data-bs-dismiss="modal">{{ 'TEACHING_MODULE.ASSISTANTS.CANCEL' | translate
+              }}</button>
+            <button class="btn btn-danger" (click)="deleteEvent()" data-bs-dismiss="modal">{{
               'TEACHING_MODULE.ASSISTANTS.DELETE' | translate }}</button>
           </div>
         </div>

@@ -23,27 +23,42 @@ export interface Participacion {
  * Interfaz principal para los registros de Enseñanza
  * Basado en la hoja "LIBRO10" del Excel y CSV
  */
-export interface Teaching {
+export interface TeachingEvent {
   id?: number;
-  correo?: string; // Correo electrónico
-  ei?: string; // E.I. - Fecha de inicio (formato: 12/20, 13/20, etc.)
-  ef?: string; // E.F. - Fecha final (formato: 20/20, 18/21, etc.)
-  profesion: string; // Profesión (DR., EPSS., MIP., LE., etc.)
-  nombre: string; // Nombre completo del profesional
-  area: string; // Área (MEDICINA, ENFERMERIA, MEDICO INTERNO DE PREGRADO, etc.)
-  adscripcion: string; // Adscripción (HOSPITAL GRAL. REG. "DR. GUILLERMO SOBERÓN ACEVEDO")
-  nombre_evento: string; // Nombre del evento/programa
-  tema?: string; // Tema específico de la sesión
-  fecha: string; // Fecha del evento (formato: 01/13/2025)
-  horas: string; // Horas del evento (ej: "1 HRA.")
-  foja: string; // Número de foja/página
-  modalidad_id?: number; // ID de la modalidad
-  modalidad?: string; // Nombre de la modalidad (CLASES.MIP, SESION EPSS PRESENCIAL, etc.)
-  participacion_id?: number; // ID de la participación
-  participacion?: string; // Nombre de la participación (ASESOR, PONENTE, ASISTENTE, etc.)
+  teaching_assistant_id?: number;
+  nombre_evento: string;
+  tema?: string;
+  fecha: string;
+  horas: string;
+  foja: string;
+  modalidad_id?: number;
+  // Optional expanded fields
+  modalidad?: string;
+  participacion_id?: number;
+  participacion?: string;
   created_at?: string;
   updated_at?: string;
 }
+
+export interface TeachingAssistant {
+  id?: number;
+  nombre: string;
+  profesion?: string;
+  area?: string;
+  adscripcion?: string;
+  correo?: string;
+  ei?: string;
+  ef?: string;
+  events?: TeachingEvent[];
+  events_count?: number;
+  created_at?: string;
+  updated_at?: string;
+
+  // Legacy compatibility / Flattened accessors (optional, might not need them if we refactor components)
+}
+
+// Alias for compatibility if needed, but better to update components
+export type Teaching = TeachingAssistant;
 
 /**
  * Interfaz para el seguimiento de evaluaciones pendientes

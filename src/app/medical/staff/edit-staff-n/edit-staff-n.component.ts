@@ -82,7 +82,7 @@ export class EditStaffNComponent {
     private translate: TranslateService,
     private router: Router,
     private driverTourService: DriverTourService
-  ) {}
+  ) { }
 
   /**
    * Inicia el tour guiado del formulario de editar staff

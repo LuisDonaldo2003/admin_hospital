@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { AppointmentsService, Appointment, Doctor, Especialidad, TimeSlot, EstadoCita } from '../../service/appointments.service';
+import { AppointmentsService, Appointment, Doctor, TimeSlot, EstadoCita } from '../../service/appointments.service';
+import { AppointmentServicesService } from '../../service/appointment-services.service';
 import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
 
 @Component({
@@ -32,7 +33,7 @@ export class EditAppointmentComponent implements OnInit {
   procedencia: string = '';
   tipo_cita: 'Primera vez' | 'Subsecuente' | '' = '';
   turno: 'Matutino' | 'Vespertino' | '' = '';
-  especialidad_id: number = 0;
+  appointment_service_id: number = 0;
   doctor_id: number = 0;
   fecha: string = '';
   hora_inicio: string = '';
@@ -51,7 +52,7 @@ export class EditAppointmentComponent implements OnInit {
   loadingHorarios = false;
 
   // Listas
-  especialidades: Especialidad[] = [];
+  services: any[] = [];
   doctoresDisponibles: Doctor[] = [];
   horariosDisponibles: TimeSlot[] = [];
 
@@ -71,6 +72,7 @@ export class EditAppointmentComponent implements OnInit {
     private route: ActivatedRoute,
     private translate: TranslateService,
     private appointmentsService: AppointmentsService,
+    private appointmentServicesService: AppointmentServicesService,
     private driverTourService: DriverTourService
   ) {
     const selectedLang = localStorage.getItem('language') || 'es';
@@ -78,7 +80,7 @@ export class EditAppointmentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadEspecialidades();
+    this.loadServices();
 
     // Obtener ID de la cita desde la ruta
     this.route.params.subscribe(params => {
@@ -112,7 +114,12 @@ export class EditAppointmentComponent implements OnInit {
         this.procedencia = appointment.procedencia || '';
         this.tipo_cita = appointment.tipo_cita || '';
         this.turno = appointment.turno || '';
-        this.especialidad_id = appointment.doctor_relation?.especialidad_id || appointment.doctor?.especialidad_id || 0;
+        // Mapear servicio unificado
+        this.appointment_service_id = appointment.doctor_relation?.appointment_service_id ||
+          appointment.doctor?.appointment_service_id ||
+          appointment.doctor_relation?.especialidad_id || // Fallback temporal
+          appointment.doctor_relation?.general_medical_id || 0;
+
         this.doctor_id = appointment.doctor_id;
 
         // Formatear fecha: convertir de ISO a YYYY-MM-DD
@@ -134,9 +141,9 @@ export class EditAppointmentComponent implements OnInit {
         // El backend usa 'observaciones' no 'notas'
         this.notas = appointment.observaciones || appointment.notas || '';
 
-        // Cargar doctores de la especialidad
-        if (this.especialidad_id) {
-          this.loadDoctoresByEspecialidad();
+        // Cargar doctores del servicio
+        if (this.appointment_service_id) {
+          this.loadDoctoresByService();
         }
 
         // Cargar horarios disponibles
@@ -156,44 +163,44 @@ export class EditAppointmentComponent implements OnInit {
     });
   }
 
-  loadEspecialidades(): void {
-    this.appointmentsService.listEspecialidades().subscribe({
+  loadServices(): void {
+    this.appointmentServicesService.listAccessible().subscribe({
       next: (response) => {
         if (response.success) {
-          this.especialidades = response.data;
+          this.services = response.data;
         }
       },
       error: (error) => {
-        this.text_validation = 'Error al cargar especialidades';
+        this.text_validation = 'Error al cargar servicios';
       }
     });
   }
 
-  onEspecialidadChange(): void {
+  onServiceChange(): void {
     this.doctor_id = 0;
     this.hora_inicio = '';
     this.horariosDisponibles = [];
 
-    if (this.especialidad_id && this.especialidad_id !== 0) {
-      this.loadDoctoresByEspecialidad();
+    if (this.appointment_service_id && this.appointment_service_id !== 0) {
+      this.loadDoctoresByService();
     } else {
       this.doctoresDisponibles = [];
     }
   }
 
-  loadDoctoresByEspecialidad(): void {
+  loadDoctoresByService(): void {
     this.loadingDoctors = true;
     this.doctoresDisponibles = [];
 
-    this.appointmentsService.getDoctorsByEspecialidad(this.especialidad_id).subscribe({
+    this.appointmentsService.listDoctors({ appointment_service_id: this.appointment_service_id }).subscribe({
       next: (response) => {
         this.loadingDoctors = false;
 
         if (response.success && response.data) {
-          this.doctoresDisponibles = response.data.filter(d => d.activo);
+          this.doctoresDisponibles = response.data.filter((d: any) => d.activo);
 
           if (this.doctoresDisponibles.length === 0) {
-            this.text_validation = 'No hay doctores disponibles para esta especialidad';
+            this.text_validation = 'No hay doctores disponibles para este servicio';
           }
         } else {
           this.doctoresDisponibles = [];
@@ -297,7 +304,7 @@ export class EditAppointmentComponent implements OnInit {
       return false;
     }
 
-    if (!this.especialidad_id || this.especialidad_id === 0) {
+    if (!this.appointment_service_id || this.appointment_service_id === 0) {
       return false;
     }
 

@@ -131,16 +131,17 @@
                   </h5>
                 </div>
                 <div class="row g-3">
-                  <!-- Especialidad -->
+                  <!-- Servicio -->
                   <div class="col-md-6">
                     <label class="form-label">
-                      <i class="fa fa-stethoscope me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.SPECIALTY' | translate }}
+                      <i class="fa fa-stethoscope me-1"></i>{{ 'APPOINTMENTS.ADD_APPOINTMENT.SERVICE_TYPE' | translate
+                      }}
                       <span class="text-danger">*</span>
                     </label>
-                    <select class="form-select form-control" [(ngModel)]="especialidad_id" name="especialidad_id"
-                      (change)="onEspecialidadChange()" required>
-                      <option [value]="0">{{ 'APPOINTMENTS.ADD_APPOINTMENT.SELECT_SPECIALTY' | translate }}</option>
-                      <option *ngFor="let esp of especialidades" [value]="esp.id">{{ esp.nombre }}</option>
+                    <select class="form-select form-control" [(ngModel)]="appointment_service_id"
+                      name="appointment_service_id" (change)="onServiceChange()" required>
+                      <option [value]="0">{{ 'APPOINTMENTS.ADD_APPOINTMENT.SELECT_SERVICE' | translate }}</option>
+                      <option *ngFor="let service of services" [value]="service.id">{{ service.nombre }}</option>
                     </select>
                   </div>
 
@@ -151,7 +152,8 @@
                         class="text-danger">*</span>
                     </label>
                     <select class="form-select form-control" [(ngModel)]="doctor_id" name="doctor_id"
-                      (change)="onDoctorOrFechaChange()" [disabled]="!especialidad_id || loadingDoctors" required>
+                      (change)="onDoctorOrFechaChange()" [disabled]="!appointment_service_id || loadingDoctors"
+                      required>
                       <option [value]="0">
                         @if (loadingDoctors) {
                         {{ 'COMMON.LOADING' | translate }}...

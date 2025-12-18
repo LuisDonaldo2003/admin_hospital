@@ -26,23 +26,22 @@ export class EditPersonalComponent implements OnInit {
   nombre: string = '';
   apellidos: string = '';
   tipo: 'Clínico' | 'No Clínico' | '' = '';
-  fechaIngreso: string = '';
   activo: boolean = true;
   rfc: string = '';
   numeroChecador: string = '';
-  
-  // Control del formulario
-  submitted = false;
-  loading = false;
-  loadingPersonal = true;
-  
-  // ID del personal a editar
+  fechaIngreso: string = '';
+
+  // Control
   personalId: number = 0;
-  
-  // Documentos existentes y nuevos
+  isLoading = true;
+  isSaving = false;
+
+  // Documentos
   documentosExistentes: PersonalDocument[] = [];
-  documentosNuevos = new Map<string, File>();
-  
+
+  // Estado para subida de archivo individual
+  isUploadingDoc = false;
+
   // Mensajes
   text_success = '';
   text_validation = '';
@@ -62,8 +61,7 @@ export class EditPersonalComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private translate: TranslateService,
-    private personalService: PersonalService
-    ,
+    private personalService: PersonalService,
     private driverTourService: DriverTourService
   ) {
     const selectedLang = localStorage.getItem('language') || 'es';
@@ -71,421 +69,206 @@ export class EditPersonalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.personalId = Number(this.route.snapshot.paramMap.get('id'));
-    if (this.personalId) {
-      this.cargarDatosPersonal();
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.personalId = +id;
+      this.cargarDatos();
     } else {
-      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.INVALID_ID');
-      this.loadingPersonal = false;
+      this.goToList();
     }
   }
 
-  /**
-   * Cargar datos del personal desde el servidor
-   */
-  cargarDatosPersonal(): void {
-    this.loadingPersonal = true;
-
-    this.personalService.showPersonal(this.personalId).subscribe({
-      next: (response) => {
-        this.loadingPersonal = false;
-        if (response.success) {
-          const personal = response.data;
-          this.nombre = personal.nombre;
-          this.apellidos = personal.apellidos;
-          this.tipo = personal.tipo;
-          this.fechaIngreso = personal.fecha_ingreso || '';
-          this.activo = personal.activo !== false;
-          this.rfc = personal.rfc || '';
-          this.numeroChecador = personal.numero_checador || '';
-
-          // Cargar documentos existentes
-          this.cargarDocumentos();
-        } else {
-          this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.LOAD_ERROR');
-        }
-      },
-      error: (error) => {
-        this.loadingPersonal = false;
-        console.error('Error al cargar personal:', error);
-        this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.LOAD_ERROR');
-      }
-    });
+  startEditPersonalTour(): void {
+    this.driverTourService.startEditPersonalTour();
   }
 
-  /**
-   * Añadir archivo nuevo (validación reutilizable)
-   */
-  private addNewFile(file: File, tipoDocumento: string): void {
-    // Validar que sea PDF
-    if (file.type !== 'application/pdf') {
-      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.PDF_ONLY');
-      return;
-    }
-
-    // Validar tamaño máximo (10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.FILE_SIZE_LIMIT');
-      return;
-    }
-
-    // Agregar archivo nuevo (reemplazará el existente)
-    this.documentosNuevos.set(tipoDocumento, file);
-    this.text_validation = ''; // Limpiar mensaje de error
-  }
-
-  /**
-   * Detectar si el modo oscuro está activo (para binding en template)
-   */
   isDarkMode(): boolean {
     return document.body.classList.contains('dark-mode');
   }
 
-  /**
-   * Eventos de drag & drop (para soportar arrastrar archivos a la nueva UI)
-   */
-  onDragOver(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
+  formatFileSize(bytes: number): string {
+    if (!bytes) return '0 KB';
+    return (bytes / 1024).toFixed(0) + ' KB';
   }
 
-  onDragEnter(event: DragEvent, element?: EventTarget | null): void {
-    event.preventDefault();
-    event.stopPropagation();
-    if (element && element instanceof HTMLElement) {
-      element.classList.add('drag-over');
-    }
+  cargarDatos() {
+    this.isLoading = true;
+    this.personalService.showPersonal(this.personalId).subscribe({
+      next: (resp) => {
+        if (resp.success) {
+          const p = resp.data;
+          this.nombre = p.nombre;
+          this.apellidos = p.apellidos;
+          this.tipo = p.tipo;
+          this.activo = p.activo !== false;
+          this.rfc = p.rfc || '';
+          this.numeroChecador = p.numero_checador || '';
+          this.fechaIngreso = p.fecha_ingreso || '';
+
+          this.cargarDocumentos(); // Cargar docs después de los datos
+        } else {
+          this.text_validation = 'Error cargando datos';
+          this.isLoading = false;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.text_validation = 'Error de conexión';
+        this.isLoading = false;
+      }
+    });
   }
 
-  onDragLeave(event: DragEvent, element?: EventTarget | null): void {
-    event.preventDefault();
-    event.stopPropagation();
-    if (element && element instanceof HTMLElement) {
-      element.classList.remove('drag-over');
-    }
-  }
-
-  onDrop(event: DragEvent, tipoDocumento: string, element?: EventTarget | null): void {
-    event.preventDefault();
-    event.stopPropagation();
-    if (element && element instanceof HTMLElement) {
-      element.classList.remove('drag-over');
-    }
-
-    const files = event.dataTransfer?.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      this.addNewFile(file, tipoDocumento);
-    }
-  }
-
-  /**
-   * Cargar documentos existentes del personal
-   */
-  cargarDocumentos(): void {
+  cargarDocumentos() {
     this.personalService.getDocumentos(this.personalId).subscribe({
-      next: (response) => {
-        if (response.success) {
-          // Filtrar solo documentos que pertenezcan a este personal
-          this.documentosExistentes = response.data.filter(doc => doc.personal_id === this.personalId);
-        }
+      next: (resp) => {
+        this.documentosExistentes = resp.data || [];
+        this.isLoading = false;
       },
-      error: (error) => {
-        console.error('Error al cargar documentos:', error);
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
       }
     });
   }
 
-  /**
-   * Manejar selección de archivos para reemplazar documentos
-   */
-  onFileSelected(event: any, tipoDocumento: string): void {
-    const file = event.target.files[0];
-    if (file) {
-      // Validar que sea PDF
-      if (file.type !== 'application/pdf') {
-        this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.PDF_ONLY');
-        event.target.value = '';
-        return;
-      }
-      
-      // Validar tamaño máximo (10MB)
-      if (file.size > 10 * 1024 * 1024) {
-        this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.FILE_SIZE_LIMIT');
-        event.target.value = '';
-        return;
-      }
-      
-      // Agregar archivo nuevo (reemplazará el existente)
-      this.documentosNuevos.set(tipoDocumento, file);
-      this.text_validation = ''; // Limpiar mensaje de error
-    }
-  }
+  // --- Actualizar Datos Basicos ---
 
-  /**
-   * Eliminar documento nuevo seleccionado
-   */
-  removeNewDocument(tipoDocumento: string): void {
-    this.documentosNuevos.delete(tipoDocumento);
-  }
-
-  /**
-   * Eliminar documento existente
-   */
-  removeExistingDocument(documento: PersonalDocument): void {
-    if (confirm('¿Está seguro de eliminar este documento?')) {
-      this.personalService.deleteDocument(documento.id!).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.documentosExistentes = this.documentosExistentes.filter(d => d.id !== documento.id);
-            this.text_success = this.translate.instant('PERSONAL.EDIT_PERSONAL.DELETE_DOCUMENT_SUCCESS');
-            setTimeout(() => this.text_success = '', 3000);
-          } else {
-            this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.DELETE_DOCUMENT_ERROR');
-          }
-        },
-        error: (error) => {
-          console.error('Error al eliminar documento:', error);
-          this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.DELETE_DOCUMENT_ERROR');
-        }
-      });
-    }
-  }
-
-  /**
-   * Descargar documento existente
-   */
-  downloadDocument(documentId: number): void {
-    this.personalService.downloadDocument(documentId).subscribe({
-      next: (blob: Blob) => {
-        const documento = this.documentosExistentes.find(d => d.id === documentId);
-        let fileName = `documento_${documentId}.pdf`;
-        
-        if (documento) {
-          // Usar el nombre del personal actual, no el del archivo
-          const nombrePersona = `${this.nombre}_${this.apellidos}`.replace(/\s+/g, '_');
-          const tipoDocumento = documento.tipo_documento.replace(/\s+/g, '_');
-          fileName = `${nombrePersona}_${tipoDocumento}.pdf`;
-        }
-        
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = fileName;
-        link.click();
-        window.URL.revokeObjectURL(url);
-      },
-      error: (error) => {
-        console.error('Error al descargar documento:', error);
-        this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.DOWNLOAD_ERROR');
-      }
-    });
-  }
-
-  /**
-   * Obtener lista de documentos faltantes
-   */
-  getMissingDocuments(): string[] {
-    const tiposExistentes = this.documentosExistentes.map(d => d.tipo_documento);
-    const tiposNuevos = Array.from(this.documentosNuevos.keys());
-    const todosTipos = [...tiposExistentes, ...tiposNuevos];
-    
-    return this.documentosRequeridos.filter(tipo => !todosTipos.includes(tipo));
-  }
-
-  /**
-   * Verificar si un tipo de documento ya existe
-   */
-  documentExists(tipoDocumento: string): boolean {
-    return this.documentosExistentes.some(d => d.tipo_documento === tipoDocumento);
-  }
-
-  /**
-   * Obtener documento existente por tipo
-   */
-  getExistingDocument(tipoDocumento: string): PersonalDocument | undefined {
-    return this.documentosExistentes.find(d => d.tipo_documento === tipoDocumento);
-  }
-
-  /**
-   * Obtener nombre limpio del documento para mostrar
-   */
-  getDocumentDisplayName(tipoDocumento: string): string {
-    const nombrePersona = `${this.nombre || ''} ${this.apellidos || ''}`.trim();
-    if (!nombrePersona) {
-      return `${tipoDocumento}.pdf`;
-    }
-    return `${nombrePersona} - ${tipoDocumento}.pdf`;
-  }
-
-  /**
-   * Validar formulario
-   */
-  validateForm(): boolean {
-    this.text_validation = '';
-
-    // Validar campos básicos
-    if (!this.nombre.trim()) {
-      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.NAME_REQUIRED');
-      return false;
-    }
-
-    if (this.nombre.trim().length < 2) {
-      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.NAME_MIN_LENGTH');
-      return false;
-    }
-
-    if (!this.apellidos.trim()) {
-      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.LAST_NAME_REQUIRED');
-      return false;
-    }
-
-    if (this.apellidos.trim().length < 2) {
-      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.LAST_NAME_MIN_LENGTH');
-      return false;
-    }
-
-    if (!this.tipo) {
-      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.TYPE_REQUIRED');
-      return false;
-    }
-
-    // Validar RFC
-    if (!this.rfc.trim()) {
-      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.RFC_REQUIRED');
-      return false;
-    }
-
-    if (this.rfc.trim().length < 10 || this.rfc.trim().length > 13) {
-      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.RFC_LENGTH');
-      return false;
-    }
-
-    // Validar RFC formato básico (letras/números)
-    const rfcPattern = /^[A-Z0-9]+$/;
-    if (!rfcPattern.test(this.rfc.trim().toUpperCase()) || this.rfc.trim().length > 13) {
-      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.RFC_FORMAT');
-      return false;
-    }
-
-    // Validar número de checador
-    if (!this.numeroChecador.trim()) {
-      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.CHECADOR_REQUIRED');
-      return false;
-    }
-
-    if (!/^[0-9]{1,4}$/.test(this.numeroChecador.trim())) {
-      this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.CHECADOR_FORMAT');
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Guardar cambios del personal
-   */
-  save(): void {
-    this.submitted = true;
+  saveBasicData() {
+    this.isSaving = true;
     this.text_success = '';
     this.text_validation = '';
 
-    // Validar formulario
-    if (!this.validateForm()) {
-      return;
-    }
-
-    this.loading = true;
-
-    // Preparar datos del personal para actualizar
-    const personalData: Partial<Personal> = {
-      nombre: this.nombre.trim(),
-      apellidos: this.apellidos.trim(),
-      tipo: this.tipo as 'Clínico' | 'No Clínico',
+    const data: Partial<Personal> = {
+      nombre: this.nombre,
+      apellidos: this.apellidos,
+      tipo: this.tipo as any,
       activo: this.activo,
-      rfc: this.rfc.trim().toUpperCase(),
-      numero_checador: this.numeroChecador.trim()
+      rfc: this.rfc,
+      numero_checador: this.numeroChecador
     };
 
-    // Actualizar datos básicos del personal
-    this.personalService.updatePersonal(this.personalId, personalData)
-      .subscribe({
-        next: (response) => {
-          if (response.success) {
-            // Si hay documentos nuevos, subirlos
-            if (this.documentosNuevos.size > 0) {
-              this.subirDocumentosNuevos();
-            } else {
-              this.loading = false;
-              this.text_success = this.translate.instant('PERSONAL.EDIT_PERSONAL.UPDATE_SUCCESS');
-              setTimeout(() => {
-                this.goToList();
-              }, 2000);
-            }
-          } else {
-            this.loading = false;
-            this.text_validation = response.message || this.translate.instant('PERSONAL.EDIT_PERSONAL.UPDATE_ERROR');
-          }
-        },
-        error: (error) => {
-          this.loading = false;
-          console.error('Error al actualizar personal:', error);
-          this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.UPDATE_ERROR');
+    this.personalService.updatePersonal(this.personalId, data).subscribe({
+      next: (resp) => {
+        this.isSaving = false;
+        if (resp.success) {
+          this.text_success = 'Datos actualizados correctamente';
+          setTimeout(() => this.text_success = '', 3000);
+        } else {
+          this.text_validation = resp.message;
         }
-      });
-  }
-
-  /**
-   * Subir documentos nuevos
-   */
-  private subirDocumentosNuevos(): void {
-    let documentosSubidos = 0;
-    const totalDocumentos = this.documentosNuevos.size;
-
-    this.documentosNuevos.forEach((file, tipoDocumento) => {
-      this.personalService.uploadDocument(this.personalId, tipoDocumento, file)
-        .subscribe({
-          next: (response) => {
-            documentosSubidos++;
-            if (response.success) {
-              // Actualizar lista de documentos existentes
-              this.cargarDocumentos();
-            }
-            
-            // Si se subieron todos los documentos
-            if (documentosSubidos === totalDocumentos) {
-              this.loading = false;
-              this.documentosNuevos.clear();
-              this.text_success = this.translate.instant('PERSONAL.EDIT_PERSONAL.UPDATE_WITH_DOCS_SUCCESS');
-              setTimeout(() => {
-                this.goToList();
-              }, 2000);
-            }
-          },
-          error: (error) => {
-            documentosSubidos++;
-            console.error('Error al subir documento:', error);
-            
-            if (documentosSubidos === totalDocumentos) {
-              this.loading = false;
-              this.text_validation = this.translate.instant('PERSONAL.EDIT_PERSONAL.UPDATE_DOCS_PARTIAL_ERROR');
-            }
-          }
-        });
+      },
+      error: (err) => {
+        this.isSaving = false;
+        this.text_validation = err.error?.message || 'Error al actualizar';
+      }
     });
   }
 
-  /**
-   * Ir a la lista de personal
-   */
-  goToList(): void {
-    this.router.navigate(['/personal/list']);
-  }
+  // --- Gestión de Documentos ---
 
   /**
-   * Inicia el tour del formulario de edición de personal
+   * Al seleccionar un archivo, se sube inmediatamente.
    */
-  public startEditPersonalTour(): void {
-    this.driverTourService.startEditPersonalTour();
+  onFileSelected(event: any, tipoDocumento: string) {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+
+      // Validaciones básicas antes de enviar
+      if (file.type !== 'application/pdf') {
+        alert('Solo se permiten archivos PDF');
+        return;
+      }
+      if (file.size > 500 * 1024) {
+        alert('El archivo supera los 500KB');
+        return;
+      }
+
+      this.uploadDocument(tipoDocumento, file);
+      event.target.value = ''; // Limpiar
+    }
+  }
+
+  // Soporte Drop
+  onDrop(event: DragEvent, tipoDocumento: string) {
+    event.preventDefault();
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type !== 'application/pdf') {
+        alert('Solo PDF');
+        return;
+      }
+      this.uploadDocument(tipoDocumento, file);
+    }
+  }
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  uploadDocument(tipo: string, file: File) {
+    this.isUploadingDoc = true;
+    this.personalService.uploadDocument(this.personalId, tipo, file).subscribe({
+      next: (resp) => {
+        this.isUploadingDoc = false;
+        if (resp.success) {
+          this.cargarDocumentos(); // Recargar lista
+          this.text_success = `Documento ${tipo} subido correctamente`;
+          setTimeout(() => this.text_success = '', 3000);
+        } else {
+          alert('Error al subir: ' + resp.message);
+        }
+      },
+      error: (err) => {
+        this.isUploadingDoc = false;
+        console.error(err);
+        alert('Error al subir documento');
+      }
+    });
+  }
+
+  deleteDocument(docId: number) {
+    if (!confirm('¿Seguro de eliminar este documento?')) return;
+
+    this.personalService.deleteDocument(docId).subscribe({
+      next: (resp) => {
+        if (resp.success) {
+          this.cargarDocumentos();
+        } else {
+          alert(resp.message);
+        }
+      },
+      error: (err) => alert('Error eliminando documento')
+    });
+  }
+
+  downloadDocument(docId: number, nombreOriginal: string) {
+    this.personalService.downloadDocument(docId).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = nombreOriginal;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+  // --- Helpers Vista ---
+
+  getExistingDocs(tipo: string): PersonalDocument[] {
+    return this.documentosExistentes.filter(d => d.tipo_documento === tipo);
+  }
+
+  hasDocument(tipo: string): boolean {
+    // Para mostrar check si ya tiene (excepto constancias que pueden ser muchas)
+    return this.documentosExistentes.some(d => d.tipo_documento === tipo);
+  }
+
+  goToList() {
+    this.router.navigate(['/personal/list']);
   }
 }

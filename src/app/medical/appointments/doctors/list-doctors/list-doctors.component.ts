@@ -5,9 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AppointmentsService, Doctor } from '../../service/appointments.service';
+import { AppointmentServicesService } from '../../service/appointment-services.service';
 import { DriverTourService } from 'src/app/shared/services/driver-tour.service';
-import { GeneralMedicalService } from '../../general-medical/service/general-medical.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-list-doctors',
@@ -25,18 +26,12 @@ export class ListDoctorsComponent implements OnInit {
 
   doctors: Doctor[] = [];
   filteredDoctors: Doctor[] = [];
-  especialidades: any[] = [];
-  generalMedicals: any[] = [];
+  services: any[] = [];
   isLoading = false;
   searchTerm: string = '';
 
   // Filtros
-  filtroEspecialidad: string = '';
-  filtroGeneralMedical: string = '';
-
-  // Flags de UI
-  showSpecialist: boolean = false;
-  showGeneral: boolean = false;
+  filtroService: string = '';
 
   // Doctor seleccionado para eliminar
   selectedDoctor: Doctor | null = null;
@@ -60,7 +55,7 @@ export class ListDoctorsComponent implements OnInit {
     private router: Router,
     private translate: TranslateService,
     private appointmentsService: AppointmentsService,
-    private generalMedicalService: GeneralMedicalService,
+    private appointmentServicesService: AppointmentServicesService,
     private driverTourService: DriverTourService,
     public authService: AuthService
   ) {
@@ -69,30 +64,9 @@ export class ListDoctorsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.determineFilters();
+    this.loadServices();
     this.loadDoctors();
     this.checkAndStartTour();
-  }
-
-  determineFilters(): void {
-    const canSpecialist = this.authService.hasPermission('appointments_add_especialidad');
-    const canGeneral = this.authService.hasPermission('appointments_add_general_medical');
-
-    if (canSpecialist && !canGeneral) {
-      this.showSpecialist = true;
-      this.showGeneral = false;
-      this.loadEspecialidades();
-    } else if (canGeneral && !canSpecialist) {
-      this.showSpecialist = false;
-      this.showGeneral = true;
-      this.loadGeneralMedicals();
-    } else {
-      // Admin o ambos
-      this.showSpecialist = true;
-      this.showGeneral = true;
-      this.loadEspecialidades();
-      this.loadGeneralMedicals();
-    }
   }
 
   private checkAndStartTour(): void {
@@ -108,25 +82,18 @@ export class ListDoctorsComponent implements OnInit {
   }
 
   /**
-   * Cargar especialidades
+   * Cargar servicios unificados
    */
-  loadEspecialidades(): void {
-    this.appointmentsService.listEspecialidades().subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.especialidades = response.data;
+  loadServices(): void {
+    this.appointmentServicesService.listAccessible().subscribe({
+      next: (resp: any) => {
+        if (resp.success) {
+          // Filtrar activos
+          this.services = resp.data.filter((s: any) => s.activo);
         }
       },
       error: (error) => {
-        console.error('Error al cargar especialidades:', error);
-      }
-    });
-  }
-
-  loadGeneralMedicals(): void {
-    this.generalMedicalService.listGeneralMedicals().subscribe({
-      next: (resp) => {
-        if (resp.success) this.generalMedicals = resp.data.filter(g => g.activo);
+        console.error('Error al cargar servicios:', error);
       }
     });
   }
@@ -140,26 +107,10 @@ export class ListDoctorsComponent implements OnInit {
       next: (response) => {
         this.isLoading = false;
         if (response.success) {
-          let allDoctors = response.data;
-
-          // Filtrado estricto por permisos
-          const canSpecialist = this.authService.hasPermission('appointments_add_especialidad');
-          const canGeneral = this.authService.hasPermission('appointments_add_general_medical');
-
-          if (canSpecialist && !canGeneral) {
-            // Solo especialistas: filtrar aquellos que tienen especialidad_id
-            allDoctors = allDoctors.filter(d => d.especialidad_id);
-          } else if (canGeneral && !canSpecialist) {
-            // Solo generales: filtrar aquellos que tienen general_medical_id
-            allDoctors = allDoctors.filter(d => d.general_medical_id);
-          }
-          // Si tiene ambos o ninguno (admin?), mostrar todos o manejar segun requerimiento.
-          // Asumimos que admin ve todo.
-
-          this.doctors = allDoctors;
+          this.doctors = response.data;
           this.totalDoctors = this.doctors.length;
-          this.filteredDoctors = [...this.doctors];
-          this.calculatePagination();
+          // Apply initial filter
+          this.filterDoctors();
         }
       },
       error: (error) => {
@@ -177,18 +128,23 @@ export class ListDoctorsComponent implements OnInit {
       const matchSearch = !this.searchTerm ||
         doctor.nombre_completo.toLowerCase().includes(this.searchTerm.toLowerCase());
 
-      // Filtro especialidad
-      const matchEspecialidad = !this.filtroEspecialidad ||
-        doctor.especialidad_id === parseInt(this.filtroEspecialidad);
+      // Filtro por servicio
+      let matchService = true;
+      if (this.filtroService) {
+        const serviceId = parseInt(this.filtroService);
+        // Verificar si el doctor tiene este servicio principal
+        if (doctor.appointment_service_id === serviceId) {
+          matchService = true;
+        } else if (doctor.appointmentService && doctor.appointmentService.id === serviceId) {
+          matchService = true;
+        } else {
+          matchService = false;
+        }
+      }
 
-      // Filtro General Medical
-      const matchGeneral = !this.filtroGeneralMedical ||
-        doctor.general_medical_id === parseInt(this.filtroGeneralMedical);
-
-      return matchSearch && matchEspecialidad && matchGeneral;
+      return matchSearch && matchService;
     });
 
-    // Reset a la primera página y calcular paginación
     this.currentPage = 1;
     this.skip = 0;
     this.calculatePagination();
@@ -199,7 +155,7 @@ export class ListDoctorsComponent implements OnInit {
    */
   clearFilters(): void {
     this.searchTerm = '';
-    this.filtroEspecialidad = '';
+    this.filtroService = '';
     this.filterDoctors();
   }
 
@@ -220,20 +176,28 @@ export class ListDoctorsComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           this.loadDoctors();
+          Swal.fire({
+            icon: 'success',
+            title: 'Eliminado',
+            text: 'El doctor ha sido eliminado correctamente',
+            customClass: {
+              confirmButton: 'btn btn-success'
+            }
+          });
         }
       },
       error: (error) => {
         console.error('Error al eliminar doctor:', error);
-        alert(this.translate.instant('APPOINTMENTS.LIST_DOCTORS.DELETE_ERROR'));
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: this.translate.instant('APPOINTMENTS.LIST_DOCTORS.DELETE_ERROR'),
+          customClass: {
+            confirmButton: 'btn btn-danger'
+          }
+        });
       }
     });
-  }
-
-  /**
-   * Verificar si hay filtros activos
-   */
-  get hasActiveFilters(): boolean {
-    return !!(this.searchTerm.trim() || this.filtroEspecialidad);
   }
 
   /**
@@ -241,22 +205,6 @@ export class ListDoctorsComponent implements OnInit {
    */
   goToAddDoctor(): void {
     this.router.navigate(['/appointments/add_doctor']);
-  }
-
-  /**
-   * Ir a editar doctor
-   */
-  editDoctor(doctor: Doctor): void {
-    if (doctor.id) {
-      this.router.navigate(['/appointments/edit_doctor', doctor.id]);
-    }
-  }
-
-  /**
-   * Obtener nombre completo del doctor
-   */
-  getFullName(doctor: Doctor): string {
-    return doctor.nombre_completo;
   }
 
   /**
@@ -273,17 +221,21 @@ export class ListDoctorsComponent implements OnInit {
   }
 
   /**
-   * Obtener nombre del rol (Especialidad o Médico General)
+   * Obtener nombre del rol (Servicio)
    */
   getRoleName(doctor: Doctor): string {
+    if (doctor.appointmentService) {
+      return doctor.appointmentService.nombre;
+    }
+    if (doctor.appointment_service) {
+      return doctor.appointment_service.nombre;
+    }
+    // Fallback legacy
     if (doctor.especialidad?.nombre) {
       return doctor.especialidad.nombre;
     }
-
-    if (doctor.general_medical_id) {
-      // Buscar en la lista cargada
-      const gm = this.generalMedicals.find(g => g.id === doctor.general_medical_id);
-      return gm ? gm.nombre : 'Médico General';
+    if (doctor.general_medical_id && doctor.generalMedical) {
+      return doctor.generalMedical.nombre;
     }
 
     return 'N/A';
@@ -294,39 +246,32 @@ export class ListDoctorsComponent implements OnInit {
    */
   private calculatePagination(): void {
     this.totalData = this.filteredDoctors.length;
-    this.totalPages = Math.ceil(this.totalData / this.pageSize);
+    this.totalPages = this.pageSize > 0 ? Math.ceil(this.totalData / this.pageSize) : 0;
 
-    // Generar array de números de página
     this.pageNumberArray = [];
     for (let i = 1; i <= this.totalPages; i++) {
       this.pageNumberArray.push(i);
     }
 
-    // Generar array de números de serie
     this.serialNumberArray = [];
-    const startIndex = (this.currentPage - 1) * this.pageSize + 1;
-    for (let i = startIndex; i < startIndex + this.pageSize && i <= this.totalData; i++) {
-      this.serialNumberArray.push(i);
+    if (this.totalData > 0) {
+      const startIndex = (this.currentPage - 1) * this.pageSize + 1;
+      for (let i = startIndex; i < startIndex + this.pageSize && i <= this.totalData; i++) {
+        this.serialNumberArray.push(i);
+      }
     }
   }
 
-  /**
-   * Obtener más datos (paginación)
-   */
   public getMoreData(event: string): void {
     if (event === 'next' && this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.skip = (this.currentPage - 1) * this.pageSize;
     } else if (event === 'previous' && this.currentPage > 1) {
       this.currentPage--;
-      this.skip = (this.currentPage - 1) * this.pageSize;
     }
+    this.skip = (this.currentPage - 1) * this.pageSize;
     this.calculatePagination();
   }
 
-  /**
-   * Mover a una página específica
-   */
   public moveToPage(pageNumber: number): void {
     this.currentPage = pageNumber;
     this.skip = (pageNumber - 1) * this.pageSize;

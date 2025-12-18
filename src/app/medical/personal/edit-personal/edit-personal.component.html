@@ -6,7 +6,8 @@
       <div class="row">
         <div class="col-sm-12">
           <ol class="breadcrumb bg-light p-2 rounded">
-            <li class="breadcrumb-item"><a href="#">{{'PERSONAL.EDIT_PERSONAL.EDIT' | translate}} ></a></li>
+            <li class="breadcrumb-item"><a href="#"
+                (click)="$event.preventDefault(); goToList()">{{'PERSONAL.EDIT_PERSONAL.EDIT' | translate}} ></a></li>
             <li class="breadcrumb-item active">{{'PERSONAL.EDIT_PERSONAL.TITLE' | translate}}</li>
           </ol>
         </div>
@@ -14,7 +15,7 @@
     </div>
 
     <!-- Loading spinner mientras se cargan los datos -->
-    <div class="row justify-content-center" *ngIf="loadingPersonal">
+    <div class="row justify-content-center" *ngIf="isLoading">
       <div class="col-12 text-center py-5">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">{{'PERSONAL.EDIT_PERSONAL.LOADING' | translate}}</span>
@@ -23,7 +24,7 @@
       </div>
     </div>
 
-    <div class="row justify-content-center" *ngIf="!loadingPersonal">
+    <div class="row justify-content-center" *ngIf="!isLoading">
       <div class="col-lg-10 col-xl-8">
         <!-- Tarjeta principal del formulario -->
         <div class="card card-form shadow border-0">
@@ -31,665 +32,194 @@
             <!-- Título del formulario -->
             <h3 class="text-center mb-4 fw-bold">{{'PERSONAL.EDIT_PERSONAL.EDIT_PERSONAL' | translate}}</h3>
 
-            <!-- Formulario para editar personal -->
-            <form (keydown.enter)="save()" class="form-section" novalidate>
+            <!-- Formulario para editar datos básicos -->
+            <form (keydown.enter)="saveBasicData()" class="form-section" novalidate>
               <div class="row g-3">
-                
+
                 <!-- Campo: Nombre -->
                 <div class="col-md-6">
                   <label class="form-label">{{'PERSONAL.EDIT_PERSONAL.NAME' | translate}}(s) *</label>
-                  <input 
-                    type="text" 
-                    class="form-control" 
-                    [(ngModel)]="nombre"
-                    name="nombre"
-                    placeholder="{{ 'PERSONAL.EDIT_PERSONAL.NAME_PLACEHOLDER' | translate }}"
-                    required 
-                    [ngClass]="{ 'is-invalid': submitted && !nombre.trim() }" />
-                  <div *ngIf="submitted && !nombre.trim()" class="invalid-feedback">
-                    {{  'PERSONAL.EDIT_PERSONAL.NAME_REQUIRED' | translate }}
-                  </div>
+                  <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre"
+                    placeholder="{{ 'PERSONAL.EDIT_PERSONAL.NAME_PLACEHOLDER' | translate }}" required />
                 </div>
 
                 <!-- Campo: Apellidos -->
                 <div class="col-md-6">
                   <label class="form-label">{{'PERSONAL.EDIT_PERSONAL.LAST_NAME' | translate}} *</label>
-                  <input 
-                    type="text" 
-                    class="form-control" 
-                    [(ngModel)]="apellidos"
-                    name="apellidos"
-                    placeholder="{{ 'PERSONAL.EDIT_PERSONAL.LAST_NAME_PLACEHOLDER' | translate }}"
-                    required 
-                    [ngClass]="{ 'is-invalid': submitted && !apellidos.trim() }" />
-                  <div *ngIf="submitted && !apellidos.trim()" class="invalid-feedback">
-                    {{'PERSONAL.EDIT_PERSONAL.LAST_NAME_REQUIRED2' | translate}}
-                  </div>
+                  <input type="text" class="form-control" [(ngModel)]="apellidos" name="apellidos"
+                    placeholder="{{ 'PERSONAL.EDIT_PERSONAL.LAST_NAME_PLACEHOLDER' | translate }}" required />
                 </div>
 
                 <!-- Campo: Tipo de Personal -->
                 <div class="col-md-6">
                   <label class="form-label">{{'PERSONAL.EDIT_PERSONAL.TYPE' | translate}} *</label>
-                  <select 
-                    class="form-select" 
-                    [(ngModel)]="tipo"
-                    name="tipo"
-                    required 
-                    [ngClass]="{ 'is-invalid': submitted && !tipo }">
+                  <select class="form-select" [(ngModel)]="tipo" name="tipo" required>
                     <option value="">{{ 'PERSONAL.EDIT_PERSONAL.SELECT_TYPE' | translate }}</option>
                     <option value="Clínico">Clínico</option>
                     <option value="No Clínico">No Clínico</option>
                   </select>
-                  <div *ngIf="submitted && !tipo" class="invalid-feedback">
-                    {{'PERSONAL.EDIT_PERSONAL.TYPE_REQUIRED' | translate}}
-                  </div>
                 </div>
 
                 <!-- Fecha de Ingreso (solo lectura) -->
                 <div class="col-md-6">
                   <label class="form-label">{{'PERSONAL.EDIT_PERSONAL.ENTRY_DATE' | translate}}</label>
-                  <input 
-                    type="text" 
-                    class="form-control" 
-                    [value]="fechaIngreso"
-                    readonly
-                    placeholder="{{'PERSONAL.EDIT_PERSONAL.ENTRY_DATE' | translate}}" />
-                  <small class="form-text text-muted">{{'PERSONAL.EDIT_PERSONAL.READ_ONLY' | translate}}</small>
+                  <input type="text" class="form-control" [value]="fechaIngreso" readonly />
                 </div>
 
                 <!-- Campo: RFC -->
                 <div class="col-md-6">
                   <label class="form-label">{{'PERSONAL.EDIT_PERSONAL.RFC' | translate}} *</label>
-                  <input 
-                    type="text" 
-                    class="form-control text-uppercase" 
-                    [(ngModel)]="rfc"
-                    name="rfc"
-                    placeholder="{{ 'PERSONAL.EDIT_PERSONAL.RFC_PLACEHOLDER' | translate }}"
-                    maxlength="13"
-                    required 
-                    style="text-transform: uppercase;"
-                    [ngClass]="{ 'is-invalid': submitted && !rfc.trim() }" />
-                  <div *ngIf="submitted && !rfc.trim()" class="invalid-feedback">
-                    {{'PERSONAL.EDIT_PERSONAL.RFC_REQUIRED' | translate}}
-                  </div>
-                  <small class="form-text text-muted">{{'PERSONAL.EDIT_PERSONAL.RFC_HELP' | translate}}</small>
+                  <input type="text" class="form-control text-uppercase" [(ngModel)]="rfc" name="rfc"
+                    placeholder="{{ 'PERSONAL.EDIT_PERSONAL.RFC_PLACEHOLDER' | translate }}" maxlength="13" required />
                 </div>
 
                 <!-- Campo: Número de Checador -->
                 <div class="col-md-6">
                   <label class="form-label">{{'PERSONAL.EDIT_PERSONAL.CHECKER_NUMBER' | translate}} *</label>
-                  <input 
-                    type="text" 
-                    class="form-control" 
-                    [(ngModel)]="numeroChecador"
-                    name="numeroChecador"
-                    placeholder="{{ 'PERSONAL.EDIT_PERSONAL.CHECKER_NUMBER_PLACEHOLDER' | translate }}"
-                    pattern="[0-9]*"
-                    required 
-                    [ngClass]="{ 'is-invalid': submitted && !numeroChecador.trim() }" />
-                  <div *ngIf="submitted && !numeroChecador.trim()" class="invalid-feedback">
-                    {{'PERSONAL.EDIT_PERSONAL.CHECKER_NUMBER_REQUIRED' | translate}}
+                  <input type="text" class="form-control" [(ngModel)]="numeroChecador" name="numeroChecador"
+                    placeholder="{{ 'PERSONAL.EDIT_PERSONAL.CHECKER_NUMBER_PLACEHOLDER' | translate }}" pattern="[0-9]*"
+                    required />
+                </div>
+
+                <!-- Campo: Activo -->
+                <div class="col-md-12">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" [(ngModel)]="activo"
+                      name="activo">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Personal Activo</label>
                   </div>
-                  <small class="form-text text-muted">{{'PERSONAL.EDIT_PERSONAL.CHECKER_NUMBER_HELP' | translate}}</small>
                 </div>
 
               </div>
 
-              <!-- Sección de Documentos -->
-              <div class="form-section mt-4">
-                <h5 class="form-section-title mb-3">
-                  <i class="fa fa-file-pdf-o text-danger me-2"></i>
-                  {{'PERSONAL.EDIT_PERSONAL.DOCUMENTS' | translate}} (PDF) - {{'PERSONAL.EDIT_PERSONAL.OPTIONAL' | translate}}
-                </h5>
-                <p class="text-muted mb-3">
-                  {{'PERSONAL.EDIT_PERSONAL.DOCUMENTS_DESCRIPTION' | translate}} 
-                  <strong>{{'PERSONAL.EDIT_PERSONAL.DOCUMENTS_WARNING' | translate}}</strong>
-                </p>
-
-                <div class="row g-4">
-                  <!-- Acta de Nacimiento -->
-                  <div class="col-md-6">
-                    <div class="document-upload-card">
-                      <div class="upload-header">
-                        <i class="fa fa-id-card text-primary me-2"></i>
-                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.BIRTH_CERTIFICATE' | translate}}</label>
-                      </div>
-                      <div class="upload-area"
-                           [class.has-file]="documentExists('Acta de nacimiento') || documentosNuevos.has('Acta de nacimiento')"
-                           (dragover)="onDragOver($event)"
-                           (dragenter)="onDragEnter($event, $event.currentTarget)"
-                           (dragleave)="onDragLeave($event, $event.currentTarget)"
-                           (drop)="onDrop($event, 'Acta de nacimiento', $event.currentTarget)">
-                        <div *ngIf="!(documentExists('Acta de nacimiento') || documentosNuevos.has('Acta de nacimiento'))" class="upload-placeholder">
-                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
-                          <div class="select-row">
-                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
-                            <input
-                              type="file"
-                              class="file-input"
-                              id="acta-nacimiento-edit"
-                              accept=".pdf"
-                              aria-label="Seleccionar Acta de Nacimiento"
-                              (change)="onFileSelected($event, 'Acta de nacimiento')" />
-                            <label for="acta-nacimiento-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
-                            </label>
-                          </div>
-                        </div>
-                        <div *ngIf="documentExists('Acta de nacimiento') && !documentosNuevos.has('Acta de nacimiento')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.EXISTING_DOCUMENT' | translate}}</p>
-                          <small class="text-muted d-block">{{ getDocumentDisplayName('Acta de nacimiento') }}</small>
-                          <div class="btn-group-sm mt-2">
-                            <button type="button"
-                                    class="btn btn-outline-primary btn-sm me-1"
-                                    (click)="downloadDocument(getExistingDocument('Acta de nacimiento')?.id!)"
-                                    title="Descargar">
-                              <i class="fa fa-download"></i>
-                            </button>
-                            <button type="button"
-                                    class="btn btn-outline-danger btn-sm"
-                                    (click)="removeExistingDocument(getExistingDocument('Acta de nacimiento')!)"
-                                    title="Eliminar">
-                              <i class="fa fa-trash"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div *ngIf="documentosNuevos.has('Acta de nacimiento')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">{{ 'PERSONAL.EDIT_PERSONAL.NEW_FILE_UPLOADED' | translate }}</p>
-                          <small class="text-muted d-block">{{ documentosNuevos.get('Acta de nacimiento')?.name }}</small>
-                          <button type="button"
-                                  class="btn btn-outline-danger btn-sm mt-2"
-                                  (click)="removeNewDocument('Acta de nacimiento')">
-                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Comprobante de Domicilio -->
-                  <div class="col-md-6">
-                    <div class="document-upload-card">
-                      <div class="upload-header">
-                        <i class="fa fa-home text-primary me-2"></i>
-                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.PROOF_OF_ADDRESS' | translate}}</label>
-                      </div>
-                      <div class="upload-area"
-                           [class.has-file]="documentExists('Comprobante de domicilio') || documentosNuevos.has('Comprobante de domicilio')"
-                           (dragover)="onDragOver($event)"
-                           (dragenter)="onDragEnter($event, $event.currentTarget)"
-                           (dragleave)="onDragLeave($event, $event.currentTarget)"
-                           (drop)="onDrop($event, 'Comprobante de domicilio', $event.currentTarget)">
-                        <div *ngIf="!(documentExists('Comprobante de domicilio') || documentosNuevos.has('Comprobante de domicilio'))" class="upload-placeholder">
-                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
-                          <div class="select-row">
-                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
-                            <input
-                              type="file"
-                              class="file-input"
-                              id="comprobante-domicilio-edit"
-                              accept=".pdf"
-                              aria-label="Seleccionar Comprobante de Domicilio"
-                              (change)="onFileSelected($event, 'Comprobante de domicilio')" />
-                            <label for="comprobante-domicilio-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
-                            </label>
-                          </div>
-                        </div>
-                        <div *ngIf="documentExists('Comprobante de domicilio') && !documentosNuevos.has('Comprobante de domicilio')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Documento existente</p>
-                          <small class="text-muted d-block">{{ getDocumentDisplayName('Comprobante de domicilio') }}</small>
-                          <div class="btn-group-sm mt-2">
-                            <button type="button"
-                                    class="btn btn-outline-primary btn-sm me-1"
-                                    (click)="downloadDocument(getExistingDocument('Comprobante de domicilio')?.id!)"
-                                    title="Descargar">
-                              <i class="fa fa-download"></i>
-                            </button>
-                            <button type="button"
-                                    class="btn btn-outline-danger btn-sm"
-                                    (click)="removeExistingDocument(getExistingDocument('Comprobante de domicilio')!)"
-                                    title="Eliminar">
-                              <i class="fa fa-trash"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div *ngIf="documentosNuevos.has('Comprobante de domicilio')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Archivo nuevo cargado</p>
-                          <small class="text-muted d-block">{{ documentosNuevos.get('Comprobante de domicilio')?.name }}</small>
-                          <button type="button"
-                                  class="btn btn-outline-danger btn-sm mt-2"
-                                  (click)="removeNewDocument('Comprobante de domicilio')">
-                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- CURP -->
-                  <div class="col-md-6">
-                    <div class="document-upload-card">
-                      <div class="upload-header">
-                        <i class="fa fa-address-card text-primary me-2"></i>
-                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.CURP' | translate}}</label>
-                      </div>
-                      <div class="upload-area"
-                           [class.has-file]="documentExists('CURP') || documentosNuevos.has('CURP')"
-                           (dragover)="onDragOver($event)"
-                           (dragenter)="onDragEnter($event, $event.currentTarget)"
-                           (dragleave)="onDragLeave($event, $event.currentTarget)"
-                           (drop)="onDrop($event, 'CURP', $event.currentTarget)">
-                        <div *ngIf="!(documentExists('CURP') || documentosNuevos.has('CURP'))" class="upload-placeholder">
-                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
-                          <div class="select-row">
-                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
-                            <input
-                              type="file"
-                              class="file-input"
-                              id="curp-edit"
-                              accept=".pdf"
-                              aria-label="Seleccionar CURP"
-                              (change)="onFileSelected($event, 'CURP')" />
-                            <label for="curp-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
-                            </label>
-                          </div>
-                        </div>
-                        <div *ngIf="documentExists('CURP') && !documentosNuevos.has('CURP')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Documento existente</p>
-                          <small class="text-muted d-block">{{ getDocumentDisplayName('CURP') }}</small>
-                          <div class="btn-group-sm mt-2">
-                            <button type="button"
-                                    class="btn btn-outline-primary btn-sm me-1"
-                                    (click)="downloadDocument(getExistingDocument('CURP')?.id!)"
-                                    title="Descargar">
-                              <i class="fa fa-download"></i>
-                            </button>
-                            <button type="button"
-                                    class="btn btn-outline-danger btn-sm"
-                                    (click)="removeExistingDocument(getExistingDocument('CURP')!)"
-                                    title="Eliminar">
-                              <i class="fa fa-trash"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div *ngIf="documentosNuevos.has('CURP')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.NEW_FILE_UPLOADED' | translate}}</p>
-                          <small class="text-muted d-block">{{ documentosNuevos.get('CURP')?.name }}</small>
-                          <button type="button"
-                                  class="btn btn-outline-danger btn-sm mt-2"
-                                  (click)="removeNewDocument('CURP')">
-                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- INE -->
-                  <div class="col-md-6">
-                    <div class="document-upload-card">
-                      <div class="upload-header">
-                        <i class="fa fa-credit-card text-primary me-2"></i>
-                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.INE' | translate}}</label>
-                      </div>
-                      <div class="upload-area"
-                           [class.has-file]="documentExists('INE') || documentosNuevos.has('INE')"
-                           (dragover)="onDragOver($event)"
-                           (dragenter)="onDragEnter($event, $event.currentTarget)"
-                           (dragleave)="onDragLeave($event, $event.currentTarget)"
-                           (drop)="onDrop($event, 'INE', $event.currentTarget)">
-                        <div *ngIf="!(documentExists('INE') || documentosNuevos.has('INE'))" class="upload-placeholder">
-                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
-                          <div class="select-row">
-                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
-                            <input
-                              type="file"
-                              class="file-input"
-                              id="ine-edit"
-                              accept=".pdf"
-                              aria-label="Seleccionar INE"
-                              (change)="onFileSelected($event, 'INE')" />
-                            <label for="ine-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
-                            </label>
-                          </div>
-                        </div>
-                        <div *ngIf="documentExists('INE') && !documentosNuevos.has('INE')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.EXISTING_DOCUMENT' | translate}}</p>
-                          <small class="text-muted d-block">{{ getDocumentDisplayName('INE') }}</small>
-                          <div class="btn-group-sm mt-2">
-                            <button type="button"
-                                    class="btn btn-outline-primary btn-sm me-1"
-                                    (click)="downloadDocument(getExistingDocument('INE')?.id!)"
-                                    title="Descargar">
-                              <i class="fa fa-download"></i>
-                            </button>
-                            <button type="button"
-                                    class="btn btn-outline-danger btn-sm"
-                                    (click)="removeExistingDocument(getExistingDocument('INE')!)"
-                                    title="Eliminar">
-                              <i class="fa fa-trash"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div *ngIf="documentosNuevos.has('INE')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.NEW_FILE_UPLOADED' | translate}}</p>
-                          <small class="text-muted d-block">{{ documentosNuevos.get('INE')?.name }}</small>
-                          <button type="button"
-                                  class="btn btn-outline-danger btn-sm mt-2"
-                                  (click)="removeNewDocument('INE')">
-                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Título Profesional -->
-                  <div class="col-md-6">
-                    <div class="document-upload-card">
-                      <div class="upload-header">
-                        <i class="fa fa-graduation-cap text-primary me-2"></i>
-                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.TITULO_PROFESIONAL' | translate}}</label>
-                      </div>
-                      <div class="upload-area"
-                           [class.has-file]="documentExists('Título profesional') || documentosNuevos.has('Título profesional')"
-                           (dragover)="onDragOver($event)"
-                           (dragenter)="onDragEnter($event, $event.currentTarget)"
-                           (dragleave)="onDragLeave($event, $event.currentTarget)"
-                           (drop)="onDrop($event, 'Título profesional', $event.currentTarget)">
-                        <div *ngIf="!(documentExists('Título profesional') || documentosNuevos.has('Título profesional'))" class="upload-placeholder">
-                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
-                          <div class="select-row">
-                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
-                            <input
-                              type="file"
-                              class="file-input"
-                              id="titulo-profesional-edit"
-                              accept=".pdf"
-                              aria-label="Seleccionar Título Profesional"
-                              (change)="onFileSelected($event, 'Título profesional')" />
-                            <label for="titulo-profesional-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
-                            </label>
-                          </div>
-                        </div>
-                        <div *ngIf="documentExists('Título profesional') && !documentosNuevos.has('Título profesional')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Documento existente</p>
-                          <small class="text-muted d-block">{{ getDocumentDisplayName('Título profesional') }}</small>
-                          <div class="btn-group-sm mt-2">
-                            <button type="button"
-                                    class="btn btn-outline-primary btn-sm me-1"
-                                    (click)="downloadDocument(getExistingDocument('Título profesional')?.id!)"
-                                    title="Descargar">
-                              <i class="fa fa-download"></i>
-                            </button>
-                            <button type="button"
-                                    class="btn btn-outline-danger btn-sm"
-                                    (click)="removeExistingDocument(getExistingDocument('Título profesional')!)"
-                                    title="Eliminar">
-                              <i class="fa fa-trash"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div *ngIf="documentosNuevos.has('Título profesional')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.NEW_FILE_UPLOADED' | translate}}</p>
-                          <small class="text-muted d-block">{{ documentosNuevos.get('Título profesional')?.name }}</small>
-                          <button type="button"
-                                  class="btn btn-outline-danger btn-sm mt-2"
-                                  (click)="removeNewDocument('Título profesional')">
-                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Constancias de Cursos -->
-                  <div class="col-md-6">
-                    <div class="document-upload-card">
-                      <div class="upload-header">
-                        <i class="fa fa-certificate text-primary me-2"></i>
-                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.CONSTANCIAS_CURSOS' | translate}}</label>
-                      </div>
-                      <div class="upload-area"
-                           [class.has-file]="documentExists('Constancias de cursos') || documentosNuevos.has('Constancias de cursos')"
-                           (dragover)="onDragOver($event)"
-                           (dragenter)="onDragEnter($event, $event.currentTarget)"
-                           (dragleave)="onDragLeave($event, $event.currentTarget)"
-                           (drop)="onDrop($event, 'Constancias de cursos', $event.currentTarget)">
-                        <div *ngIf="!(documentExists('Constancias de cursos') || documentosNuevos.has('Constancias de cursos'))" class="upload-placeholder">
-                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
-                          <div class="select-row">
-                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
-                            <input
-                              type="file"
-                              class="file-input"
-                              id="constancias-cursos-edit"
-                              accept=".pdf"
-                              aria-label="Seleccionar Constancias de Cursos"
-                              (change)="onFileSelected($event, 'Constancias de cursos')" />
-                            <label for="constancias-cursos-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
-                            </label>
-                          </div>
-                        </div>
-                        <!-- Documento existente -->
-                        <div *ngIf="documentExists('Constancias de cursos') && !documentosNuevos.has('Constancias de cursos')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">Documento existente</p>
-                          <small class="text-muted d-block">{{ getDocumentDisplayName('Constancias de cursos') }}</small>
-                          <div class="mt-2">
-                            <button type="button"
-                                    class="btn btn-outline-primary btn-sm me-2"
-                                    (click)="downloadDocument(getExistingDocument('Constancias de cursos')?.id!)"
-                                    *ngIf="getExistingDocument('Constancias de cursos')?.id">
-                              <i class="fa fa-download me-1"></i>{{'PERSONAL.EDIT.DOWNLOAD'}}
-                            </button>
-                            <button type="button"
-                                    class="btn btn-outline-danger btn-sm"
-                                    (click)="removeExistingDocument(getExistingDocument('Constancias de cursos')!)"
-                                    *ngIf="getExistingDocument('Constancias de cursos')">
-                              <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
-                            </button>
-                          </div>
-                        </div>
-                        <!-- Documento nuevo -->
-                        <div *ngIf="documentosNuevos.has('Constancias de cursos')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.NEW_FILE_UPLOADED' | translate}}</p>
-                          <small class="text-muted d-block">{{ documentosNuevos.get('Constancias de cursos')?.name }}</small>
-                          <button type="button"
-                                  class="btn btn-outline-danger btn-sm mt-2"
-                                  (click)="removeNewDocument('Constancias de cursos')">
-                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Cédula Profesional -->
-                  <div class="col-md-6">
-                    <div class="document-upload-card">
-                      <div class="upload-header">
-                        <i class="fa fa-id-badge text-primary me-2"></i>
-                        <label class="form-label mb-0">{{'PERSONAL.EDIT_PERSONAL.CEDULA_PROFESIONAL' | translate}}</label>
-                      </div>
-                      <div class="upload-area"
-                           [class.has-file]="documentExists('Cédula profesional') || documentosNuevos.has('Cédula profesional')"
-                           (dragover)="onDragOver($event)"
-                           (dragenter)="onDragEnter($event, $event.currentTarget)"
-                           (dragleave)="onDragLeave($event, $event.currentTarget)"
-                           (drop)="onDrop($event, 'Cédula profesional', $event.currentTarget)">
-                        <div *ngIf="!(documentExists('Cédula profesional') || documentosNuevos.has('Cédula profesional'))" class="upload-placeholder">
-                          <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
-                          <p class="text-muted mb-1">{{'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate}}</p>
-                          <div class="select-row">
-                            <small class="text-muted mb-0">{{'PERSONAL.EDIT_PERSONAL.OR' | translate}}</small>
-                            <input
-                              type="file"
-                              class="file-input"
-                              id="cedula-profesional-edit"
-                              accept=".pdf"
-                              aria-label="Seleccionar Cédula Profesional"
-                              (change)="onFileSelected($event, 'Cédula profesional')" />
-                            <label for="cedula-profesional-edit" class="btn btn-primary btn-sm">
-                              <i class="fa fa-folder-open me-1"></i> {{'PERSONAL.EDIT_PERSONAL.SELECT_FILE' | translate}}
-                            </label>
-                          </div>
-                        </div>
-                        <!-- Documento existente -->
-                        <div *ngIf="documentExists('Cédula profesional') && !documentosNuevos.has('Cédula profesional')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.EXISTING_DOCUMENT' | translate}}</p>
-                          <small class="text-muted d-block">{{ getDocumentDisplayName('Cédula profesional') }}</small>
-                          <div class="mt-2">
-                            <button type="button"
-                                    class="btn btn-outline-primary btn-sm me-2"
-                                    (click)="downloadDocument(getExistingDocument('Cédula profesional')?.id!)"
-                                    *ngIf="getExistingDocument('Cédula profesional')?.id">
-                              <i class="fa fa-download me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DOWNLOAD' | translate}}
-                            </button>
-                            <button type="button"
-                                    class="btn btn-outline-danger btn-sm"
-                                    (click)="removeExistingDocument(getExistingDocument('Cédula profesional')!)"
-                                    *ngIf="getExistingDocument('Cédula profesional')">
-                              <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
-                            </button>
-                          </div>
-                        </div>
-                        <!-- Documento nuevo -->
-                        <div *ngIf="documentosNuevos.has('Cédula profesional')" class="upload-success">
-                          <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
-                          <p class="text-success mb-1 fw-bold">{{'PERSONAL.EDIT_PERSONAL.NEW_FILE_UPLOADED' | translate}}</p>
-                          <small class="text-muted d-block">{{ documentosNuevos.get('Cédula profesional')?.name }}</small>
-                          <button type="button"
-                                  class="btn btn-outline-danger btn-sm mt-2"
-                                  (click)="removeNewDocument('Cédula profesional')">
-                            <i class="fa fa-trash me-1"></i>{{'PERSONAL.EDIT_PERSONAL.DELETE' | translate}}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
+              <!-- Botones de acción para datos básicos -->
+              <div class="text-end mt-4 d-flex gap-2 justify-content-end form-actions">
+                <div class="mt-4" *ngIf="text_success">
+                  <span class="text-success me-3">{{ text_success }}</span>
                 </div>
+                <div class="mt-4" *ngIf="text_validation">
+                  <span class="text-danger me-3">{{ text_validation }}</span>
+                </div>
+
+                <button type="button" class="btn btn-primary px-4 btn-save" (click)="saveBasicData()"
+                  [disabled]="isSaving">
+                  <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2"></span>
+                  {{ isSaving ? ('PERSONAL.EDIT_PERSONAL.SAVING' | translate) : ('PERSONAL.EDIT_PERSONAL.UPDATING' |
+                  translate) }}
+                </button>
+                <button type="button" class="btn btn-outline-secondary px-4" (click)="goToList()">
+                  <i class="fa fa-list"></i> {{'PERSONAL.EDIT_PERSONAL.VIEW_LIST' | translate}}
+                </button>
               </div>
-
-              <!-- Estado de documentos nuevos -->
-              <div class="form-section mt-4" *ngIf="documentosNuevos.size > 0">
-                <h6 class="mb-3">
-                  <i class="fa fa-plus-circle text-primary me-2"></i>
-                  Documentos Nuevos a Subir ({{ documentosNuevos.size }})
-                </h6>
-                <div class="documents-status" style="background-color: #f8f9fa !important; color: #212529 !important;">
-                  <div class="row g-2">
-                    <div class="col-md-4" *ngFor="let doc of documentosNuevos | keyvalue">
-                      <div class="document-item d-flex align-items-center p-2 bg-light rounded">
-                        <i class="fa fa-file-pdf-o text-danger me-2"></i>
-                        <div class="flex-grow-1">
-                          <small class="fw-bold d-block">{{ doc.key }}</small>
-                          <small class="text-muted">{{ doc.value.name }}</small>
-                        </div>
-                        <button type="button" 
-                                class="btn btn-sm btn-outline-danger"
-                                (click)="removeNewDocument(doc.key)"
-                                title="Eliminar">
-                          <i class="fa fa-times"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-                    <!-- Botón flotante de ayuda para iniciar el tour del formulario de editar personal -->
-                    <button class="tour-help-button" 
-                            (click)="startEditPersonalTour()" 
-                            title="{{ 'TOUR.HELP_BUTTON' | translate }}"
-                            type="button">
-                      <i class="fa fa-question"></i>
-                    </button>
-
-              <!-- Estado general de documentos -->
-              <div class="form-section mt-4">
-                <h6 class="mb-3">
-                  <i class="fa fa-info-circle text-info me-2"></i>
-                  {{'PERSONAL.EDIT_PERSONAL.DOCUMENT_STATUS' | translate}}
-                </h6>
-                
-                <!-- Documentos completos -->
-                <div *ngIf="getMissingDocuments().length === 0" class="alert alert-success" style="background-color: #d4edda !important; color: #155724 !important;">
-                  <i class="fa fa-check-circle me-2"></i>
-                  <strong style="color: #155724 !important;">{{'PERSONAL.EDIT_PERSONAL.ALL_DOCUMENTS_COMPLETE' | translate}}</strong>
-                  <br><small style="color: #0f4132 !important;">{{'PERSONAL.EDIT_PERSONAL.PERSONNEL_MARKED_COMPLETE' | translate}}</small>
-                </div>
-
-                <!-- Documentos faltantes -->
-                <div *ngIf="getMissingDocuments().length > 0" class="alert alert-warning" style="background-color: #fff3cd !important; color: #856404 !important;">
-                  <i class="fa fa-exclamation-triangle me-2"></i>
-                  <strong style="color: #856404 !important;">{{'PERSONAL.EDIT_PERSONAL.MISSING_DOCUMENTS' | translate}}{{ getMissingDocuments().length }}/6</strong>
-                  <div class="mt-2">
-                    <small style="color: #664d03 !important;">{{'PERSONAL.EDIT_PERSONAL.PENDING_DOCUMENTS' | translate}}: 
-                      <span *ngFor="let tipo of getMissingDocuments(); let last = last">
-                        <span style="color: #212529 !important;">{{ tipo }}</span><span *ngIf="!last">, </span>
-                      </span>
-                    </small>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Alerta de éxito -->
-              <div class="mt-4" *ngIf="text_success">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong>{{'PERSONAL.EDIT_PERSONAL.SUCCESS' | translate}}</strong> {{ text_success }}
-                  <button type="button" class="btn-close" (click)="text_success = ''" aria-label="Cerrar"></button>
-                </div>
-              </div>
-
-              <!-- Alerta de validación/error -->
-              <div class="mt-4" *ngIf="text_validation">
-                <div class="alert alert-warning alert-dismissible fade show">
-                  <strong>Advertencia:</strong> {{ text_validation }}
-                  <button type="button" class="btn-close" (click)="text_validation = ''" aria-label="Cerrar"></button>
-                </div>
-              </div>
-
-              <!-- Botones de acción: guardar y ver lista -->
-               <div class="text-end mt-4 d-flex gap-2 justify-content-end form-actions">
-                  <button type="button" 
-                          class="btn btn-primary px-4 btn-save" 
-                          (click)="save()"
-                          [disabled]="loading">
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-                    {{ loading ? ('PERSONAL.EDIT_PERSONAL.SAVING' | translate) : ('PERSONAL.EDIT_PERSONAL.UPDATING' | translate) }}
-                  </button>
-                  <button type="button" class="btn btn-outline-secondary px-4" (click)="goToList()">
-                    <i class="fa fa-list"></i> {{'PERSONAL.EDIT_PERSONAL.VIEW_LIST' | translate}}
-                  </button>
-                </div>
 
             </form>
+
+            <!-- Sección de Documentos -->
+            <div class="form-section mt-5 border-top pt-4">
+              <h5 class="form-section-title mb-3">
+                <i class="fa fa-file-pdf-o text-danger me-2"></i>
+                Gestión de Documentos (PDF)
+              </h5>
+              <p class="text-muted mb-3">
+                Los documentos se suben y eliminan de forma inmediata.
+              </p>
+
+              <div *ngIf="isUploadingDoc" class="alert alert-info">
+                <i class="fa fa-spinner fa-spin me-2"></i> Subiendo documento...
+              </div>
+
+              <div class="row g-4 transition-all">
+
+                <!-- Iterar sobre los tipos de documentos requeridos -->
+                <div class="col-md-6" *ngFor="let docName of documentosRequeridos">
+                  <div class="document-upload-card h-100">
+                    <div class="upload-header d-flex justify-content-between align-items-center">
+                      <div>
+                        <i class="fa fa-file-text-o text-primary me-2"></i>
+                        <label class="form-label mb-0">{{ docName }}</label>
+                      </div>
+                      <span *ngIf="hasDocument(docName)" class="badge bg-success"><i class="fa fa-check"></i></span>
+                    </div>
+
+                    <div class="upload-area" [class.has-file]="hasDocument(docName)" (dragover)="onDragOver($event)"
+                      (drop)="onDrop($event, docName)">
+
+                      <!-- Input siempre visible (fuera de ngIf) para que funcionen los labels -->
+                      <input type="file" [id]="'file-' + docName" class="d-none" accept=".pdf"
+                        (change)="onFileSelected($event, docName)" [multiple]="docName === 'Constancias de cursos'">
+
+                      <!-- Lista de archivos existentes para este tipo -->
+                      <div *ngIf="hasDocument(docName)" class="upload-success w-100">
+                        <div *ngFor="let doc of getExistingDocs(docName)"
+                          class="d-flex align-items-center justify-content-between p-2 mb-2 bg-light rounded border">
+                          <div class="text-truncate me-2" style="max-width: 150px;">
+                            <small class="d-block text-truncate" title="{{doc.nombre_archivo}}">{{ doc.nombre_archivo
+                              }}</small>
+                            <small class="text-muted" style="font-size: 0.7em">{{ formatFileSize(doc.file_size)
+                              }}</small>
+                          </div>
+                          <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-primary"
+                              (click)="downloadDocument(doc.id!, doc.nombre_archivo)" title="Descargar">
+                              <i class="fa fa-download"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" (click)="deleteDocument(doc.id!)"
+                              title="Eliminar">
+                              <i class="fa fa-trash"></i>
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- Boton extra para constancias -->
+                        <div *ngIf="docName === 'Constancias de cursos'" class="text-center mt-2">
+                          <label [for]="'file-' + docName" class="btn btn-outline-primary btn-sm">
+                            <i class="fa fa-plus"></i> Agregar otro
+                          </label>
+                        </div>
+
+                        <!-- Boton de reemplazo para otros documentos (opcional, o reusar el zona de carga si no hay docs)
+                                 En este caso, para no constancias, si ya hay uno, podriamos querer reemplazarlo.
+                                 Para seguir el estilo de AddPersonal, si ya hay archivo, mostramos el archivo y opción de borrar.
+                                 Si el usuario quiere reemplazar, borra y sube, o podemos poner un botón "Reemplazar".
+                                 AddPersonal no tiene "Reemplazar" explícito, solo borrar. 
+                                 Pero AddPersonal permite "drag over" para reemplazar? No, AddPersonal oculta el dropzone si ya hay archivo.
+                                 Aquí, si ocultamos dropzone, usuario debe borrar primero. 
+                                 Pero podemos dejar un boton 'Cambiar' si se desea.
+                                 Haremos coincidir AddPersonal: Solo borrar. 
+                            -->
+                      </div>
+
+                      <!-- Zona de carga (visible si NO hay docs, O si es constancias (aunque ya haya, pero queremos que se vea abajo? 
+                             No, AddPersonal oculta el dropzone grande si ya hay docs, y pone el boton 'Agregar otro'.
+                             Asi que imitaremos eso.) -->
+                      <div *ngIf="!hasDocument(docName)"
+                        class="upload-placeholder text-center p-3 border rounded border-dashed">
+
+                        <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
+                        <p class="text-muted small mb-1">{{ 'PERSONAL.EDIT_PERSONAL.DRAG_FILE_HERE' | translate }}</p>
+                        <div class="d-grid gap-2">
+                          <label [for]="'file-' + docName" class="btn btn-sm btn-outline-primary cursor-pointer">
+                            Seleccionar
+                          </label>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+
           </div>
         </div>
       </div>
     </div>
   </div>
+  <!-- Botón flotante de ayuda para iniciar el tour del formulario de editar personal -->
+  <button class="tour-help-button" (click)="startEditPersonalTour()" title="{{ 'TOUR.HELP_BUTTON' | translate }}"
+    type="button">
+    <i class="fa fa-question"></i>
+  </button>
 </div>
